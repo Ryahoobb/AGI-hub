@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AGI HUB Pattern Samples — WIRED-inspired</title>
+<link rel="stylesheet" href="palette.css">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: var(--ff-body); font-feature-settings: "palt"; font-size: 16px; line-height: 1.75; color: #1a1a1a; background: #e5e5e5; }
+
+.index { position: fixed; top: 20px; right: 20px; background: #000; color: #fff; padding: 16px 20px; font-size: 12px; z-index: 100; line-height: 1.8; }
+.index a { color: #fff; text-decoration: none; display: block; }
+.index a:hover { color: #0066ff; }
+
+.sample {
+  max-width: 860px;
+  margin: 40px auto;
+  min-height: 70vh;
+  background: var(--bg);
+  color: var(--fg);
+  padding: 64px 56px;
+  border: 1px solid #aaa;
+}
+
+.sample h1 { font-size: 52px; line-height: 1.05; font-weight: 700; letter-spacing: -0.01em; margin: 16px 0 24px; }
+.sample h2 { font-size: 28px; line-height: 1.2; font-weight: 700; margin: 32px 0 16px; }
+.sample p  { font-size: 16px; line-height: 1.75; margin: 0 0 16px; max-width: 62ch; }
+.sample p.lead { font-size: 20px; line-height: 1.55; color: var(--fg); max-width: 60ch; margin-bottom: 28px; }
+
+.sample img { display: block; width: 100%; object-fit: cover; background: #ddd; }
+
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin: 24px 0; }
+.grid-3 .card { border: 1px solid var(--border); padding: 20px; }
+.grid-3 .card .num { font-family: var(--ff-mono); font-size: 11px; color: var(--meta); letter-spacing: 0.15em; margin-bottom: 8px; }
+.grid-3 .card p { font-size: 14px; line-height: 1.55; }
+
+.compare { width: 100%; border-collapse: collapse; margin: 24px 0; font-size: 14px; }
+.compare th, .compare td { padding: 12px; border-bottom: 1px solid var(--border); text-align: left; }
+.compare th { font-family: var(--ff-mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--meta); }
+
+.timeline { margin: 24px 0; }
+.timeline .item { display: grid; grid-template-columns: 80px 1fr; gap: 24px; padding: 12px 0; border-bottom: 1px solid var(--border); }
+.timeline .num { font-family: var(--ff-mono); font-size: 14px; color: var(--accent); }
+
+.label-bar { background: #111; color: #fff; padding: 12px 24px; font-family: var(--ff-mono); font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; max-width: 860px; margin: 40px auto 0; }
+
+/* Dark pattern special */
+.pattern-photoessay .eyebrow { color: var(--accent); }
+.pattern-photoessay h1 { color: #fff; }
+.pattern-photoessay p { color: #ccc; }
+.pattern-photoessay .caption { color: #888; }
+</style>
+</head>
+<body>
+
+<nav class="index">
+  PATTERNS<br>
+  <a href="#p1">1. Monolith</a>
+  <a href="#p2">2. Broadsheet</a>
+  <a href="#p3">3. Dispatch</a>
+  <a href="#p4">4. Conversation</a>
+  <a href="#p5">5. Photo Essay</a>
+  <a href="#p6">6. Investigation</a>
+</nav>
+
+<!-- ═══════════ Pattern 1: Monolith ═══════════ -->
+<div class="label-bar">Pattern 1 / Monolith — 純モノトーン・論考記事</div>
+<article id="p1" class="sample pattern-monolith">
+  <div class="eyebrow">The Long Arc</div>
+  <h1>Yudkowskyを越えて——アラインメントの本来の射程</h1>
+  <p class="lead">「アラインメント」という語は鋳造された瞬間から歪んでいた。現代の用法はその歪みの上にさらに複雑な層を重ねている。</p>
+  <img class="hero ar-16-7" src="https://images.unsplash.com/photo-1534796636912-3b95b3ab5986?w=1400" alt="">
+  <p class="caption">銀河。<span class="credit">PHOTOGRAPH: UNSPLASH</span></p>
+  <p>Yudkowskyがこの語を最初に使ったのは2001年前後だが、当時の意味は「最適化プロセスが設計者の意図と一致すること」だった。今日の用法はここから三段階ほど意味が拡張している。</p>
+  <p>第一段階はRLHFの普及で「好ましい応答の選好」を意味するようになったこと。第二段階は解釈可能性研究の台頭で「内部表現の可観測性」が含まれたこと。第三段階は現代の「AI安全保障」の文脈で政策用語化したことだ。</p>
+  <div class="grid-3">
+    <div class="card"><div class="num">01</div><p>意図一致の理論問題</p></div>
+    <div class="card"><div class="num">02</div><p>好ましい応答の工学</p></div>
+    <div class="card"><div class="num">03</div><p>政策用語としての拡散</p></div>
+  </div>
+</article>
+
+<!-- ═══════════ Pattern 2: Broadsheet ═══════════ -->
+<div class="label-bar">Pattern 2 / Broadsheet — クリーム背景ロングリード（accent: deepblue）</div>
+<article id="p2" class="sample pattern-broadsheet accent-deepblue">
+  <div class="eyebrow">Longread / Geopolitics</div>
+  <h1 style="font-size:56px;">知能の国境線</h1>
+  <p class="lead">AGI開発が国家戦略の中心に移動するとき、研究の倫理は誰が管轄するのか。</p>
+  <img class="hero ar-1-1" src="https://images.unsplash.com/photo-1506260408121-e353d10b87c7?w=1400" alt="" style="max-height:520px;">
+  <p class="caption">国境。<span class="credit">PHOTOGRAPH: UNSPLASH</span></p>
+  <p class="dropcap">2023年以降、AGI研究は確実に地政学の一部になった。OpenAI、Anthropic、DeepMindといった民間研究所が持つ計算資源は、十年前の国家プロジェクトを凌駕する規模に達し、そして同時に、その影響は特定の国境の内側で完結しなくなった。</p>
+  <p>この移行は静かだったが、後戻りできない。中国の国家AI計画はすでに7年を経過し、EUのAI法は民間モデルの規制を制度化した。アメリカは輸出規制という形で半導体サプライチェーンを知能生産の関門として再定義した。</p>
+  <div class="section-marker">I</div>
+  <h2>計算資源という国境</h2>
+  <p>NVIDIAのH100チップの生産能力がそのまま各国のAI研究能力の上限になった時点で、知能の地理が書き換えられた。問題は誰がどれだけの計算を持つかではなく、誰がその流通を統制するかに移った。</p>
+  <blockquote class="pullquote">
+    計算は新しい石油ではない。計算は新しい国境である。
+    <cite>— 本文より</cite>
+  </blockquote>
+  <p>この比喩は誇張ではない。石油と違い、計算は物理的な産地を持たず、しかし同じ重みで国家の生存戦略を規定する。</p>
+</article>
+
+<!-- ═══════════ Pattern 3: Dispatch ═══════════ -->
+<div class="label-bar">Pattern 3 / Dispatch — ニュース短報（accent: wired-blue）</div>
+<article id="p3" class="sample pattern-dispatch">
+  <div class="eyebrow" style="color:var(--accent);">Dispatch / 2026.04.09</div>
+  <h1 style="font-size:44px;">Anthropicがハイブリッド推論モデルを発表</h1>
+  <img class="hero ar-16-9" src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=1400" alt="">
+  <p class="caption">サーバー。<span class="credit">PHOTOGRAPH: UNSPLASH</span></p>
+  <p class="lead">
+    Anthropicは本日、<span class="accent-underline">Claude 4.5</span>の派生となるハイブリッド推論モデルを公開した。一つのモデルが即応モードと熟考モードを切り替える設計。
+  </p>
+  <p>従来の推論モデル（OpenAIのo1系、DeepSeekのR1など）は専用モデルとして分離されていたが、今回の発表は「単一モデル内の切り替え」という方向転換を示す。</p>
+  <div class="grid-3">
+    <div class="card"><div class="num" style="color:var(--accent);">01</div><p>推論時間を動的制御</p></div>
+    <div class="card"><div class="num" style="color:var(--accent);">02</div><p>APIで思考予算を指定</p></div>
+    <div class="card"><div class="num" style="color:var(--accent);">03</div><p>長文タスクで効率化</p></div>
+  </div>
+</article>
+
+<!-- ═══════════ Pattern 4: Conversation ═══════════ -->
+<div class="label-bar">Pattern 4 / Conversation — インタビュー（accent: burnt-orange）</div>
+<article id="p4" class="sample pattern-conversation">
+  <div class="eyebrow">The Big Interview</div>
+  <h1>対論：タクオフの速度をどう見積もるか</h1>
+  <p class="lead">AGIが自己改良サイクルに入ったとき、人類が反応できる時間は数ヶ月か、数年か。この問いに対する研究者の見解は、実は一致していない。</p>
+  <img class="hero ar-3-4" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=900" alt="" style="max-height:560px;">
+  <p class="caption">人物。<span class="credit">PHOTOGRAPH: UNSPLASH</span></p>
+  <dl>
+    <dt style="font-family:var(--ff-mono);font-size:13px;color:var(--accent);text-transform:uppercase;letter-spacing:0.08em;margin:32px 0 12px;">Q. 最初にタクオフの議論に触れたのはいつですか？</dt>
+    <dd style="font-size:18px;line-height:1.7;margin:0 0 24px;">
+      2008年頃にBostromの初期論文を読んだときです。当時は思弁的な議論だと感じていましたが、2020年のGPT-3登場で、この問題が工学の射程に入ったことに気づきました。
+    </dd>
+  </dl>
+  <blockquote class="pullquote">
+    われわれは今もなお、問題を正しく定義する段階にいる。
+    <cite>— Interviewee</cite>
+  </blockquote>
+  <dl>
+    <dt style="font-family:var(--ff-mono);font-size:13px;color:var(--accent);text-transform:uppercase;letter-spacing:0.08em;margin:32px 0 12px;">Q. あなたの現在の見積もりは？</dt>
+    <dd style="font-size:18px;line-height:1.7;margin:0 0 24px;">
+      Slow takeoff派です。ただし「slow」が年単位なのか十年単位なのかは保留しています。
+    </dd>
+  </dl>
+</article>
+
+<!-- ═══════════ Pattern 5: Photo Essay ═══════════ -->
+<div class="label-bar">Pattern 5 / Photo Essay — ダーク反転（accent: neon-yellow）</div>
+<article id="p5" class="sample pattern-photoessay">
+  <div class="eyebrow">Photo Essay</div>
+  <h1 style="font-size:56px;">計算の神殿を訪ねる</h1>
+  <p class="lead">世界の主要AI研究所のデータセンター群を歩いた記録。</p>
+  <img class="hero ar-1-1 hero-color" src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=1200" alt="" style="max-height:540px;">
+  <p class="caption">Server farm, Oregon<span class="credit">PHOTO: UNSPLASH</span></p>
+  <div class="gallery-grid-2">
+    <figure>
+      <img class="ar-3-4 hero-color" src="https://images.unsplash.com/photo-1573164713714-d95e436ab8d6?w=800" style="width:100%;height:auto;">
+      <p class="caption">Cooling tower</p>
+    </figure>
+    <figure>
+      <img class="ar-3-4 hero-color" src="https://images.unsplash.com/photo-1591779051696-1c3fa1469a79?w=800" style="width:100%;height:auto;">
+      <p class="caption">Fiber backbone</p>
+    </figure>
+  </div>
+  <p style="font-size:18px;color:#ccc;max-width:640px;margin-top:32px;">
+    テキストは最小限。写真が語る。われわれが計算と呼ぶものは、実際には何万平方メートルの金属と電力と、冷却水の循環である。
+  </p>
+</article>
+
+<!-- ═══════════ Pattern 6: Investigation ═══════════ -->
+<div class="label-bar">Pattern 6 / Investigation — 調査報道（accent: alert-red）</div>
+<article id="p6" class="sample pattern-investigation">
+  <div class="eyebrow" style="color:var(--accent);">Investigation</div>
+  <h1>自己複製AGIという前提の解体</h1>
+  <p class="lead">「AGIは自己複製する」という主張は、しばしば証明なしに共有される。その前提を段階ごとに検証する。</p>
+  <img class="hero ar-3-2" src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=1400" alt="" style="max-height:480px;">
+  <p class="caption">Circuit diagram<span class="credit">PHOTO: UNSPLASH</span></p>
+
+  <h2>論点の時系列</h2>
+  <div class="timeline">
+    <div class="item"><div class="num">2008</div><p>Bostromが初期に言及。まだ比喩的</p></div>
+    <div class="item"><div class="num">2014</div><p>Superintelligence刊行。比喩が前提化</p></div>
+    <div class="item"><div class="num">2023</div><p>LLM時代に「エージェント自律複製」として再定義</p></div>
+  </div>
+
+  <h2>主張と検証</h2>
+  <table class="compare">
+    <thead><tr><th>主張</th><th>検証</th><th>結論</th></tr></thead>
+    <tbody>
+      <tr><td>自己改良する</td><td>現在のモデルは重み更新を自律でできない</td><td style="color:var(--accent);">未成立</td></tr>
+      <tr><td>資源を確保する</td><td>計算資源の確保には人間側の承認が必須</td><td style="color:var(--accent);">未成立</td></tr>
+      <tr><td>複製する</td><td>コピーは可能だが制御は人間側にある</td><td>部分的</td></tr>
+    </tbody>
+  </table>
+
+  <aside style="border-left:4px solid var(--accent);padding:20px 24px;background:rgba(208,0,0,0.04);margin:32px 0;font-size:17px;">
+    <strong style="color:var(--accent);">Critical:</strong> 「自己複製」という語が三つの異なる意味で使われており、論者の主張は往々にして意味の滑り落ちで成立している。
+  </aside>
+
+  <blockquote class="pullquote">
+    論理の飛躍は、権威によって隠蔽される。
+  </blockquote>
+</article>
+
+<div style="max-width:860px;margin:40px auto;padding:0 20px;font-size:12px;color:#666;">
+  6 patterns × WIRED-inspired monotone base. Generated 2026-04-09.
+</div>
+
+</body>
+</html>

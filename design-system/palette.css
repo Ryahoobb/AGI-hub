@@ -1,0 +1,411 @@
+/* ═════════════════════════════════════════════════════
+   AGI HUB Design Tokens
+   WIRED-inspired. Monotone base + 1 accent per article.
+   Source: wired.com CSS analysis (2026-04-09)
+   ═════════════════════════════════════════════════════ */
+
+:root {
+  /* ── Base (monotone, 常時利用) ── */
+  --black: #000000;
+  --body-text: #1a1a1a;
+  --mid-gray: #585858;
+  --meta: #757575;
+  --light-gray: #999999;
+  --border: #e5e5e5;
+  --bg-gray: #f7f7f7;
+  --white: #ffffff;
+
+  /* ── Cream backgrounds (記事タイプ別切替) ── */
+  --cream-light: #fefcf5;
+  --cream-base:  #faf8f1;
+  --cream-warm:  #f9f7ef;
+  --cream-deep:  #f3f1e9;
+
+  /* ── Article default (Monolith pattern) ── */
+  --bg: var(--white);
+  --fg: var(--body-text);
+  --accent: var(--black);  /* デフォルトはモノトーン。記事別に上書き */
+
+  /* ── Typography ── */
+  --ff-body: HelveticaNeue, "Helvetica Neue", Helvetica, Arial,
+             游ゴシック体, YuGothic, "游ゴシック Medium", "Yu Gothic Medium",
+             游ゴシック, "Yu Gothic",
+             "ヒラギノ角ゴ ProN W3", "Hiragino Kaku Gothic ProN",
+             "MS ゴシック", sans-serif;
+  --ff-mono: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+  --ff-serif: "Playfair Display", "Noto Serif JP", Georgia, serif; /* Broadsheet専用 */
+
+  /* WIRED実測の階調 */
+  --fs-eyebrow: 11px;
+  --fs-caption: 12px;
+  --fs-meta: 13px;
+  --fs-body: 16px;
+  --fs-body-lg: 19px;
+  --fs-lead: 20px;
+  --fs-h3: 24px;
+  --fs-h2-s: 28px;
+  --fs-h2: 34px;
+  --fs-h1-s: 44px;
+  --fs-h1: 52px;
+  --fs-hero: 56px;
+
+  --lh-tight: 1.0;
+  --lh-snug: 1.15;
+  --lh-normal: 1.5;
+  --lh-relaxed: 1.75;
+
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ═════════════════════════════════════════════════════
+   記事パターン別オーバーライド
+   <body class="pattern-broadsheet accent-blue"> のように指定
+   ═════════════════════════════════════════════════════ */
+
+/* Pattern 1: Monolith (既存AGI HUB踏襲 - 純モノトーン) */
+.pattern-monolith {
+  --bg: var(--white);
+  --fg: var(--body-text);
+  --accent: var(--black);
+}
+
+/* Pattern 2: Broadsheet (ロングリード) */
+.pattern-broadsheet {
+  --bg: var(--cream-base);
+  --fg: var(--body-text);
+  /* --accent は記事別に選択 */
+}
+
+/* Pattern 3: Dispatch (ニュース短報) */
+.pattern-dispatch {
+  --bg: var(--white);
+  --fg: var(--body-text);
+  --accent: #0066ff;
+}
+
+/* Pattern 4: Conversation (インタビュー) */
+.pattern-conversation {
+  --bg: var(--cream-warm);
+  --fg: var(--body-text);
+  --accent: #e96700;
+}
+
+/* Pattern 5: Photo Essay (ダーク反転) */
+.pattern-photoessay {
+  --bg: #000000;
+  --fg: #f5f5f5;
+  --meta: #888888;
+  --border: #222222;
+  --accent: #e6ff00;
+}
+
+/* Pattern 6: Investigation (調査報道) */
+.pattern-investigation {
+  --bg: var(--cream-deep);
+  --fg: var(--body-text);
+  --accent: #d00000;
+}
+
+/* ── Accent variants (Broadsheetと組み合わせ) ── */
+.accent-blue       { --accent: #0066ff; }
+.accent-orange     { --accent: #e96700; }
+.accent-red        { --accent: #d00000; }
+.accent-gold       { --accent: #f7c442; }
+.accent-forest     { --accent: #298552; }
+.accent-deepblue   { --accent: #2f2b92; }
+.accent-sciblue    { --accent: #057dbc; }
+.accent-darkpurple { --accent: #231927; }
+.accent-mono       { --accent: var(--black); }
+
+/* ═════════════════════════════════════════════════════
+   共通コンポーネント
+   ═════════════════════════════════════════════════════ */
+
+body {
+  font-family: var(--ff-body);
+  font-feature-settings: "palt";
+  font-size: var(--fs-body);
+  line-height: var(--lh-relaxed);
+  color: var(--fg);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+}
+
+.eyebrow {
+  font-family: var(--ff-mono);
+  font-feature-settings: normal;
+  font-size: var(--fs-eyebrow);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--meta);
+}
+
+.accent-underline {
+  display: inline;
+  background-image: linear-gradient(var(--accent), var(--accent));
+  background-repeat: no-repeat;
+  background-size: 100% 1px;
+  background-position: 0 100%;
+  padding-bottom: 2px;
+}
+
+.pullquote {
+  border-left: 2px solid var(--accent);
+  padding: 12px 0 12px 24px;
+  margin: 32px 0;
+  font-size: var(--fs-h2-s);
+  line-height: 1.35;
+  font-weight: 600;
+  color: var(--fg);
+}
+.pullquote cite {
+  display: block;
+  margin-top: 12px;
+  font-size: var(--fs-meta);
+  font-style: normal;
+  font-family: var(--ff-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--meta);
+}
+
+.dropcap::first-letter {
+  font-family: var(--ff-serif);
+  font-size: 4.5em;
+  line-height: 0.85;
+  float: left;
+  padding: 6px 10px 0 0;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.caption {
+  font-family: var(--ff-mono);
+  font-feature-settings: normal;
+  font-size: var(--fs-caption);
+  color: var(--meta);
+  margin-top: 10px;
+  line-height: 1.4;
+}
+.caption .credit {
+  display: block;
+  margin-top: 4px;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+/* アスペクト比ユーティリティ */
+.ar-1-1  { aspect-ratio: 1 / 1; }
+.ar-16-9 { aspect-ratio: 16 / 9; }
+.ar-16-7 { aspect-ratio: 16 / 7; }
+.ar-3-2  { aspect-ratio: 3 / 2; }
+.ar-3-4  { aspect-ratio: 3 / 4; }
+.ar-2-3  { aspect-ratio: 2 / 3; }
+
+.hero {
+  width: 100%;
+  object-fit: cover;
+  display: block;
+  filter: grayscale(0.6) contrast(1.1);
+  transition: filter 0.6s var(--ease);
+}
+.hero:hover { filter: grayscale(0) contrast(1); }
+.hero.hero-color { filter: none; } /* カラー表示したい場合 */
+
+/* Gallery grid (legacy aliases, kept for backward compat) */
+.gallery-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.gallery-grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.gallery-grid-4 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+@media (min-width: 768px) {
+  .gallery-grid-4 { grid-template-columns: repeat(4, 1fr); }
+}
+
+/* ═════════════════════════════════════════════════════
+   Image Placement Utilities
+   記事本文（max-width ~62ch / 約680px）を content-width と呼ぶ。
+   この幅との関係で画像のサイズ・配置を10種類定義する。
+   各クラスは <figure class="img-*"> に付与する想定。
+   ═════════════════════════════════════════════════════ */
+
+:root {
+  --content-width: 680px;   /* 本文段落の最大幅 */
+  --wide-width: 1080px;     /* 本文を超えるワイド画像の幅 */
+  --gutter: 24px;
+}
+
+/* figure の共通デフォルト */
+figure.img { margin: 40px 0; }
+figure.img img { width: 100%; height: auto; display: block; object-fit: cover; }
+figure.img figcaption,
+figure.img .caption { margin-top: 10px; }
+
+/* 1. Full-bleed: 画面端まで達する全幅画像 */
+.img-fullbleed {
+  position: relative;
+  width: 100vw;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+  margin-top: 56px;
+  margin-bottom: 56px;
+}
+.img-fullbleed img { max-height: 92vh; }
+.img-fullbleed figcaption,
+.img-fullbleed .caption {
+  max-width: var(--content-width);
+  margin-left: auto;
+  margin-right: auto;
+  padding: 10px 24px 0;
+}
+
+/* 2. Wide: 本文幅を超えるが画面端までは達しない（通称 extended / outset） */
+.img-wide {
+  width: min(var(--wide-width), calc(100vw - 48px));
+  max-width: none;
+  margin-left: 50%;
+  transform: translateX(-50%);
+  position: relative;
+  margin-top: 48px;
+  margin-bottom: 48px;
+}
+
+/* 3. Content-width: 本文と同じ幅（標準配置） */
+.img-content {
+  width: 100%;
+  max-width: var(--content-width);
+  margin: 40px 0;
+}
+
+/* 4. Center small: 本文幅より小さく中央配置。図版・補助画像向け */
+.img-center-small {
+  width: 100%;
+  max-width: 420px;
+  margin: 40px auto;
+  text-align: center;
+}
+.img-center-small img { margin: 0 auto; }
+
+/* 5. Float left + テキスト回り込み */
+.img-float-left {
+  float: left;
+  width: 44%;
+  max-width: 340px;
+  margin: 6px 28px 16px 0;
+  shape-outside: margin-box;
+}
+.img-float-left img { width: 100%; }
+
+/* 6. Float right + テキスト回り込み */
+.img-float-right {
+  float: right;
+  width: 44%;
+  max-width: 340px;
+  margin: 6px 0 16px 28px;
+  shape-outside: margin-box;
+}
+.img-float-right img { width: 100%; }
+
+/* clearfix utility for paragraphs after floats */
+.clear-floats::after { content: ""; display: table; clear: both; }
+
+/* 7. Side by side: 2枚並列（横並び）、本文幅または wide 幅 */
+.img-side-by-side {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin: 40px 0;
+}
+.img-side-by-side figure,
+.img-side-by-side > div { margin: 0; }
+.img-side-by-side img { width: 100%; height: 100%; object-fit: cover; }
+
+/* 8. Grid 3 / Grid 4: フォトエッセイ用 */
+.img-grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin: 48px 0;
+}
+.img-grid-4 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+  margin: 48px 0;
+}
+@media (min-width: 900px) {
+  .img-grid-4 { grid-template-columns: repeat(4, 1fr); }
+}
+.img-grid-3 img,
+.img-grid-4 img { width: 100%; height: 100%; object-fit: cover; aspect-ratio: 1 / 1; }
+
+/* 9. Overlay: 画像の上にテキスト重ね（カバー・特集オープナー向け） */
+.img-overlay {
+  position: relative;
+  width: min(var(--wide-width), calc(100vw - 48px));
+  margin-left: 50%;
+  transform: translateX(-50%);
+  margin-top: 56px;
+  margin-bottom: 56px;
+  overflow: hidden;
+}
+.img-overlay img {
+  width: 100%;
+  height: auto;
+  max-height: 80vh;
+  object-fit: cover;
+  filter: grayscale(0.6) contrast(1.1) brightness(0.65);
+}
+.img-overlay .overlay-text {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 48px;
+  color: #fff;
+}
+.img-overlay .overlay-text .eyebrow { color: #fff; opacity: 0.8; }
+.img-overlay .overlay-text h1,
+.img-overlay .overlay-text h2 {
+  color: #fff;
+  max-width: 18ch;
+  line-height: 1.05;
+  text-shadow: 0 2px 24px rgba(0,0,0,0.4);
+}
+
+/* 10. Inline: 段落内の小画像（アイコン〜サムネ） */
+.img-inline {
+  display: inline-block;
+  vertical-align: middle;
+  width: auto;
+  height: 1.4em;
+  margin: 0 0.2em;
+}
+.img-inline-thumb {
+  display: inline-block;
+  vertical-align: middle;
+  width: 96px;
+  height: 96px;
+  object-fit: cover;
+  margin: 0 12px 4px 0;
+  float: left;
+}
+
+/* Section marker */
+.section-marker {
+  text-align: center;
+  margin: 48px 0;
+  font-family: var(--ff-mono);
+  font-size: 14px;
+  letter-spacing: 0.3em;
+  color: var(--meta);
+}
+.section-marker::before {
+  content: "◆";
+  display: block;
+  color: var(--accent);
+  font-size: 16px;
+  margin-bottom: 8px;
+}

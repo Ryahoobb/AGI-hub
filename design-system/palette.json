@@ -1,0 +1,104 @@
+{
+  "name": "AGI HUB Palette (WIRED-inspired)",
+  "version": "1.0.0",
+  "created": "2026-04-09",
+  "source": "Extracted from wired.com CSS across 8 articles",
+  "philosophy": "モノトーン基調。1記事につき1色のアクセントに抑制。クリーム背景オプションあり",
+  "base": {
+    "black": "#000000",
+    "bodyText": "#1a1a1a",
+    "mid": "#585858",
+    "meta": "#757575",
+    "border": "#e5e5e5",
+    "bgGray": "#f7f7f7",
+    "white": "#ffffff"
+  },
+  "cream": {
+    "cream1_light": "#fefcf5",
+    "cream2_base": "#faf8f1",
+    "cream3_warm": "#f9f7ef",
+    "cream4_deep": "#f3f1e9"
+  },
+  "accent": {
+    "wiredBlue": {
+      "hex": "#0066ff",
+      "useFor": "リンク、CTA、地政学系記事",
+      "contrastOnWhite": 4.5
+    },
+    "neonCyan": {
+      "hex": "#00ffff",
+      "useFor": "AI/サイバー特集のハイライト",
+      "warning": "背景は必ずダーク（#000）。白背景では視認性NG"
+    },
+    "neonGreen": {
+      "hex": "#00ff00",
+      "useFor": "テック・コード系",
+      "warning": "背景は必ずダーク"
+    },
+    "neonYellow": {
+      "hex": "#e6ff00",
+      "useFor": "カルチャー、フォトエッセイ（ダーク反転背景）"
+    },
+    "neonMagenta": {
+      "hex": "#ff00fc",
+      "useFor": "フューチャー系"
+    },
+    "pinkPastel": {
+      "hex": "#f6b6f7",
+      "useFor": "ソフトカルチャー、感情系"
+    },
+    "goldYellow": {
+      "hex": "#f7c442",
+      "useFor": "経済・金融・ビジネス系"
+    },
+    "burntOrange": {
+      "hex": "#e96700",
+      "useFor": "インタビュー強調、Q&A、規制系"
+    },
+    "alertRed": {
+      "hex": "#d00000",
+      "useFor": "リスク、批評、警告、調査報道"
+    },
+    "alertRedBright": {
+      "hex": "#eb0000",
+      "useFor": "リンクホバー時のalertRed"
+    },
+    "forestGreen": {
+      "hex": "#298552",
+      "useFor": "サステナ、環境系"
+    },
+    "emeraldBright": {
+      "hex": "#00c559",
+      "useFor": "ポジティブ指標、成長系"
+    },
+    "deepBlue": {
+      "hex": "#2f2b92",
+      "useFor": "政治、地政学、国家戦略"
+    },
+    "scienceBlue": {
+      "hex": "#057dbc",
+      "useFor": "科学、研究、学術"
+    },
+    "darkPurple": {
+      "hex": "#231927",
+      "useFor": "ミステリー、闇、アンダーカバー"
+    }
+  },
+  "rules": {
+    "maxAccentPerArticle": 1,
+    "accentUsage": [
+      "ヘッドラインの下線1px",
+      "pull-quoteの左ボーダー2px",
+      "CTAボタンの背景",
+      "数字・固有名詞の強調（inlineマーカー）",
+      "セクションnumberの色",
+      "リンクのunderline"
+    ],
+    "forbidden": [
+      "background全体をアクセントで塗る",
+      "複数アクセントの混在",
+      "本文をアクセントで書く",
+      "グラデーション"
+    ]
+  }
+}

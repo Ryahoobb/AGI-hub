@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI存亡リスク論の系譜 — Extropianメーリングリストから政府声明まで</title>
+    <style>
+      /* ══════════════════════════════════════
+         AGI HUB Editorial Style
+         Monotone, Flat, No Shadows
+         ══════════════════════════════════════ */
+
+      :root {
+        --black: #000;
+        --body-text: #1a1a1a;
+        --meta: #757575;
+        --light-gray: #999;
+        --border: #e5e5e5;
+        --bg: #fff;
+        --ease: cubic-bezier(0.22, 1, 0.36, 1);
+      }
+
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+      html { scroll-behavior: smooth; }
+
+      body {
+        font-family: HelveticaNeue, "Helvetica Neue", Helvetica, Arial,
+          游ゴシック体, YuGothic, "游ゴシック Medium", "Yu Gothic Medium",
+          游ゴシック, "Yu Gothic", "ヒラギノ角ゴ ProN W3", "Hiragino Kaku Gothic ProN",
+          "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", "MS ゴシック", "MS Gothic",
+          sans-serif;
+        font-feature-settings: "palt";
+        font-size: 16px;
+        line-height: 1.75;
+        color: var(--body-text);
+        background: var(--bg);
+        -webkit-font-smoothing: antialiased;
+        overflow-x: hidden;
+        word-wrap: break-word;
+      }
+
+      /* ── Progress Bar ── */
+      .progress {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 2px;
+        background: var(--black);
+        width: 0%;
+        z-index: 100;
+        transition: width 0.3s var(--ease);
+      }
+
+      /* ── Navigation Dots ── */
+      .nav {
+        position: fixed;
+        right: 24px;
+        top: 50%;
+        transform: translateY(-50%);
+        display: grid;
+        gap: 16px;
+        z-index: 50;
+      }
+
+      .nav button {
+        width: 8px;
+        height: 8px;
+        border-radius: 999px;
+        border: 1.5px solid var(--meta);
+        background: transparent;
+        cursor: pointer;
+        transition: all 0.3s var(--ease);
+      }
+
+      .nav button.active {
+        background: var(--black);
+        border-color: var(--black);
+        transform: scale(1.4);
+      }
+
+      /* ── Slides ── */
+      main { scroll-snap-type: y mandatory; }
+
+      .slide {
+        position: relative;
+        min-height: 100vh;
+        max-width: 1120px;
+        margin: 0 auto;
+        padding: 80px 48px 64px;
+        display: grid;
+        grid-template-rows: auto auto 1fr auto;
+        gap: 32px;
+        scroll-snap-align: start;
+      }
+
+      .slide + .slide { border-top: 1px solid var(--border); }
+
+      /* ── Hero Image ── */
+      .hero {
+        width: 100%;
+        aspect-ratio: 16 / 7;
+        object-fit: cover;
+        display: block;
+        filter: grayscale(0.6) contrast(1.1);
+        transition: filter 0.6s var(--ease);
+      }
+
+      .hero:hover { filter: grayscale(0) contrast(1); }
+
+      .hero-caption {
+        font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 11px;
+        letter-spacing: 0.083em;
+        color: var(--light-gray);
+        margin-top: 8px;
+        text-transform: uppercase;
+      }
+
+      /* ── Photo Credits ── */
+      .credits {
+        max-width: 1120px;
+        margin: 0 auto;
+        padding: 48px 48px 80px;
+        border-top: 1px solid var(--border);
+      }
+
+      .credits p {
+        font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 11px;
+        letter-spacing: 0.047em;
+        line-height: 2;
+        color: var(--light-gray);
+      }
+
+      .credits a {
+        color: var(--meta);
+        text-decoration: none;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .credits a:hover {
+        color: var(--black);
+        border-bottom-color: var(--black);
+      }
+
+      /* ── Scroll Animation ── */
+      .reveal {
+        opacity: 0;
+        transform: translateY(24px);
+        transition: opacity 0.6s var(--ease), transform 0.6s var(--ease);
+      }
+      .reveal.visible { opacity: 1; transform: translateY(0); }
+      .reveal-delay-1 { transition-delay: 0.1s; }
+      .reveal-delay-2 { transition-delay: 0.2s; }
+      .reveal-delay-3 { transition-delay: 0.35s; }
+
+      /* ── Eyebrow Label ── */
+      .eyebrow {
+        font-family: "SF Mono", "Fira Code", "Fira Mono", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 11px;
+        font-weight: 400;
+        letter-spacing: 0.083em;
+        text-transform: uppercase;
+        color: var(--meta);
+      }
+
+      /* ── Headings ── */
+      h1, h2 {
+        color: var(--black);
+        font-weight: 700;
+        line-height: 1.625;
+        letter-spacing: normal;
+        max-width: 22ch;
+      }
+
+      h1 { font-size: clamp(28px, 4vw, 32px); }
+      h2 { font-size: clamp(24px, 3.5vw, 32px); }
+
+      /* ── Lead / Body ── */
+      .lead {
+        max-width: 780px;
+        font-size: 16px;
+        line-height: 1.75;
+        color: var(--body-text);
+      }
+
+      .lead + .lead { margin-top: 8px; }
+
+      /* ── Panels & Grids ── */
+      .panel { display: grid; gap: 24px; align-content: start; }
+      .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
+      .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+
+      /* ── Cards ── */
+      .card {
+        padding: 24px 0;
+        border-top: 2px solid var(--black);
+      }
+
+      .card strong { color: var(--black); }
+
+      .card p {
+        font-size: 16px;
+        line-height: 1.75;
+        color: var(--body-text);
+      }
+
+      /* ── Tag ── */
+      .tag {
+        display: inline-block;
+        font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 11px;
+        letter-spacing: 0.083em;
+        color: var(--meta);
+        margin-bottom: 12px;
+      }
+
+      /* ── Bullets ── */
+      .bullets { display: grid; gap: 16px; }
+
+      .point {
+        padding-left: 16px;
+        border-left: 2px solid var(--black);
+        font-size: 16px;
+        line-height: 1.75;
+        color: var(--body-text);
+      }
+
+      .point strong { color: var(--black); }
+
+      /* ── Timeline ── */
+      .timeline {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 1px;
+        background: var(--border);
+      }
+
+      .timeline-step {
+        display: grid;
+        gap: 8px;
+        padding: 20px 16px;
+        background: var(--bg);
+      }
+
+      .timeline-step.highlight {
+        background: var(--black);
+      }
+      .timeline-step.highlight .num,
+      .timeline-step.highlight p,
+      .timeline-step.highlight strong {
+        color: var(--bg);
+      }
+
+      .timeline-step .num {
+        font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 11px;
+        font-weight: 400;
+        letter-spacing: 0.083em;
+        text-transform: uppercase;
+        color: var(--meta);
+      }
+
+      .timeline-step p {
+        font-size: 15px;
+        line-height: 1.65;
+        color: var(--body-text);
+      }
+
+      .timeline-step strong { color: var(--black); }
+
+      /* ── Compare Table ── */
+      .compare {
+        width: 100%;
+        border-collapse: collapse;
+        border-top: 2px solid var(--black);
+        border-bottom: 2px solid var(--black);
+      }
+
+      .compare th,
+      .compare td {
+        padding: 18px 16px;
+        text-align: left;
+        font-size: 15px;
+        line-height: 1.65;
+        color: var(--body-text);
+        border-bottom: 1px solid var(--border);
+        vertical-align: top;
+      }
+
+      .compare th {
+        font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 11px;
+        letter-spacing: 0.083em;
+        text-transform: uppercase;
+        color: var(--meta);
+        font-weight: 400;
+        border-bottom: 1px solid var(--black);
+      }
+
+      .compare td strong { color: var(--black); }
+
+      .compare tr:last-child td { border-bottom: none; }
+
+      /* ── Note (pull quote) ── */
+      .note {
+        font-size: 16px;
+        line-height: 1.75;
+        color: var(--body-text);
+        padding: 24px 0;
+        border-top: 1px solid var(--border);
+        border-bottom: 1px solid var(--border);
+      }
+
+      .note strong { color: var(--black); }
+
+      /* ── Footer ── */
+      .footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: end;
+        gap: 16px;
+        font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 11px;
+        letter-spacing: 0.083em;
+        color: var(--light-gray);
+        text-transform: uppercase;
+      }
+
+      .slide-count {
+        font-weight: 700;
+        color: var(--black);
+      }
+
+      /* ── Responsive ── */
+      @media (max-width: 768px) {
+        .slide { padding: 64px 24px 48px; }
+        .grid-2, .grid-3, .timeline { grid-template-columns: 1fr; }
+        .nav { right: 12px; }
+        .compare { font-size: 13px; }
+        .compare th, .compare td { padding: 14px 10px; }
+        .hero { aspect-ratio: 16 / 9; }
+        .credits { padding: 32px 24px 64px; }
+      }
+
+      /* ── Print ── */
+      @media print {
+        .slide { min-height: auto; page-break-after: always; padding: 24px 0; }
+        .nav, .progress { display: none; }
+        .reveal { opacity: 1; transform: none; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="progress" id="progress"></div>
+
+    <aside class="nav" aria-label="Slide navigation">
+      <button data-target="slide-1" class="active" aria-label="Slide 1"></button>
+      <button data-target="slide-2" aria-label="Slide 2"></button>
+      <button data-target="slide-3" aria-label="Slide 3"></button>
+      <button data-target="slide-4" aria-label="Slide 4"></button>
+      <button data-target="slide-5" aria-label="Slide 5"></button>
+    </aside>
+
+    <main>
+      <!-- ═══════════ Slide 1 ═══════════ -->
+      <section class="slide" id="slide-1">
+        <div class="eyebrow reveal">The 2023 Shockwave</div>
+        <h1 class="reveal reveal-delay-1">2023年の存亡リスク合意は、30年の系譜の上に突然現れた</h1>
+        <div class="panel reveal reveal-delay-2">
+          <div>
+            <img class="hero" src="images/ai_risk_lineage/slide1.jpg" alt="Black and white tree roots representing genealogy">
+            <div class="hero-caption">Photo: Unsplash</div>
+          </div>
+          <p class="lead">
+            2023年3月14日にGPT-4がリリースされ、その8日後の3月22日、Future of Life Instituteは6か月の訓練停止を求める公開書簡を公表した。署名者にElon Musk、Yoshua Bengio、Stuart Russell。続く5月30日、Center for AI Safetyは「AIによる絶滅リスクの低減は、パンデミックや核戦争と並ぶ世界規模の優先事項であるべきだ」という22語の声明を出し、Sam Altman、Demis Hassabis、Dario Amodei、Geoffrey Hinton、Bill Gates、Stuart Russell、Yoshua Bengioが署名した。6月、国連事務総長がAIの存亡リスクに言及する。11月、イギリスのAI Safety Summitで<strong>28か国とEUがブレッチリー宣言に署名</strong>した。アメリカと中国を含む。
+          </p>
+          <p class="lead">
+            新聞読者には突然の潮目変化に見えた。ChatGPTの衝撃で人々が慌て、著名人がそれらしい声明を出した、という時系列に読めたからだ。しかし実際には、この合意は30年かけて準備されていた。文脈を欠いた読者は、2023年の現象を「AIが賢くなったから人々が怖くなった」と解釈する。正しい読みはその逆だ。<strong>AIが賢くなる前から危険だと言い続けていた小さな集団が、2023年に初めて主流の言語に接続した</strong>。
+          </p>
+          <p class="lead">
+            この記事ではその接続を遡る。起点は1991年、Extropian Instituteという無名のメーリングリストである。ここに集まった人々の多くは当時20代で、Transhumanism運動と呼ばれる思想圏の中にいた。彼らのうち二人が後にAI存亡リスク論の枠組みを作る。その枠組みが2010年代に効果的利他主義運動と合流し、OpenAI、DeepMind、Anthropicの創設にまで影響を及ぼし、2023年の政府声明へと到達する。系譜を追うと、現在のAI議論の言語がどこで誰によって鋳造されたかが見える。
+          </p>
+          <div class="grid-3">
+            <div class="card">
+              <span class="tag">01</span>
+              <p><strong>FLI 公開書簡</strong><br>2023年3月22日。GPT-4より強力なモデルの訓練を6か月停止するよう求めた。署名者は33,000人を超え、Musk、Bengio、Russellが先頭に並ぶ。主流メディアが初めて「モラトリアム」という言葉を真面目に扱った瞬間である。</p>
+            </div>
+            <div class="card">
+              <span class="tag">02</span>
+              <p><strong>CAIS 22語声明</strong><br>2023年5月30日。Center for AI Safety発。AIによる絶滅リスクを核戦争やパンデミックと同列の「世界規模の優先事項」と位置づけた。OpenAI、Google DeepMind、Anthropicのトップが揃って署名した点が決定的だった。</p>
+            </div>
+            <div class="card">
+              <span class="tag">03</span>
+              <p><strong>ブレッチリー宣言</strong><br>2023年11月1-2日、英国ブレッチリー・パークで開催されたAI Safety Summit。米中含む28か国とEUがAIの深刻なリスクへの対処で合意。歴史上初めて、大国が共同でAIの存亡リスクに言及した外交文書である。</p>
+            </div>
+          </div>
+        </div>
+        <div class="footer reveal reveal-delay-3">
+          <span>現在の合意は、30年前のメーリングリストに起点がある</span>
+          <span class="slide-count">1 / 5</span>
+        </div>
+      </section>
+
+      <!-- ═══════════ Slide 2 ═══════════ -->
+      <section class="slide" id="slide-2">
+        <div class="eyebrow reveal">The Extropian Origins</div>
+        <h2 class="reveal reveal-delay-1">系譜の起点は1991年、Transhumanism運動の内部で生まれた</h2>
+        <div class="panel reveal reveal-delay-2">
+          <div>
+            <img class="hero" src="images/ai_risk_lineage/slide2.jpg" alt="Black and white abstract tree representing intellectual lineage">
+            <div class="hero-caption">Photo: Unsplash</div>
+          </div>
+          <p class="lead">
+            1991年、オックスフォードの哲学者Max MoreがExtropian Instituteのメーリングリストを立ち上げた。Extropyとはエントロピーの反義語として提唱された用語で、テクノロジーによって生命・知能・秩序を拡張しようとする楽観主義的立場を指す。これはTranshumanism運動の一派だった。Transhumanismそのものは、1957年にJulian Huxleyが造語した概念で、人間の身体的・認知的限界をテクノロジーで乗り越えるという思想的系譜を持つ。
+          </p>
+          <p class="lead">
+            Extropianメーリングリストの参加者名簿は、今から振り返ると異様に豪華である。Marvin Minsky（AI研究創始者の一人）、Eric Drexler（分子ナノテクノロジー）、Ralph Merkle（公開鍵暗号）、Ray Kurzweil（シンギュラリティ概念普及者）、Nick Szabo（スマートコントラクト概念）、Wei Dai（暗号通貨の先行概念）。暗号通貨の源流の一部もここに接続している。1990年代のテクノロジー楽観主義の先鋭を集めた場だった。彼らの主たる懸念は当時、Eric Drexlerが1986年に提示した「Grey goo」と呼ばれる分子ナノテクノロジーの暴走シナリオであり、AIはまだ中心的な危機対象ではなかった。
+          </p>
+          <p class="lead">
+            1996年、このリストに二人の若者が加わる。<strong>当時17歳のEliezer Yudkowskyと、当時大学院生のNick Bostrom</strong>である。Yudkowskyはシカゴの正統派ユダヤ人家庭出身で、11歳でほぼ無神論者、17歳で高校を中退した。Bostromはスウェーデン生まれ、10代でニーチェとショーペンハウアーを読み、1995年にWWWに触れて英雄的哲学が時代遅れになりつつあると感じ始めていた。二人とも当初は極端なテクノフィリアで、AIを恐れるどころか、シンギュラリティをできるだけ早く実現させたい立場に立っていた。
+          </p>
+          <div class="grid-2">
+            <div class="card">
+              <p><strong>Yudkowskyの初期立場（1996-2001）</strong></p>
+              <div class="bullets" style="margin-top: 16px">
+                <p class="point"><strong>1996年の宣言</strong> 17歳で「Staring into the Singularity」を投稿。目標は超知能をできるだけ早く実現させること。「銀河をクリップに変えるほど愚かなスーパーマインドはいない」と書いた。</p>
+                <p class="point"><strong>2000年のSIAI設立</strong> 21歳でSingularity Institute for Artificial Intelligence（現MIRI）を設立。当時の使命は「Friendlyで自己改善する人工知能を作成すること」。Friendly AIはあくまで万一の保険として位置づけられていた。</p>
+                <p class="point"><strong>2001年のCFAI論文</strong> 「Creating Friendly AI」を公表。ただし本文のQ3.3は「Friendly AIを作る方が作らないより安全」という条件付き推奨に留まり、AI開発そのものを問題視する段階には至っていない。</p>
+              </div>
+            </div>
+            <div class="card">
+              <p><strong>Bostromの初期立場（1996-2002）</strong></p>
+              <div class="bullets" style="margin-top: 16px">
+                <p class="point"><strong>1997年の博士論文</strong> 確率論を使って人類文明の寿命を推論する終末論研究。この時点で既に「トランスヒューマニズムが挫折する可能性」として存亡リスクを認識していた。</p>
+                <p class="point"><strong>1998年のH+設立</strong> 世界トランスヒューマニスト協会を共同設立し、Transhumanist宣言を起草。同年Extropian MLでYudkowskyに対し「AIシステムが道徳的動機を持たずに高度に知的になることは可能」と指摘。直交仮説の初期版である。</p>
+                <p class="point"><strong>2002年のX-risk論文</strong> 「Existential Risks」論文で存亡リスクという用語を定義。ただしこの時点ではAI由来のリスクは4番目の候補で、最大シナリオはナノテクノロジーだった。</p>
+              </div>
+            </div>
+          </div>
+          <p class="lead">
+            重要なのは、AI存亡リスク論が<strong>反テクノロジー陣営からではなくテクノロジー楽観主義の内部から生まれた</strong>ことだ。BostromもYudkowskyも、技術の発展自体を止めたかったわけではない。Transhumanismが目指す人類の拡張プロジェクトを成功させるためには、その最大の失敗シナリオを分析する必要がある。そういう立場から存亡リスク論は出発した。この出自は、後の議論の空気を決定的に特徴づけることになる。
+          </p>
+        </div>
+        <div class="footer reveal reveal-delay-3">
+          <span>AI脅威論は、AI推進論の内部の自己批判として生まれた</span>
+          <span class="slide-count">2 / 5</span>
+        </div>
+      </section>
+
+      <!-- ═══════════ Slide 3 ═══════════ -->
+      <section class="slide" id="slide-3">
+        <div class="eyebrow reveal">The Turning Points</div>
+        <h2 class="reveal reveal-delay-1">2002-2005年に、楽観主義の中から破滅論の核が析出した</h2>
+        <div class="panel reveal reveal-delay-2">
+          <div>
+            <img class="hero" src="images/ai_risk_lineage/slide3.jpg" alt="Abstract black and white background with dots representing network of ideas">
+            <div class="hero-caption">Photo: Unsplash</div>
+          </div>
+          <p class="lead">
+            Yudkowskyは2002年後半、SF小説を書いている最中に突然の転回を経験したと書いている。彼はこれを「My Naturalistic Awakening」と呼ぶ。非認知的で非進化的な最適化プロセスを小説のアイデアとして考えていたとき、知性とは「未来を狭い領域に押し込む物理的プロセス」に過ぎず、そのオプティマイザーに任意の効用関数を差し込めば<strong>任意の未来が実現しうる</strong>ことに気づいた。人間的な心のアーキテクチャを前提に考えていた自分が、6年間この明白な帰結を見逃していたことに恥じ入ったという。
+          </p>
+          <p class="lead">
+            この覚醒から半年以内に、Yudkowskyは既にExtropian MLで「道徳的でないAIが構築されれば結果は死に至る。例外はない」と書いている。2003年3月13日には人類史上最初の「Paperclip Maximizer」への言及が登場する。ペーパークリップを無限に作ることを目標とする純粋計算知能が、人間よりも知性・意識・創造性・情熱・好奇心を持ちうるという思考実験である。現代のAI脅威論の語彙の中核は、この短期間にYudkowskyが鋳造した。
+          </p>
+          <p class="lead">
+            同じ2003年9月、BostromはAI脅威論の最初の本格論文を発表する。超知能の初期目標の実装誤りがpaperclip maximizer的な事態を招きうることを論理的に展開し、Yudkowskyの「AI Box実験」とFriendly AIを参考文献に引いた。ただしBostromは同論文で、他のリスクと比較して「全体リスクは細心の注意を払いつつできるだけ早く超知能を導入することで最小化できる」とも書いている。2023年のインタビューでも同じ立場を保っていて、<strong>BostromはYudkowskyほど極端ではない</strong>。両者の差は現在まで続いている。
+          </p>
+          <div class="compare">
+            <thead>
+              <tr>
+                <th>年</th>
+                <th>出来事</th>
+                <th>意味</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>2002後半</strong></td>
+                <td>Yudkowskyの「Naturalistic Awakening」。任意の効用関数＋最適化プロセス＝任意の未来という気づき</td>
+                <td>Friendly AIの位置づけが「保険」から「唯一の生存手段」に転換する思想的転換点</td>
+              </tr>
+              <tr>
+                <td><strong>2003年3月</strong></td>
+                <td>Extropian MLで「Paperclip Maximizer」初言及。Yudkowsky</td>
+                <td>価値中立な最適化プロセスが任意の目標を追求する思考実験が成立</td>
+              </tr>
+              <tr>
+                <td><strong>2003年7月</strong></td>
+                <td>Bostrom「トランスヒューマニストの価値観」。存亡リスクを運動の最優先条件と位置づけ</td>
+                <td>Transhumanism運動の内部で、AI安全が明示的に最優先課題となる</td>
+              </tr>
+              <tr>
+                <td><strong>2003年9月</strong></td>
+                <td>Bostrom、最初のAI脅威論論文。paperclip maximizerを理論的に展開</td>
+                <td>YudkowskyとBostromの分業が確立。MLの議論が学術論文に昇格</td>
+              </tr>
+              <tr>
+                <td><strong>2003年</strong></td>
+                <td>Bostrom「Astronomical Waste」論文。宇宙資源利用の遅延を潜在価値損失として定式化</td>
+                <td>後の長期主義の理論基盤。存亡リスク回避を道徳的最優先にする論拠を提供</td>
+              </tr>
+              <tr>
+                <td><strong>2005年</strong></td>
+                <td>Future of Humanity Institute（FHI）設立。オックスフォード大学</td>
+                <td>存亡リスク研究が学術的ホームを獲得。周縁から中心への第一歩</td>
+              </tr>
+            </tbody>
+          </table>
+          <p class="lead">
+            2002-2005年の期間は短いが密度が高い。Transhumanism楽観主義の内部で、AI安全を巡る思想が独立した領域として析出した。Yudkowskyが行動の言葉を、Bostromが理論の言葉を、それぞれ鋳造した。FHIという学術拠点の獲得は、2000年代後半の広範な影響力拡大の前提を整えた。ここから先は、議論の場がメーリングリストから研究機関へ、さらに慈善運動の中核へと移っていく。
+          </p>
+        </div>
+        <div class="footer reveal reveal-delay-3">
+          <span>2002-2005 — 楽観主義の内側で破滅論の結晶が育った3年間</span>
+          <span class="slide-count">3 / 5</span>
+        </div>
+      </section>
+
+      <!-- ═══════════ Slide 4 ═══════════ -->
+      <section class="slide" id="slide-4">
+        <div class="eyebrow reveal">The EA Convergence</div>
+        <h2 class="reveal reveal-delay-1">効果的利他主義との合流で、周縁思想は資金と組織を獲得した</h2>
+        <div class="panel reveal reveal-delay-2">
+          <div>
+            <img class="hero" src="images/ai_risk_lineage/slide4.jpg" alt="Geometric architectural shapes in stark black and white contrast">
+            <div class="hero-caption">Photo: Unsplash</div>
+          </div>
+          <p class="lead">
+            2009年、オックスフォードの倫理学者Toby OrdとWill MacAskillが寄付団体Giving What We Canを立ち上げる。これが後の効果的利他主義（Effective Altruism、EA）運動の出発点となる。EAは証拠と理性を用いて「他者にできるだけ利益をもたらす方法」を特定し実行する思想運動で、当初の関心は世界貧困とグローバル・ヘルスだった。しかしOrdは2005-2009年にBostromの指導下で博士号を取り、BostromのAstronomical Waste論文と存亡リスク概念を深く吸収していた。2011年には彼らの組織を統合してCentre for Effective Altruismが設立され、2012年頃から「効果的利他主義」という総称が定着する。
+          </p>
+          <p class="lead">
+            アメリカでは別経路で同じ合流が起きた。2007年、Holden KarnofskyとElie HassenfeldがGiveWellを設立。2011年、Facebook共同創設者のDustin Moskovitzと妻のCari Tunaが約138億ドルの資金を背景にGiveWellと組んで<strong>Open Philanthropy</strong>を共同設立する。Karnofskyは2007年時点で既にLessWrongやOvercoming Biasの合理主義コミュニティと接触していたが、AI安全論は学術コミュニティで真面目に扱われていないために中身が薄いのだろうと見ていた。2013年頃にAI研究者と話すうちに、問題は議論の中身ではなく「そもそも誰も考えていなかった」ことだと気づき、2014年にBostromの「Superintelligence」出版とStuart Russellの立場転換を目撃して方針を反転させた。
+          </p>
+          <p class="lead">
+            ここで起きたのは、<strong>小さな思想圏が巨大な慈善資本にアクセスを得たという事件</strong>である。2014年以降、Open Philanthropyから効果的利他主義コミュニティへの助成金が急増し、2016年以降は長期主義（longtermism）関連の助成金比率が高まっていく。内訳ではAI関連が約50%を占め、最大カテゴリとなった。longtermismという用語自体は2017年にMacAskillが定義したもので、「長期的な将来にプラスの影響を与えることが現代の最重要の道徳的優先事項である」という立場を指す。BostromのAstronomical Waste論文を道徳哲学に翻訳した概念で、存亡リスク回避を最優先とする論拠をEA運動に埋め込んだ。
+          </p>
+          <div class="grid-3">
+            <div class="card">
+              <span class="tag">Layer 1</span>
+              <p><strong>理論</strong><br>MIRI（旧SIAI）、FHI、LessWrongを中心とする合理主義コミュニティが、AI Alignment、存亡リスク、長期主義の概念体系を構築。学術論文、ブログ、フォーラム投稿で蓄積された。</p>
+            </div>
+            <div class="card">
+              <span class="tag">Layer 2</span>
+              <p><strong>資金</strong><br>Open Philanthropy、Peter Thielのような個人寄付者、後のFTX Future Fundなどが資金供給の役割を担った。長期主義関連助成金は2016年以降急増し、AI安全関連が最大カテゴリとなった。</p>
+            </div>
+            <div class="card">
+              <span class="tag">Layer 3</span>
+              <p><strong>人材</strong><br>80,000 Hoursがキャリアコンサルティングを通じて若手研究者をAI安全分野に誘導。2018年にはAIリスクが「最も緊急な壊滅的リスク」のトップに格上げされた。</p>
+            </div>
+          </div>
+          <p class="lead">
+            2015年1月、プエルトリコで開かれた「The Future of AI: Opportunities and Challenges」会議は象徴的だった。Future of Life Institute（2014年設立、Max Tegmark主導）が主催し、Bostrom、Yudkowsky、Elon Musk、Demis Hassabis、Ilya Sutskever、Stuart Russellが一堂に会した。同年EA Globalでもパネルにこの顔ぶれが並び、<strong>1996年のExtropian MLで17歳だった少年が、世界有数のAI研究機関トップと並んで議論する場が生まれた</strong>。2010年代前半に起きたのは、周縁思想が中心に移動する現象である。
+          </p>
+          <div class="note">
+            <strong>周縁から中心への移動には3つの条件が揃う必要があった</strong>。第一に、言語を持っていること。YudkowskyとBostromは2002-2005年に語彙と論理を整えていた。第二に、学術的ホームを獲得していること。FHIが2005年にそれを提供した。第三に、巨額の慈善資本に接続すること。Open PhilanthropyとEA運動との合流で2014-2016年にそれが実現した。三つ揃って初めて、2023年の政府声明に至る道筋が見えてくる。
+          </div>
+        </div>
+        <div class="footer reveal reveal-delay-3">
+          <span>理論・資金・人材の3層が揃った時点で、周縁は中心になる</span>
+          <span class="slide-count">4 / 5</span>
+        </div>
+      </section>
+
+      <!-- ═══════════ Slide 5 ═══════════ -->
+      <section class="slide" id="slide-5">
+        <div class="eyebrow reveal">Into The Mainstream</div>
+        <h2 class="reveal reveal-delay-1">DeepMind・OpenAI・Anthropicの設立は、この系譜の直接的帰結である</h2>
+        <div class="panel reveal reveal-delay-2">
+          <div>
+            <img class="hero" src="images/ai_risk_lineage/slide5.jpg" alt="Symmetrical view of concrete brutalist architecture against sky">
+            <div class="hero-caption">Photo: Unsplash</div>
+          </div>
+          <p class="lead">
+            2010年、サンフランシスコのPeter Thielのタウンハウスで、Yudkowskyは二人の若い研究者をThielに引き合わせた。Shane LeggとDemis Hassabisである。Leggは2008年にカナダのシンギュラリティAI研究所賞を受賞しており、2009年には「SIAIが現時点で私たちが持つ最大の希望」とブログに書いていた。Thielはこの紹介を受けて投資を決め、その秋、<strong>DeepMindが設立される</strong>。2014年にGoogleがDeepMindを買収する際、LeggはAI倫理委員会の設置を強く求め、Thielと初期MIRIの寄付者Jaan Tallinnがそれを後押しした。
+          </p>
+          <p class="lead">
+            2012年、Thiel系のカンファレンスでHassabisとElon Muskが会う。Muskが火星植民地化計画を語ると、Hassabisは「超知能が人類を滅ぼさない限りその計画は機能するだろう」と答えた。Muskはこの論点をそれまで考えていなかったと書かれている。Muskは直ちにThielと共同でDeepMindに投資する。2014年10月、MuskはMITのシンポジウムで「人工知能は私たちの存在を脅かす最大の脅威」と発言。2015年7月、Larry PageとMuskはAIリスクで激しく意見を違えた。その結果が同年12月の<strong>OpenAI設立</strong>である。創設メンバーのSam Altman、Greg Brockman、Ilya Sutskever、Dario Amodei、Chris Olah、Paul Christianoのうち、少なくとも数名は存亡リスク論と効果的利他主義の文脈を内面化していた。
+          </p>
+          <p class="lead">
+            2021年、Dario Amodeiと15名の研究者がOpenAIを離脱し<strong>Anthropic</strong>を設立する。Amodeiは2009年から効果的利他主義運動を認識していたとされ、Anthropicの中核的使命はAI安全研究だった。こうしてAIの先端を走る3つの研究機関のすべてが、1996年のExtropian MLに端を発する思想系譜の直接の子孫として位置づけられる。AI安全を最も恐れていた人々が、自分たちが最前線に立つ必要があると判断し、研究機関を構築したという構造である。この構造が、2023年の合意形成で内部者として機能した。
+          </p>
+          <div class="grid-2">
+            <div class="card">
+              <p><strong>系譜が2023年に可能にしたもの</strong></p>
+              <div class="bullets" style="margin-top: 16px">
+                <p class="point"><strong>研究機関トップの共通語彙</strong> OpenAI、DeepMind、Anthropicのトップが全員、存亡リスクという概念を内部化していた。CAIS声明で3社CEOが同時に署名できたのは、共通語彙の存在が前提だった。</p>
+                <p class="point"><strong>議会証言への橋渡し</strong> 2023年5月のAltman議会証言、6月のHintonの警告、各国政府へのブリーフィング。これらを成立させた裏では、20年分のAI安全研究文献が議員スタッフに読まれていた。</p>
+                <p class="point"><strong>国際枠組みの素案</strong> ブレッチリー宣言に先立つ議論の草案は、FHIやGovernance of AIセンターから提供された。枠組みの骨格をゼロから作る必要がなく、既存の学術成果を政治的言語に翻訳するだけで済んだ。</p>
+              </div>
+            </div>
+            <div class="card">
+              <p><strong>系譜がもたらした緊張</strong></p>
+              <div class="bullets" style="margin-top: 16px">
+                <p class="point"><strong>二項対立の固定化</strong> 「Alignment解決か破滅か」という枠組みが強すぎ、第三の選択肢が議論の土俵に乗りにくい。起草者のバイアスが政府文書にも影響している。</p>
+                <p class="point"><strong>e/accの反動</strong> 2022年に効果的加速主義が登場し、EA・長期主義への反動として急速に拡大した。2023年11月のAltman解任騒動では「EAvs加速主義」のストーリーが一気に可視化された。</p>
+                <p class="point"><strong>代表性の問題</strong> 起草者の多くが白人男性・英語圏・オックスフォードとシリコンバレーの人脈で構成されている。28か国合意の外観の下に、起案の同質性という問題が埋め込まれている。</p>
+              </div>
+            </div>
+          </div>
+          <div class="note">
+            系譜を辿ると、2023年の政府声明は突然の合意ではなく、<strong>1991年に始まる小さな会話の自然な延長</strong>だった。この観察は安心材料にも警戒材料にもなる。安心材料としては、熟考を重ねてきた人々が現在の議論を形作っていること。警戒材料としては、熟考の起点そのものが特定の思想圏に偏っていることだ。今後10年で必要になるのは、この系譜の外側からAI安全を考える言語を育てる作業である。現在の合意に乗るか反発するかの二択ではなく、<strong>なぜこの合意が可能になったのかを知った上で、次の合意に何を加えるかを問う段階にある</strong>。
+          </div>
+        </div>
+        <div class="footer reveal reveal-delay-3">
+          <span>1991年のML投稿が、2023年の28か国合意まで一本の線で繋がる</span>
+          <span class="slide-count">5 / 5</span>
+        </div>
+      </section>
+    </main>
+
+    <footer class="credits">
+      <p>
+        Photos: All images from <a href="https://unsplash.com">Unsplash</a> (free license).
+        Slide 1: <a href="https://unsplash.com/photos/aNezWuEDbbU">Tree roots</a> /
+        Slide 2: <a href="https://unsplash.com/photos/j0sXYAlEeMo">Abstract tree</a> /
+        Slide 3: <a href="https://unsplash.com/photos/L1gvw0C_-CY">Dots pattern</a> /
+        Slide 4: <a href="https://unsplash.com/photos/pFv5PYlDQBk">Geometric shapes</a> /
+        Slide 5: <a href="https://unsplash.com/photos/rEtsek-3HFk">Brutalist architecture</a>
+      </p>
+    </footer>
+
+    <script>
+      const buttons = Array.from(document.querySelectorAll('.nav button'));
+      const slides = Array.from(document.querySelectorAll('.slide'));
+      const progress = document.getElementById('progress');
+
+      function setActive(id) {
+        buttons.forEach(b => b.classList.toggle('active', b.dataset.target === id));
+      }
+
+      buttons.forEach(b => {
+        b.addEventListener('click', () => {
+          document.getElementById(b.dataset.target)?.scrollIntoView({ behavior: 'smooth' });
+        });
+      });
+
+      const navObserver = new IntersectionObserver(entries => {
+        entries.forEach(e => { if (e.isIntersecting) setActive(e.target.id); });
+      }, { threshold: 0.5 });
+
+      slides.forEach(s => navObserver.observe(s));
+
+      const revealObserver = new IntersectionObserver(entries => {
+        entries.forEach(e => {
+          if (e.isIntersecting) {
+            e.target.classList.add('visible');
+          }
+        });
+      }, { threshold: 0.15, rootMargin: '0px 0px -60px 0px' });
+
+      document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+      window.addEventListener('scroll', () => {
+        const scrollTop = window.scrollY;
+        const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+        const pct = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+        progress.style.width = pct + '%';
+      }, { passive: true });
+
+      window.addEventListener('keydown', e => {
+        const idx = buttons.findIndex(b => b.classList.contains('active'));
+        if (e.key === 'ArrowDown' || e.key === 'PageDown') {
+          e.preventDefault();
+          slides[Math.min(idx + 1, slides.length - 1)]?.scrollIntoView({ behavior: 'smooth' });
+        }
+        if (e.key === 'ArrowUp' || e.key === 'PageUp') {
+          e.preventDefault();
+          slides[Math.max(idx - 1, 0)]?.scrollIntoView({ behavior: 'smooth' });
+        }
+      });
+    </script>
+  </body>
+</html>

@@ -63,6 +63,8 @@ body { font-family: var(--ff-body); font-feature-settings: "palt"; font-size: 16
   <a href="#p4">4. Conversation</a>
   <a href="#p5">5. Photo Essay</a>
   <a href="#p6">6. Investigation</a>
+  <br>IMAGE PLACEMENT<br>
+  <a href="#img-gallery">Gallery (10 types)</a>
 </nav>
 
 <!-- ═══════════ Pattern 1: Monolith ═══════════ -->
@@ -204,8 +206,153 @@ body { font-family: var(--ff-body); font-feature-settings: "palt"; font-size: 16
   </blockquote>
 </article>
 
+<!-- ═══════════════════════════════════════════════════════
+     Image Placement Gallery
+     本文幅 680px を基準に10種類の画像配置を実演する
+     ═══════════════════════════════════════════════════════ -->
+<div class="label-bar">Image Placement Gallery — 10 variations of image size × layout</div>
+
+<article id="img-gallery" class="gallery-article">
+  <div class="gallery-inner">
+    <div class="eyebrow">Reference / Image Placement</div>
+    <h1 style="font-size:52px;line-height:1.05;margin:16px 0 24px;">画像配置10種</h1>
+    <p class="lead" style="font-size:20px;line-height:1.55;max-width:60ch;margin-bottom:28px;">本文幅680pxを基準に、サイズと配置の組み合わせで10通りのバリエーションを定義する。記事で使うときは3種類以内に抑え、視覚的休符としての価値を保つ。</p>
+
+    <h2 style="font-size:22px;margin:48px 0 8px;">1. Full-bleed ― 画面端まで達する全幅</h2>
+    <p>セクションの切れ目、特集オープナー、視覚的休符として使う。1記事に1回まで。</p>
+  </div>
+
+  <figure class="img img-fullbleed">
+    <img src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=2000" alt="">
+    <figcaption class="caption">画面端まで達する全幅画像。視覚的な息継ぎとして機能する。<span class="credit">PHOTO: UNSPLASH</span></figcaption>
+  </figure>
+
+  <div class="gallery-inner">
+    <h2 style="font-size:22px;margin:48px 0 8px;">2. Wide ― 本文幅を超えるが画面端までは達しない</h2>
+    <p>主要ヒーロー、引きのある資料画像。本文の流れを保ちつつ視覚的な広がりを出したいとき。</p>
+  </div>
+
+  <figure class="img img-wide">
+    <img src="https://images.unsplash.com/photo-1506260408121-e353d10b87c7?w=1600" alt="">
+    <figcaption class="caption" style="max-width:680px;margin-left:auto;margin-right:auto;">本文を超える幅で配置される主要画像。<span class="credit">PHOTO: UNSPLASH</span></figcaption>
+  </figure>
+
+  <div class="gallery-inner">
+    <h2 style="font-size:22px;margin:48px 0 8px;">3. Content-width ― 本文と同幅</h2>
+    <p>標準配置。説明的な図版、引用画像、本文の流れを止めずに挟む画像に使う。</p>
+
+    <figure class="img img-content">
+      <img src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=1200" alt="">
+      <figcaption class="caption">本文と同じ幅で配置される標準サイズ。<span class="credit">PHOTO: UNSPLASH</span></figcaption>
+    </figure>
+
+    <h2 style="font-size:22px;margin:48px 0 8px;">4. Center small ― 本文より小さく中央</h2>
+    <p>補助図、小さめのポートレート、概念図。本文幅を使い切ると重すぎる場合に選ぶ。</p>
+
+    <figure class="img img-center-small">
+      <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600" alt="" style="aspect-ratio:3/4;object-fit:cover;">
+      <figcaption class="caption">補助図としての小サイズ配置</figcaption>
+    </figure>
+
+    <h2 style="font-size:22px;margin:48px 0 8px;">5. Float left ― 左寄せ・本文回り込み</h2>
+
+    <figure class="img img-float-left">
+      <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=600" alt="" style="aspect-ratio:3/4;object-fit:cover;">
+      <figcaption class="caption">左寄せポートレート</figcaption>
+    </figure>
+    <p>画像の右側に本文が回り込む配置。人物紹介、小カット、短い説明に寄り添う図版として機能する。段落は最低3段落以上続けて、floatを十分に消費する必要がある。</p>
+    <p>1段落だけで終わるとレイアウトが崩れるため、事前に段落の長さを見積もっておく。モバイル表示では自動で落ちることを前提にして、本文の論理が画像なしでも通るように書く。</p>
+    <p>この手法は長年の編集デザインの定番だが、デジタル環境では忘れられがちで、WIREDも一部の特集記事でしか使っていない。だからこそ使うと紙面感が出る。</p>
+    <p class="clear-floats" style="margin:0;"></p>
+
+    <h2 style="font-size:22px;margin:48px 0 8px;">6. Float right ― 右寄せ・本文回り込み</h2>
+
+    <figure class="img img-float-right">
+      <img src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=600" alt="" style="aspect-ratio:4/3;object-fit:cover;">
+      <figcaption class="caption">右寄せの資料画像</figcaption>
+    </figure>
+    <p>画像の左側に本文が回り込む配置。サイドノート、引用画像、補助資料としての画像を本文の流れに差し込むときに使う。右寄せの方が視線の流れを妨げにくいため、長文中では左寄せより頻度が高くなる。</p>
+    <p>Broadsheet（ロングリード）パターンと相性がよい。セクション冒頭の引き画像として置くと、本文の密度を保ちながら視覚的な変化を加えられる。</p>
+    <p>floatを終えた次の見出しは <code>clear: both</code> を効かせる。CSS側で <code>h2</code> に <code>clear: both</code> を付けておくと事故が減る。</p>
+    <p class="clear-floats" style="margin:0;"></p>
+
+    <h2 style="font-size:22px;margin:48px 0 8px;">7. Side by side ― 2枚並列</h2>
+    <p>Before/After、対比、二項図。幅は本文幅内で2分割される。</p>
+
+    <div class="img-side-by-side">
+      <figure>
+        <img src="https://images.unsplash.com/photo-1534796636912-3b95b3ab5986?w=600" alt="" style="aspect-ratio:1/1;">
+        <figcaption class="caption">左：Before</figcaption>
+      </figure>
+      <figure>
+        <img src="https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?w=600" alt="" style="aspect-ratio:1/1;">
+        <figcaption class="caption">右：After</figcaption>
+      </figure>
+    </div>
+
+    <h2 style="font-size:22px;margin:48px 0 8px;">8. Grid 3 / Grid 4 ― フォトエッセイ用</h2>
+    <p>3枚または4枚の均等グリッド。フォトエッセイ、研究拠点群、作例一覧に使う。</p>
+
+    <div class="img-grid-3">
+      <img src="https://images.unsplash.com/photo-1573164713714-d95e436ab8d6?w=500" alt="">
+      <img src="https://images.unsplash.com/photo-1591779051696-1c3fa1469a79?w=500" alt="">
+      <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?w=500" alt="">
+    </div>
+
+    <div class="img-grid-4">
+      <img src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=500" alt="">
+      <img src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=500" alt="">
+      <img src="https://images.unsplash.com/photo-1506260408121-e353d10b87c7?w=500" alt="">
+      <img src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=500" alt="">
+    </div>
+  </div>
+
+  <div class="gallery-inner">
+    <h2 style="font-size:22px;margin:48px 0 8px;">9. Overlay ― 画像の上にテキスト重ね</h2>
+    <p>特集カバー、パート扉。画像をグレースケール + 暗くし、白文字を重ねる。1記事に1回まで。</p>
+  </div>
+
+  <figure class="img img-overlay">
+    <img src="https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?w=1800" alt="">
+    <div class="overlay-text">
+      <div class="eyebrow">Part I / Longread</div>
+      <h1 style="font-size:64px;margin:8px 0 0;">計算の地政学</h1>
+    </div>
+  </figure>
+
+  <div class="gallery-inner">
+    <h2 style="font-size:22px;margin:48px 0 8px;">10. Inline ― 段落内の小画像</h2>
+    <p>このロジックは <img class="img-inline" src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=100" alt="icon" style="border-radius:2px;"> の初期版で既に見られた。アイコン、ロゴ、絵文字代替として使う。</p>
+
+    <p style="overflow:auto;"><img class="img-inline-thumb" src="https://images.unsplash.com/photo-1573164713714-d95e436ab8d6?w=200" alt="">段落先頭にサムネイルを配置し、本文が右側に回り込む短い紹介ブロック。紹介カード、関連記事ブロック、用語定義の先頭画像として機能する。サムネは96px固定で、段落の高さを自然に消費するよう長めに書く。</p>
+
+    <hr style="margin:64px 0 32px;border:none;border-top:1px solid #e5e5e5;">
+    <p style="font-size:13px;color:#757575;">10 placements × AGI HUB design system. クラス定義は <code>palette.css</code>、詳細は <code>PATTERNS.md</code> の「Image Placement Gallery」セクション参照。</p>
+  </div>
+</article>
+
+<style>
+/* Gallery article は広いコンテナで fullbleed / wide / overlay を機能させる */
+.gallery-article {
+  max-width: none;
+  margin: 40px 0;
+  background: #fff;
+  border-top: 1px solid #aaa;
+  border-bottom: 1px solid #aaa;
+  padding: 64px 0;
+  overflow: hidden;
+}
+.gallery-article .gallery-inner {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+.gallery-article h2 { clear: both; }
+.gallery-article p { font-size: 16px; line-height: 1.75; margin: 0 0 16px; }
+</style>
+
 <div style="max-width:860px;margin:40px auto;padding:0 20px;font-size:12px;color:#666;">
-  6 patterns × WIRED-inspired monotone base. Generated 2026-04-09.
+  6 patterns + 10 image placements × WIRED-inspired monotone base. Generated 2026-04-09, updated with placement gallery.
 </div>
 
 </body>

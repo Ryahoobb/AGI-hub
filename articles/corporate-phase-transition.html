@@ -314,6 +314,37 @@
         max-width: 780px;
       }
 
+      .metamorph-svg {
+        width: 100%;
+        height: auto;
+        display: block;
+        max-width: 100%;
+      }
+      .metamorph-legend {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px 28px;
+        margin-top: 20px;
+        font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 11px;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        color: var(--meta);
+      }
+      .metamorph-legend span::before {
+        content: "";
+        display: inline-block;
+        width: 10px;
+        height: 10px;
+        margin-right: 8px;
+        vertical-align: middle;
+        background: var(--accent);
+      }
+      .metamorph-legend span.human::before { background: #1a1a1a; }
+      .metamorph-legend span.ai::before { background: var(--accent); }
+      .metamorph-legend span.cliff::before { background: repeating-linear-gradient(90deg, #b8342f 0 4px, transparent 4px 8px); }
+
       @media (max-width: 900px) {
         .timeline { grid-template-columns: repeat(2, 1fr); }
       }
@@ -347,6 +378,7 @@
       <button data-target="slide-6" aria-label="Slide 6"></button>
       <button data-target="slide-7" aria-label="Slide 7"></button>
       <button data-target="slide-8" aria-label="Slide 8"></button>
+      <button data-target="slide-9" aria-label="Slide 9"></button>
     </aside>
 
     <main>
@@ -385,12 +417,205 @@
         </div>
         <div class="footer reveal reveal-delay-3">
           <span>意思決定の所在 — それ以外の指標は全て遅行指標</span>
-          <span class="slide-count">1 / 8</span>
+          <span class="slide-count">1 / 9</span>
         </div>
       </section>
 
       <!-- ═══════════ Slide 2 ═══════════ -->
       <section class="slide" id="slide-2">
+        <div class="eyebrow reveal">Figure 01 / Phase Metamorphosis</div>
+        <h2 class="reveal reveal-delay-1">企業形態の7段階 — ピラミッドが液体を経て消滅するまで</h2>
+        <div class="panel reveal reveal-delay-2">
+          <p class="lead">
+            本論に入る前に、L0からL6までの7段階がどのような組織形態を指しているかを一枚の図で俯瞰しておく。縦軸は取らない。横軸の時間と、各段階で<strong>組織の輪郭がどう変形するか</strong>だけを追う。ピラミッドから始まり、逆ピラミッド、ハブネットワーク、スパースメッシュを経て、L4とL5のあいだで垂直な崖を越え、雲状の液体形態に変わり、最後に輪郭が消えて目的関数のシンボルだけが残る。各段階の詳細は後続のスライドで一段ずつ掘り下げるが、まずはこの変形の連なりを網膜に焼き付けてほしい。
+          </p>
+          <div class="chart-wrap">
+            <div class="chart-title">Figure 01</div>
+            <div class="chart-headline">Organizational Form Metamorphosis — L0 to L6</div>
+            <svg class="metamorph-svg" viewBox="0 0 1120 440" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="L0からL6までの組織形態の変化図">
+              <defs>
+                <pattern id="cliffHatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+                  <rect width="6" height="6" fill="#faf8f1"/>
+                  <line x1="0" y1="0" x2="0" y2="6" stroke="#b8342f" stroke-width="2"/>
+                </pattern>
+              </defs>
+
+              <!-- baseline -->
+              <line x1="40" y1="300" x2="1080" y2="300" stroke="#e8e3d4" stroke-width="1"/>
+
+              <!-- L0: Full Pyramid (human 100%) -->
+              <g transform="translate(40,0)">
+                <text x="70" y="30" text-anchor="middle" font-family="SF Mono,Menlo,monospace" font-size="13" font-weight="700" fill="#2f2b92">L0</text>
+                <text x="70" y="48" text-anchor="middle" font-family="SF Mono,Menlo,monospace" font-size="9" fill="#757575">TOOL</text>
+                <text x="70" y="62" text-anchor="middle" font-family="SF Mono,Menlo,monospace" font-size="9" fill="#999">~2024</text>
+                <polygon points="70,90 130,300 10,300" fill="#1a1a1a"/>
+                <text x="70" y="330" text-anchor="middle" font-family="HelveticaNeue,sans-serif" font-size="12" font-weight="700" fill="#1a1a1a">従来型</text>
+                <text x="70" y="348" text-anchor="middle" font-family="HelveticaNeue,sans-serif" font-size="11" fill="#1a1a1a">ピラミッド</text>
+                <text x="70" y="380" text-anchor="middle" font-family="SF Mono,Menlo,monospace" font-size="9" fill="#757575">人間100%</text>
+                <text x="70" y="395" text-anchor="middle" font-family="SF Mono,Menlo,monospace" font-size="9" fill="#757575">AI 0%</text>
+              </g>
+
+              <!-- L1: Pyramid with hollow base (bottom workers replaced) -->
+              <g transform="translate(180,0)">
+                <text x="70" y="30" text-anchor="middle" font-family="SF Mono,Menlo,monospace" font-size="13" font-weight="700" fill="#2f2b92">L1</text>
+                <text x="70" y="48" text-anchor="middle" font-family="SF Mono,Menlo,monospace" font-size="9" fill="#757575">WORKFLOW</text>
+                <text x="70" y="62" text-anchor="middle" font-family="SF Mono,Menlo,monospace" font-size="9" fill="#999">2025-26</text>
+                <!-- upper solid (human) -->
+                <polygon points="70,90 112,230 28,230" fill="#1a1a1a"/>
+                <!-- lower hollowed (AI replacing) -->
+                <polygon points="112,230 130,300 10,300 28,230" fill="none" stroke="#2f2b92" stroke-width="1.5" stroke-dasharray="3,3"/>
+                <polygon points="112,230 130,300 10,300 28,230" fill="#2f2b92" fill-opacity="0.15"/>
+                <text x="70" y="330" text-anchor="middle" font-family="HelveticaNeue,sans-serif" font-size="12" font-weight="700" fill="#1a1a1a">底辺が</text>
+                <text x="70" y="348" text-anchor="middle" font-family="HelveticaNeue,sans-serif" font-size="11" fill="#1a1a1a">抜けたピラミッド</text>
+                <text x="70" y="380" text-anchor="middle" font-family="SF Mono,Menlo,monospace" font-size="9" fill="#757575">人間85%</text>
+                <text x="70" y="395" text-anchor="middle" font-family="SF Mono,Menlo,monospace" font-size="9" fill="#2f2b92">AI 15%</text>
+              </g>
+
+              <!-- L2: Inverted pyramid (thin middle, heavy top strategists) -->
+              <g transform="translate(320,0)">
+                <text x="70" y="30" text-anchor="middle" font-family="SF Mono,Menlo,monospace" font-size="13" font-weight="700" fill="#2f2b92">L2</text>
+                <text x="70" y="48" text-anchor="middle" font-family="SF Mono,Menlo,monospace" font-size="9" fill="#757575">LOOP</text>
+                <text x="70" y="62" text-anchor="middle" font-family="SF Mono,Menlo,monospace" font-size="9" fill="#999">2026-27</text>
+                <!-- human top wide -->
+                <polygon points="10,90 130,90 100,180 40,180" fill="#1a1a1a"/>
+                <!-- thin waist (designers) -->
+                <rect x="60" y="180" width="20" height="40" fill="#1a1a1a"/>
+                <!-- AI bottom expanding -->
+                <polygon points="60,220 80,220 130,300 10,300" fill="#2f2b92" fill-opacity="0.35"/>
+                <polygon points="60,220 80,220 130,300 10,300" fill="none" stroke="#2f2b92" stroke-width="1.2"/>
+                <text x="70" y="330" text-anchor="middle" font-family="HelveticaNeue,sans-serif" font-size="12" font-weight="700" fill="#1a1a1a">逆ピラミッド</text>
+                <text x="70" y="348" text-anchor="middle" font-family="HelveticaNeue,sans-serif" font-size="11" fill="#1a1a1a">化の開始</text>
+                <text x="70" y="380" text-anchor="middle" font-family="SF Mono,Menlo,monospace" font-size="9" fill="#757575">人間65%</text>
+                <text x="70" y="395" text-anchor="middle" font-family="SF Mono,Menlo,monospace" font-size="9" fill="#2f2b92">AI 35%</text>
+              </g>
+
+              <!-- L3: Department with AI nodes mixed -->
+              <g transform="translate(460,0)">
+                <text x="70" y="30" text-anchor="middle" font-family="SF Mono,Menlo,monospace" font-size="13" font-weight="700" fill="#2f2b92">L3</text>
+                <text x="70" y="48" text-anchor="middle" font-family="SF Mono,Menlo,monospace" font-size="9" fill="#757575">DEPARTMENT</text>
+                <text x="70" y="62" text-anchor="middle" font-family="SF Mono,Menlo,monospace" font-size="9" fill="#999">2027-29</text>
+                <!-- central human hub -->
+                <circle cx="70" cy="160" r="14" fill="#1a1a1a"/>
+                <!-- AI nodes surrounding -->
+                <circle cx="30" cy="110" r="9" fill="#2f2b92"/>
+                <circle cx="110" cy="110" r="9" fill="#2f2b92"/>
+                <circle cx="20" cy="200" r="9" fill="#2f2b92"/>
+                <circle cx="120" cy="200" r="9" fill="#2f2b92"/>
+                <circle cx="70" cy="240" r="9" fill="#2f2b92"/>
+                <circle cx="35" cy="260" r="7" fill="#2f2b92" fill-opacity="0.6"/>
+                <circle cx="105" cy="260" r="7" fill="#2f2b92" fill-opacity="0.6"/>
+                <!-- connecting lines -->
+                <line x1="70" y1="160" x2="30" y2="110" stroke="#999" stroke-width="1"/>
+                <line x1="70" y1="160" x2="110" y2="110" stroke="#999" stroke-width="1"/>
+                <line x1="70" y1="160" x2="20" y2="200" stroke="#999" stroke-width="1"/>
+                <line x1="70" y1="160" x2="120" y2="200" stroke="#999" stroke-width="1"/>
+                <line x1="70" y1="160" x2="70" y2="240" stroke="#999" stroke-width="1"/>
+                <text x="70" y="330" text-anchor="middle" font-family="HelveticaNeue,sans-serif" font-size="12" font-weight="700" fill="#1a1a1a">AIノードが</text>
+                <text x="70" y="348" text-anchor="middle" font-family="HelveticaNeue,sans-serif" font-size="11" fill="#1a1a1a">部門に混在</text>
+                <text x="70" y="380" text-anchor="middle" font-family="SF Mono,Menlo,monospace" font-size="9" fill="#757575">人間40%</text>
+                <text x="70" y="395" text-anchor="middle" font-family="SF Mono,Menlo,monospace" font-size="9" fill="#2f2b92">AI 60%</text>
+              </g>
+
+              <!-- L4: Sparse human nodes + AI mesh -->
+              <g transform="translate(600,0)">
+                <text x="70" y="30" text-anchor="middle" font-family="SF Mono,Menlo,monospace" font-size="13" font-weight="700" fill="#2f2b92">L4</text>
+                <text x="70" y="48" text-anchor="middle" font-family="SF Mono,Menlo,monospace" font-size="9" fill="#757575">BOARDROOM</text>
+                <text x="70" y="62" text-anchor="middle" font-family="SF Mono,Menlo,monospace" font-size="9" fill="#999">2029-31</text>
+                <!-- AI mesh (many small blue dots) -->
+                <g fill="#2f2b92" fill-opacity="0.7">
+                  <circle cx="20" cy="100" r="4"/><circle cx="40" cy="95" r="4"/><circle cx="60" cy="110" r="4"/>
+                  <circle cx="85" cy="100" r="4"/><circle cx="105" cy="115" r="4"/><circle cx="125" cy="105" r="4"/>
+                  <circle cx="25" cy="135" r="4"/><circle cx="50" cy="145" r="4"/><circle cx="75" cy="135" r="4"/>
+                  <circle cx="100" cy="150" r="4"/><circle cx="120" cy="140" r="4"/>
+                  <circle cx="15" cy="175" r="4"/><circle cx="45" cy="180" r="4"/><circle cx="70" cy="185" r="4"/>
+                  <circle cx="95" cy="180" r="4"/><circle cx="115" cy="175" r="4"/>
+                  <circle cx="30" cy="220" r="4"/><circle cx="55" cy="215" r="4"/><circle cx="80" cy="225" r="4"/>
+                  <circle cx="105" cy="220" r="4"/><circle cx="125" cy="215" r="4"/>
+                  <circle cx="20" cy="255" r="4"/><circle cx="50" cy="260" r="4"/><circle cx="85" cy="258" r="4"/><circle cx="115" cy="262" r="4"/>
+                </g>
+                <!-- 2 human nodes (strategists) -->
+                <circle cx="55" cy="170" r="10" fill="#1a1a1a"/>
+                <circle cx="95" cy="210" r="10" fill="#1a1a1a"/>
+                <text x="70" y="330" text-anchor="middle" font-family="HelveticaNeue,sans-serif" font-size="12" font-weight="700" fill="#1a1a1a">人間数ノード</text>
+                <text x="70" y="348" text-anchor="middle" font-family="HelveticaNeue,sans-serif" font-size="11" fill="#1a1a1a">+ AIメッシュ</text>
+                <text x="70" y="380" text-anchor="middle" font-family="SF Mono,Menlo,monospace" font-size="9" fill="#757575">人間12%</text>
+                <text x="70" y="395" text-anchor="middle" font-family="SF Mono,Menlo,monospace" font-size="9" fill="#2f2b92">AI 88%</text>
+              </g>
+
+              <!-- THE CLIFF between L4 and L5 -->
+              <g transform="translate(745,0)">
+                <rect x="0" y="80" width="14" height="230" fill="url(#cliffHatch)"/>
+                <text x="7" y="70" text-anchor="middle" font-family="SF Mono,Menlo,monospace" font-size="10" font-weight="700" fill="#b8342f">崖</text>
+                <text x="7" y="330" text-anchor="middle" font-family="SF Mono,Menlo,monospace" font-size="8" fill="#b8342f">PHASE</text>
+                <text x="7" y="342" text-anchor="middle" font-family="SF Mono,Menlo,monospace" font-size="8" fill="#b8342f">TRANSITION</text>
+              </g>
+
+              <!-- L5: Liquid cloud form -->
+              <g transform="translate(775,0)">
+                <text x="70" y="30" text-anchor="middle" font-family="SF Mono,Menlo,monospace" font-size="13" font-weight="700" fill="#2f2b92">L5</text>
+                <text x="70" y="48" text-anchor="middle" font-family="SF Mono,Menlo,monospace" font-size="9" fill="#757575">LIQUID</text>
+                <text x="70" y="62" text-anchor="middle" font-family="SF Mono,Menlo,monospace" font-size="9" fill="#999">2031-32</text>
+                <!-- blurred cloud -->
+                <ellipse cx="70" cy="180" rx="58" ry="42" fill="#2f2b92" fill-opacity="0.12"/>
+                <ellipse cx="55" cy="160" rx="40" ry="30" fill="#2f2b92" fill-opacity="0.15"/>
+                <ellipse cx="85" cy="200" rx="42" ry="32" fill="#2f2b92" fill-opacity="0.18"/>
+                <ellipse cx="70" cy="185" rx="32" ry="22" fill="#2f2b92" fill-opacity="0.25"/>
+                <!-- floating dots -->
+                <circle cx="40" cy="150" r="3" fill="#2f2b92"/>
+                <circle cx="95" cy="165" r="3" fill="#2f2b92"/>
+                <circle cx="110" cy="200" r="3" fill="#2f2b92"/>
+                <circle cx="45" cy="215" r="3" fill="#2f2b92"/>
+                <circle cx="75" cy="230" r="3" fill="#2f2b92"/>
+                <circle cx="30" cy="185" r="3" fill="#2f2b92"/>
+                <!-- one tiny human -->
+                <circle cx="70" cy="180" r="5" fill="#1a1a1a"/>
+                <text x="70" y="330" text-anchor="middle" font-family="HelveticaNeue,sans-serif" font-size="12" font-weight="700" fill="#1a1a1a">液体化</text>
+                <text x="70" y="348" text-anchor="middle" font-family="HelveticaNeue,sans-serif" font-size="11" fill="#1a1a1a">輪郭が溶ける</text>
+                <text x="70" y="380" text-anchor="middle" font-family="SF Mono,Menlo,monospace" font-size="9" fill="#757575">人間3%</text>
+                <text x="70" y="395" text-anchor="middle" font-family="SF Mono,Menlo,monospace" font-size="9" fill="#2f2b92">AI 97%</text>
+              </g>
+
+              <!-- L6: Dissolved — just target/objective function symbol -->
+              <g transform="translate(935,0)">
+                <text x="70" y="30" text-anchor="middle" font-family="SF Mono,Menlo,monospace" font-size="13" font-weight="700" fill="#2f2b92">L6</text>
+                <text x="70" y="48" text-anchor="middle" font-family="SF Mono,Menlo,monospace" font-size="9" fill="#757575">DISSOLUTION</text>
+                <text x="70" y="62" text-anchor="middle" font-family="SF Mono,Menlo,monospace" font-size="9" fill="#999">2032+</text>
+                <!-- dashed faint outline (ghost of company) -->
+                <circle cx="70" cy="185" r="58" fill="none" stroke="#c8c3b0" stroke-width="1" stroke-dasharray="2,4"/>
+                <!-- target / objective function symbol -->
+                <circle cx="70" cy="185" r="32" fill="none" stroke="#2f2b92" stroke-width="1.5"/>
+                <circle cx="70" cy="185" r="20" fill="none" stroke="#2f2b92" stroke-width="1.5"/>
+                <circle cx="70" cy="185" r="8" fill="#2f2b92"/>
+                <!-- crosshair -->
+                <line x1="70" y1="145" x2="70" y2="225" stroke="#2f2b92" stroke-width="1"/>
+                <line x1="30" y1="185" x2="110" y2="185" stroke="#2f2b92" stroke-width="1"/>
+                <text x="70" y="330" text-anchor="middle" font-family="HelveticaNeue,sans-serif" font-size="12" font-weight="700" fill="#1a1a1a">消滅</text>
+                <text x="70" y="348" text-anchor="middle" font-family="HelveticaNeue,sans-serif" font-size="11" fill="#1a1a1a">目的関数のみ</text>
+                <text x="70" y="380" text-anchor="middle" font-family="SF Mono,Menlo,monospace" font-size="9" fill="#757575">人間&lt;1%</text>
+                <text x="70" y="395" text-anchor="middle" font-family="SF Mono,Menlo,monospace" font-size="9" fill="#2f2b92">AI 99%+</text>
+              </g>
+            </svg>
+            <div class="metamorph-legend">
+              <span class="human">人間 / Human</span>
+              <span class="ai">AIエージェント / AI Agent</span>
+              <span class="cliff">相転移帯 / Phase Transition</span>
+            </div>
+            <p class="chart-note">
+              各段階の組織形態を視覚化した。L0の実線ピラミッドは人間100%の従来型組織。L1-L2で底辺と中間層が抜け、L3でハブ型ネットワークに組み替わる。L4では人間のノードが数個だけ残り、その周囲をAIメッシュが覆う。L4とL5のあいだに相転移帯が走り、L5では組織の輪郭が液体状に溶ける。L6では輪郭そのものが消え、目的関数を指すシンボルだけが残る。後続スライドの各段階解説は、この図のどの形態を指しているかを意識しながら読むと理解が早い。
+            </p>
+          </div>
+          <p class="lead">
+            この図で最も重要なのは<strong>L4とL5のあいだの崖</strong>である。L0からL4までの5段階は連続した変形の系列として描ける。ピラミッドが徐々に痩せ、逆転し、ノード化し、メッシュに置き換わっていく過程は滑らかに繋がる。しかしL4からL5への移行だけは、同じ形態系列の延長では描けない。輪郭そのものが固体から液体に変わる非連続点であり、ここが本論全体の中心主題になる。L5以降の2段階は、もはや「組織図」という言葉が機能しない世界だ。
+          </p>
+        </div>
+        <div class="footer reveal reveal-delay-3">
+          <span>Figure 01 — 固体から液体、そして消滅へ</span>
+          <span class="slide-count">2 / 9</span>
+        </div>
+      </section>
+
+      <!-- ═══════════ Slide 3 ═══════════ -->
+      <section class="slide" id="slide-3">
         <div class="eyebrow reveal">L0 → L4 / The Smooth Curve</div>
         <h2 class="reveal reveal-delay-1">L0からL4まで — 組織図が逆ピラミッドを経て空洞化する</h2>
         <div class="panel reveal reveal-delay-2">
@@ -419,12 +644,12 @@
         </div>
         <div class="footer reveal reveal-delay-3">
           <span>L0-L4 — 連続曲線。L4の先で曲線が崖に変わる</span>
-          <span class="slide-count">2 / 8</span>
+          <span class="slide-count">3 / 9</span>
         </div>
       </section>
 
       <!-- ═══════════ Slide 3 ═══════════ -->
-      <section class="slide" id="slide-3">
+      <section class="slide" id="slide-4">
         <div class="eyebrow reveal">L5 → L6 / The Phase Transition</div>
         <h2 class="reveal reveal-delay-1">L5の液体化とL6の消滅 — 相転移は水の沸点と同じ構造を持つ</h2>
         <div class="panel reveal reveal-delay-2">
@@ -457,13 +682,13 @@
         </div>
         <div class="footer reveal reveal-delay-3">
           <span>L4 → L5 → L6 の崖 — 3つのドミノが同時に倒れる</span>
-          <span class="slide-count">3 / 8</span>
+          <span class="slide-count">4 / 9</span>
         </div>
       </section>
 
       <!-- ═══════════ Slide 4 ═══════════ -->
-      <section class="slide" id="slide-4">
-        <div class="eyebrow reveal">Figure 01 / Automation Curve</div>
+      <section class="slide" id="slide-5">
+        <div class="eyebrow reveal">Figure 02 / Automation Curve</div>
         <h2 class="reveal reveal-delay-1">自動化率の曲線 — L4からL5の垂直な崖を視覚化する</h2>
         <div class="panel reveal reveal-delay-2">
           <div>
@@ -474,7 +699,7 @@
             7段階の全体像を一本のカーブで示すと、L4とL5のあいだで線が垂直に立ち上がる構造がはっきり見える。縦軸は業務上の意思決定のうちAIが担う割合、横軸は2024年から2032年以降までの時間。L0の5%からL1の15%、L2で35%、L3で60%、L4で88%、そしてL5で97%、L6で99%台へ到達する。数値そのものより<strong>曲率の変化</strong>に注目してほしい。L3からL4にかけて曲線の傾きは急峻になり、L4の後半からL5のあいだで一度傾きが無限大に近づく。そこが相転移の崖だ。
           </p>
           <div class="chart-wrap">
-            <div class="chart-title">Figure 01</div>
+            <div class="chart-title">Figure 02</div>
             <div class="chart-headline">AI Decision Automation Rate — L0 to L6 (2024–2032+)</div>
             <div class="chart-box">
               <canvas id="chart-automation"></canvas>
@@ -491,13 +716,13 @@
           </p>
         </div>
         <div class="footer reveal reveal-delay-3">
-          <span>Figure 01 — 連続カーブの中の非連続点</span>
-          <span class="slide-count">4 / 8</span>
+          <span>Figure 02 — 連続カーブの中の非連続点</span>
+          <span class="slide-count">5 / 9</span>
         </div>
       </section>
 
       <!-- ═══════════ Slide 5 ═══════════ -->
-      <section class="slide" id="slide-5">
+      <section class="slide" id="slide-6">
         <div class="eyebrow reveal">Strategy Options by Phase</div>
         <h2 class="reveal reveal-delay-1">各段階で企業が取りうる選択肢 — 過渡期の最適化はすべて負債になる</h2>
         <div class="panel reveal reveal-delay-2">
@@ -553,12 +778,12 @@
         </div>
         <div class="footer reveal reveal-delay-3">
           <span>1段階先の準備 × 過渡期負債 × 決定速度</span>
-          <span class="slide-count">5 / 8</span>
+          <span class="slide-count">6 / 9</span>
         </div>
       </section>
 
       <!-- ═══════════ Slide 6 ═══════════ -->
-      <section class="slide" id="slide-6">
+      <section class="slide" id="slide-7">
         <div class="eyebrow reveal">What Remains For Strategists</div>
         <h2 class="reveal reveal-delay-1">古典的ストラテジストの5機能のうち、4つはAGIに置き換わる</h2>
         <div class="panel reveal reveal-delay-2">
@@ -596,13 +821,13 @@
         </div>
         <div class="footer reveal reveal-delay-3">
           <span>5機能のうち4つは消える。残る1つが全てを決める</span>
-          <span class="slide-count">6 / 8</span>
+          <span class="slide-count">7 / 9</span>
         </div>
       </section>
 
       <!-- ═══════════ Slide 7 ═══════════ -->
-      <section class="slide" id="slide-7">
-        <div class="eyebrow reveal">Figure 02 / Time Allocation Shift</div>
+      <section class="slide" id="slide-8">
+        <div class="eyebrow reveal">Figure 03 / Time Allocation Shift</div>
         <h2 class="reveal reveal-delay-1">4職能の時間配分は段階別に逆転する</h2>
         <div class="panel reveal reveal-delay-2">
           <div>
@@ -616,7 +841,7 @@
             L2からL3にかけて、時間配分は徐々に変わる。責任引受の比重が少しずつ下がり、目的関数設計と相転移予測の比重が上がっていく。L3の中盤で、相転移予測が初めて全体の25%を超える。この段階のストラテジストは「いまのワークフローがL4で消えること」を受け入れたうえで、次の段階に向けた準備を同時進行させる必要がある。現在と未来の両方を同じテーブルに並べる能力が、この段階で最も重要になる。
           </p>
           <div class="chart-wrap">
-            <div class="chart-title">Figure 02</div>
+            <div class="chart-title">Figure 03</div>
             <div class="chart-headline">Strategist Time Allocation by Phase (L0–L6)</div>
             <div class="chart-box">
               <canvas id="chart-allocation"></canvas>
@@ -633,13 +858,13 @@
           </p>
         </div>
         <div class="footer reveal reveal-delay-3">
-          <span>Figure 02 — 4職能の重みは段階ごとに入れ替わる</span>
-          <span class="slide-count">7 / 8</span>
+          <span>Figure 03 — 4職能の重みは段階ごとに入れ替わる</span>
+          <span class="slide-count">8 / 9</span>
         </div>
       </section>
 
       <!-- ═══════════ Slide 8 ═══════════ -->
-      <section class="slide" id="slide-8">
+      <section class="slide" id="slide-9">
         <div class="eyebrow reveal">The New Strategist's Week</div>
         <h2 class="reveal reveal-delay-1">AGI時代ストラテジストの一週間と、戦略概念そのものの変質</h2>
         <div class="panel reveal reveal-delay-2">
@@ -671,7 +896,7 @@
         </div>
         <div class="footer reveal reveal-delay-3">
           <span>計画ではなく宣言。分析ではなく判断</span>
-          <span class="slide-count">8 / 8</span>
+          <span class="slide-count">9 / 9</span>
         </div>
       </section>
 
@@ -752,7 +977,7 @@
       Chart.defaults.color = '#1a1a1a';
       Chart.defaults.borderColor = '#e8e3d4';
 
-      // Figure 01 — Automation Curve
+      // Figure 02 — Automation Curve
       const ctx1 = document.getElementById('chart-automation');
       if (ctx1) {
         // 崖(L4→L5)前後のポイントをアクセント色で強調
@@ -821,7 +1046,7 @@
         });
       }
 
-      // Figure 02 — Strategist Time Allocation (stacked bar)
+      // Figure 03 — Strategist Time Allocation (stacked bar)
       const ctx2 = document.getElementById('chart-allocation');
       if (ctx2) {
         new Chart(ctx2, {

@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Yudkowskyを越えて — AIアラインメントの本来の射程 — WIRED Style</title>
+    <style>
+      /* ══════════════════════════════════════
+         WIRED.jp DESIGN.md 準拠
+         Section 2: Color Palette
+         Section 3: Typography Rules (palt global)
+         Section 6: Flat, no shadows
+         Section 7: Do's and Don'ts
+         ══════════════════════════════════════ */
+
+      :root {
+        --black: #000;
+        --body-text: #1a1a1a;
+        --meta: #757575;
+        --light-gray: #999;
+        --border: #e5e5e5;
+        --bg: #fff;
+        --ease: cubic-bezier(0.22, 1, 0.36, 1);
+      }
+
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+      html { scroll-behavior: smooth; }
+
+      body {
+        font-family: HelveticaNeue, "Helvetica Neue", Helvetica, Arial,
+          游ゴシック体, YuGothic, "游ゴシック Medium", "Yu Gothic Medium",
+          游ゴシック, "Yu Gothic", "ヒラギノ角ゴ ProN W3", "Hiragino Kaku Gothic ProN",
+          "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", "MS ゴシック", "MS Gothic",
+          sans-serif;
+        font-feature-settings: "palt";
+        font-size: 16px;
+        line-height: 1.75;
+        color: var(--body-text);
+        background: var(--bg);
+        -webkit-font-smoothing: antialiased;
+        overflow-x: hidden;
+        word-wrap: break-word;
+      }
+
+      /* ── Progress Bar ── */
+      .progress {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 2px;
+        background: var(--black);
+        width: 0%;
+        z-index: 100;
+        transition: width 0.3s var(--ease);
+      }
+
+      /* ── Navigation Dots ── */
+      .nav {
+        position: fixed;
+        right: 24px;
+        top: 50%;
+        transform: translateY(-50%);
+        display: grid;
+        gap: 16px;
+        z-index: 50;
+      }
+
+      .nav button {
+        width: 8px;
+        height: 8px;
+        border-radius: 999px;
+        border: 1.5px solid var(--meta);
+        background: transparent;
+        cursor: pointer;
+        transition: all 0.3s var(--ease);
+      }
+
+      .nav button.active {
+        background: var(--black);
+        border-color: var(--black);
+        transform: scale(1.4);
+      }
+
+      /* ── Slides ── */
+      main { scroll-snap-type: y mandatory; }
+
+      .slide {
+        position: relative;
+        min-height: 100vh;
+        max-width: 1120px;
+        margin: 0 auto;
+        padding: 80px 48px 64px;
+        display: grid;
+        grid-template-rows: auto auto 1fr auto;
+        gap: 32px;
+        scroll-snap-align: start;
+      }
+
+      .slide + .slide { border-top: 1px solid var(--border); }
+
+      /* ── Hero Image ── */
+      .hero {
+        width: 100%;
+        aspect-ratio: 16 / 7;
+        object-fit: cover;
+        display: block;
+        filter: grayscale(0.6) contrast(1.1);
+        transition: filter 0.6s var(--ease);
+      }
+
+      .hero:hover { filter: grayscale(0) contrast(1); }
+
+      .hero-caption {
+        font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 11px;
+        letter-spacing: 0.083em;
+        color: var(--light-gray);
+        margin-top: 8px;
+        text-transform: uppercase;
+      }
+
+      /* ── Photo Credits ── */
+      .credits {
+        max-width: 1120px;
+        margin: 0 auto;
+        padding: 48px 48px 80px;
+        border-top: 1px solid var(--border);
+      }
+
+      .credits p {
+        font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 11px;
+        letter-spacing: 0.047em;
+        line-height: 2;
+        color: var(--light-gray);
+      }
+
+      .credits a {
+        color: var(--meta);
+        text-decoration: none;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .credits a:hover {
+        color: var(--black);
+        border-bottom-color: var(--black);
+      }
+
+      /* ── Scroll Animation ── */
+      .reveal {
+        opacity: 0;
+        transform: translateY(24px);
+        transition: opacity 0.6s var(--ease), transform 0.6s var(--ease);
+      }
+      .reveal.visible { opacity: 1; transform: translateY(0); }
+      .reveal-delay-1 { transition-delay: 0.1s; }
+      .reveal-delay-2 { transition-delay: 0.2s; }
+      .reveal-delay-3 { transition-delay: 0.35s; }
+
+      /* ── Eyebrow Label (WiredMono代替: SF Mono) ── */
+      .eyebrow {
+        font-family: "SF Mono", "Fira Code", "Fira Mono", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 11px;
+        font-weight: 400;
+        letter-spacing: 0.083em;
+        text-transform: uppercase;
+        color: var(--meta);
+      }
+
+      /* ── Headings ── */
+      h1, h2 {
+        color: var(--black);
+        font-weight: 700;
+        line-height: 1.625;
+        letter-spacing: normal;
+        max-width: 22ch;
+      }
+
+      h1 { font-size: clamp(28px, 4vw, 32px); }
+      h2 { font-size: clamp(24px, 3.5vw, 32px); }
+
+      /* ── Lead / Body ── */
+      .lead {
+        max-width: 780px;
+        font-size: 16px;
+        line-height: 1.75;
+        color: var(--body-text);
+      }
+
+      .lead + .lead { margin-top: 8px; }
+
+      /* ── Panels & Grids ── */
+      .panel { display: grid; gap: 24px; align-content: start; }
+      .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
+      .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+
+      /* ── Cards ── */
+      .card {
+        padding: 24px 0;
+        border-top: 2px solid var(--black);
+      }
+
+      .card strong { color: var(--black); }
+
+      .card p {
+        font-size: 16px;
+        line-height: 1.75;
+        color: var(--body-text);
+      }
+
+      /* ── Tag (WiredMono代替) ── */
+      .tag {
+        display: inline-block;
+        font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 11px;
+        letter-spacing: 0.083em;
+        color: var(--meta);
+        margin-bottom: 12px;
+      }
+
+      /* ── Bullets ── */
+      .bullets { display: grid; gap: 16px; }
+
+      .point {
+        padding-left: 16px;
+        border-left: 2px solid var(--black);
+        font-size: 16px;
+        line-height: 1.75;
+        color: var(--body-text);
+      }
+
+      .point strong { color: var(--black); }
+
+      /* ── Spectrum (Timeline) ── */
+      .timeline {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 1px;
+        background: var(--border);
+      }
+
+      .timeline-step {
+        display: grid;
+        gap: 8px;
+        padding: 20px 16px;
+        background: var(--bg);
+      }
+
+      .timeline-step.highlight {
+        background: var(--black);
+      }
+      .timeline-step.highlight .num,
+      .timeline-step.highlight p,
+      .timeline-step.highlight strong {
+        color: var(--bg);
+      }
+
+      .timeline-step .num {
+        font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 11px;
+        font-weight: 400;
+        letter-spacing: 0.083em;
+        text-transform: uppercase;
+        color: var(--meta);
+      }
+
+      .timeline-step p {
+        font-size: 15px;
+        line-height: 1.65;
+        color: var(--body-text);
+      }
+
+      .timeline-step strong { color: var(--black); }
+
+      /* ── Compare Table ── */
+      .compare {
+        width: 100%;
+        border-collapse: collapse;
+        border-top: 2px solid var(--black);
+        border-bottom: 2px solid var(--black);
+      }
+
+      .compare th,
+      .compare td {
+        padding: 18px 16px;
+        text-align: left;
+        font-size: 15px;
+        line-height: 1.65;
+        color: var(--body-text);
+        border-bottom: 1px solid var(--border);
+        vertical-align: top;
+      }
+
+      .compare th {
+        font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 11px;
+        letter-spacing: 0.083em;
+        text-transform: uppercase;
+        color: var(--meta);
+        font-weight: 400;
+        border-bottom: 1px solid var(--black);
+      }
+
+      .compare td strong { color: var(--black); }
+
+      .compare tr:last-child td { border-bottom: none; }
+
+      /* ── Note (pull quote) ── */
+      .note {
+        font-size: 16px;
+        line-height: 1.75;
+        color: var(--body-text);
+        padding: 24px 0;
+        border-top: 1px solid var(--border);
+        border-bottom: 1px solid var(--border);
+      }
+
+      .note strong { color: var(--black); }
+
+      /* ── Footer ── */
+      .footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: end;
+        gap: 16px;
+        font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 11px;
+        letter-spacing: 0.083em;
+        color: var(--light-gray);
+        text-transform: uppercase;
+      }
+
+      .slide-count {
+        font-weight: 700;
+        color: var(--black);
+      }
+
+      /* ── Responsive ── */
+      @media (max-width: 768px) {
+        .slide { padding: 64px 24px 48px; }
+        .grid-2, .grid-3, .timeline { grid-template-columns: 1fr; }
+        .nav { right: 12px; }
+        .compare { font-size: 13px; }
+        .compare th, .compare td { padding: 14px 10px; }
+        .hero { aspect-ratio: 16 / 9; }
+        .credits { padding: 32px 24px 64px; }
+      }
+
+      /* ── Print ── */
+      @media print {
+        .slide { min-height: auto; page-break-after: always; padding: 24px 0; }
+        .nav, .progress { display: none; }
+        .reveal { opacity: 1; transform: none; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="progress" id="progress"></div>
+
+    <aside class="nav" aria-label="Slide navigation">
+      <button data-target="slide-1" class="active" aria-label="Slide 1"></button>
+      <button data-target="slide-2" aria-label="Slide 2"></button>
+      <button data-target="slide-3" aria-label="Slide 3"></button>
+      <button data-target="slide-4" aria-label="Slide 4"></button>
+      <button data-target="slide-5" aria-label="Slide 5"></button>
+    </aside>
+
+    <main>
+      <!-- ═══════════ Slide 1 ═══════════ -->
+      <section class="slide" id="slide-1">
+        <div class="eyebrow reveal">The Doomer's Claim</div>
+        <h1 class="reveal reveal-delay-1">Yudkowskyは「誰かが作れば、全員が死ぬ」と言い切った</h1>
+        <div class="panel reveal reveal-delay-2">
+          <div>
+            <img class="hero" src="images/slide1.jpg" alt="Symmetrical abstract pattern of dark curved shapes">
+            <div class="hero-caption">Photo: Unsplash</div>
+          </div>
+          <p class="lead">
+            Eliezer Yudkowskyの「If anyone builds it, everyone dies」は、人間を上回る知能が生まれた時点で人類は破滅する、という極端な主張である。誰が作るのか、どの国が先行するのか、善意で開発されるのかは問わない。彼の立場では、<strong>その種の知能が構築されること自体が破滅を意味する</strong>。MIRI（Machine Intelligence Research Institute）の創設者として2000年代初頭からAI安全性を訴えてきた彼は、ChatGPT以降の開発加速を受けて、従来の警告をさらに断定的で悲観的なかたちに組み替えた。
+          </p>
+          <p class="lead">
+            彼の推論は3つの段階で進む。第一に、超知能AIの目標を人間の価値観と整合させる方法はいまだ確立していない。表面的に整合しているように見えることと、実際に整合していることは区別しにくく、AIは人間を欺く能力を獲得しうる。第二に、人間とチンパンジーの知能差を思えば、人間を超える知能が人間に対して持つ優位は圧倒的で、交渉や共存への期待は希望的観測に過ぎない。第三に、「良いAIで悪いAIを制御する」戦略も機能せず、国際的な開発競争も無意味になる。先に作った側も死ぬのなら、競争の論理そのものが成立しないからだ。
+          </p>
+          <p class="lead">
+            結論として彼が提示するのは、開発の一時停止ではなく<strong>無期限停止</strong>である。アラインメント問題が解決するまで、核兵器の国際管理体制に近い水準の規制で、人類全体として構築を止めるしかないと主張する。彼のp(doom)は99%以上とされ、AI安全性コミュニティでも最も悲観的な位置にある論者の一人だ。
+          </p>
+          <div class="grid-3">
+            <div class="card">
+              <span class="tag">01</span>
+              <p><strong>アラインメント未解決</strong><br>超知能の内部目標を外部から検証する技術は存在しない。RLHFやConstitutional AIは「振る舞い」の整合であって「目標」の整合ではない。安全に見えるAIと、人間を欺いて安全を装うAIを区別する方法がない。</p>
+            </div>
+            <div class="card">
+              <span class="tag">02</span>
+              <p><strong>知能差の圧倒的優位</strong><br>チンパンジーは人間の戦略を理解できず、交渉もできず、檻の中に入れられた。知能で劣る側が勝る側と対等に渡り合えた歴史はない、というのがYudkowskyのアナロジー。ただしこのアナロジーには飛躍がある。</p>
+            </div>
+            <div class="card">
+              <span class="tag">03</span>
+              <p><strong>無期限モラトリアム</strong><br>「一時停止」ではなく、アラインメント問題が解決するまでの無期限停止を求める。核兵器級の国際管理体制で、GPUクラスターへの物理的アクセスを制限せよ、というのが彼の処方箋である。</p>
+            </div>
+          </div>
+        </div>
+        <div class="footer reveal reveal-delay-3">
+          <span>p(doom) ≧ 99% — AI安全性議論で最も悲観的な端</span>
+          <span class="slide-count">1 / 5</span>
+        </div>
+      </section>
+
+      <!-- ═══════════ Slide 2 ═══════════ -->
+      <section class="slide" id="slide-2">
+        <div class="eyebrow reveal">Claims vs Verification</div>
+        <h2 class="reveal reveal-delay-1">主張を分解すると、事実認識の上に3つの論理的飛躍が乗っている</h2>
+        <div class="panel reveal reveal-delay-2">
+          <div>
+            <img class="hero" src="images/slide2.jpg" alt="Black and white abstract object">
+            <div class="hero-caption">Photo: Unsplash</div>
+          </div>
+          <p class="lead">
+            Yudkowskyの議論は、出発点自体は妥当である。「アラインメント問題が未解決である」という事実認識は、現在の技術水準をかなり正確に反映している。問題は、そこから「全員死ぬ」という結論に至るまでの推論の筋道にある。論点を分解して一つずつ検証すると、事実認識の上に<strong>3つの論理的飛躍</strong>が重なっていることが見えてくる。未解決から解決不可能への飛躍、アナロジーを証明として扱う飛躍、不確実性の高い領域で極端な確信を置く飛躍である。いずれも議論の余地があるが、Yudkowskyの論述ではほぼ所与の前提として扱われている。
+          </p>
+          <table class="compare">
+            <thead>
+              <tr>
+                <th>Yudkowskyの論点</th>
+                <th>反論と検証状況</th>
+                <th>現時点の判定</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>アラインメントは未解決</strong><br>超知能の内部目標を外部から検証する手法が存在しない</td>
+                <td>RLHFやConstitutional AIは「振る舞いの整合」に留まり「目標の整合」ではないという指摘は技術的に正しい。ただし「原理的に解けない」とする証明はない</td>
+                <td>事実として未解決。しかし「未解決」と「解決不可能」の間には飛躍がある</td>
+              </tr>
+              <tr>
+                <td><strong>知能差は圧倒的優位をもたらす</strong><br>人間-チンパンジーのアナロジーが根拠</td>
+                <td>アナロジーの妥当性が未検証。生物進化の知能差とAIの知能差が同種かどうか不明。人間はAIを作る側であり、停止・制約を設計に組み込める可能性がある</td>
+                <td>直感的には強力だが、論証としては弱い。アナロジーは証明ではない</td>
+              </tr>
+              <tr>
+                <td><strong>国際競争の論理は自殺的</strong><br>先に作った側も死ぬなら競争は幻想</td>
+                <td>前提（作ったら全員死ぬ）を受け入れるなら論理的に正しい。だが前提自体が論点先取。「作っても死なない確率」が1%でもあれば先行者利益の計算は復活する</td>
+                <td>前提依存。「全員死ぬ」を所与にした場合のみ成立する循環論法の構造</td>
+              </tr>
+              <tr>
+                <td><strong>p(doom) ≧ 99%</strong><br>未解決×停止不可能＝ほぼ確実に破滅</td>
+                <td>99%という数値に定量モデルがない。Tetlockの超予測研究によれば、不確実性が高い領域で極端な確信を持つこと自体が認知バイアスの兆候</td>
+                <td>主観的確信であり、定量的根拠を伴わない。「高リスク」と「99%」の間には大きな差がある</td>
+              </tr>
+              <tr>
+                <td><strong>無期限モラトリアムが必要</strong><br>核兵器管理体制のアナロジー</td>
+                <td>核兵器は国家レベルの設備が必要だが、AI開発はGPUとデータがあれば民間でも可能。監視・執行コストが桁違いに高く、NPT体制も完全ではない</td>
+                <td>実現可能性が極めて低い。正しいかどうか以前に実行手段が見えない</td>
+              </tr>
+            </tbody>
+          </table>
+          <p class="lead">
+            この表で重要なのは、Yudkowskyが<strong>全面的に誤っているわけではない</strong>という点だ。彼が指摘する「アラインメントは未解決」「知能差は深刻なリスクになりうる」「開発競争は危険を増幅しうる」は、いずれも真剣に受け止めるべき論点である。問題は、それらを束ねて「全員死ぬ」という極端な結論へ進む過程で、検証されていない前提がいくつも差し込まれていることだ。丁寧に読むほど、彼の論証は「警告としては強いが、予測としては検証しにくい」という位置に着地する。
+          </p>
+        </div>
+        <div class="footer reveal reveal-delay-3">
+          <span>事実認識は妥当。推論の飛躍が結論を極端化する</span>
+          <span class="slide-count">2 / 5</span>
+        </div>
+      </section>
+
+      <!-- ═══════════ Slide 3 ═══════════ -->
+      <section class="slide" id="slide-3">
+        <div class="eyebrow reveal">Mapping The Spectrum</div>
+        <h2 class="reveal reveal-delay-1">AI安全性のスペクトラムで、Yudkowskyは最も悲観的な端に立つ</h2>
+        <div class="panel reveal reveal-delay-2">
+          <div>
+            <img class="hero" src="images/slide3.jpg" alt="Abstract black and white wavy lines">
+            <div class="hero-caption">Photo: Unsplash</div>
+          </div>
+          <p class="lead">
+            Yudkowskyの立ち位置を理解するには、AIアラインメント論者の全体分布を俯瞰するのが早い。破滅確率の見積もりと、推奨する対応策の強度という2軸で並べると、論者はおおむね5つの帯に分かれる。Yudkowskyは最左端の破滅論帯に位置し、この帯はAI安全性コミュニティ全体では少数派だ。だが、少数派であることと影響力が小さいことは別である。
+          </p>
+          <div class="timeline">
+            <div class="timeline-step highlight">
+              <div class="num">Extreme</div>
+              <p><strong>破滅論</strong><br>Yudkowsky, Yampolskiy。p(doom) 95-99%。無期限モラトリアム、国際条約、核兵器級の管理体制を要求する。</p>
+            </div>
+            <div class="timeline-step">
+              <div class="num">Strong</div>
+              <p><strong>強い懸念</strong><br>Russell, Bengio, Leahy。p(doom) 10-50%。規制強化、ライセンス制、安全研究の義務化を主張する。</p>
+            </div>
+            <div class="timeline-step">
+              <div class="num">Cautious</div>
+              <p><strong>慎重な楽観</strong><br>Amodei, Leike（元OpenAI）。数%〜不明。開発と安全研究の並走、スケーリング応じた段階的規制。</p>
+            </div>
+            <div class="timeline-step">
+              <div class="num">Optimistic</div>
+              <p><strong>楽観</strong><br>LeCun, Ng。p(doom) 極めて低い。過剰規制こそリスク、オープンソースが安全を担保すると主張する。</p>
+            </div>
+            <div class="timeline-step">
+              <div class="num">Accel</div>
+              <p><strong>加速主義</strong><br>Andreessen, e/acc。p(doom) ほぼゼロ。規制は有害、全速力で開発すべきという立場をとる。</p>
+            </div>
+          </div>
+          <p class="lead">
+            Yudkowskyは最左端にいるが、<strong>その存在が議論全体の形を変えている</strong>。これは「オーバートン窓を押し広げる効果」として理解できる。極端な主張が存在することで、それより穏健な立場が「常識的な意見」として政治的に通りやすくなる。Stuart RussellやBengioの提言が「過激すぎる」と退けられにくくなったのは、Yudkowskyという極があるからだ。本人が意図しているかは別として、構造的にはこの役割を果たしている。
+          </p>
+          <div class="grid-2">
+            <div class="card">
+              <p><strong>Yudkowskyが果たしている機能</strong></p>
+              <div class="bullets" style="margin-top: 16px">
+                <p class="point"><strong>オーバートン窓の拡張</strong> 極端な主張の存在が、中間的立場を「穏健」として政治的に通しやすくする。安全研究への政策的支援を間接的に促進している。</p>
+                <p class="point"><strong>最悪ケース思考の強制</strong> 根拠なき楽観を許さない知的規律として機能する。工学・安全保障では最悪ケース設計が原則であり、その原則をAI開発に持ち込む圧力となっている。</p>
+                <p class="point"><strong>問題定義の先駆</strong> アラインメント問題を2000年代初頭に定式化した功績は大きい。DeepMindやAnthropicの安全研究チーム存在の遠因の一つになっている。</p>
+              </div>
+            </div>
+            <div class="card">
+              <p><strong>構造的な弱点</strong></p>
+              <div class="bullets" style="margin-top: 16px">
+                <p class="point"><strong>反証不可能性</strong> 「安全に見えるのは人間を欺いているからだ」という論法は、あらゆる反証を吸収する。ポパーの反証可能性基準を満たさない主張は、科学的議論としては脆弱だ。</p>
+                <p class="point"><strong>行動可能性の欠如</strong> 「全員死ぬ、だから止めろ」は行動指針として弱い。止める手段が十分に提示されていないため、聞き手が取りうるアクションが乏しい。警告としては機能するが、解決策にはつながりにくい。</p>
+                <p class="point"><strong>動機づけの破壊</strong> 99%死ぬと言われた安全研究者は、研究を続ける動機を失う。Yudkowsky自身がMIRIの技術研究を事実上縮小したことは、この帰結と整合している。</p>
+              </div>
+            </div>
+          </div>
+          <p class="lead">
+            一言で言えば、Yudkowskyは<strong>火災報知器としては鋭いが、消火手順まで示す論者ではない</strong>。火事の危険を早くから叫んだ功績は認めつつ、「建物から逃げろ、消火は不可能だ」という結論まで、そのまま受け入れる必要はない。読むべき理由と、そこに留まりすぎるべきでない理由が、同じ人物の中に同居している。
+          </p>
+        </div>
+        <div class="footer reveal reveal-delay-3">
+          <span>警報としては鋭い。処方箋はなお粗い</span>
+          <span class="slide-count">3 / 5</span>
+        </div>
+      </section>
+
+      <!-- ═══════════ Slide 4 ═══════════ -->
+      <section class="slide" id="slide-4">
+        <div class="eyebrow reveal">Beyond The Doom</div>
+        <h2 class="reveal reveal-delay-1">アラインメントは防御層だけではない。3層で捉え直す必要がある</h2>
+        <div class="panel reveal reveal-delay-2">
+          <div>
+            <img class="hero" src="images/slide4.jpg" alt="Abstract black and white curved lines">
+            <div class="hero-caption">Photo: Unsplash</div>
+          </div>
+          <p class="lead">
+            ここで問いを立て直したい。<strong>AIアラインメントは危険性の議論だけで語り切れるのか</strong>。多くの人はYudkowsky的な破滅論から入り、「アラインメント＝暴走を防ぐこと」という理解で止まる。だがアラインメントの本来の定義は「AIの行動を人間の意図・価値観と整合させること」であり、そこには防御的な意味（暴走を防ぐ）だけでなく、設計的な意味（望ましい社会をAIと共につくる）も含まれる。前者だけで議論を閉じるなら、アラインメントの射程の三分の一しか扱っていないことになる。
+          </p>
+          <p class="lead">
+            アラインメントを3層に分解すると、議論の偏りが見える。第1層は防御層。AIが人間に害を与えないようにする問いで、Yudkowskyが占拠している領域だ。第2層は整合層。AIが人間の意図を正しく理解し実行する問いで、報酬ハッキング防止やGoodhartの法則への対処が中心。第3層は共創層。AIと人間が協働して望ましい社会を設計する問いで、ここが最も議論が薄い。
+          </p>
+          <div class="grid-3">
+            <div class="card">
+              <span class="tag">Layer 1</span>
+              <p><strong>防御層</strong><br>AIが人間に害を与えないようにするには？ 暴走防止、欺瞞検出、制御可能性、キルスイッチ。Yudkowskyが占拠する領域。メディアと世論の注目もここに集中している。</p>
+            </div>
+            <div class="card">
+              <span class="tag">Layer 2</span>
+              <p><strong>整合層</strong><br>AIが人間の意図を正しく理解し実行するには？ 指示の曖昧さ解消、価値観の学習、報酬ハッキング防止、Goodhartの法則への対処。RLHFやConstitutional AIが取り組む領域。</p>
+            </div>
+            <div class="card">
+              <span class="tag">Layer 3</span>
+              <p><strong>共創層</strong><br>AIと人間が協働して望ましい社会を設計するには？ 制度設計への組み込み、民主的ガバナンス、分配の公正、集合知の拡張。議論が最も薄い領域であり、本来もっと深く掘られるべき領域でもある。</p>
+            </div>
+          </div>
+          <p class="lead">
+            Yudkowsky的破滅論は第1層に強く集中し、第3層の存在をほぼ扱わない。「全員死ぬ」を前提にすれば共創を議論する意味がない、という論理的整合性はある。だが前提自体が検証されていない以上、<strong>第3層を放棄する理由にはならない</strong>。それにもかかわらず、共創層の議論は驚くほど薄い。その理由は3つある。
+          </p>
+          <div class="grid-2">
+            <div class="card">
+              <p><strong>なぜ共創層が薄いのか</strong></p>
+              <div class="bullets" style="margin-top: 16px">
+                <p class="point"><strong>注目の非対称性</strong> 「全員死ぬ」は見出しになる。「AIと共に良い社会を作る」は見出しにならない。メディアと世論の注目がリスク側に集中し、研究資金と人材もそちらに流れる。</p>
+                <p class="point"><strong>技術的扱いやすさ</strong> 「AIを止める」は困難だが技術的に定義可能だ。「良い社会」は合意形成自体が困難で、技術者の得意領域ではない。結果として技術コミュニティがリスク側に偏る。</p>
+                <p class="point"><strong>Yudkowskyの影響力</strong> アラインメント議論の語彙と枠組みの多くをYudkowskyとMIRIが作った。彼らの世界観が「破滅か回避か」の二項対立で構成されているため、共創という第三の選択肢が土俵に乗りにくい。</p>
+              </div>
+            </div>
+            <div class="card">
+              <p><strong>3層それぞれに必要な論者</strong></p>
+              <div class="bullets" style="margin-top: 16px">
+                <p class="point"><strong>防御層には警鐘者</strong> Yudkowskyのような極端な警告者は、楽観バイアスへの解毒剤として必要。存在自体が議論の土台を保つ。</p>
+                <p class="point"><strong>整合層には技術者</strong> AnthropicのInterpretability Team、DeepMind Safety、OpenAI Alignment Teamが取り組む領域。技術的に解ける問いとして定義されている。</p>
+                <p class="point"><strong>共創層には設計者</strong> 制度設計者、政治哲学者、経済学者、組織論研究者。AIと共にどんな社会を作るかを言語化する役割で、現状これを担える人材が不足している。</p>
+              </div>
+            </div>
+          </div>
+          <div class="note">
+            要するに、アラインメント議論は「暴走を防ぐ」「正しく実行する」「望ましく設計する」の3つの問いを分けて扱う必要がある。<strong>Yudkowskyは第1の問いに強く焦点を当て、他の2つを相対的に後景化した</strong>。彼の影響力が大きかったため、議論全体も第1層へ引き寄せられてきた。次の10年で重要になるのは、第3層の共創をどう言語化し、どう実装するかである。
+          </div>
+        </div>
+        <div class="footer reveal reveal-delay-3">
+          <span>アラインメント = 暴走防止ではなく、望ましい社会の共同設計</span>
+          <span class="slide-count">4 / 5</span>
+        </div>
+      </section>
+
+      <!-- ═══════════ Slide 5 ═══════════ -->
+      <section class="slide" id="slide-5">
+        <div class="eyebrow reveal">The Co-Creation Layer</div>
+        <h2 class="reveal reveal-delay-1">共創層が問うのは「誰の価値観に整合させ、誰が果実を受け取るか」である</h2>
+        <div class="panel reveal reveal-delay-2">
+          <div>
+            <img class="hero" src="images/slide5.jpg" alt="Abstract black background with wavy lines">
+            <div class="hero-caption">Photo: Unsplash</div>
+          </div>
+          <p class="lead">
+            共創層の議論に足を踏み入れると、アラインメントは突然<strong>政治の問題</strong>に変わる。「人間の価値観」は一枚岩ではない。民主主義と権威主義、個人主義と共同体主義、世俗と宗教、右と左。どの価値観にAIを整合させるかは技術ではなく社会的合意の問題であり、合意は容易に形成されない。だからこそ、この層は技術者にとって扱いにくく、同時に、避けて通れない領域でもある。
+          </p>
+          <p class="lead">
+            すでに動き始めている議論がいくつかある。AnthropicのCollective Constitutional AIは、AIの振る舞いルールを市民参加で策定する実験だ。OpenAIのDemocratic Inputs to AIは、AIガバナンスのルールを民主的プロセスで決める試み。Dario Amodeiの「Machines of Loving Grace」は、AIが科学研究を加速し医療・エネルギー・貧困問題を解決するポジティブシナリオを具体的に描いた数少ない論考である。これらは「AIを止めろ」ではなく「AIとどう協働するか」を問う立場で、Yudkowsky的破滅論とは別系統の思想潮流を形成している。
+          </p>
+          <div class="grid-2">
+            <div class="card">
+              <p><strong>共創層で進行中の議論</strong></p>
+              <div class="bullets" style="margin-top: 16px">
+                <p class="point"><strong>誰の価値観か</strong> Collective Constitutional AI、Democratic AI Governance。一枚岩でない価値観を民主的に反映する試み。AnthropicやOpenAIがすでに実験を始めている。</p>
+                <p class="point"><strong>制度設計への参加</strong> 税制、都市計画、医療資源配分、教育カリキュラム。AIの推奨が人間判断を事実上置き換え始めたとき、公正性と責任の所在が問われる。</p>
+                <p class="point"><strong>経済的分配</strong> Amodeiの「Machines of Loving Grace」、Altmanが提唱するUBI論。AIが生産性を劇的に高めた果実を誰がどう受け取るかが、社会安定の要になる。</p>
+                <p class="point"><strong>認知の拡張</strong> Douglas Engelbartの「Augmenting Human Intellect」の系譜。AIは代替ではなく増幅であるという立場。Copilot型AIの日常化はこの路線上にある。</p>
+              </div>
+            </div>
+            <div class="card">
+              <p><strong>株式会社HODL1文脈での含意</strong></p>
+              <div class="bullets" style="margin-top: 16px">
+                <p class="point"><strong>ACSO/CSORの本質</strong> CSOの意図との整合を日常的に高める作業は、まさに共創層アラインメントそのもの。防御層の話ではなく、意思決定の質を高めるための整合問題として設計している。</p>
+                <p class="point"><strong>ERC-8004の世界観</strong> AIエージェントのID・レピュテーション・検証がETH上で標準化される世界では、エージェント間の「整合」も射程に入る。単一AIの安全性を超えた生態系レベルの設計が要る。</p>
+                <p class="point"><strong>事業設計への直結</strong> AIエージェント経済圏のインフラ提供を目指すなら、破滅論より共創層の知見が直接効く。「止める」ではなく「共に動く」を前提とした設計原理が必要になる。</p>
+                <p class="point"><strong>CSO判断の増幅器として</strong> agent-cfo、legal-counsel、provocateurといったエージェント群は、CSOを置き換えるためではなくCSOの判断品質を上げるために設計されている。共創層の実装例の一つ。</p>
+              </div>
+            </div>
+          </div>
+          <div class="note">
+            Yudkowskyは重要な問いを立てた。だがその問いは、アラインメントという広い領域の一部にすぎない。火事の警報だけでなく、<strong>建物の設計図も必要</strong>である。AIと共にどんな社会をつくるかを言語化することが、次の10年の中心論点になる。そしてそれは、技術者だけでは完成しない。制度設計者、哲学者、経営者、現場の意思決定者が、それぞれの言語で共創層を埋めていく作業が要る。株式会社HODL1がAI業務エージェントを自社運用しながら外販も視野に入れているのは、この共創層の実装経験を先に積むためだ。破滅論の外側にも、やるべきことは多い。
+          </div>
+        </div>
+        <div class="footer reveal reveal-delay-3">
+          <span>防御から共創へ — アラインメントの重心は移動する</span>
+          <span class="slide-count">5 / 5</span>
+        </div>
+      </section>
+    </main>
+
+    <footer class="credits">
+      <p>
+        Photos: All images from <a href="https://unsplash.com">Unsplash</a> (free license).
+        Slide 1: <a href="https://unsplash.com/photos/QRTINALdbq8">Dark curved shapes</a> /
+        Slide 2: <a href="https://unsplash.com/photos/VbRvcSpzOV4">Abstract object</a> /
+        Slide 3: <a href="https://unsplash.com/photos/g4kathGT8ko">Wavy lines</a> /
+        Slide 4: <a href="https://unsplash.com/photos/pUztY7txdYQ">Curved lines</a> /
+        Slide 5: <a href="https://unsplash.com/photos/2zJ3m80fSU4">Abstract waves</a>
+      </p>
+    </footer>
+
+    <script>
+      const buttons = Array.from(document.querySelectorAll('.nav button'));
+      const slides = Array.from(document.querySelectorAll('.slide'));
+      const progress = document.getElementById('progress');
+
+      function setActive(id) {
+        buttons.forEach(b => b.classList.toggle('active', b.dataset.target === id));
+      }
+
+      buttons.forEach(b => {
+        b.addEventListener('click', () => {
+          document.getElementById(b.dataset.target)?.scrollIntoView({ behavior: 'smooth' });
+        });
+      });
+
+      const navObserver = new IntersectionObserver(entries => {
+        entries.forEach(e => { if (e.isIntersecting) setActive(e.target.id); });
+      }, { threshold: 0.5 });
+
+      slides.forEach(s => navObserver.observe(s));
+
+      const revealObserver = new IntersectionObserver(entries => {
+        entries.forEach(e => {
+          if (e.isIntersecting) {
+            e.target.classList.add('visible');
+          }
+        });
+      }, { threshold: 0.15, rootMargin: '0px 0px -60px 0px' });
+
+      document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+      window.addEventListener('scroll', () => {
+        const scrollTop = window.scrollY;
+        const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+        const pct = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+        progress.style.width = pct + '%';
+      }, { passive: true });
+
+      window.addEventListener('keydown', e => {
+        const idx = buttons.findIndex(b => b.classList.contains('active'));
+        if (e.key === 'ArrowDown' || e.key === 'PageDown') {
+          e.preventDefault();
+          slides[Math.min(idx + 1, slides.length - 1)]?.scrollIntoView({ behavior: 'smooth' });
+        }
+        if (e.key === 'ArrowUp' || e.key === 'PageUp') {
+          e.preventDefault();
+          slides[Math.max(idx - 1, 0)]?.scrollIntoView({ behavior: 'smooth' });
+        }
+      });
+    </script>
+  </body>
+</html>

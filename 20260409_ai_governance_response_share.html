@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>止められない技術にどう向き合うか — AIガバナンスの設計図</title>
+    <style>
+      :root {
+        --black: #000;
+        --body-text: #1a1a1a;
+        --meta: #757575;
+        --light-gray: #999;
+        --border: #e5e5e5;
+        --bg: #fff;
+        --ease: cubic-bezier(0.22, 1, 0.36, 1);
+      }
+
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+      html { scroll-behavior: smooth; }
+
+      body {
+        font-family: HelveticaNeue, "Helvetica Neue", Helvetica, Arial,
+          游ゴシック体, YuGothic, "游ゴシック Medium", "Yu Gothic Medium",
+          游ゴシック, "Yu Gothic", "ヒラギノ角ゴ ProN W3", "Hiragino Kaku Gothic ProN",
+          "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", "MS ゴシック", "MS Gothic",
+          sans-serif;
+        font-feature-settings: "palt";
+        font-size: 16px;
+        line-height: 1.75;
+        color: var(--body-text);
+        background: var(--bg);
+        -webkit-font-smoothing: antialiased;
+        overflow-x: hidden;
+        word-wrap: break-word;
+      }
+
+      .progress {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 2px;
+        background: var(--black);
+        width: 0%;
+        z-index: 100;
+        transition: width 0.3s var(--ease);
+      }
+
+      .nav {
+        position: fixed;
+        right: 24px;
+        top: 50%;
+        transform: translateY(-50%);
+        display: grid;
+        gap: 16px;
+        z-index: 50;
+      }
+
+      .nav button {
+        width: 8px;
+        height: 8px;
+        border-radius: 999px;
+        border: 1.5px solid var(--meta);
+        background: transparent;
+        cursor: pointer;
+        transition: all 0.3s var(--ease);
+      }
+
+      .nav button.active {
+        background: var(--black);
+        border-color: var(--black);
+        transform: scale(1.4);
+      }
+
+      main { scroll-snap-type: y mandatory; }
+
+      .slide {
+        position: relative;
+        min-height: 100vh;
+        max-width: 1120px;
+        margin: 0 auto;
+        padding: 80px 48px 64px;
+        display: grid;
+        grid-template-rows: auto auto 1fr auto;
+        gap: 32px;
+        scroll-snap-align: start;
+      }
+
+      .slide + .slide { border-top: 1px solid var(--border); }
+
+      .hero {
+        width: 100%;
+        aspect-ratio: 16 / 7;
+        object-fit: cover;
+        display: block;
+        filter: grayscale(0.6) contrast(1.1);
+        transition: filter 0.6s var(--ease);
+      }
+
+      .hero:hover { filter: grayscale(0) contrast(1); }
+
+      .hero-caption {
+        font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 11px;
+        letter-spacing: 0.083em;
+        color: var(--light-gray);
+        margin-top: 8px;
+        text-transform: uppercase;
+      }
+
+      .credits {
+        max-width: 1120px;
+        margin: 0 auto;
+        padding: 48px 48px 80px;
+        border-top: 1px solid var(--border);
+      }
+
+      .credits p {
+        font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 11px;
+        letter-spacing: 0.047em;
+        line-height: 2;
+        color: var(--light-gray);
+      }
+
+      .credits a {
+        color: var(--meta);
+        text-decoration: none;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .credits a:hover {
+        color: var(--black);
+        border-bottom-color: var(--black);
+      }
+
+      .reveal {
+        opacity: 0;
+        transform: translateY(24px);
+        transition: opacity 0.6s var(--ease), transform 0.6s var(--ease);
+      }
+      .reveal.visible { opacity: 1; transform: translateY(0); }
+      .reveal-delay-1 { transition-delay: 0.1s; }
+      .reveal-delay-2 { transition-delay: 0.2s; }
+      .reveal-delay-3 { transition-delay: 0.35s; }
+
+      .eyebrow {
+        font-family: "SF Mono", "Fira Code", "Fira Mono", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 11px;
+        font-weight: 400;
+        letter-spacing: 0.083em;
+        text-transform: uppercase;
+        color: var(--meta);
+      }
+
+      h1, h2 {
+        color: var(--black);
+        font-weight: 700;
+        line-height: 1.625;
+        letter-spacing: normal;
+        max-width: 22ch;
+      }
+
+      h1 { font-size: clamp(28px, 4vw, 32px); }
+      h2 { font-size: clamp(24px, 3.5vw, 32px); }
+
+      .lead {
+        max-width: 780px;
+        font-size: 16px;
+        line-height: 1.75;
+        color: var(--body-text);
+      }
+
+      .lead + .lead { margin-top: 8px; }
+
+      .panel { display: grid; gap: 24px; align-content: start; }
+      .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
+      .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+
+      .card {
+        padding: 24px 0;
+        border-top: 2px solid var(--black);
+      }
+
+      .card strong { color: var(--black); }
+
+      .card p {
+        font-size: 16px;
+        line-height: 1.75;
+        color: var(--body-text);
+      }
+
+      .tag {
+        display: inline-block;
+        font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 11px;
+        letter-spacing: 0.083em;
+        color: var(--meta);
+        margin-bottom: 12px;
+      }
+
+      .bullets { display: grid; gap: 16px; }
+
+      .point {
+        padding-left: 16px;
+        border-left: 2px solid var(--black);
+        font-size: 16px;
+        line-height: 1.75;
+        color: var(--body-text);
+      }
+
+      .point strong { color: var(--black); }
+
+      .timeline {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 1px;
+        background: var(--border);
+      }
+
+      .timeline-step {
+        display: grid;
+        gap: 8px;
+        padding: 20px 16px;
+        background: var(--bg);
+      }
+
+      .timeline-step.highlight {
+        background: var(--black);
+      }
+      .timeline-step.highlight .num,
+      .timeline-step.highlight p,
+      .timeline-step.highlight strong {
+        color: var(--bg);
+      }
+
+      .timeline-step .num {
+        font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 11px;
+        font-weight: 400;
+        letter-spacing: 0.083em;
+        text-transform: uppercase;
+        color: var(--meta);
+      }
+
+      .timeline-step p {
+        font-size: 15px;
+        line-height: 1.65;
+        color: var(--body-text);
+      }
+
+      .timeline-step strong { color: var(--black); }
+
+      .compare {
+        width: 100%;
+        border-collapse: collapse;
+        border-top: 2px solid var(--black);
+        border-bottom: 2px solid var(--black);
+      }
+
+      .compare th,
+      .compare td {
+        padding: 18px 16px;
+        text-align: left;
+        font-size: 15px;
+        line-height: 1.65;
+        color: var(--body-text);
+        border-bottom: 1px solid var(--border);
+        vertical-align: top;
+      }
+
+      .compare th {
+        font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 11px;
+        letter-spacing: 0.083em;
+        text-transform: uppercase;
+        color: var(--meta);
+        font-weight: 400;
+        border-bottom: 1px solid var(--black);
+      }
+
+      .compare td strong { color: var(--black); }
+
+      .compare tr:last-child td { border-bottom: none; }
+
+      .note {
+        font-size: 16px;
+        line-height: 1.75;
+        color: var(--body-text);
+        padding: 24px 0;
+        border-top: 1px solid var(--border);
+        border-bottom: 1px solid var(--border);
+      }
+
+      .note strong { color: var(--black); }
+
+      .footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: end;
+        gap: 16px;
+        font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 11px;
+        letter-spacing: 0.083em;
+        color: var(--light-gray);
+        text-transform: uppercase;
+      }
+
+      .slide-count {
+        font-weight: 700;
+        color: var(--black);
+      }
+
+      @media (max-width: 768px) {
+        .slide { padding: 64px 24px 48px; }
+        .grid-2, .grid-3, .timeline { grid-template-columns: 1fr; }
+        .nav { right: 12px; }
+        .compare { font-size: 13px; }
+        .compare th, .compare td { padding: 14px 10px; }
+        .hero { aspect-ratio: 16 / 9; }
+        .credits { padding: 32px 24px 64px; }
+      }
+
+      @media print {
+        .slide { min-height: auto; page-break-after: always; padding: 24px 0; }
+        .nav, .progress { display: none; }
+        .reveal { opacity: 1; transform: none; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="progress" id="progress"></div>
+
+    <aside class="nav" aria-label="Slide navigation">
+      <button data-target="slide-1" class="active" aria-label="Slide 1"></button>
+      <button data-target="slide-2" aria-label="Slide 2"></button>
+      <button data-target="slide-3" aria-label="Slide 3"></button>
+      <button data-target="slide-4" aria-label="Slide 4"></button>
+      <button data-target="slide-5" aria-label="Slide 5"></button>
+    </aside>
+
+    <main>
+      <!-- ═══════════ Slide 1 ═══════════ -->
+      <section class="slide" id="slide-1">
+        <div class="eyebrow reveal">The Unstoppable Race</div>
+        <h1 class="reveal reveal-delay-1">開発は止められない。だからガバナンスが必要になる</h1>
+        <div class="panel reveal reveal-delay-2">
+          <div>
+            <img class="hero" src="images/ai_governance_response/slide1.jpg" alt="Monochrome mountain shrouded in fog">
+            <div class="hero-caption">Photo: Unsplash</div>
+          </div>
+          <p class="lead">
+            高度なAIの悪用、事故、構造的リスクが語られるたびに、素朴な処方箋が出てくる。開発を止めればよい、という発想である。しかし開発停止は現実的な選択肢にならない。より慎重でない他の主体が、強力で危険なAIを代わりに開発する可能性があるからだ。加えて国家安全保障の論理が働く。半導体輸出規制を続ける米国と、自前で追いつこうとする中国。停止を望む側にも、先行を望む側にも、同じだけの戦略的圧力がかかっている。
+          </p>
+          <p class="lead">
+            AI研究者コミュニティはこの状況を<strong>「地雷原をできるだけ早く駆け抜けるゲーム」</strong>と呼んできた。安全意識の低い主体が先に構築するよりは、安全意識の高い側がある程度急いで構築したほうがましだ、という苦い妥協である。Nick Bostromも超知能を早めに導入すべきだと主張した論者の一人で、ナノテクノロジーや合成生物学といった別の存亡リスクが出現する前に、超知能を制御下に置くべきだと論じた。止めることと進めることのどちらもリスクを孕む構造で、その中で取りうる選択肢を設計するのがAIガバナンスである。
+          </p>
+          <p class="lead">
+            したがってガバナンスの問いは<strong>「開発するか、しないか」ではなく「どう管理しながら進めるか」</strong>に変わる。地域的・世界的な規範、政策、法律、プロセス、制度、政治。これらを組み合わせて、AIの開発・導入による社会的帰結を望ましい方向へ誘導することが、ガバナンス研究の射程になる。本稿はその全体像を、Compute Governance、情報セキュリティ、国際協力、d/acc、バイオセキュリティ、深層防護、民意のAIへの反映という7つの切り口から辿る。
+          </p>
+          <div class="grid-3">
+            <div class="card">
+              <span class="tag">01</span>
+              <p><strong>停止は実効性を欠く</strong><br>世界的な開発停止を実現できたとしても、不注意な組織や個人がどこかで危険なシステムを作る可能性が残る。封じ込めのためには、むしろ慎重な側が強力なAIを使って兆候を検知する必要が出てくる。</p>
+            </div>
+            <div class="card">
+              <span class="tag">02</span>
+              <p><strong>国家安全保障の論理</strong><br>米国とその同盟国は現状AIで安定したリードを保っており、AI進歩を遅らせる犠牲を払ってでも規制を入れる余地がある、と見る論者もいる。競争は現実であり、ガバナンスはその現実に接続していなければならない。</p>
+            </div>
+            <div class="card">
+              <span class="tag">03</span>
+              <p><strong>ガバナンスの定義</strong><br>人類が高度なAI存在下にどう移行するかを考え、関連する意思決定を誘導するための制度設計。技術的アラインメントと並走する第二の防御層であり、アラインメントが間に合わなかった場合の受け皿でもある。</p>
+            </div>
+          </div>
+        </div>
+        <div class="footer reveal reveal-delay-3">
+          <span>地雷原を抜けるゲームの設計図を描く作業</span>
+          <span class="slide-count">1 / 5</span>
+        </div>
+      </section>
+
+      <!-- ═══════════ Slide 2 ═══════════ -->
+      <section class="slide" id="slide-2">
+        <div class="eyebrow reveal">Compute As A Chokepoint</div>
+        <h2 class="reveal reveal-delay-1">AIチップは物理物であり、ガバナンスの物理的な接点になる</h2>
+        <div class="panel reveal reveal-delay-2">
+          <div>
+            <img class="hero" src="images/ai_governance_response/slide2.jpg" alt="Monochrome concrete wall texture">
+            <div class="hero-caption">Photo: Unsplash</div>
+          </div>
+          <p class="lead">
+            AIガバナンスで最も実装可能性が高い手段がCompute Governanceである。データやアルゴリズムは容易にコピー・送信・保存できるため、規制の執行が難しい。対照的にAIチップは物理的な存在で、製造には極めて複雑なグローバル・サプライチェーンが必要になる。少数の企業と国家が主要なステップを独占しており、どの国も単独では最先端チップを量産できない。この非対称性が規制の実効性を担保する。
+          </p>
+          <p class="lead">
+            GPT-4クラスのフロンティアモデルは数万個のAIチップで訓練された。より高度なAIにはさらに多くの計算資源が要る。政府が大規模なチップ使用を規制できれば、フロンティアAI開発に対して事実上の<strong>許認可権</strong>を持つことになる。米国が中国への半導体輸出規制を強化しているのはこの文脈だ。安全協定の検証手段としても有望で、暗号技術を組み合わせれば、プライバシーを保ったまま遵守を確認できる可能性がある。
+          </p>
+          <div class="grid-2">
+            <div class="card">
+              <p><strong>Compute Governanceの4つのレバー</strong></p>
+              <div class="bullets" style="margin-top: 16px">
+                <p class="point"><strong>供給の監視</strong> チップに一意IDを付与し、作業証明で所在を確認する。攻撃者が特定数以上のチップへアクセスできないようにする設計が議論されている。</p>
+                <p class="point"><strong>ワークロードの監視</strong> AIシステムが特定サイズ以下、特定パラメータ内でのみ訓練されるよう、計算リソース側で制約をかける。</p>
+                <p class="point"><strong>遵守の検証</strong> 現場検査とチップ位置確認で監視の改ざんを防ぐ。ゼロ知識証明を使えば機密を開示せずに遵守を証明できる。</p>
+                <p class="point"><strong>遵守の強制</strong> チップをリモートで無効化する、署名されていないワークロードを拒否する。最終手段としての執行。</p>
+              </div>
+            </div>
+            <div class="card">
+              <p><strong>それでも残る構造的限界</strong></p>
+              <div class="bullets" style="margin-top: 16px">
+                <p class="point"><strong>ハードウェア効率の向上</strong> アルゴリズムとチップの進化で、特定能力のAIを訓練するのに必要な計算量は年々減っていく。規制は時間稼ぎにしかならない。</p>
+                <p class="point"><strong>十分な資金力の抜け穴</strong> リソースを潤沢に持つ主体は、型落ちチップを大量投入することで最先端に追いつく可能性がある。チップ依存を前提にした戦略には耐用期限がある。</p>
+                <p class="point"><strong>計算の分散化</strong> 新しいハードウェア・パラダイムがデータセンター集約を壊すと、物理的追跡が困難になる。PC監視まで踏み込めば倫理的に受け入れがたい。</p>
+                <p class="point"><strong>規制対象の偏り</strong> データセンター向けネットワーク機器など、AIチップ以外の特殊ハードウェアにも介入余地があるが、この領域の研究は手薄なままだ。</p>
+              </div>
+            </div>
+          </div>
+          <div class="note">
+            Compute Governanceは万能ではない。ハードウェア効率の向上とアルゴリズムの進歩によって、規制の有効期限は短くなっていく。だが「一時的な措置」であっても、安全のために重要な時間を稼げる。ガバナンス手段の中で<strong>最も物理層に近く、最も執行しやすい</strong>接点であることに変わりはない。
+          </div>
+        </div>
+        <div class="footer reveal reveal-delay-3">
+          <span>チップという物理物が、国際協力の検証手段になる</span>
+          <span class="slide-count">2 / 5</span>
+        </div>
+      </section>
+
+      <!-- ═══════════ Slide 3 ═══════════ -->
+      <section class="slide" id="slide-3">
+        <div class="eyebrow reveal">Seven Levers</div>
+        <h2 class="reveal reveal-delay-1">ガバナンスは7つのレバーで構成される</h2>
+        <div class="panel reveal reveal-delay-2">
+          <div>
+            <img class="hero" src="images/ai_governance_response/slide3.jpg" alt="Grayscale aerial view of dense city grid">
+            <div class="hero-caption">Photo: Unsplash</div>
+          </div>
+          <p class="lead">
+            AIガバナンスを単一の政策として語ると、必ずどこかが抜け落ちる。現実に必要なのは、異なる層で異なる時間軸で効く複数のレバーを同時に動かすことだ。地雷原の比喩を借りれば、地雷を踏む確率を下げるレバー、踏んだときの被害を抑えるレバー、被害からの回復を速めるレバーが別々に設計されなければならない。代表的な対策類型を並べると、AI Alignment研究が示してきた典型が浮かび上がる。
+          </p>
+          <div class="timeline">
+            <div class="timeline-step highlight">
+              <div class="num">Lever 1</div>
+              <p><strong>アライメント研究</strong><br>地雷原を安全に通り抜ける道筋を描く。技術的労力の直接投入。</p>
+            </div>
+            <div class="timeline-step">
+              <div class="num">Lever 2</div>
+              <p><strong>脅威評価</strong><br>地雷について他者に警告する。能力と整合性の評価をガバナンスに接続する。</p>
+            </div>
+            <div class="timeline-step">
+              <div class="num">Lever 3</div>
+              <p><strong>競争の緩和</strong><br>地雷原を慎重に進むための時間と余地を確保する。ライセンス制や規制協調で競争圧を下げる。</p>
+            </div>
+            <div class="timeline-step">
+              <div class="num">Lever 4</div>
+              <p><strong>選択的情報共有</strong><br>安全技術は広く共有し、危険なモデル重みは秘匿する。情報戦略そのものがガバナンス手段になる。</p>
+            </div>
+            <div class="timeline-step">
+              <div class="num">Lever 5</div>
+              <p><strong>グローバル監視</strong><br>危険なプロジェクトの兆候を世界的に検出する。プライバシー保護と両立する設計が問われる。</p>
+            </div>
+          </div>
+          <p class="lead">
+            これらに加えて、AI開発組織自体が自主的に実装できる対策がある。産業規模の安全対策としてDeepMind、Centre for the Governance of AI、OpenAI、Anthropic、Alignment Research Centerが共同で提案したモデル評価フレームワークでは、危険な能力の評価と、危険な傾向（アライメント）の評価を分けて扱う。そしてその結果を<strong>責任あるトレーニング、責任ある展開、透明性、適切なセキュリティ</strong>という4つのガバナンスプロセスに組み込む。これが現時点で最もまとまった業界側の自主対策の姿だ。
+          </p>
+          <table class="compare">
+            <thead>
+              <tr>
+                <th>対策カテゴリ</th>
+                <th>具体的な実装</th>
+                <th>現在の成熟度</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>モデル評価</strong><br>独立監査人による開発中・配備前・更新前のテスト</td>
+                <td>危険な能力（生物兵器支援、欺瞞）と危険な傾向（制御抵抗）を2カテゴリに分けて評価する</td>
+                <td>2023年時点で評価技術は未成熟。能力評価の研究が進行中</td>
+              </tr>
+              <tr>
+                <td><strong>開発前の脅威評価</strong><br>訓練計画そのものの事前審査</td>
+                <td>訓練計算量に関するモデル拡張速度を評価基準とする。比較的単純だが場当たり的</td>
+                <td>方法論は技術的に未熟。多くがアドホック</td>
+              </tr>
+              <tr>
+                <td><strong>情報セキュリティ</strong><br>モデル重みと知的財産の盗難防止</td>
+                <td>強力な国家主体からの防御が必要。オープンソース化の抑制が出発点となる</td>
+                <td>攻撃面が広く、並外れた努力が要求される段階</td>
+              </tr>
+              <tr>
+                <td><strong>段階的なAPIデプロイ</strong><br>AI開発者が仲介役となる配備形態</td>
+                <td>危険なプロンプトと出力を監視、ロールアウト速度を制限、危険なインタラクションをブロック</td>
+                <td>主要ラボで実装済み。ジェイルブレイクへの耐性が継続課題</td>
+              </tr>
+              <tr>
+                <td><strong>安全な訓練手法</strong><br>人間の利益に沿った挙動を確実に拒否できる訓練</td>
+                <td>Bengioが「制御可能にする方法はまだわかっていない」と述べる段階。ブレークスルー待ち</td>
+                <td>研究段階。実運用に耐える手法は未確立</td>
+              </tr>
+            </tbody>
+          </table>
+          <p class="lead">
+            この表を見てわかるのは、<strong>多くの対策がまだ研究段階にある</strong>ということだ。ガバナンスが整ってから開発が始まるのではなく、開発が先行する中で対策を追いかけている。内部告発者の保護、ライセンス要件、規制当局への情報開示義務といった間接的な制度設計は、この「追いかける側」を補強するための仕掛けとして位置づけられる。
+          </p>
+        </div>
+        <div class="footer reveal reveal-delay-3">
+          <span>7つのレバーを同時に動かす — 単一の処方箋はない</span>
+          <span class="slide-count">3 / 5</span>
+        </div>
+      </section>
+
+      <!-- ═══════════ Slide 4 ═══════════ -->
+      <section class="slide" id="slide-4">
+        <div class="eyebrow reveal">d/acc And Defense In Depth</div>
+        <h2 class="reveal reveal-delay-1">中央集権を避けながら防御を厚くするための設計思想</h2>
+        <div class="panel reveal reveal-delay-2">
+          <div>
+            <img class="hero" src="images/ai_governance_response/slide4.jpg" alt="Monochrome suspension bridge infrastructure">
+            <div class="hero-caption">Photo: Unsplash</div>
+          </div>
+          <p class="lead">
+            Compute Governanceや国際条約のような中央集権的な手段だけでガバナンスを組み立てるのは危険でもある。過度に集権的な体制は別種のリスク、つまり権力集中と価値観の固定化を招きやすい。Ethereum考案者のVitalik Buterinは2023年に<strong>d/acc（defensive / decentralized / democratic / differential acceleration）</strong>という概念を提唱した。e/acc（効果的加速主義）への応答として打ち出されたもので、加速しながら防御的・分散的・民主的・差分的な技術を優先するという考え方だ。
+          </p>
+          <p class="lead">
+            Differential Technological Developmentはもともと2002年にNick Bostromが提唱したアイデアで、危険な技術の開発を遅らせ、有益な技術、特に存亡リスクを軽減する技術の開発を加速する、という選別原理である。Buterinはこれに防御的という要素を加えて、技術を「攻撃優位と防御優位」で切り分け、後者を選択的に加速することでリスクと便益のバランスを取る戦略を描いた。暗号技術、ゼロ知識証明、予測市場、プライバシー保護AIなどが、防御優位の技術群として具体的に挙げられている。
+          </p>
+          <div class="grid-2">
+            <div class="card">
+              <p><strong>d/accが想定する4つの防御層</strong></p>
+              <div class="bullets" style="margin-top: 16px">
+                <p class="point"><strong>マクロ物理的防御</strong> 核戦争のような大規模破壊に対するサプライチェーン強靭化、多惑星文明化、独立した生存インフラの構築。</p>
+                <p class="point"><strong>ミクロ物理的防御</strong> バイオセキュリティ。パンデミック検出、空気質改善、オープンソースワクチン、遠紫外線照射などの公衆衛生インフラ。</p>
+                <p class="point"><strong>サイバーセキュリティ</strong> ブロックチェーンとゼロ知識証明を核とした、オープンで安全で自由なインターネット。中央集権ソフトウェアへの依存を下げる。</p>
+                <p class="point"><strong>情報防御</strong> フェイクニュース、心理プロファイリングによる大衆操作への対策。コミュニティノートや予測市場など制度的な検証装置。</p>
+              </div>
+            </div>
+            <div class="card">
+              <p><strong>深層防護 — 3層の防御設計</strong></p>
+              <div class="bullets" style="margin-top: 16px">
+                <p class="point"><strong>第1層: 予防</strong> Compute Governance、国際的な訓練規制、ライセンス制、非認可プロジェクトの検知と隔離。大惨事が発生する可能性そのものを下げる。</p>
+                <p class="point"><strong>第2層: 対応</strong> 情報セキュリティ対策、核酸観測所によるバイオ攻撃検知、ワクチン迅速配布体制。大惨事が文明の将来を脅かす段階に進むのを防ぐ。</p>
+                <p class="point"><strong>第3層: 回復力</strong> 核・バイオ・ナノ攻撃に耐えるシェルター、種子貯蔵、文化遺産の分散保存。最終的な絶滅を防ぐ冗長性。</p>
+                <p class="point"><strong>原子力安全の系譜</strong> Defence in depthは原子炉安全工学で確立された概念で、Future of Humanity Instituteが存亡リスク低減に応用した。単一の失敗が全体を壊さない設計原理。</p>
+              </div>
+            </div>
+          </div>
+          <p class="lead">
+            d/accと深層防護は性質が異なるが、方向は同じだ。<strong>単一の防御線に依存しない</strong>。中央集権的な禁止と分散的な強靭化、予防と対応と回復を、同じ戦略の中に組み込む。Buterinが重要なのは、AI安全性コミュニティと暗号技術コミュニティの対話を実際に駆動している点である。MIRIへの寄付を続け、プライバシー保護のもとでAI監視を可能にする暗号プロトコルの設計を呼びかけてきた。AIガバナンスと暗号技術は別領域ではなく、交差点にこそ実装可能な手段が潜んでいる。
+          </p>
+          <div class="note">
+            Compute Governanceが上流で計算資源を絞るアプローチなら、d/accは下流で防御技術を広げるアプローチである。どちらか一方だけでは不十分で、<strong>両者が補完的に機能したときに初めて</strong>「開発を続けながら破局を回避する」という矛盾した要求に応えられる設計になる。
+          </div>
+        </div>
+        <div class="footer reveal reveal-delay-3">
+          <span>d/acc — 防御的・分散的・民主的・差分的に加速する</span>
+          <span class="slide-count">4 / 5</span>
+        </div>
+      </section>
+
+      <!-- ═══════════ Slide 5 ═══════════ -->
+      <section class="slide" id="slide-5">
+        <div class="eyebrow reveal">Whose Values, Which Consensus</div>
+        <h2 class="reveal reveal-delay-1">民意をAIに反映する問いが、次のガバナンスの中心になる</h2>
+        <div class="panel reveal reveal-delay-2">
+          <div>
+            <img class="hero" src="images/ai_governance_response/slide5.jpg" alt="Abstract monochrome topographic map">
+            <div class="hero-caption">Photo: Unsplash</div>
+          </div>
+          <p class="lead">
+            AIガバナンスを構成する諸レバーは、最終的にひとつの問いに収束する。<strong>どの価値観にAIを整合させるのか</strong>。技術的アラインメントが「AIを人間の意図に沿わせる方法」を問うのに対して、価値整合の問いは「どの人間の、どの意図に沿わせるか」を問う。これは技術ではなく政治の問題であり、ガバナンスの設計思想が民主制度と交差する地点でもある。
+          </p>
+          <p class="lead">
+            先駆的な考え方にEliezer YudkowskyのCEV（Coherent Extrapolated Volition）がある。人類が十分に長く議論した結果として収束するはずの意志をAIに実装する、という発想だ。だが本人が論文を出した直後に「時代遅れ」と撤回した。実装の困難さに加えて、そもそも人間の価値観が収束する保証がない、という二重の問題を抱えていたからだ。Max TegmarkはLife3.0で功利主義、多様性、自主性、継承性の4原則を提唱したが、完全な成分化は極めて困難と認めている。
+          </p>
+          <div class="grid-3">
+            <div class="card">
+              <span class="tag">Track 1</span>
+              <p><strong>DeepMindの試み</strong><br>言語モデルを人間のフィードバックで微調整し、政治的問題への多様な意見を入力として、功利主義やロールズ的平等主義といった社会的厚生関数を最大化するコンセンサス文を生成する。価値観の集約を技術的課題として扱う。</p>
+            </div>
+            <div class="card">
+              <span class="tag">Track 2</span>
+              <p><strong>OpenAI Collective Alignment</strong><br>多様な世界中の公的意見をAIに反映するシステム開発を担うチームを編成。「誰の価値観か」の問いを、組織内部に独立した研究対象として立て直した。</p>
+            </div>
+            <div class="card">
+              <span class="tag">Track 3</span>
+              <p><strong>国際協力とバイオセキュリティ</strong><br>核酸観測所による病原体の早期検知、空気質改善、オープンソースのワクチンと検査。Balviなどの非営利組織が資金を投じ、公衆衛生インフラを防御層として再構築している。</p>
+            </div>
+          </div>
+          <p class="lead">
+            価値観の民主的反映は、既存のガバナンスレバーと別系統ではない。Compute Governanceが計算資源を絞っている間に、国際協力が規範を作り、情報セキュリティが重要情報を守り、d/accが防御技術を広げる。そしてその総体を<strong>誰の価値観に基づいて運用するか</strong>を決める制度設計が、民意のAIへの反映という問いに当たる。技術と政治と倫理がここで合流する。どこか一つだけで解決できる問題ではない。
+          </p>
+          <div class="grid-2">
+            <div class="card">
+              <p><strong>残された論点</strong></p>
+              <div class="bullets" style="margin-top: 16px">
+                <p class="point"><strong>オープンソースの扱い</strong> オープンソースモデルを強く規制すべきか。バイオテロリスクを理由にした規制強化論と、規制のデメリットを重く見る反論が並立している。メリットとデメリットの定量比較はまだ不十分だ。</p>
+                <p class="point"><strong>強権化のリスク</strong> 高度なAIを管理するために、全人類の監視や強力な警察権が議論される可能性がある。長期主義から自動的に強権が導かれるわけではないが、議論の種は確実に存在する。</p>
+                <p class="point"><strong>黒いボール問題</strong> オープンソースモデルの能力がクローズドモデルを追い越した瞬間、既存ガバナンスの前提が崩れる。Nick Bostromが警告する「脆弱な世界」が現実化する条件は何か。</p>
+                <p class="point"><strong>暗号技術との交差</strong> ゼロ知識証明、安全マルチパーティ計算、同型暗号、スマートコントラクト。AIガバナンスの検証手段として、これらをどこまで実装可能な制度に落とせるか。</p>
+              </div>
+            </div>
+            <div class="card">
+              <p><strong>実装への含意</strong></p>
+              <div class="bullets" style="margin-top: 16px">
+                <p class="point"><strong>組織の自主対策</strong> モデル評価、情報セキュリティ、段階的APIデプロイ、内部告発者保護、安全文化。これらは規制を待たずに今日から実装できる領域で、ベストプラクティスが徐々に形成されている。</p>
+                <p class="point"><strong>国際協定の前哨戦</strong> 軍備管理、環境条約、原子力規制の歴史には学ぶべき教訓がある。AIガバナンスも過去の事例から類推しながら制度化を進めるほかない。</p>
+                <p class="point"><strong>防御技術への投資</strong> 暗号、バイオセキュリティ、情報防御、予測市場。d/acc的な防御層への投資は、中央集権的規制を補完する独立したガバナンス資源になる。</p>
+                <p class="point"><strong>民主的プロセスの設計</strong> AIに反映する価値観をどう集約するか。技術者だけでなく哲学者、政治学者、市民の参加を制度化する仕組みが不足している。</p>
+              </div>
+            </div>
+          </div>
+          <div class="note">
+            ガバナンスは完成形を持たない。<strong>開発が進むたびに制度を追いかけ、制度が整うたびに新しい能力が追いつく</strong>。この循環の速度を制御しながら、単一の失敗が全体を壊さない冗長性を設計し続けるしかない。d/accが示すように、防御的な技術を選び取ること自体が意思決定であり、その選び方が次の10年の文明の形を左右する。止められない技術への応答は、止めることではなく、進みながら設計することだ。
+          </div>
+        </div>
+        <div class="footer reveal reveal-delay-3">
+          <span>ガバナンスは完成しない — 設計を続けるほかない</span>
+          <span class="slide-count">5 / 5</span>
+        </div>
+      </section>
+
+      <!-- ═══════════ Related Reading ═══════════ -->
+      <section class="slide" style="min-height:auto;padding:64px 48px 80px;grid-template-rows:auto auto 1fr;">
+        <div class="eyebrow reveal">Related Reading</div>
+        <h2 class="reveal reveal-delay-1" style="max-width:none;">他の記事も読む</h2>
+        <div class="panel reveal reveal-delay-2">
+          <div class="grid-2">
+            <a href="20260409_ai_alignment_wired_share.html" class="card" style="color:inherit;display:block;">
+              <p style="font-family:'SF Mono','Fira Code',Menlo,Consolas,monospace;font-feature-settings:normal;font-size:11px;letter-spacing:0.083em;text-transform:uppercase;color:#757575;margin-bottom:12px;">AI Alignment</p>
+              <p><strong>Yudkowskyを越えて — AIアラインメントの本来の射程</strong><br>破滅論の外側にある共創層の議論を辿る。ガバナンスが扱う価値観の問いは、アラインメントの第3層と接続している。</p>
+            </a>
+            <a href="20260409_misaligned_ai_mechanics_share.html" class="card" style="color:inherit;display:block;">
+              <p style="font-family:'SF Mono','Fira Code',Menlo,Consolas,monospace;font-feature-settings:normal;font-size:11px;letter-spacing:0.083em;text-transform:uppercase;color:#757575;margin-bottom:12px;">Mechanics</p>
+              <p><strong>Misaligned AIの構造 — なぜ有能なAIが人間の意図から外れるのか</strong><br>ガバナンスが受け止めるべき「技術的アラインメントが間に合わない場合」の内部機序。防御層設計の前提として読む。</p>
+            </a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="credits">
+      <p>
+        Photos: All images from <a href="https://unsplash.com">Unsplash</a> (free license).
+        Slide 1: <a href="https://unsplash.com/photos/-9QcjZP-j7Q">Mountain covered in fog</a> /
+        Slide 2: <a href="https://unsplash.com/photos/UuBR5kbvt4Y">Concrete wall texture</a> /
+        Slide 3: <a href="https://unsplash.com/photos/y7tAgosfLHg">Grayscale aerial city</a> /
+        Slide 4: <a href="https://unsplash.com/photos/lwcFxShu4dY">Suspension bridge</a> /
+        Slide 5: <a href="https://unsplash.com/photos/PEaG0Wu5w70">Abstract topographic</a>
+      </p>
+    </footer>
+
+    <script>
+      const buttons = Array.from(document.querySelectorAll('.nav button'));
+      const slides = Array.from(document.querySelectorAll('.slide'));
+      const progress = document.getElementById('progress');
+
+      function setActive(id) {
+        buttons.forEach(b => b.classList.toggle('active', b.dataset.target === id));
+      }
+
+      buttons.forEach(b => {
+        b.addEventListener('click', () => {
+          document.getElementById(b.dataset.target)?.scrollIntoView({ behavior: 'smooth' });
+        });
+      });
+
+      const navObserver = new IntersectionObserver(entries => {
+        entries.forEach(e => { if (e.isIntersecting) setActive(e.target.id); });
+      }, { threshold: 0.5 });
+
+      slides.forEach(s => navObserver.observe(s));
+
+      const revealObserver = new IntersectionObserver(entries => {
+        entries.forEach(e => {
+          if (e.isIntersecting) {
+            e.target.classList.add('visible');
+          }
+        });
+      }, { threshold: 0.15 });
+
+      document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+      window.addEventListener('scroll', () => {
+        const h = document.documentElement;
+        const scrolled = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
+        progress.style.width = scrolled + '%';
+      });
+    </script>
+  </body>
+</html>

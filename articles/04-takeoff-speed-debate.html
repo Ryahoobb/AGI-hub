@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>テイクオフ速度論 — なぜ賢い人々は1,000倍もズレるのか — AGI HUB</title>
+    <link rel="stylesheet" href="../design-system/palette.css">
     <style>
       :root {
         --black: #000;
@@ -320,7 +321,7 @@
       }
     </style>
   </head>
-  <body>
+  <body class="pattern-monolith">
     <div class="progress" id="progress"></div>
 
     <aside class="nav" aria-label="Slide navigation">
@@ -558,6 +559,34 @@
           <p class="lead">
             そしてもう一つ。この議論は日本ではほとんど知られていない。ForethoughtやEpoch AIの定量的分析、AI Futures Projectのシナリオモデル、Davidsonの代替弾力性の議論——これらは英語圏のAI安全性コミュニティでは中心的な論点だが、日本語での紹介は薄い。「ChatGPTがもう少し賢くなる」程度の認識で止まっている人々と、10年で数百年分の変化を真剣に予測している人々の間に、圧倒的な認識ギャップがある。このギャップを埋めることが、日本側からできる最初の一歩である。
           </p>
+
+          <figure class="chart" style="margin: 40px 0 32px;">
+            <div class="chart-title">テイクオフ予測の数値ギャップ</div>
+            <div class="chart-subtitle">同じAGI後10年を見ても、研究努力量と所要時間の見積もりは桁違いに分かれる。</div>
+            <div class="chart-bignum-grid">
+              <div class="cell">
+                <div class="num">1,000<span class="unit">万倍</span></div>
+                <div class="label">Forethought 保守シナリオ<br>10年累積の研究努力量</div>
+              </div>
+              <div class="cell">
+                <div class="num accent">100<span class="unit">兆倍</span></div>
+                <div class="label">Forethought 積極シナリオ<br>同・上限見積もり</div>
+              </div>
+              <div class="cell">
+                <div class="num">1<span class="unit">–10年</span></div>
+                <div class="label">テイクオフ完了までの幅<br>Kokotajlo / Epoch AI の隔たり</div>
+              </div>
+              <div class="cell">
+                <div class="num">4<span class="unit">陣営</span></div>
+                <div class="label">主要論者の立場数<br>合意は速度ではなく到達点のみ</div>
+              </div>
+            </div>
+            <figcaption class="chart-footer">
+              <p class="chart-caption">差は3桁から7桁。数値の解釈以前に、何を測るかで議論が分岐している。</p>
+              <p class="chart-source">Forethought / Epoch AI / AI Futures Project の公開資料からAGI HUBが整理</p>
+            </figcaption>
+          </figure>
+
           <div class="note">
             テイクオフ速度論は、数日か10年かという幅の大きい予測である。だが<strong>「どれが正しいか」を待つ余裕はない</strong>。速い派が正しければ、待っている間に間に合わなくなる。遅い派が正しくても、10年は歴史的には一瞬である。速度の議論は結論ではなく、前提の議論だ。どの速度を信じるかで準備のペースは変わるが、準備の必要性は変わらない。時計はすでに動き始めている。
           </div>

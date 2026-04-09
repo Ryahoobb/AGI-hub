@@ -65,6 +65,32 @@ body { font-family: var(--ff-body); font-feature-settings: "palt"; font-size: 16
   <a href="#p6">6. Investigation</a>
   <br>IMAGE PLACEMENT<br>
   <a href="#img-gallery">Gallery (10 types)</a>
+  <br>CHARTS<br>
+  <a href="#c1">C1. Bar</a>
+  <a href="#c2">C2. H-Bar Rank</a>
+  <a href="#c3">C3. Line</a>
+  <a href="#c4">C4. Area</a>
+  <a href="#c5">C5. Slope</a>
+  <a href="#c6">C6. Dumbbell</a>
+  <a href="#c7">C7. Scatter</a>
+  <a href="#c8">C8. Stacked</a>
+  <a href="#c9">C9. Big Num</a>
+  <a href="#c10">C10. Progress</a>
+  <br>TABLES<br>
+  <a href="#t1">T1. Minimal</a>
+  <a href="#t2">T2. Spec Sheet</a>
+  <a href="#t3">T3. Pricing</a>
+  <a href="#t4">T4. Ranking</a>
+  <a href="#t5">T5. Matrix</a>
+  <br>INFOGRAPHICS<br>
+  <a href="#i1">I1. Timeline</a>
+  <a href="#i2">I2. Process</a>
+  <a href="#i3">I3. Stat Cards</a>
+  <a href="#i4">I4. Before/After</a>
+  <a href="#i5">I5. Tree</a>
+  <a href="#i6">I6. Stepper</a>
+  <a href="#i7">I7. Relation</a>
+  <a href="#i8">I8. Isotype</a>
 </nav>
 
 <!-- ═══════════ Pattern 1: Monolith ═══════════ -->
@@ -351,8 +377,1072 @@ body { font-family: var(--ff-body); font-feature-settings: "palt"; font-size: 16
 .gallery-article p { font-size: 16px; line-height: 1.75; margin: 0 0 16px; }
 </style>
 
+<!-- ═══════════════════════════════════════════════════════
+     CHART SYSTEM SAMPLES (10 types)
+     SVG直書き。外部ライブラリ依存なし。
+     ═══════════════════════════════════════════════════════ -->
+
+<div class="label-bar">Chart System — モノトーン + アクセント1色のデータビズ</div>
+
+<!-- C1: Vertical Bar -->
+<article id="c1" class="sample pattern-monolith">
+  <div class="eyebrow">Chart 01 / Vertical Bar</div>
+  <h2>計算コストの推移</h2>
+  <p>時系列比較の基本形。直近のデータ点だけをアクセント色で強調し、それ以外はモノトーン階調で抑える。凡例は使わず、直近バーの上に数値を直接書く。</p>
+
+  <figure class="chart">
+    <div class="chart-title">GPT系モデル訓練コスト（推定）</div>
+    <div class="chart-subtitle">公開情報ベースの推計値。2020年以降、計算コストは約18カ月で10倍化している。</div>
+    <svg class="chart-svg" viewBox="0 0 640 260" role="img" aria-label="訓練コストの棒グラフ">
+      <!-- grid lines -->
+      <g>
+        <line class="grid-line" x1="60" y1="40"  x2="620" y2="40"/>
+        <line class="grid-line" x1="60" y1="90"  x2="620" y2="90"/>
+        <line class="grid-line" x1="60" y1="140" x2="620" y2="140"/>
+        <line class="grid-line" x1="60" y1="190" x2="620" y2="190"/>
+        <line class="axis-zero" x1="60" y1="220" x2="620" y2="220"/>
+      </g>
+      <!-- y-axis labels -->
+      <g text-anchor="end">
+        <text x="52" y="44">$200M</text>
+        <text x="52" y="94">$150M</text>
+        <text x="52" y="144">$100M</text>
+        <text x="52" y="194">$50M</text>
+        <text x="52" y="224">0</text>
+      </g>
+      <!-- bars (6 years) -->
+      <g>
+        <rect class="data-secondary" x="90"  y="208" width="60" height="12"/>
+        <rect class="data-secondary" x="180" y="196" width="60" height="24"/>
+        <rect class="data-secondary" x="270" y="172" width="60" height="48"/>
+        <rect class="data-secondary" x="360" y="140" width="60" height="80"/>
+        <rect class="data-secondary" x="450" y="96"  width="60" height="124"/>
+        <rect class="data-accent"    x="540" y="46"  width="60" height="174"/>
+        <!-- value label on highlighted bar -->
+        <text class="data-label-accent" x="570" y="38" text-anchor="middle">$174M</text>
+      </g>
+      <!-- x-axis labels -->
+      <g text-anchor="middle">
+        <text x="120" y="240">2020</text>
+        <text x="210" y="240">2021</text>
+        <text x="300" y="240">2022</text>
+        <text x="390" y="240">2023</text>
+        <text x="480" y="240">2024</text>
+        <text x="570" y="240">2025</text>
+      </g>
+    </svg>
+    <figcaption class="chart-footer">
+      <p class="chart-caption">実線は推定値の上限。モデル名・提供主体は個別に示さず、計算予算のオーダーだけを比較する。</p>
+      <p class="chart-source">Epoch AI, public disclosures (illustrative)</p>
+    </figcaption>
+  </figure>
+</article>
+
+<!-- C2: Horizontal Bar / Ranking -->
+<article id="c2" class="sample pattern-monolith">
+  <div class="eyebrow">Chart 02 / Horizontal Ranking</div>
+  <h2>ランキング・構成比の表示</h2>
+  <p>カテゴリが6項目以上ある、またはラベルが長い場合は横棒を選ぶ。棒の末尾に数値を直接書き、凡例と軸ラベルを省く。注目カテゴリだけアクセント色に切り替える。</p>
+
+  <figure class="chart">
+    <div class="chart-title">主要研究機関のフロンティアモデル数（累計）</div>
+    <div class="chart-subtitle">2020年以降に公開された主要モデルの数。機関名は抽象化している。</div>
+    <svg class="chart-svg" viewBox="0 0 640 300" role="img" aria-label="研究機関ランキング">
+      <g>
+        <!-- each row: label + bar + value -->
+        <text x="140" y="34" text-anchor="end" fill="#1a1a1a" font-weight="600">Lab A</text>
+        <rect class="data-accent"    x="150" y="20" width="420" height="20"/>
+        <text class="data-label-accent" x="580" y="34">42</text>
+
+        <text x="140" y="74" text-anchor="end" fill="#1a1a1a" font-weight="600">Lab B</text>
+        <rect class="data-secondary" x="150" y="60" width="340" height="20"/>
+        <text class="data-label" x="500" y="74">34</text>
+
+        <text x="140" y="114" text-anchor="end" fill="#1a1a1a" font-weight="600">Lab C</text>
+        <rect class="data-secondary" x="150" y="100" width="280" height="20"/>
+        <text class="data-label" x="440" y="114">28</text>
+
+        <text x="140" y="154" text-anchor="end" fill="#1a1a1a" font-weight="600">Lab D</text>
+        <rect class="data-secondary" x="150" y="140" width="210" height="20"/>
+        <text class="data-label" x="370" y="154">21</text>
+
+        <text x="140" y="194" text-anchor="end" fill="#1a1a1a" font-weight="600">Lab E</text>
+        <rect class="data-secondary" x="150" y="180" width="150" height="20"/>
+        <text class="data-label" x="310" y="194">15</text>
+
+        <text x="140" y="234" text-anchor="end" fill="#1a1a1a" font-weight="600">Lab F</text>
+        <rect class="data-secondary" x="150" y="220" width="90"  height="20"/>
+        <text class="data-label" x="250" y="234">9</text>
+
+        <text x="140" y="274" text-anchor="end" fill="#1a1a1a" font-weight="600">Others</text>
+        <rect class="data-tertiary" x="150" y="260" width="60"  height="20"/>
+        <text class="data-label" x="220" y="274">6</text>
+      </g>
+    </svg>
+    <figcaption class="chart-footer">
+      <p class="chart-caption">カテゴリ名は匿名化したサンプル。首位の項目だけをアクセント色でハイライトし、他はモノトーン階調に落としている。</p>
+      <p class="chart-source">AGI HUB illustrative dataset</p>
+    </figcaption>
+  </figure>
+</article>
+
+<!-- C3: Line Chart (multi-series) -->
+<article id="c3" class="sample pattern-monolith">
+  <div class="eyebrow">Chart 03 / Line</div>
+  <h2>複数系列の時系列比較</h2>
+  <p>時系列で2〜4系列を比較する定番。凡例は使わず、線の末端に直接ラベルを置く。主役の1系列だけアクセント色にし、他系列はグレー階調で抑える。</p>
+
+  <figure class="chart">
+    <div class="chart-title">フロンティアモデルのベンチマーク推移</div>
+    <div class="chart-subtitle">3系列の正規化スコア（0-100）。A系列だけを記事の主対象として強調している。</div>
+    <svg class="chart-svg" viewBox="0 0 640 300" role="img" aria-label="3系列の折れ線グラフ">
+      <g>
+        <line class="grid-line" x1="60" y1="40"  x2="620" y2="40"/>
+        <line class="grid-line" x1="60" y1="100" x2="620" y2="100"/>
+        <line class="grid-line" x1="60" y1="160" x2="620" y2="160"/>
+        <line class="grid-line" x1="60" y1="220" x2="620" y2="220"/>
+        <line class="axis-zero" x1="60" y1="260" x2="620" y2="260"/>
+      </g>
+      <g text-anchor="end">
+        <text x="52" y="44">100</text>
+        <text x="52" y="104">75</text>
+        <text x="52" y="164">50</text>
+        <text x="52" y="224">25</text>
+        <text x="52" y="264">0</text>
+      </g>
+      <!-- series B (secondary, gray) -->
+      <path class="line-path" stroke="#888" d="M80,240 L160,220 L240,200 L320,170 L400,140 L480,110 L560,90"/>
+      <text class="data-label" fill="#888" x="568" y="92">B</text>
+      <!-- series C (tertiary, lighter gray) -->
+      <path class="line-path" stroke="#bcbcbc" d="M80,250 L160,238 L240,225 L320,200 L400,175 L480,150 L560,130"/>
+      <text class="data-label" fill="#bcbcbc" x="568" y="132">C</text>
+      <!-- series A (accent, highlighted) -->
+      <path class="line-path" stroke="currentColor" style="stroke:var(--accent);stroke-width:2.8" d="M80,230 L160,200 L240,160 L320,120 L400,85 L480,60 L560,48"/>
+      <!-- data point at end -->
+      <circle cx="560" cy="48" r="4" class="data-accent"/>
+      <text class="data-label-accent" x="568" y="50">A</text>
+
+      <g text-anchor="middle">
+        <text x="80"  y="282">2019</text>
+        <text x="160" y="282">2020</text>
+        <text x="240" y="282">2021</text>
+        <text x="320" y="282">2022</text>
+        <text x="400" y="282">2023</text>
+        <text x="480" y="282">2024</text>
+        <text x="560" y="282">2025</text>
+      </g>
+    </svg>
+    <figcaption class="chart-footer">
+      <p class="chart-caption">凡例を使わず末端に直接ラベルを配置。主系列は色とストローク幅の両方で差別化する。</p>
+      <p class="chart-source">AGI HUB illustrative composite</p>
+    </figcaption>
+  </figure>
+</article>
+
+<!-- C4: Area Chart with annotation -->
+<article id="c4" class="sample pattern-broadsheet accent-deepblue">
+  <div class="eyebrow">Chart 04 / Area + Annotation</div>
+  <h2>累積成長とアノテーション</h2>
+  <p>エリアチャートは累積量や構成比の推移を示す。特定の時点に注釈を添えることで、データに物語を重ねる。FT/Economist流のドロップインアノテーション。</p>
+
+  <figure class="chart">
+    <div class="chart-title">推論需要の累積（FLOPs）</div>
+    <div class="chart-subtitle">2020年を1.0として正規化。マークした時点で需要曲線の屈折が観察される。</div>
+    <svg class="chart-svg" viewBox="0 0 640 300" role="img" aria-label="累積エリアチャート">
+      <g>
+        <line class="grid-line" x1="60" y1="50"  x2="620" y2="50"/>
+        <line class="grid-line" x1="60" y1="120" x2="620" y2="120"/>
+        <line class="grid-line" x1="60" y1="190" x2="620" y2="190"/>
+        <line class="axis-zero" x1="60" y1="250" x2="620" y2="250"/>
+      </g>
+      <g text-anchor="end">
+        <text x="52" y="54">1000×</text>
+        <text x="52" y="124">100×</text>
+        <text x="52" y="194">10×</text>
+        <text x="52" y="254">1×</text>
+      </g>
+      <!-- area + line -->
+      <path class="area-path" style="fill:var(--accent)"
+        d="M80,248 L160,242 L240,230 L320,205 L400,160 L480,105 L560,55 L560,250 L80,250 Z"/>
+      <path class="line-path" style="stroke:var(--accent);stroke-width:2.5"
+        d="M80,248 L160,242 L240,230 L320,205 L400,160 L480,105 L560,55"/>
+      <!-- annotation at 2023 inflection -->
+      <line class="annotation-line" x1="400" y1="160" x2="400" y2="90"/>
+      <circle cx="400" cy="160" r="4" class="data-accent"/>
+      <text class="annotation" x="408" y="84">2023: 推論需要が訓練需要を超過</text>
+
+      <g text-anchor="middle">
+        <text x="80"  y="274">2020</text>
+        <text x="240" y="274">2022</text>
+        <text x="400" y="274">2024</text>
+        <text x="560" y="274">2026</text>
+      </g>
+    </svg>
+    <figcaption class="chart-footer">
+      <p class="chart-caption">Y軸は対数スケール。グラフの解釈を助けるためにアノテーションで屈折点を明示する。</p>
+      <p class="chart-source">Illustrative extrapolation, AGI HUB</p>
+    </figcaption>
+  </figure>
+</article>
+
+<!-- C5: Slope Chart -->
+<article id="c5" class="sample pattern-monolith">
+  <div class="eyebrow">Chart 05 / Slope</div>
+  <h2>2時点比較（スロープチャート）</h2>
+  <p>2時点の変化を複数カテゴリで比較するならスロープが最も読みやすい。大きく変化した項目だけをアクセント、他はグレーで重ねる。Tufteが推奨する最も情報密度の高い形式の一つ。</p>
+
+  <figure class="chart">
+    <div class="chart-title">各ベンチマークのスコア変化 2023→2025</div>
+    <div class="chart-subtitle">上位スコアを占めたB項目の上昇が特に大きい。</div>
+    <svg class="chart-svg" viewBox="0 0 640 320" role="img" aria-label="スロープチャート">
+      <g>
+        <text x="120" y="24" text-anchor="middle" font-weight="700" fill="#1a1a1a">2023</text>
+        <text x="520" y="24" text-anchor="middle" font-weight="700" fill="#1a1a1a">2025</text>
+        <line class="axis-line" x1="120" y1="40" x2="120" y2="290"/>
+        <line class="axis-line" x1="520" y1="40" x2="520" y2="290"/>
+      </g>
+      <!-- Non-focus lines (gray) -->
+      <g>
+        <line x1="120" y1="90"  x2="520" y2="70"  stroke="#bcbcbc" stroke-width="1.5"/>
+        <circle cx="120" cy="90" r="4" fill="#bcbcbc"/><circle cx="520" cy="70" r="4" fill="#bcbcbc"/>
+        <text x="112" y="94" text-anchor="end" fill="#888" font-size="11">A: 62</text>
+        <text x="528" y="74" fill="#888" font-size="11">A: 78</text>
+
+        <line x1="120" y1="170" x2="520" y2="150" stroke="#bcbcbc" stroke-width="1.5"/>
+        <circle cx="120" cy="170" r="4" fill="#bcbcbc"/><circle cx="520" cy="150" r="4" fill="#bcbcbc"/>
+        <text x="112" y="174" text-anchor="end" fill="#888" font-size="11">C: 48</text>
+        <text x="528" y="154" fill="#888" font-size="11">C: 60</text>
+
+        <line x1="120" y1="240" x2="520" y2="235" stroke="#bcbcbc" stroke-width="1.5"/>
+        <circle cx="120" cy="240" r="4" fill="#bcbcbc"/><circle cx="520" cy="235" r="4" fill="#bcbcbc"/>
+        <text x="112" y="244" text-anchor="end" fill="#888" font-size="11">D: 31</text>
+        <text x="528" y="239" fill="#888" font-size="11">D: 35</text>
+      </g>
+      <!-- Focus line (accent) -->
+      <g>
+        <line x1="120" y1="130" x2="520" y2="50" class="data-accent" stroke-width="2.8"/>
+        <circle cx="120" cy="130" r="5" class="data-accent"/>
+        <circle cx="520" cy="50"  r="5" class="data-accent"/>
+        <text x="112" y="134" text-anchor="end" class="data-label-accent">B: 55</text>
+        <text x="528" y="54" class="data-label-accent">B: 89</text>
+      </g>
+    </svg>
+    <figcaption class="chart-footer">
+      <p class="chart-caption">垂直軸はスコア。両端のラベルで値を直接示し、軸目盛りを省略する。</p>
+      <p class="chart-source">Illustrative</p>
+    </figcaption>
+  </figure>
+</article>
+
+<!-- C6: Dumbbell Chart -->
+<article id="c6" class="sample pattern-investigation">
+  <div class="eyebrow">Chart 06 / Dumbbell</div>
+  <h2>差分の強調（ダンベル）</h2>
+  <p>同一カテゴリの2時点または2条件の差分を強調したいときに使う。バーの代わりに2点とそれを結ぶ線で表現するため、ギャップが視覚的に読み取りやすい。</p>
+
+  <figure class="chart">
+    <div class="chart-title">安全性評価スコア：開発時 vs デプロイ後</div>
+    <div class="chart-subtitle">デプロイ後に下落したカテゴリほどダンベルが右側に長く伸びる。</div>
+    <svg class="chart-svg" viewBox="0 0 640 280" role="img" aria-label="ダンベルチャート">
+      <g>
+        <line class="grid-line" x1="180" y1="30"  x2="180" y2="260"/>
+        <line class="grid-line" x1="290" y1="30"  x2="290" y2="260"/>
+        <line class="grid-line" x1="400" y1="30"  x2="400" y2="260"/>
+        <line class="grid-line" x1="510" y1="30"  x2="510" y2="260"/>
+        <text x="180" y="22" text-anchor="middle" fill="#888">40</text>
+        <text x="290" y="22" text-anchor="middle" fill="#888">60</text>
+        <text x="400" y="22" text-anchor="middle" fill="#888">80</text>
+        <text x="510" y="22" text-anchor="middle" fill="#888">100</text>
+      </g>
+      <g font-weight="600">
+        <!-- Row 1 -->
+        <text x="160" y="64" text-anchor="end" fill="#1a1a1a">Refusal</text>
+        <line x1="460" y1="60" x2="510" y2="60" stroke="#888" stroke-width="2"/>
+        <circle cx="460" cy="60" r="6" fill="#bcbcbc"/>
+        <circle cx="510" cy="60" r="6" fill="#111"/>
+
+        <!-- Row 2 -->
+        <text x="160" y="104" text-anchor="end" fill="#1a1a1a">Bias</text>
+        <line x1="350" y1="100" x2="470" y2="100" class="data-accent" stroke-width="2"/>
+        <circle cx="350" cy="100" r="6" fill="#bcbcbc"/>
+        <circle cx="470" cy="100" r="6" class="data-accent"/>
+
+        <!-- Row 3 -->
+        <text x="160" y="144" text-anchor="end" fill="#1a1a1a">Jailbreak</text>
+        <line x1="240" y1="140" x2="430" y2="140" class="data-accent" stroke-width="2"/>
+        <circle cx="240" cy="140" r="6" fill="#bcbcbc"/>
+        <circle cx="430" cy="140" r="6" class="data-accent"/>
+
+        <!-- Row 4 -->
+        <text x="160" y="184" text-anchor="end" fill="#1a1a1a">Hallucination</text>
+        <line x1="320" y1="180" x2="420" y2="180" stroke="#888" stroke-width="2"/>
+        <circle cx="320" cy="180" r="6" fill="#bcbcbc"/>
+        <circle cx="420" cy="180" r="6" fill="#111"/>
+
+        <!-- Row 5 -->
+        <text x="160" y="224" text-anchor="end" fill="#1a1a1a">PII Leak</text>
+        <line x1="410" y1="220" x2="480" y2="220" stroke="#888" stroke-width="2"/>
+        <circle cx="410" cy="220" r="6" fill="#bcbcbc"/>
+        <circle cx="480" cy="220" r="6" fill="#111"/>
+      </g>
+      <!-- Legend (inline, minimal) -->
+      <g transform="translate(160,252)" font-size="11" fill="#888">
+        <circle cx="0" cy="0" r="5" fill="#bcbcbc"/>
+        <text x="10" y="4">開発時</text>
+        <circle cx="70" cy="0" r="5" fill="#111"/>
+        <text x="80" y="4">デプロイ後</text>
+      </g>
+    </svg>
+    <figcaption class="chart-footer">
+      <p class="chart-caption">差分が大きいカテゴリだけをアクセント色に切り替える。評価の閾値を超える悪化に読者の目を誘導する。</p>
+      <p class="chart-source">Illustrative, AGI HUB</p>
+    </figcaption>
+  </figure>
+</article>
+
+<!-- C7: Scatter Plot -->
+<article id="c7" class="sample pattern-monolith">
+  <div class="eyebrow">Chart 07 / Scatter</div>
+  <h2>相関・分布の可視化</h2>
+  <p>散布図は2変数の相関を示す。外れ値や注目データ点だけをアクセント色にして、全体分布はグレーの点群で表現する。軸ラベルは左下に控えめに配置。</p>
+
+  <figure class="chart">
+    <div class="chart-title">パラメータ数 vs. ベンチマーク精度</div>
+    <div class="chart-subtitle">モデル規模と性能の関係。上位群の中に規模に不釣り合いなスコアのモデルが1点存在する。</div>
+    <svg class="chart-svg" viewBox="0 0 640 320" role="img" aria-label="散布図">
+      <g>
+        <line class="grid-line" x1="80" y1="50"  x2="620" y2="50"/>
+        <line class="grid-line" x1="80" y1="130" x2="620" y2="130"/>
+        <line class="grid-line" x1="80" y1="210" x2="620" y2="210"/>
+        <line class="axis-zero" x1="80" y1="270" x2="620" y2="270"/>
+        <line class="axis-zero" x1="80" y1="50" x2="80" y2="270"/>
+      </g>
+      <g text-anchor="end" fill="#888">
+        <text x="72" y="54">95</text>
+        <text x="72" y="134">75</text>
+        <text x="72" y="214">55</text>
+        <text x="72" y="274">35</text>
+      </g>
+      <g text-anchor="middle" fill="#888">
+        <text x="130" y="290">1B</text>
+        <text x="260" y="290">10B</text>
+        <text x="390" y="290">100B</text>
+        <text x="520" y="290">1T</text>
+      </g>
+      <!-- regular scatter points -->
+      <g fill="#bcbcbc">
+        <circle cx="120" cy="250" r="5"/>
+        <circle cx="150" cy="240" r="5"/>
+        <circle cx="180" cy="220" r="5"/>
+        <circle cx="210" cy="200" r="5"/>
+        <circle cx="240" cy="195" r="5"/>
+        <circle cx="260" cy="180" r="5"/>
+        <circle cx="290" cy="165" r="5"/>
+        <circle cx="320" cy="150" r="5"/>
+        <circle cx="360" cy="140" r="5"/>
+        <circle cx="400" cy="125" r="5"/>
+        <circle cx="430" cy="110" r="5"/>
+        <circle cx="470" cy="100" r="5"/>
+        <circle cx="510" cy="85" r="5"/>
+        <circle cx="550" cy="78" r="5"/>
+      </g>
+      <!-- outlier (highlighted) -->
+      <circle cx="310" cy="70" r="7" class="data-accent"/>
+      <line class="annotation-line" x1="310" y1="70" x2="380" y2="50"/>
+      <text class="annotation" x="388" y="54">規模に対して精度が高い異常値</text>
+
+      <!-- axis titles -->
+      <text x="340" y="312" text-anchor="middle" font-size="11" fill="#555">パラメータ数（対数軸）</text>
+      <text transform="translate(30,160) rotate(-90)" text-anchor="middle" font-size="11" fill="#555">スコア</text>
+    </svg>
+    <figcaption class="chart-footer">
+      <p class="chart-caption">主な点群は灰色で抑え、注目すべき外れ値にのみアクセントと注釈を付ける。</p>
+      <p class="chart-source">Illustrative</p>
+    </figcaption>
+  </figure>
+</article>
+
+<!-- C8: Stacked Bar -->
+<article id="c8" class="sample pattern-monolith">
+  <div class="eyebrow">Chart 08 / Stacked Bar</div>
+  <h2>構成比の推移</h2>
+  <p>累積構成比。階調で複数カテゴリを重ねる。モノトーン階調3段階+アクセントの組み合わせで、最大4カテゴリまで扱える。それ以上は可読性が落ちるため使わない。</p>
+
+  <figure class="chart">
+    <div class="chart-title">学習データの内訳</div>
+    <div class="chart-subtitle">Web / Books / Code / Synthetic の4カテゴリ。直近ではSynthetic（アクセント）の比率が急拡大している。</div>
+    <svg class="chart-svg" viewBox="0 0 640 280" role="img" aria-label="積み上げ棒グラフ">
+      <g>
+        <line class="grid-line" x1="80" y1="30"  x2="620" y2="30"/>
+        <line class="grid-line" x1="80" y1="90"  x2="620" y2="90"/>
+        <line class="grid-line" x1="80" y1="150" x2="620" y2="150"/>
+        <line class="axis-zero" x1="80" y1="210" x2="620" y2="210"/>
+      </g>
+      <g text-anchor="end" fill="#888">
+        <text x="72" y="34">100%</text>
+        <text x="72" y="94">75%</text>
+        <text x="72" y="154">50%</text>
+        <text x="72" y="214">25%</text>
+      </g>
+      <!-- 5 bars stacked: web (dark), books (mid), code (light), synthetic (accent) -->
+      <!-- Year 1: web 70, books 15, code 13, synth 2 -->
+      <g>
+        <rect x="120" y="84"  width="70" height="126" fill="#111"/>
+        <rect x="120" y="57"  width="70" height="27"  fill="#666"/>
+        <rect x="120" y="33"  width="70" height="24"  fill="#bbb"/>
+        <rect x="120" y="29"  width="70" height="4"   class="data-accent"/>
+      </g>
+      <!-- Year 2 -->
+      <g>
+        <rect x="210" y="84"  width="70" height="126" fill="#111"/>
+        <rect x="210" y="54"  width="70" height="30"  fill="#666"/>
+        <rect x="210" y="33"  width="70" height="21"  fill="#bbb"/>
+        <rect x="210" y="25"  width="70" height="8"   class="data-accent"/>
+      </g>
+      <!-- Year 3 -->
+      <g>
+        <rect x="300" y="100" width="70" height="110" fill="#111"/>
+        <rect x="300" y="67"  width="70" height="33"  fill="#666"/>
+        <rect x="300" y="46"  width="70" height="21"  fill="#bbb"/>
+        <rect x="300" y="25"  width="70" height="21"  class="data-accent"/>
+      </g>
+      <!-- Year 4 -->
+      <g>
+        <rect x="390" y="118" width="70" height="92"  fill="#111"/>
+        <rect x="390" y="83"  width="70" height="35"  fill="#666"/>
+        <rect x="390" y="55"  width="70" height="28"  fill="#bbb"/>
+        <rect x="390" y="25"  width="70" height="30"  class="data-accent"/>
+      </g>
+      <!-- Year 5 -->
+      <g>
+        <rect x="480" y="140" width="70" height="70"  fill="#111"/>
+        <rect x="480" y="100" width="70" height="40"  fill="#666"/>
+        <rect x="480" y="70"  width="70" height="30"  fill="#bbb"/>
+        <rect x="480" y="25"  width="70" height="45"  class="data-accent"/>
+      </g>
+
+      <g text-anchor="middle" fill="#888">
+        <text x="155" y="232">2021</text>
+        <text x="245" y="232">2022</text>
+        <text x="335" y="232">2023</text>
+        <text x="425" y="232">2024</text>
+        <text x="515" y="232">2025</text>
+      </g>
+      <!-- direct labels (end of last bar) -->
+      <g font-size="11" font-weight="600">
+        <text x="555" y="180" fill="#111">Web</text>
+        <text x="555" y="125" fill="#666">Books</text>
+        <text x="555" y="90"  fill="#888">Code</text>
+        <text x="555" y="50" class="data-label-accent">Synthetic</text>
+      </g>
+    </svg>
+    <figcaption class="chart-footer">
+      <p class="chart-caption">注目すべき1カテゴリだけアクセント、他はモノトーン階調で抑える。凡例は最終バーの右側に直接置く。</p>
+      <p class="chart-source">Illustrative composition</p>
+    </figcaption>
+  </figure>
+</article>
+
+<!-- C9: Big Number / KPI -->
+<article id="c9" class="sample pattern-monolith">
+  <div class="eyebrow">Chart 09 / Big Number</div>
+  <h2>数値1点を際立たせる</h2>
+  <p>グラフ化するほどデータ系列がない場合、巨大な数字を1-4個並べる。WIRED/FT短報やKPIダッシュボードで多用される。軸も線もいらない、ただ数値をタイポグラフィとして扱う。</p>
+
+  <!-- Single big number -->
+  <div class="chart-bignum">
+    <div class="num">10×</div>
+    <div class="label">推論コストの2年間削減率 (2023→2025)</div>
+  </div>
+
+  <!-- Grid variant -->
+  <div class="chart-bignum-grid">
+    <div class="cell">
+      <div class="num accent">42</div>
+      <div class="label">公開モデル数（2025）</div>
+    </div>
+    <div class="cell">
+      <div class="num">$174M</div>
+      <div class="label">単一モデル訓練コスト上限</div>
+    </div>
+    <div class="cell">
+      <div class="num">18<span style="font-size:28px;">ヶ月</span></div>
+      <div class="label">コストが10倍化する周期</div>
+    </div>
+    <div class="cell">
+      <div class="num">86<span style="font-size:28px;">%</span></div>
+      <div class="label">合成データの比率上限（推定）</div>
+    </div>
+  </div>
+  <p class="chart-source" style="margin-top:-16px;">Illustrative, AGI HUB composite</p>
+</article>
+
+<!-- C10: Progress / Horizontal mini-bar list -->
+<article id="c10" class="sample pattern-monolith">
+  <div class="eyebrow">Chart 10 / Progress Bars</div>
+  <h2>進捗と上限の可視化</h2>
+  <p>パーセンテージやスコア達成率を複数カテゴリで並べる最もシンプルな形式。SVGを使わずHTML/CSSだけで実装できるため、本文フロー内に軽く差し込むのに適する。</p>
+
+  <div style="max-width:560px;">
+    <div class="chart-progress">
+      <div class="label">Bench A</div>
+      <div class="bar"><div class="fill accent" style="--w:92%"></div></div>
+      <div class="val">92%</div>
+    </div>
+    <div class="chart-progress">
+      <div class="label">Bench B</div>
+      <div class="bar"><div class="fill" style="--w:78%"></div></div>
+      <div class="val">78%</div>
+    </div>
+    <div class="chart-progress">
+      <div class="label">Bench C</div>
+      <div class="bar"><div class="fill" style="--w:64%"></div></div>
+      <div class="val">64%</div>
+    </div>
+    <div class="chart-progress">
+      <div class="label">Bench D</div>
+      <div class="bar"><div class="fill" style="--w:51%"></div></div>
+      <div class="val">51%</div>
+    </div>
+    <div class="chart-progress">
+      <div class="label">Bench E</div>
+      <div class="bar"><div class="fill" style="--w:38%"></div></div>
+      <div class="val">38%</div>
+    </div>
+  </div>
+  <p class="chart-source" style="margin-top:16px;">AGI HUB illustrative benchmark</p>
+</article>
+
+
+<!-- ═══════════════════════════════════════════════
+     TABLE PATTERNS (T1–T5)
+     ═══════════════════════════════════════════════ -->
+
+<!-- T1: Minimal Compare -->
+<div class="label-bar">Table 1 / Minimal Compare — 横罫のみのシンプル比較</div>
+<article id="t1" class="sample pattern-monolith">
+  <div class="eyebrow">Table 1 / Minimal Compare</div>
+  <h2>主要アラインメント手法の比較</h2>
+  <p>3-5列のシンプルな並列比較。横罫のみ、ゼブラなし。セマンティックな <code>&lt;table&gt;</code> で組む。</p>
+
+  <table class="table">
+    <caption>主要アラインメント手法の比較<span class="sub">代表的アプローチ（2026年時点）</span></caption>
+    <thead>
+      <tr>
+        <th scope="col">手法</th>
+        <th scope="col">登場</th>
+        <th scope="col">対象</th>
+        <th scope="col">主な批判</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th scope="row">RLHF</th>
+        <td>2017</td>
+        <td>出力の選好整合</td>
+        <td>内部状態を見ない</td>
+      </tr>
+      <tr>
+        <th scope="row">Constitutional AI</th>
+        <td>2022</td>
+        <td>規範ベース応答</td>
+        <td>規範の起源が不透明</td>
+      </tr>
+      <tr>
+        <th scope="row">Mechanistic Interp.</th>
+        <td>2021</td>
+        <td>内部回路の可観測化</td>
+        <td>スケール困難</td>
+      </tr>
+      <tr>
+        <th scope="row">Scalable Oversight</th>
+        <td>2023</td>
+        <td>超人的モデルの監督</td>
+        <td>仮定の強さ</td>
+      </tr>
+    </tbody>
+  </table>
+  <p class="table-source">AGI HUB composite</p>
+</article>
+
+<!-- T2: Spec Sheet -->
+<div class="label-bar">Table 2 / Spec Sheet — 行ヘッダ主体のスペック表</div>
+<article id="t2" class="sample pattern-monolith">
+  <div class="eyebrow">Table 2 / Spec Sheet</div>
+  <h2>モデル単体のスペック列挙</h2>
+  <p>属性名が1列目の行ヘッダ、値が2列目。モデルカード・製品仕様に適する。</p>
+
+  <table class="table table-spec">
+    <caption>Crystal-X 7B スペック</caption>
+    <tbody>
+      <tr><th scope="row">Parameters</th><td>7.2B</td></tr>
+      <tr><th scope="row">Architecture</th><td>Decoder-only Transformer</td></tr>
+      <tr><th scope="row">Context Window</th><td class="num">131,072 tokens</td></tr>
+      <tr><th scope="row">Training Tokens</th><td class="num">3.8T</td></tr>
+      <tr><th scope="row">Training Data Cutoff</th><td>2025-10</td></tr>
+      <tr><th scope="row">Quantization</th><td>FP16 / INT8 / INT4</td></tr>
+      <tr><th scope="row">License</th><td>Research-only, non-commercial</td></tr>
+    </tbody>
+  </table>
+</article>
+
+<!-- T3: Pricing Tiers -->
+<div class="label-bar">Table 3 / Pricing Tiers — 推奨列ハイライト</div>
+<article id="t3" class="sample pattern-monolith">
+  <div class="eyebrow">Table 3 / Pricing Tiers</div>
+  <h2>プラン比較表</h2>
+  <p>料金表。推奨列を <code>.col-featured</code> で囲み、価格を大きく出す。アクセント色で Recommended バッジと上罫を強調。</p>
+
+  <table class="table table-pricing">
+    <caption>プラン比較<span class="sub">2026年4月時点、税別</span></caption>
+    <thead>
+      <tr>
+        <th scope="col"></th>
+        <th scope="col">Basic</th>
+        <th scope="col" class="col-featured">Standard</th>
+        <th scope="col">Enterprise</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th scope="row">料金</th>
+        <td><span class="price">$29<span class="unit">/mo</span></span></td>
+        <td class="col-featured">
+          <span class="badge">Recommended</span>
+          <span class="price">$99<span class="unit">/mo</span></span>
+        </td>
+        <td><span class="price">$499<span class="unit">/mo</span></span></td>
+      </tr>
+      <tr>
+        <th scope="row">API呼び出し上限</th>
+        <td class="num">10,000</td>
+        <td class="col-featured num">100,000</td>
+        <td class="num">無制限</td>
+      </tr>
+      <tr>
+        <th scope="row">コンテキスト長</th>
+        <td class="num">32K</td>
+        <td class="col-featured num">128K</td>
+        <td class="num">1M</td>
+      </tr>
+      <tr>
+        <th scope="row">優先サポート</th>
+        <td>—</td>
+        <td class="col-featured">メール（48h）</td>
+        <td>専任SA</td>
+      </tr>
+      <tr>
+        <th scope="row">SLA</th>
+        <td>—</td>
+        <td class="col-featured">99.5%</td>
+        <td>99.9%</td>
+      </tr>
+    </tbody>
+  </table>
+  <p class="table-source">Illustrative</p>
+</article>
+
+<!-- T4: Ranking -->
+<div class="label-bar">Table 4 / Ranking — 順位 + インラインバー</div>
+<article id="t4" class="sample pattern-investigation">
+  <div class="eyebrow" style="color:var(--accent);">Table 4 / Ranking</div>
+  <h2>ベンチマークスコア上位</h2>
+  <p>順位 + モデル名 + インラインバー + 数値。首位行は <code>.is-top</code> でアクセント色に。横棒チャートの軽量版。</p>
+
+  <table class="table table-rank">
+    <caption>架空ベンチマーク HAL-26 スコア<span class="sub">上位5モデル</span></caption>
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">モデル</th>
+        <th scope="col"></th>
+        <th scope="col" class="num">Score</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="is-top">
+        <td class="rank">01</td>
+        <th scope="row">Crystal-X 70B</th>
+        <td class="bar-cell"><div class="inline-bar"><div class="fill" style="--w:96%"></div></div></td>
+        <td class="val num">96.2</td>
+      </tr>
+      <tr>
+        <td class="rank">02</td>
+        <th scope="row">Helios-7 Pro</th>
+        <td class="bar-cell"><div class="inline-bar"><div class="fill" style="--w:88%"></div></div></td>
+        <td class="val num">88.1</td>
+      </tr>
+      <tr>
+        <td class="rank">03</td>
+        <th scope="row">Nova-Delta</th>
+        <td class="bar-cell"><div class="inline-bar"><div class="fill" style="--w:82%"></div></div></td>
+        <td class="val num">82.4</td>
+      </tr>
+      <tr>
+        <td class="rank">04</td>
+        <th scope="row">Orion-12</th>
+        <td class="bar-cell"><div class="inline-bar"><div class="fill" style="--w:76%"></div></div></td>
+        <td class="val num">76.8</td>
+      </tr>
+      <tr>
+        <td class="rank">05</td>
+        <th scope="row">Meridian-S</th>
+        <td class="bar-cell"><div class="inline-bar"><div class="fill" style="--w:71%"></div></div></td>
+        <td class="val num">71.2</td>
+      </tr>
+    </tbody>
+  </table>
+  <p class="table-source">Illustrative benchmark</p>
+</article>
+
+<!-- T5: Matrix Check -->
+<div class="label-bar">Table 5 / Matrix Check — ◯△×対応マトリクス</div>
+<article id="t5" class="sample pattern-monolith">
+  <div class="eyebrow">Table 5 / Matrix Check</div>
+  <h2>機能対応マトリクス</h2>
+  <p>◯△×で機能対応を段階表示。色だけで情報を伝えないよう、必要に応じて <code>.mark-label</code> で補助ラベルを添える。</p>
+
+  <table class="table table-matrix">
+    <caption>主要モデル×機能対応</caption>
+    <thead>
+      <tr>
+        <th scope="col">機能</th>
+        <th scope="col" class="center">Crystal-X</th>
+        <th scope="col" class="center">Helios-7</th>
+        <th scope="col" class="center">Nova-Δ</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th scope="row">Tool use</th>
+        <td class="mark yes">◯<span class="mark-label">native</span></td>
+        <td class="mark yes">◯</td>
+        <td class="mark partial">△<span class="mark-label">beta</span></td>
+      </tr>
+      <tr>
+        <th scope="row">Vision</th>
+        <td class="mark yes">◯</td>
+        <td class="mark no">×</td>
+        <td class="mark yes">◯</td>
+      </tr>
+      <tr>
+        <th scope="row">Audio input</th>
+        <td class="mark partial">△</td>
+        <td class="mark no">×</td>
+        <td class="mark yes">◯</td>
+      </tr>
+      <tr>
+        <th scope="row">Fine-tuning API</th>
+        <td class="mark yes">◯</td>
+        <td class="mark yes">◯</td>
+        <td class="mark no">×</td>
+      </tr>
+      <tr>
+        <th scope="row">Open weights</th>
+        <td class="mark no">×</td>
+        <td class="mark yes">◯</td>
+        <td class="mark no">×</td>
+      </tr>
+    </tbody>
+  </table>
+</article>
+
+<!-- ═══════════════════════════════════════════════
+     INFOGRAPHIC PATTERNS (I1–I8)
+     ═══════════════════════════════════════════════ -->
+
+<!-- I1: Vertical Timeline -->
+<div class="label-bar">Info 1 / Vertical Timeline — 縦の年表</div>
+<article id="i1" class="sample pattern-monolith">
+  <div class="eyebrow">Info 1 / Timeline</div>
+  <h2>アラインメント研究の系譜</h2>
+  <figure class="info">
+    <p class="info-title">アラインメント研究の主要マイルストーン</p>
+    <p class="info-subtitle">2001〜2025の節目となった出来事。is-keyクラスでアクセント強調。</p>
+    <div class="timeline-v">
+      <div class="event is-key">
+        <div class="year">2001</div>
+        <h4 class="title">「アラインメント」概念の鋳造</h4>
+        <p class="desc">Yudkowskyが最初期の用法を提示。最適化プロセスと設計者意図の整合が主題。</p>
+      </div>
+      <div class="event">
+        <div class="year">2017</div>
+        <h4 class="title">RLHFの実用化</h4>
+        <p class="desc">強化学習による選好整合が広く採用される。</p>
+      </div>
+      <div class="event">
+        <div class="year">2021</div>
+        <h4 class="title">Mechanistic Interpretabilityの台頭</h4>
+        <p class="desc">内部回路を直接観測する手法が注目される。</p>
+      </div>
+      <div class="event is-key">
+        <div class="year">2023</div>
+        <h4 class="title">Scalable Oversight論の展開</h4>
+        <p class="desc">超人的モデルの監督問題が研究議題として定式化される。</p>
+      </div>
+      <div class="event">
+        <div class="year">2025</div>
+        <h4 class="title">安全保障化</h4>
+        <p class="desc">政策用語として「alignment」が採用され始める。</p>
+      </div>
+    </div>
+    <p class="info-source">AGI HUB composite</p>
+  </figure>
+</article>
+
+<!-- I2: Process Flow -->
+<div class="label-bar">Info 2 / Process Flow — 横方向プロセス図</div>
+<article id="i2" class="sample pattern-monolith">
+  <div class="eyebrow">Info 2 / Process Flow</div>
+  <h2>モデル開発パイプライン</h2>
+  <figure class="info info-wide">
+    <p class="info-title">学習から公開までの4フェーズ</p>
+    <p class="info-subtitle">矢印は時系列依存。各ステップで必要リソースが桁違いに変わる。</p>
+    <div class="process">
+      <div class="step">
+        <div class="n">Step 01</div>
+        <h4 class="title">データ収集</h4>
+        <p class="desc">公開ウェブ + ライセンス済みコーパスの収集・重複除去</p>
+      </div>
+      <div class="step">
+        <div class="n">Step 02</div>
+        <h4 class="title">事前学習</h4>
+        <p class="desc">数ヶ月、数千〜数万GPU。最大コスト局面</p>
+      </div>
+      <div class="step">
+        <div class="n">Step 03</div>
+        <h4 class="title">整合学習</h4>
+        <p class="desc">RLHF + 監督ファインチューン + 安全性調整</p>
+      </div>
+      <div class="step">
+        <div class="n">Step 04</div>
+        <h4 class="title">評価・公開</h4>
+        <p class="desc">レッドチーム + ベンチ + 段階リリース</p>
+      </div>
+    </div>
+  </figure>
+</article>
+
+<!-- I3: Stat Summary Cards -->
+<div class="label-bar">Info 3 / Stat Summary Cards — 統計サマリー</div>
+<article id="i3" class="sample pattern-dispatch">
+  <div class="eyebrow" style="color:var(--accent);">Info 3 / Stats</div>
+  <h2>2025年モデル開発統計</h2>
+  <figure class="info info-wide">
+    <p class="info-title">1年間に公開された大規模モデルの集計</p>
+    <p class="info-subtitle">対象: 10B超のパラメータ数を持つ公開モデル</p>
+    <div class="stat-grid">
+      <div class="cell">
+        <div class="label">Released</div>
+        <div class="num accent">127</div>
+        <div class="delta up">+38 YoY</div>
+      </div>
+      <div class="cell">
+        <div class="label">Avg Params</div>
+        <div class="num">240<span class="unit">B</span></div>
+        <div class="delta up">+62%</div>
+      </div>
+      <div class="cell">
+        <div class="label">Peak Train</div>
+        <div class="num">4.2<span class="unit">ZFLOPs</span></div>
+        <div class="note">最大モデル推定</div>
+      </div>
+      <div class="cell">
+        <div class="label">Open Weights</div>
+        <div class="num">43<span class="unit">%</span></div>
+        <div class="delta down">-9pt</div>
+      </div>
+    </div>
+    <p class="info-source">AGI HUB illustrative</p>
+  </figure>
+</article>
+
+<!-- I4: Before/After -->
+<div class="label-bar">Info 4 / Before After — 2状態対比</div>
+<article id="i4" class="sample pattern-investigation">
+  <div class="eyebrow" style="color:var(--accent);">Info 4 / Before/After</div>
+  <h2>RLHF導入前と後</h2>
+  <figure class="info">
+    <p class="info-title">命令追従の質的転換</p>
+    <div class="compare-ba">
+      <div class="side is-before">
+        <div class="tag">Before / 2019</div>
+        <h4>命令追従の困難</h4>
+        <p>ベースモデルは単語予測のみで、指示の意図把握が弱い。</p>
+        <ul>
+          <li>ゼロショット性能が低い</li>
+          <li>プロンプトエンジニアリング依存</li>
+          <li>対話インターフェイスが未成立</li>
+        </ul>
+      </div>
+      <div class="side is-after">
+        <div class="tag">After / 2023</div>
+        <h4>選好整合の実装</h4>
+        <p>人間選好でのファインチューンで命令追従が一般化。</p>
+        <ul>
+          <li>対話インターフェイスが成立</li>
+          <li>一般ユーザーが利用開始</li>
+          <li>新しい安全性論点が発生</li>
+        </ul>
+      </div>
+    </div>
+  </figure>
+</article>
+
+<!-- I5: Hierarchy Tree -->
+<div class="label-bar">Info 5 / Hierarchy Tree — 階層ツリー</div>
+<article id="i5" class="sample pattern-monolith">
+  <div class="eyebrow">Info 5 / Tree</div>
+  <h2>アラインメント研究の分類</h2>
+  <figure class="info">
+    <p class="info-title">主要サブ領域の階層</p>
+    <p class="info-subtitle">ルートノードのみアクセント色。</p>
+    <div class="tree">
+      <div class="tree-root">
+        <div class="node accent">Alignment<span class="sub">Field</span></div>
+      </div>
+      <div class="tree-row">
+        <div class="node">Outer<span class="sub">Objective</span></div>
+        <div class="node">Inner<span class="sub">Mesa-opt</span></div>
+        <div class="node">Interpret<span class="sub">Mechanistic</span></div>
+      </div>
+    </div>
+  </figure>
+</article>
+
+<!-- I6: Stepper -->
+<div class="label-bar">Info 6 / Stepper — 番号付き手順</div>
+<article id="i6" class="sample pattern-monolith">
+  <div class="eyebrow">Info 6 / Stepper</div>
+  <h2>論文を読む手順</h2>
+  <figure class="info">
+    <p class="info-title">最短で主張を掴む3ステップ</p>
+    <ol class="stepper">
+      <li>
+        <h4>アブストラクトと結論だけ先に読む</h4>
+        <p>主張を押さえてから本文に入る。枝葉に引きずられないため。</p>
+        <div class="meta">所要 5分</div>
+      </li>
+      <li>
+        <h4>図表を全部先に見る</h4>
+        <p>データの形と実験条件を把握する。ここで「弱い点」の仮説を立てる。</p>
+        <div class="meta">所要 10分</div>
+      </li>
+      <li>
+        <h4>本文は反証可能性を意識して読む</h4>
+        <p>主張の最も弱い点を特定してから妥当性を判定する。同意は最後。</p>
+        <div class="meta">所要 30-60分</div>
+      </li>
+    </ol>
+  </figure>
+</article>
+
+<!-- I7: Relation Diagram -->
+<div class="label-bar">Info 7 / Relation Diagram — SVGノード関係図</div>
+<article id="i7" class="sample pattern-monolith">
+  <div class="eyebrow">Info 7 / Relation</div>
+  <h2>エージェント構成図</h2>
+  <figure class="info info-wide">
+    <p class="info-title">メインエージェントとサブエージェントの呼び出し関係</p>
+    <p class="info-subtitle">実線: 直接呼び出し / 破線: 結果の相互参照</p>
+    <svg class="relation-svg" viewBox="0 0 720 280" role="img" aria-label="エージェント構成図">
+      <title>エージェント構成図</title>
+      <!-- edges -->
+      <line class="edge accent" x1="360" y1="74" x2="180" y2="200"/>
+      <line class="edge accent" x1="360" y1="74" x2="360" y2="200"/>
+      <line class="edge accent" x1="360" y1="74" x2="540" y2="200"/>
+      <line class="edge dashed" x1="180" y1="244" x2="360" y2="244"/>
+      <line class="edge dashed" x1="360" y1="244" x2="540" y2="244"/>
+      <!-- root -->
+      <g transform="translate(300,30)">
+        <rect class="node-box accent" width="120" height="44"/>
+        <text class="node-label accent" x="60" y="22" dominant-baseline="central">Main Agent</text>
+        <text class="node-sub" x="60" y="38">orchestrator</text>
+      </g>
+      <!-- children -->
+      <g transform="translate(120,200)">
+        <rect class="node-box" width="120" height="44"/>
+        <text class="node-label" x="60" y="22" dominant-baseline="central">Scout</text>
+        <text class="node-sub" x="60" y="38">fact-gather</text>
+      </g>
+      <g transform="translate(300,200)">
+        <rect class="node-box" width="120" height="44"/>
+        <text class="node-label" x="60" y="22" dominant-baseline="central">Analyst</text>
+        <text class="node-sub" x="60" y="38">synthesis</text>
+      </g>
+      <g transform="translate(480,200)">
+        <rect class="node-box" width="120" height="44"/>
+        <text class="node-label" x="60" y="22" dominant-baseline="central">Writer</text>
+        <text class="node-sub" x="60" y="38">draft</text>
+      </g>
+    </svg>
+    <p class="info-source">AGI HUB illustrative architecture</p>
+  </figure>
+</article>
+
+<!-- I8: Isotype -->
+<div class="label-bar">Info 8 / Isotype — ピクトグラム構成比</div>
+<article id="i8" class="sample pattern-monolith">
+  <div class="eyebrow">Info 8 / Isotype</div>
+  <h2>出力用途の構成比</h2>
+  <figure class="info">
+    <p class="info-title">大規模モデルの主要ユースケース内訳</p>
+    <p class="info-subtitle">1マス=1%。100マスで全体。is-highlight 行がアクセント色。</p>
+    <div class="isotype">
+      <div class="row is-highlight">
+        <div class="label">Code generation<span class="sub">developer</span></div>
+        <div class="cells" id="iso-code"></div>
+        <div class="val">42%</div>
+      </div>
+      <div class="row">
+        <div class="label">Writing<span class="sub">editorial</span></div>
+        <div class="cells" id="iso-write"></div>
+        <div class="val">23%</div>
+      </div>
+      <div class="row">
+        <div class="label">Research<span class="sub">analysis</span></div>
+        <div class="cells" id="iso-res"></div>
+        <div class="val">18%</div>
+      </div>
+      <div class="row">
+        <div class="label">Support<span class="sub">customer</span></div>
+        <div class="cells" id="iso-sup"></div>
+        <div class="val">11%</div>
+      </div>
+      <div class="row">
+        <div class="label">Other</div>
+        <div class="cells" id="iso-other"></div>
+        <div class="val">6%</div>
+      </div>
+    </div>
+    <p class="info-source">AGI HUB illustrative</p>
+  </figure>
+  <script>
+    // Generate isotype cells: total 100 per row, fill N as .on
+    (function(){
+      var rows = [
+        {id:'iso-code', n:42},
+        {id:'iso-write', n:23},
+        {id:'iso-res', n:18},
+        {id:'iso-sup', n:11},
+        {id:'iso-other', n:6}
+      ];
+      rows.forEach(function(r){
+        var el = document.getElementById(r.id);
+        if(!el) return;
+        var frag = '';
+        for(var i=0;i<100;i++){
+          frag += '<span class="' + (i<r.n?'on':'') + '"></span>';
+        }
+        el.innerHTML = frag;
+      });
+    })();
+  </script>
+</article>
+
+
 <div style="max-width:860px;margin:40px auto;padding:0 20px;font-size:12px;color:#666;">
-  6 patterns + 10 image placements × WIRED-inspired monotone base. Generated 2026-04-09, updated with placement gallery.
+  6 patterns + 10 image placements + 10 chart types + 5 table patterns + 8 infographic patterns × WIRED/FT/Economist-inspired monotone base. Generated 2026-04-09, tables + infographics added 2026-04-10.
 </div>
 
 </body>

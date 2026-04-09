@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>止められない技術にどう向き合うか — AIガバナンスの設計図</title>
+    <link rel="stylesheet" href="../design-system/palette.css">
     <style>
       :root {
         --black: #000;
@@ -334,7 +335,7 @@
       }
     </style>
   </head>
-  <body>
+  <body class="pattern-monolith">
     <div class="progress" id="progress"></div>
 
     <aside class="nav" aria-label="Slide navigation">
@@ -551,6 +552,28 @@
           <p class="lead">
             d/accと深層防護は性質が異なるが、方向は同じだ。<strong>単一の防御線に依存しない</strong>。中央集権的な禁止と分散的な強靭化、予防と対応と回復を、同じ戦略の中に組み込む。Buterinが重要なのは、AI安全性コミュニティと暗号技術コミュニティの対話を実際に駆動している点である。MIRIへの寄付を続け、プライバシー保護のもとでAI監視を可能にする暗号プロトコルの設計を呼びかけてきた。AIガバナンスと暗号技術は別領域ではなく、交差点にこそ実装可能な手段が潜んでいる。
           </p>
+          <figure class="info info-wide">
+            <p class="info-title">深層防護 — 3段の防御パイプライン</p>
+            <p class="info-subtitle">原子炉安全工学で確立された概念を、AI存亡リスクに転用する</p>
+            <div class="process">
+              <div class="step">
+                <div class="n">Layer 01</div>
+                <h4 class="title">予防</h4>
+                <p class="desc">Compute Governance、訓練規制、ライセンス制。大惨事が発生する確率そのものを下げる。</p>
+              </div>
+              <div class="step">
+                <div class="n">Layer 02</div>
+                <h4 class="title">対応</h4>
+                <p class="desc">情報セキュリティ、核酸観測所、ワクチン迅速配布。発生した事象が文明規模に拡大するのを止める。</p>
+              </div>
+              <div class="step">
+                <div class="n">Layer 03</div>
+                <h4 class="title">回復力</h4>
+                <p class="desc">シェルター、種子貯蔵、分散保存。単一の失敗が全体を壊さない冗長性を残す。</p>
+              </div>
+            </div>
+            <p class="info-source">Future of Humanity Institute / d/acc framework</p>
+          </figure>
           <div class="note">
             Compute Governanceが上流で計算資源を絞るアプローチなら、d/accは下流で防御技術を広げるアプローチである。どちらか一方だけでは不十分で、<strong>両者が補完的に機能したときに初めて</strong>「開発を続けながら破局を回避する」という矛盾した要求に応えられる設計になる。
           </div>

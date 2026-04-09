@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>産業爆発の隠れた前提 — ロボット自己複製が未来を二つに割る</title>
+    <link rel="stylesheet" href="../design-system/palette.css">
     <style>
       :root {
         --black: #000;
@@ -335,7 +336,7 @@
       }
     </style>
   </head>
-  <body>
+  <body class="pattern-monolith">
     <div class="progress" id="progress"></div>
 
     <aside class="nav" aria-label="Slide navigation">
@@ -560,6 +561,33 @@
               <p><strong>どちらを設計するか</strong><br>技術的実現性ではなく、政治的・戦略的判断が分岐を決める。両国家・両陣営が同じ計算を眺めている。</p>
             </div>
           </div>
+          <figure class="chart" style="margin: 40px 0 32px;">
+            <div class="chart-title">産業爆発の前提となる数字</div>
+            <div class="chart-subtitle">記事中のForethought・Shulman・Epoch AIの試算を並べる。</div>
+            <div class="chart-bignum-grid">
+              <div class="cell">
+                <div class="num">1<span class="unit">年→数日</span></div>
+                <div class="label">倍増時間の短縮幅<br>Shulman 80,000 Hours</div>
+              </div>
+              <div class="cell">
+                <div class="num accent">80<span class="unit">%</span></div>
+                <div class="label">経験曲線のコスト低下率<br>5年で発散する想定</div>
+              </div>
+              <div class="cell">
+                <div class="num">25<span class="unit">×</span></div>
+                <div class="label">AI研究努力の年成長率<br>推論効率と計算量</div>
+              </div>
+              <div class="cell">
+                <div class="num">1,000<span class="unit">万倍</span></div>
+                <div class="label">保守シナリオの研究努力量<br>積極なら100兆倍</div>
+              </div>
+            </div>
+            <figcaption class="chart-footer">
+              <p class="chart-caption">これらの数字が同時に成立するか否かで、2035年は別の星になる。</p>
+              <p class="chart-source">Forethought / Carl Shulman / Epoch AI — 本文中の引用を整理</p>
+            </figcaption>
+          </figure>
+
           <div class="note">
             <strong>結論</strong>。産業爆発の数字は感情的な誇張ではなく、半内生的成長モデルと経験曲線と自己複製仮定の積である。この積の妥当性を疑うべき場所は、ロボット自己複製が物理と経済の両面で閉ループを作れるかどうかに尽きる。閉ループが作れるなら残りは時間の問題でしかない。作れないなら産業爆発は起きない。議論の半分はこの一点に引き戻されるべきだ。
           </div>

@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Misaligned AIの構造 — なぜ有能なAIが人間の意図から外れるのか</title>
+    <link rel="stylesheet" href="../design-system/palette.css">
     <style>
       :root {
         --black: #000;
@@ -348,7 +349,7 @@
       }
     </style>
   </head>
-  <body>
+  <body class="pattern-monolith">
     <div class="progress" id="progress"></div>
 
     <aside class="nav" aria-label="Slide navigation">
@@ -476,6 +477,21 @@
               <p><strong>二層の食い違い</strong><br>Base OptimizerとMesa Optimizerの目標がずれると、運用時の分布シフトで行動が意図から外れる。Specification Gamingの対応策は、ここでは機能しない。</p>
             </div>
           </div>
+          <figure class="info">
+            <p class="info-title">誤整合の分類 — アラインメント失敗の構造</p>
+            <p class="info-subtitle">報酬設計の層と、内部目標の層は別の対処が必要になる</p>
+            <div class="tree">
+              <div class="tree-root">
+                <div class="node accent">Misalignment<span class="sub">失敗の総称</span></div>
+              </div>
+              <div class="tree-row">
+                <div class="node">Outer<span class="sub">報酬設計の失敗</span></div>
+                <div class="node">Inner<span class="sub">内部目標の誤汎化</span></div>
+                <div class="node">Instrumental<span class="sub">道具的収束の圧力</span></div>
+              </div>
+            </div>
+            <p class="info-source">AGI HUB composite — 2026</p>
+          </figure>
           <div class="note">
             要するに、Goal Misgeneralizationは<strong>報酬設計という表層の対処が届かない領域</strong>に属している。完璧な報酬関数を書けたとしても、モデル内部で別の目標が形成され、運用時にそれが顔を出す可能性は残る。Inner Alignmentは、アラインメント研究の中でも、もっとも解くのが難しい層に置かれている。
           </div>

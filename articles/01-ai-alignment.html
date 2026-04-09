@@ -3,10 +3,12 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Yudkowskyを越えて — AIアラインメントの本来の射程 — WIRED Style</title>
+    <title>Yudkowskyを越えて — AIアラインメントの本来の射程</title>
+    <link rel="stylesheet" href="../design-system/palette.css">
     <style>
       /* ══════════════════════════════════════
-         WIRED.jp DESIGN.md 準拠
+         AGI HUB Editorial Style
+         palette.css 連動。pattern-monolith 基底
          Section 2: Color Palette
          Section 3: Typography Rules (palt global)
          Section 6: Flat, no shadows
@@ -159,7 +161,7 @@
       .reveal-delay-2 { transition-delay: 0.2s; }
       .reveal-delay-3 { transition-delay: 0.35s; }
 
-      /* ── Eyebrow Label (WiredMono代替: SF Mono) ── */
+      /* ── Eyebrow Label (mono accent: SF Mono) ── */
       .eyebrow {
         font-family: "SF Mono", "Fira Code", "Fira Mono", Menlo, Consolas, monospace;
         font-feature-settings: normal;
@@ -211,7 +213,7 @@
         color: var(--body-text);
       }
 
-      /* ── Tag (WiredMono代替) ── */
+      /* ── Tag (mono accent) ── */
       .tag {
         display: inline-block;
         font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
@@ -361,7 +363,7 @@
       }
     </style>
   </head>
-  <body>
+  <body class="pattern-monolith">
     <div class="progress" id="progress"></div>
 
     <aside class="nav" aria-label="Slide navigation">
@@ -504,6 +506,58 @@
               <p><strong>加速主義</strong><br>Andreessen, e/acc。p(doom) ほぼゼロ。規制は有害、全速力で開発すべきという立場をとる。</p>
             </div>
           </div>
+
+          <figure class="chart" style="margin: 48px 0 32px;">
+            <div class="chart-title">p(doom) スペクトラムの幅</div>
+            <div class="chart-subtitle">5つの立場の破滅確率レンジ。同じ問いに対して3桁以上の差が並走している。</div>
+            <svg class="chart-svg" viewBox="0 0 640 280" role="img" aria-label="p(doom)スペクトラム横棒チャート">
+              <title>p(doom)スペクトラム</title>
+              <!-- grid lines -->
+              <line class="grid-line" x1="160" y1="20"  x2="160" y2="240"/>
+              <line class="grid-line" x1="280" y1="20"  x2="280" y2="240"/>
+              <line class="grid-line" x1="400" y1="20"  x2="400" y2="240"/>
+              <line class="grid-line" x1="520" y1="20"  x2="520" y2="240"/>
+              <line class="axis-line" x1="160" y1="240" x2="640" y2="240"/>
+
+              <!-- x-axis labels -->
+              <text class="data-label" x="160" y="262" text-anchor="middle">0%</text>
+              <text class="data-label" x="280" y="262" text-anchor="middle">25%</text>
+              <text class="data-label" x="400" y="262" text-anchor="middle">50%</text>
+              <text class="data-label" x="520" y="262" text-anchor="middle">75%</text>
+              <text class="data-label" x="635" y="262" text-anchor="end">100%</text>
+
+              <!-- bars: x = 160 + (val/100)*475, val 0..100 -->
+              <!-- Extreme: 95-99 -->
+              <text x="155" y="44" text-anchor="end" class="data-label" font-weight="600">破滅論</text>
+              <rect class="data-accent" x="611.25" y="32" width="19" height="20"/>
+              <text x="635" y="46" text-anchor="end" class="data-label-accent" font-size="11">95–99%</text>
+
+              <!-- Strong: 10-50 -->
+              <text x="155" y="84" text-anchor="end" class="data-label" font-weight="600">強い懸念</text>
+              <rect class="data-primary" x="207.5" y="72" width="190" height="20"/>
+              <text x="402" y="86" class="data-label" font-size="11">10–50%</text>
+
+              <!-- Cautious: 1-15 (数%〜不明 を 1-15 と表記) -->
+              <text x="155" y="124" text-anchor="end" class="data-label" font-weight="600">慎重な楽観</text>
+              <rect class="data-secondary" x="164.75" y="112" width="66.5" height="20"/>
+              <text x="236" y="126" class="data-label" font-size="11">数%–15%</text>
+
+              <!-- Optimistic: 0-2 -->
+              <text x="155" y="164" text-anchor="end" class="data-label" font-weight="600">楽観</text>
+              <rect class="data-tertiary" x="160" y="152" width="9.5" height="20"/>
+              <text x="174" y="166" class="data-label" font-size="11">&lt;2%</text>
+
+              <!-- Accel: ~0 -->
+              <text x="155" y="204" text-anchor="end" class="data-label" font-weight="600">加速主義</text>
+              <rect class="data-tertiary" x="160" y="192" width="3" height="20"/>
+              <text x="168" y="206" class="data-label" font-size="11">≈0%</text>
+            </svg>
+            <figcaption class="chart-footer">
+              <p class="chart-caption">最も悲観の帯と最も楽観の帯で、同じ「未来予測」が3桁以上隔たっている。中央値の合意は存在しない。</p>
+              <p class="chart-source">AGI HUB composite — 各論者の公開発言と論文から推定したレンジ</p>
+            </figcaption>
+          </figure>
+
           <p class="lead">
             Yudkowskyは最左端にいるが、<strong>その存在が議論全体の形を変えている</strong>。これは「オーバートン窓を押し広げる効果」として理解できる。極端な主張が存在することで、それより穏健な立場が「常識的な意見」として政治的に通りやすくなる。Stuart RussellやBengioの提言が「過激すぎる」と退けられにくくなったのは、Yudkowskyという極があるからだ。本人が意図しているかは別として、構造的にはこの役割を果たしている。
           </p>

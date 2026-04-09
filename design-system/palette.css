@@ -409,3 +409,918 @@ figure.img .caption { margin-top: 10px; }
   font-size: 16px;
   margin-bottom: 8px;
 }
+
+/* ═════════════════════════════════════════════════════
+   Chart System
+   データビジュアライゼーション用ユーティリティ。
+   SVG直書きを前提。外部ライブラリ依存なし。
+   モノトーン基調 + アクセント1色でデータ点を強調。
+   ═════════════════════════════════════════════════════ */
+
+:root {
+  /* データビズ用カラー階調（モノトーン + 1アクセント） */
+  --data-0: #111111;        /* 最濃・主データ */
+  --data-1: #444444;        /* 副データ */
+  --data-2: #888888;        /* 第3データ */
+  --data-3: #bcbcbc;        /* 第4データ（背景的） */
+  --data-4: #dddddd;        /* グリッド基調 */
+  --data-grid: #e5e5e5;     /* グリッド線 */
+  --data-axis: #999999;     /* 軸線 */
+  --data-bg: transparent;   /* チャート背景 */
+  --data-accent: var(--accent); /* 強調色（記事アクセントを継承） */
+
+  /* チャート寸法 */
+  --chart-maxw: var(--content-width);
+  --chart-maxw-wide: var(--wide-width);
+}
+
+/* チャートコンテナ */
+.chart {
+  width: 100%;
+  max-width: var(--chart-maxw);
+  margin: 48px auto;
+  font-family: var(--ff-body);
+  color: var(--fg);
+}
+.chart.chart-wide { max-width: var(--chart-maxw-wide); }
+.chart.chart-inline { max-width: 320px; margin: 24px 0; display: inline-block; }
+
+.chart-title {
+  font-size: 17px;
+  font-weight: 700;
+  line-height: 1.3;
+  margin: 0 0 4px;
+  letter-spacing: -0.005em;
+}
+.chart-subtitle {
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--mid-gray);
+  line-height: 1.45;
+  margin: 0 0 20px;
+  max-width: 60ch;
+}
+.chart-svg {
+  width: 100%;
+  height: auto;
+  display: block;
+  overflow: visible;
+}
+
+/* SVG内の標準スタイル（属性より優先させず、fallback用） */
+.chart-svg text {
+  font-family: var(--ff-body);
+  font-size: 12px;
+  fill: var(--mid-gray);
+}
+.chart-svg .axis-line,
+.chart-svg .grid-line {
+  stroke: var(--data-grid);
+  stroke-width: 1;
+  shape-rendering: crispEdges;
+}
+.chart-svg .axis-zero {
+  stroke: var(--data-axis);
+  stroke-width: 1;
+}
+.chart-svg .data-primary   { fill: var(--data-0); stroke: var(--data-0); }
+.chart-svg .data-secondary { fill: var(--data-2); stroke: var(--data-2); }
+.chart-svg .data-tertiary  { fill: var(--data-3); stroke: var(--data-3); }
+.chart-svg .data-accent {
+  fill: var(--data-accent);
+  stroke: var(--data-accent);
+}
+.chart-svg .data-label {
+  font-family: var(--ff-body);
+  font-size: 11px;
+  font-weight: 600;
+  fill: var(--body-text);
+}
+.chart-svg .data-label-accent {
+  fill: var(--data-accent);
+  font-weight: 700;
+}
+.chart-svg .annotation {
+  font-family: var(--ff-body);
+  font-size: 11px;
+  font-style: italic;
+  fill: var(--mid-gray);
+}
+.chart-svg .annotation-line {
+  stroke: var(--mid-gray);
+  stroke-width: 1;
+  stroke-dasharray: 2 2;
+  fill: none;
+}
+.chart-svg .line-path {
+  fill: none;
+  stroke-width: 2;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+.chart-svg .area-path {
+  fill-opacity: 0.14;
+  stroke: none;
+}
+
+/* フットエリア: キャプションと出典 */
+.chart-footer {
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  border-top: 1px solid var(--border);
+  padding-top: 10px;
+}
+.chart-caption {
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--mid-gray);
+  max-width: 62ch;
+}
+.chart-source {
+  font-family: var(--ff-mono);
+  font-feature-settings: normal;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--meta);
+}
+.chart-source::before { content: "SOURCE: "; }
+
+/* インライン数値強調（本文中の統計用） */
+.stat-inline {
+  font-family: var(--ff-body);
+  font-weight: 700;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Big number callout (KPI風) */
+.chart-bignum {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 24px 0;
+  border-top: 1px solid var(--body-text);
+  border-bottom: 1px solid var(--border);
+  margin: 32px 0;
+}
+.chart-bignum .num {
+  font-size: 72px;
+  line-height: 0.95;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}
+.chart-bignum .label {
+  font-family: var(--ff-mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--meta);
+}
+
+/* Big number grid (3-4カラム) */
+.chart-bignum-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 0;
+  margin: 40px 0;
+  border-top: 2px solid var(--body-text);
+  border-bottom: 1px solid var(--border);
+}
+.chart-bignum-grid .cell {
+  padding: 24px 20px 24px 0;
+  border-right: 1px solid var(--border);
+}
+.chart-bignum-grid .cell:last-child { border-right: none; }
+.chart-bignum-grid .num {
+  font-size: 44px;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--fg);
+  font-variant-numeric: tabular-nums;
+  margin-bottom: 6px;
+}
+.chart-bignum-grid .num.accent { color: var(--accent); }
+.chart-bignum-grid .label {
+  font-family: var(--ff-mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--meta);
+  line-height: 1.4;
+}
+
+/* 進捗バー（横棒の最小版） */
+.chart-progress {
+  display: grid;
+  grid-template-columns: 160px 1fr 60px;
+  gap: 16px;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+.chart-progress .label { color: var(--fg); }
+.chart-progress .bar {
+  height: 8px;
+  background: var(--data-4);
+  position: relative;
+}
+.chart-progress .bar .fill {
+  position: absolute;
+  inset: 0;
+  width: var(--w, 0%);
+  background: var(--fg);
+}
+.chart-progress .bar .fill.accent { background: var(--accent); }
+.chart-progress .val {
+  font-family: var(--ff-body);
+  font-weight: 600;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+/* モバイル: 横スクロール可 */
+@media (max-width: 640px) {
+  .chart-scroll-x {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .chart-scroll-x .chart-svg { min-width: 560px; }
+  .chart-bignum .num { font-size: 52px; }
+}
+
+/* ═════════════════════════════════════════════════════
+   Table System
+   意味的な <table> を前提にしたスタイル。装飾divで表を
+   模倣しない。モノトーン + アクセント1色。罫線は横罫を
+   基本とし、ゼブラは使わない（編集紙面の伝統に倣う）。
+   ═════════════════════════════════════════════════════ */
+
+.table {
+  width: 100%;
+  max-width: var(--content-width);
+  margin: 40px 0;
+  border-collapse: collapse;
+  font-family: var(--ff-body);
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--fg);
+  font-variant-numeric: tabular-nums;
+}
+.table.table-wide { max-width: var(--wide-width); }
+.table caption {
+  caption-side: top;
+  text-align: left;
+  font-size: 17px;
+  font-weight: 700;
+  line-height: 1.3;
+  margin-bottom: 4px;
+  color: var(--fg);
+}
+.table caption .sub {
+  display: block;
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--mid-gray);
+  margin-top: 4px;
+}
+.table thead th {
+  font-family: var(--ff-mono);
+  font-feature-settings: normal;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--meta);
+  text-align: left;
+  padding: 10px 14px 10px 0;
+  border-bottom: 2px solid var(--body-text);
+  vertical-align: bottom;
+}
+.table tbody th {
+  font-weight: 600;
+  text-align: left;
+  padding: 14px 14px 14px 0;
+  color: var(--fg);
+  width: 30%;
+}
+.table td {
+  padding: 14px 14px 14px 0;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+.table thead th:last-child,
+.table tbody td:last-child,
+.table tbody th:last-child { padding-right: 0; }
+.table tbody tr:last-child td,
+.table tbody tr:last-child th { border-bottom: 1px solid var(--body-text); }
+.table .num,
+.table td.num,
+.table th.num { text-align: right; font-variant-numeric: tabular-nums; }
+.table .center { text-align: center; }
+
+/* T2 Spec Sheet: 縦型・行ヘッダ優先。1列目は薄背景で見出し化 */
+.table-spec tbody th {
+  background: transparent;
+  border-right: 1px solid var(--border);
+  padding-right: 20px;
+  font-family: var(--ff-mono);
+  font-size: 11px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--meta);
+}
+.table-spec tbody td { padding-left: 20px; }
+
+/* T3 Pricing: 推奨列を .col-featured で強調 */
+.table-pricing thead th.col-featured,
+.table-pricing tbody td.col-featured {
+  background: var(--bg-gray);
+  border-left: 1px solid var(--border);
+  border-right: 1px solid var(--border);
+  padding-left: 16px;
+  padding-right: 16px;
+}
+.table-pricing thead th.col-featured {
+  color: var(--accent);
+  border-top: 2px solid var(--accent);
+}
+.table-pricing .price {
+  display: block;
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--fg);
+  margin: 6px 0 2px;
+  letter-spacing: -0.01em;
+}
+.table-pricing .price .unit {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--meta);
+  margin-left: 4px;
+}
+.table-pricing .badge {
+  display: inline-block;
+  font-family: var(--ff-mono);
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent);
+  border: 1px solid var(--accent);
+  padding: 2px 6px;
+  margin-bottom: 8px;
+}
+
+/* T4 Ranking: 順位カラム + 最大値アクセント */
+.table-rank td.rank {
+  font-family: var(--ff-mono);
+  font-feature-settings: normal;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--meta);
+  width: 48px;
+  padding-right: 8px;
+}
+.table-rank tr.is-top td.rank,
+.table-rank tr.is-top td.val {
+  color: var(--accent);
+  font-weight: 700;
+}
+.table-rank td.val { font-weight: 600; }
+.table-rank td.bar-cell { width: 40%; padding-right: 16px; }
+.table-rank .inline-bar {
+  height: 6px;
+  background: var(--data-4);
+  position: relative;
+}
+.table-rank .inline-bar .fill {
+  position: absolute;
+  inset: 0;
+  width: var(--w, 0%);
+  background: var(--data-0);
+}
+.table-rank tr.is-top .inline-bar .fill { background: var(--accent); }
+
+/* T5 Matrix: ◯×△の評価マトリクス */
+.table-matrix td.mark { text-align: center; font-size: 18px; line-height: 1; width: 72px; }
+.table-matrix td.mark.yes { color: var(--accent); font-weight: 700; }
+.table-matrix td.mark.partial { color: var(--mid-gray); font-weight: 600; }
+.table-matrix td.mark.no { color: var(--border); }
+.table-matrix .mark-label {
+  display: block;
+  font-family: var(--ff-mono);
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--meta);
+  margin-top: 2px;
+  font-weight: 500;
+}
+
+/* table footer: source */
+.table-source {
+  font-family: var(--ff-mono);
+  font-feature-settings: normal;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--meta);
+  margin: 8px 0 40px;
+}
+.table-source::before { content: "SOURCE: "; }
+
+/* モバイル: 横スクロールで崩壊回避 */
+@media (max-width: 640px) {
+  .table-scroll {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin: 40px -24px;
+    padding: 0 24px;
+  }
+  .table-scroll .table { min-width: 560px; }
+  .table-pricing .price { font-size: 22px; }
+}
+
+/* ═════════════════════════════════════════════════════
+   Infographic System
+   テキスト + SVG/HTML の構造化ビジュアル。
+   アクセント1色、モノトーン基調を維持。
+   外部ライブラリ依存なし。
+   ═════════════════════════════════════════════════════ */
+
+.info {
+  width: 100%;
+  max-width: var(--content-width);
+  margin: 48px auto;
+}
+.info.info-wide { max-width: var(--wide-width); }
+.info-title {
+  font-size: 17px;
+  font-weight: 700;
+  line-height: 1.3;
+  margin: 0 0 4px;
+  letter-spacing: -0.005em;
+}
+.info-subtitle {
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--mid-gray);
+  line-height: 1.45;
+  margin: 0 0 24px;
+  max-width: 60ch;
+}
+.info-source {
+  font-family: var(--ff-mono);
+  font-feature-settings: normal;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--meta);
+  margin-top: 14px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border);
+}
+.info-source::before { content: "SOURCE: "; }
+
+/* I1 Vertical Timeline: 縦の年表 */
+.timeline-v {
+  position: relative;
+  padding: 8px 0 8px 36px;
+}
+.timeline-v::before {
+  content: "";
+  position: absolute;
+  left: 10px;
+  top: 12px;
+  bottom: 12px;
+  width: 1px;
+  background: var(--border);
+}
+.timeline-v .event {
+  position: relative;
+  padding: 14px 0 22px;
+}
+.timeline-v .event::before {
+  content: "";
+  position: absolute;
+  left: -31px;
+  top: 22px;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--bg);
+  border: 2px solid var(--body-text);
+}
+.timeline-v .event.is-key::before { background: var(--accent); border-color: var(--accent); }
+.timeline-v .event .year {
+  font-family: var(--ff-mono);
+  font-feature-settings: normal;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--meta);
+  text-transform: uppercase;
+  margin-bottom: 2px;
+}
+.timeline-v .event.is-key .year { color: var(--accent); }
+.timeline-v .event .title {
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.35;
+  color: var(--fg);
+  margin: 0 0 4px;
+}
+.timeline-v .event .desc {
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--mid-gray);
+  margin: 0;
+  max-width: 56ch;
+}
+
+/* I2 Process Flow: 横方向のプロセス図（矢印でつなぐ） */
+.process {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  gap: 0;
+  align-items: stretch;
+  border-top: 1px solid var(--body-text);
+  border-bottom: 1px solid var(--border);
+  margin: 32px 0;
+}
+.process .step {
+  position: relative;
+  padding: 22px 36px 22px 18px;
+  border-right: 1px solid var(--border);
+}
+.process .step:last-child { border-right: none; padding-right: 18px; }
+.process .step::after {
+  content: "";
+  position: absolute;
+  right: -7px;
+  top: 50%;
+  width: 14px;
+  height: 14px;
+  border-top: 1px solid var(--body-text);
+  border-right: 1px solid var(--body-text);
+  transform: translateY(-50%) rotate(45deg);
+  background: var(--bg);
+}
+.process .step:last-child::after { display: none; }
+.process .step .n {
+  font-family: var(--ff-mono);
+  font-feature-settings: normal;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  color: var(--accent);
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.process .step .title {
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.35;
+  margin: 0 0 4px;
+}
+.process .step .desc {
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--mid-gray);
+  margin: 0;
+}
+@media (max-width: 640px) {
+  .process { grid-auto-flow: row; grid-auto-columns: initial; }
+  .process .step { border-right: none; border-bottom: 1px solid var(--border); padding: 18px; }
+  .process .step:last-child { border-bottom: none; }
+  .process .step::after {
+    right: auto;
+    left: 50%;
+    top: auto;
+    bottom: -7px;
+    transform: translateX(-50%) rotate(135deg);
+  }
+}
+
+/* I3 Stat Summary Cards: 統計サマリーカード群
+   chart-bignum-grid より密度高め・アイコンレス */
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 1px;
+  background: var(--border);
+  border-top: 2px solid var(--body-text);
+  border-bottom: 1px solid var(--border);
+  margin: 32px 0;
+}
+.stat-grid .cell {
+  background: var(--bg);
+  padding: 22px 20px;
+}
+.stat-grid .cell .label {
+  font-family: var(--ff-mono);
+  font-feature-settings: normal;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--meta);
+  margin-bottom: 10px;
+}
+.stat-grid .cell .num {
+  font-size: 38px;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--fg);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.015em;
+}
+.stat-grid .cell .num.accent { color: var(--accent); }
+.stat-grid .cell .unit {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--meta);
+  margin-left: 2px;
+}
+.stat-grid .cell .delta {
+  font-family: var(--ff-mono);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--mid-gray);
+  margin-top: 6px;
+}
+.stat-grid .cell .delta.up::before { content: "▲ "; color: var(--accent); }
+.stat-grid .cell .delta.down::before { content: "▼ "; color: var(--meta); }
+.stat-grid .cell .note {
+  font-size: 11px;
+  line-height: 1.5;
+  color: var(--mid-gray);
+  margin-top: 8px;
+}
+
+/* I4 Before/After: 対比ブロック */
+.compare-ba {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  border-top: 1px solid var(--body-text);
+  border-bottom: 1px solid var(--body-text);
+  margin: 32px 0;
+}
+.compare-ba .side {
+  padding: 24px 24px 24px 0;
+  border-right: 1px solid var(--border);
+}
+.compare-ba .side + .side { padding: 24px 0 24px 24px; border-right: none; }
+.compare-ba .side .tag {
+  font-family: var(--ff-mono);
+  font-feature-settings: normal;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--meta);
+  margin-bottom: 8px;
+}
+.compare-ba .side.is-after .tag { color: var(--accent); }
+.compare-ba .side h4 {
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.3;
+  margin: 0 0 10px;
+}
+.compare-ba .side p {
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--mid-gray);
+  margin: 0 0 8px;
+}
+.compare-ba .side ul {
+  list-style: none;
+  padding: 0;
+  margin: 8px 0 0;
+}
+.compare-ba .side ul li {
+  font-size: 13px;
+  line-height: 1.55;
+  padding: 4px 0 4px 16px;
+  position: relative;
+  color: var(--fg);
+}
+.compare-ba .side ul li::before {
+  content: "—";
+  position: absolute;
+  left: 0;
+  color: var(--meta);
+}
+.compare-ba .side.is-after ul li::before { color: var(--accent); }
+@media (max-width: 640px) {
+  .compare-ba { grid-template-columns: 1fr; }
+  .compare-ba .side { padding: 20px 0; border-right: none; border-bottom: 1px solid var(--border); }
+  .compare-ba .side + .side { padding: 20px 0; border-bottom: none; }
+}
+
+/* I5 Hierarchy Tree: 組織図・階層ツリー（SVG風にHTML+CSS） */
+.tree {
+  margin: 32px 0;
+  font-size: 13px;
+  line-height: 1.5;
+}
+.tree .node {
+  display: inline-block;
+  border: 1px solid var(--body-text);
+  padding: 8px 14px;
+  background: var(--bg);
+  font-weight: 600;
+  min-width: 140px;
+  text-align: center;
+}
+.tree .node.accent { border-color: var(--accent); color: var(--accent); }
+.tree .node .sub {
+  display: block;
+  font-weight: 400;
+  font-size: 10px;
+  color: var(--meta);
+  font-family: var(--ff-mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-top: 2px;
+}
+.tree-row {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  position: relative;
+  margin-top: 28px;
+}
+.tree-row::before {
+  content: "";
+  position: absolute;
+  top: -16px;
+  left: 10%;
+  right: 10%;
+  height: 1px;
+  background: var(--border);
+}
+.tree-row .node { position: relative; }
+.tree-row .node::before {
+  content: "";
+  position: absolute;
+  top: -16px;
+  left: 50%;
+  width: 1px;
+  height: 16px;
+  background: var(--border);
+}
+.tree-root { text-align: center; }
+.tree-root .node::after {
+  content: "";
+  display: block;
+  width: 1px;
+  height: 12px;
+  background: var(--border);
+  margin: 0 auto;
+}
+
+/* I6 Stepper: 番号付き手順 */
+.stepper {
+  list-style: none;
+  counter-reset: step;
+  padding: 0;
+  margin: 32px 0;
+}
+.stepper li {
+  counter-increment: step;
+  position: relative;
+  padding: 18px 0 18px 60px;
+  border-bottom: 1px solid var(--border);
+}
+.stepper li:last-child { border-bottom: 1px solid var(--body-text); }
+.stepper li::before {
+  content: counter(step, decimal-leading-zero);
+  position: absolute;
+  left: 0;
+  top: 18px;
+  font-family: var(--ff-mono);
+  font-feature-settings: normal;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--accent);
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+.stepper li h4 {
+  font-size: 15px;
+  font-weight: 700;
+  margin: 0 0 4px;
+  line-height: 1.35;
+}
+.stepper li p {
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--mid-gray);
+  margin: 0;
+  max-width: 56ch;
+}
+.stepper li .meta {
+  font-family: var(--ff-mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--meta);
+  margin-top: 6px;
+}
+
+/* I7 Relation Diagram: SVGベースのノード関係図用スタイル */
+.relation-svg { width: 100%; height: auto; display: block; overflow: visible; }
+.relation-svg .node-box {
+  fill: var(--bg);
+  stroke: var(--body-text);
+  stroke-width: 1;
+}
+.relation-svg .node-box.accent { stroke: var(--accent); stroke-width: 1.5; }
+.relation-svg .node-label {
+  font-family: var(--ff-body);
+  font-size: 12px;
+  font-weight: 600;
+  fill: var(--fg);
+  text-anchor: middle;
+}
+.relation-svg .node-label.accent { fill: var(--accent); }
+.relation-svg .node-sub {
+  font-family: var(--ff-mono);
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  fill: var(--meta);
+  text-anchor: middle;
+  text-transform: uppercase;
+}
+.relation-svg .edge {
+  stroke: var(--mid-gray);
+  stroke-width: 1;
+  fill: none;
+}
+.relation-svg .edge.accent { stroke: var(--accent); stroke-width: 1.5; }
+.relation-svg .edge.dashed { stroke-dasharray: 3 3; }
+.relation-svg .edge-label {
+  font-family: var(--ff-mono);
+  font-size: 9px;
+  letter-spacing: 0.06em;
+  fill: var(--meta);
+  text-transform: uppercase;
+}
+
+/* I8 Isotype: ピクトグラム構成比（□の塗り数で比率表現） */
+.isotype {
+  margin: 32px 0;
+}
+.isotype .row {
+  display: grid;
+  grid-template-columns: 180px 1fr 60px;
+  gap: 16px;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+}
+.isotype .row:last-child { border-bottom: 1px solid var(--body-text); }
+.isotype .row .label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--fg);
+}
+.isotype .row .label .sub {
+  display: block;
+  font-family: var(--ff-mono);
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--meta);
+  margin-top: 2px;
+}
+.isotype .row .cells {
+  display: flex;
+  gap: 3px;
+  flex-wrap: wrap;
+}
+.isotype .row .cells span {
+  width: 10px;
+  height: 16px;
+  background: var(--border);
+  display: inline-block;
+}
+.isotype .row .cells span.on { background: var(--fg); }
+.isotype .row.is-highlight .cells span.on { background: var(--accent); }
+.isotype .row .val {
+  font-family: var(--ff-body);
+  font-weight: 600;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  font-size: 13px;
+}
+.isotype .row.is-highlight .val { color: var(--accent); }

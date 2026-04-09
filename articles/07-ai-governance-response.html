@@ -9,10 +9,14 @@
       :root {
         --black: #000;
         --body-text: #1a1a1a;
+        --mid: #585858;
         --meta: #757575;
         --light-gray: #999;
-        --border: #e5e5e5;
-        --bg: #fff;
+        --border: #ddd5bd;
+        --bg: #f3f1e9;
+        --bg-alt: #ebe7d3;
+        --accent: #b23a2f;
+        --accent-soft: rgba(178, 58, 47, 0.09);
         --ease: cubic-bezier(0.22, 1, 0.36, 1);
       }
 
@@ -40,7 +44,7 @@
         top: 0;
         left: 0;
         height: 2px;
-        background: var(--black);
+        background: var(--accent);
         width: 0%;
         z-index: 100;
         transition: width 0.3s var(--ease);
@@ -67,8 +71,8 @@
       }
 
       .nav button.active {
-        background: var(--black);
-        border-color: var(--black);
+        background: var(--accent);
+        border-color: var(--accent);
         transform: scale(1.4);
       }
 
@@ -169,26 +173,35 @@
       .reveal-delay-2 { transition-delay: 0.2s; }
       .reveal-delay-3 { transition-delay: 0.35s; }
 
+      /* Investigation: monospace eyebrow in accent red, heavy headings */
       .eyebrow {
         font-family: "SF Mono", "Fira Code", "Fira Mono", Menlo, Consolas, monospace;
         font-feature-settings: normal;
         font-size: 11px;
-        font-weight: 400;
-        letter-spacing: 0.083em;
+        font-weight: 700;
+        letter-spacing: 0.15em;
         text-transform: uppercase;
-        color: var(--meta);
+        color: var(--accent);
       }
 
+      /* Investigation: numbered report-style headings */
       h1, h2 {
         color: var(--black);
-        font-weight: 700;
-        line-height: 1.625;
-        letter-spacing: normal;
-        max-width: 22ch;
+        font-weight: 800;
+        line-height: 1.35;
+        letter-spacing: -0.01em;
+        max-width: 24ch;
+        padding-bottom: 16px;
+        border-bottom: 3px double var(--accent);
       }
 
-      h1 { font-size: clamp(28px, 4vw, 32px); }
-      h2 { font-size: clamp(24px, 3.5vw, 32px); }
+      h1 { font-size: clamp(30px, 4.4vw, 38px); }
+      h2 { font-size: clamp(26px, 3.8vw, 34px); }
+
+      /* Investigation: slide numbering badge (inside eyebrow) */
+      .eyebrow::before {
+        content: "";
+      }
 
       .lead {
         max-width: 780px;
@@ -203,11 +216,14 @@
       .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
       .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
 
+      /* Investigation: evidence-box cards (accent top rule + tag in accent) */
       .card {
-        padding: 24px 0;
-        border-top: 2px solid var(--black);
+        padding: 24px 20px 24px 0;
+        border-top: 3px solid var(--accent);
+        background: transparent;
       }
 
+      .card .tag { color: var(--accent); font-weight: 700; }
       .card strong { color: var(--black); }
 
       .card p {
@@ -230,7 +246,7 @@
 
       .point {
         padding-left: 16px;
-        border-left: 2px solid var(--black);
+        border-left: 3px solid var(--accent);
         font-size: 16px;
         line-height: 1.75;
         color: var(--body-text);
@@ -253,7 +269,7 @@
       }
 
       .timeline-step.highlight {
-        background: var(--black);
+        background: var(--accent);
       }
       .timeline-step.highlight .num,
       .timeline-step.highlight p,
@@ -279,11 +295,13 @@
 
       .timeline-step strong { color: var(--black); }
 
+      /* Investigation: Matrix-check table (T5 style) */
       .compare {
         width: 100%;
         border-collapse: collapse;
-        border-top: 2px solid var(--black);
-        border-bottom: 2px solid var(--black);
+        border-top: 3px solid var(--accent);
+        border-bottom: 3px double var(--accent);
+        background: var(--bg);
       }
 
       .compare th,
@@ -301,27 +319,41 @@
         font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
         font-feature-settings: normal;
         font-size: 11px;
-        letter-spacing: 0.083em;
+        letter-spacing: 0.12em;
         text-transform: uppercase;
-        color: var(--meta);
-        font-weight: 400;
-        border-bottom: 1px solid var(--black);
+        color: var(--accent);
+        font-weight: 700;
+        border-bottom: 1px solid var(--accent);
+        background: var(--accent-soft);
       }
 
       .compare td strong { color: var(--black); }
 
       .compare tr:last-child td { border-bottom: none; }
 
+      /* Investigation: evidence callout — red bar, cream accent block */
       .note {
-        font-size: 16px;
-        line-height: 1.75;
+        font-size: 17px;
+        line-height: 1.7;
         color: var(--body-text);
-        padding: 24px 0;
-        border-top: 1px solid var(--border);
-        border-bottom: 1px solid var(--border);
+        padding: 24px 28px;
+        margin: 12px 0;
+        border-left: 4px solid var(--accent);
+        background: var(--accent-soft);
+        position: relative;
+      }
+      .note::before {
+        content: "EVIDENCE";
+        display: block;
+        font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.15em;
+        color: var(--accent);
+        margin-bottom: 10px;
       }
 
-      .note strong { color: var(--black); }
+      .note strong { color: var(--accent); }
 
       .footer {
         display: flex;
@@ -338,7 +370,7 @@
 
       .slide-count {
         font-weight: 700;
-        color: var(--black);
+        color: var(--accent);
       }
 
       @media (max-width: 768px) {
@@ -367,7 +399,7 @@
       }
     </style>
   </head>
-  <body class="pattern-monolith">
+  <body class="pattern-investigation">
     <div class="progress" id="progress"></div>
 
     <aside class="nav" aria-label="Slide navigation">

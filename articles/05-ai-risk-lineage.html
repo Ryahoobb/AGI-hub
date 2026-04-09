@@ -14,10 +14,15 @@
       :root {
         --black: #000;
         --body-text: #1a1a1a;
+        --mid: #585858;
         --meta: #757575;
         --light-gray: #999;
-        --border: #e5e5e5;
-        --bg: #fff;
+        --border: #e8e3d4;
+        --bg: #faf8f1;
+        --bg-alt: #f3f1e4;
+        --accent: #2f2b92;
+        --accent-soft: rgba(47, 43, 146, 0.08);
+        --ff-serif: "Playfair Display", "Noto Serif JP", Georgia, serif;
         --ease: cubic-bezier(0.22, 1, 0.36, 1);
       }
 
@@ -46,7 +51,7 @@
         top: 0;
         left: 0;
         height: 2px;
-        background: var(--black);
+        background: var(--accent);
         width: 0%;
         z-index: 100;
         transition: width 0.3s var(--ease);
@@ -74,8 +79,8 @@
       }
 
       .nav button.active {
-        background: var(--black);
-        border-color: var(--black);
+        background: var(--accent);
+        border-color: var(--accent);
         transform: scale(1.4);
       }
 
@@ -188,20 +193,34 @@
         font-weight: 400;
         letter-spacing: 0.083em;
         text-transform: uppercase;
-        color: var(--meta);
+        color: var(--accent);
       }
 
-      /* ── Headings ── */
+      /* ── Headings (Broadsheet: serif, accent underline) ── */
       h1, h2 {
         color: var(--black);
+        font-family: var(--ff-serif);
         font-weight: 700;
-        line-height: 1.625;
+        line-height: 1.45;
         letter-spacing: normal;
-        max-width: 22ch;
+        max-width: 26ch;
+        padding-bottom: 14px;
+        border-bottom: 1px solid var(--accent);
       }
 
-      h1 { font-size: clamp(28px, 4vw, 32px); }
-      h2 { font-size: clamp(24px, 3.5vw, 32px); }
+      h1 { font-size: clamp(30px, 4.4vw, 40px); }
+      h2 { font-size: clamp(26px, 3.8vw, 34px); }
+
+      /* ── Broadsheet drop cap (first lead paragraph of slide 1) ── */
+      #slide-1 .lead:first-of-type::first-letter {
+        font-family: var(--ff-serif);
+        font-size: 4.5em;
+        line-height: 0.85;
+        float: left;
+        padding: 6px 10px 0 0;
+        font-weight: 700;
+        color: var(--accent);
+      }
 
       /* ── Lead / Body ── */
       .lead {
@@ -221,9 +240,10 @@
       /* ── Cards ── */
       .card {
         padding: 24px 0;
-        border-top: 2px solid var(--black);
+        border-top: 2px solid var(--accent);
       }
 
+      .card .tag { color: var(--accent); }
       .card strong { color: var(--black); }
 
       .card p {
@@ -248,7 +268,7 @@
 
       .point {
         padding-left: 16px;
-        border-left: 2px solid var(--black);
+        border-left: 2px solid var(--accent);
         font-size: 16px;
         line-height: 1.75;
         color: var(--body-text);
@@ -272,7 +292,7 @@
       }
 
       .timeline-step.highlight {
-        background: var(--black);
+        background: var(--accent);
       }
       .timeline-step.highlight .num,
       .timeline-step.highlight p,
@@ -302,8 +322,8 @@
       .compare {
         width: 100%;
         border-collapse: collapse;
-        border-top: 2px solid var(--black);
-        border-bottom: 2px solid var(--black);
+        border-top: 2px solid var(--accent);
+        border-bottom: 2px solid var(--accent);
       }
 
       .compare th,
@@ -323,26 +343,29 @@
         font-size: 11px;
         letter-spacing: 0.083em;
         text-transform: uppercase;
-        color: var(--meta);
+        color: var(--accent);
         font-weight: 400;
-        border-bottom: 1px solid var(--black);
+        border-bottom: 1px solid var(--accent);
       }
 
       .compare td strong { color: var(--black); }
 
       .compare tr:last-child td { border-bottom: none; }
 
-      /* ── Note (pull quote) ── */
+      /* ── Note / Pull Quote (Broadsheet: left-rule, serif accent) ── */
       .note {
-        font-size: 16px;
-        line-height: 1.75;
+        font-family: var(--ff-serif);
+        font-size: 22px;
+        line-height: 1.55;
         color: var(--body-text);
-        padding: 24px 0;
-        border-top: 1px solid var(--border);
-        border-bottom: 1px solid var(--border);
+        padding: 24px 28px;
+        margin: 8px 0;
+        border-left: 3px solid var(--accent);
+        background: var(--accent-soft);
+        font-weight: 500;
       }
 
-      .note strong { color: var(--black); }
+      .note strong { color: var(--accent); }
 
       /* ── Footer ── */
       .footer {
@@ -360,7 +383,7 @@
 
       .slide-count {
         font-weight: 700;
-        color: var(--black);
+        color: var(--accent);
       }
 
       /* ── Responsive ── */
@@ -391,7 +414,7 @@
       }
     </style>
   </head>
-  <body class="pattern-monolith">
+  <body class="pattern-broadsheet accent-deepblue">
     <div class="progress" id="progress"></div>
 
     <aside class="nav" aria-label="Slide navigation">

@@ -108,6 +108,29 @@
 
       .hero:hover { filter: grayscale(0) contrast(1); }
 
+      /* ── Image Placement Variations (Session 2) ── */
+      .hero.img-fullbleed {
+        width: 100vw;
+        margin-left: calc(50% - 50vw);
+        margin-right: calc(50% - 50vw);
+        max-width: none;
+        aspect-ratio: 21 / 9;
+      }
+      .hero.img-wide {
+        width: min(1280px, calc(100vw - 48px));
+        position: relative;
+        left: 50%;
+        transform: translateX(-50%);
+        max-width: none;
+      }
+      .hero.img-content {
+        max-width: 680px;
+        margin-left: auto;
+        margin-right: auto;
+        aspect-ratio: 4 / 3;
+      }
+
+
       .hero-caption {
         font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
         font-feature-settings: normal;
@@ -348,6 +371,15 @@
         .compare { font-size: 13px; }
         .compare th, .compare td { padding: 14px 10px; }
         .hero { aspect-ratio: 16 / 9; }
+        .hero.img-fullbleed, .hero.img-wide {
+          aspect-ratio: 16 / 9;
+          width: 100%;
+          margin: 0;
+          left: 0;
+          transform: none;
+          position: static;
+        }
+        .hero.img-content { max-width: 100%; aspect-ratio: 16 / 9; }
         .credits { padding: 32px 24px 64px; }
       }
 
@@ -377,7 +409,7 @@
         <h1 class="reveal reveal-delay-1">2023年の存亡リスク合意は、30年の系譜の上に突然現れた</h1>
         <div class="panel reveal reveal-delay-2">
           <div>
-            <img class="hero" src="../images/ai-risk-lineage/slide1.jpg" alt="Black and white tree roots representing genealogy">
+            <img class="hero img-fullbleed" src="../images/ai-risk-lineage/slide1.jpg" alt="Black and white tree roots representing genealogy">
             <div class="hero-caption">Photo: Unsplash</div>
           </div>
           <p class="lead">
@@ -416,7 +448,7 @@
         <h2 class="reveal reveal-delay-1">系譜の起点は1991年、Transhumanism運動の内部で生まれた</h2>
         <div class="panel reveal reveal-delay-2">
           <div>
-            <img class="hero" src="../images/ai-risk-lineage/slide2.jpg" alt="Black and white abstract tree representing intellectual lineage">
+            <img class="hero img-content" src="../images/ai-risk-lineage/slide2.jpg" alt="Black and white abstract tree representing intellectual lineage">
             <div class="hero-caption">Photo: Unsplash</div>
           </div>
           <p class="lead">
@@ -531,7 +563,7 @@
         <h2 class="reveal reveal-delay-1">効果的利他主義との合流で、周縁思想は資金と組織を獲得した</h2>
         <div class="panel reveal reveal-delay-2">
           <div>
-            <img class="hero" src="../images/ai-risk-lineage/slide4.jpg" alt="Geometric architectural shapes in stark black and white contrast">
+            <img class="hero img-wide" src="../images/ai-risk-lineage/slide4.jpg" alt="Geometric architectural shapes in stark black and white contrast">
             <div class="hero-caption">Photo: Unsplash</div>
           </div>
           <p class="lead">

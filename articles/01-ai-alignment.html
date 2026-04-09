@@ -112,6 +112,28 @@
 
       .hero:hover { filter: grayscale(0) contrast(1); }
 
+      /* ── Image Placement Variations (Session 2) ── */
+      .hero.img-fullbleed {
+        width: 100vw;
+        margin-left: calc(50% - 50vw);
+        margin-right: calc(50% - 50vw);
+        max-width: none;
+        aspect-ratio: 21 / 9;
+      }
+      .hero.img-wide {
+        width: min(1280px, calc(100vw - 48px));
+        position: relative;
+        left: 50%;
+        transform: translateX(-50%);
+        max-width: none;
+      }
+      .hero.img-content {
+        max-width: 680px;
+        margin-left: auto;
+        margin-right: auto;
+        aspect-ratio: 4 / 3;
+      }
+
       .hero-caption {
         font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
         font-feature-settings: normal;
@@ -352,6 +374,15 @@
         .compare { font-size: 13px; }
         .compare th, .compare td { padding: 14px 10px; }
         .hero { aspect-ratio: 16 / 9; }
+        .hero.img-fullbleed, .hero.img-wide {
+          aspect-ratio: 16 / 9;
+          width: 100%;
+          margin: 0;
+          left: 0;
+          transform: none;
+          position: static;
+        }
+        .hero.img-content { max-width: 100%; aspect-ratio: 16 / 9; }
         .credits { padding: 32px 24px 64px; }
       }
 
@@ -381,7 +412,7 @@
         <h1 class="reveal reveal-delay-1">Yudkowskyは「誰かが作れば、全員が死ぬ」と言い切った</h1>
         <div class="panel reveal reveal-delay-2">
           <div>
-            <img class="hero" src="../images/ai-alignment/slide1.jpg" alt="Symmetrical abstract pattern of dark curved shapes">
+            <img class="hero img-fullbleed" src="../images/ai-alignment/slide1.jpg" alt="Symmetrical abstract pattern of dark curved shapes">
             <div class="hero-caption">Photo: Unsplash</div>
           </div>
           <p class="lead">
@@ -478,7 +509,7 @@
         <h2 class="reveal reveal-delay-1">AI安全性のスペクトラムで、Yudkowskyは最も悲観的な端に立つ</h2>
         <div class="panel reveal reveal-delay-2">
           <div>
-            <img class="hero" src="../images/ai-alignment/slide3.jpg" alt="Abstract black and white wavy lines">
+            <img class="hero img-content" src="../images/ai-alignment/slide3.jpg" alt="Abstract black and white wavy lines">
             <div class="hero-caption">Photo: Unsplash</div>
           </div>
           <p class="lead">
@@ -595,7 +626,7 @@
         <h2 class="reveal reveal-delay-1">アラインメントは防御層だけではない。3層で捉え直す必要がある</h2>
         <div class="panel reveal reveal-delay-2">
           <div>
-            <img class="hero" src="../images/ai-alignment/slide4.jpg" alt="Abstract black and white curved lines">
+            <img class="hero img-wide" src="../images/ai-alignment/slide4.jpg" alt="Abstract black and white curved lines">
             <div class="hero-caption">Photo: Unsplash</div>
           </div>
           <p class="lead">

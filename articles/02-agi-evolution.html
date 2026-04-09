@@ -110,6 +110,29 @@
         filter: grayscale(0) contrast(1);
       }
 
+      /* ── Image Placement Variations (Session 2) ── */
+      .hero.img-fullbleed {
+        width: 100vw;
+        margin-left: calc(50% - 50vw);
+        margin-right: calc(50% - 50vw);
+        max-width: none;
+        aspect-ratio: 21 / 9;
+      }
+      .hero.img-wide {
+        width: min(1280px, calc(100vw - 48px));
+        position: relative;
+        left: 50%;
+        transform: translateX(-50%);
+        max-width: none;
+      }
+      .hero.img-content {
+        max-width: 680px;
+        margin-left: auto;
+        margin-right: auto;
+        aspect-ratio: 4 / 3;
+      }
+
+
       .hero-caption {
         font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
         font-feature-settings: normal;
@@ -310,6 +333,15 @@
         .grid-2, .grid-3, .timeline { grid-template-columns: 1fr; }
         .nav { right: 12px; }
         .hero { aspect-ratio: 16 / 9; }
+        .hero.img-fullbleed, .hero.img-wide {
+          aspect-ratio: 16 / 9;
+          width: 100%;
+          margin: 0;
+          left: 0;
+          transform: none;
+          position: static;
+        }
+        .hero.img-content { max-width: 100%; aspect-ratio: 16 / 9; }
         .credits { padding: 32px 24px 64px; }
       }
 
@@ -340,7 +372,7 @@
         <h1 class="reveal reveal-delay-1">AGIは技術の延長ではなく、進化の担体が人間知性の外へ拡張する転位点である</h1>
         <div class="panel reveal reveal-delay-2">
           <div>
-            <img class="hero" src="../images/agi-evolution/slide1.jpg" alt="Deep space nebula with stars and dark clouds">
+            <img class="hero img-wide" src="../images/agi-evolution/slide1.jpg" alt="Deep space nebula with stars and dark clouds">
             <div class="hero-caption">Photo: Unsplash</div>
           </div>
           <p class="lead">
@@ -385,7 +417,7 @@
         <h2 class="reveal reveal-delay-1">宇宙史は、物質・生命・知能へと自己組織化の担体を更新してきた</h2>
         <div class="panel reveal reveal-delay-2">
           <div>
-            <img class="hero" src="../images/agi-evolution/slide2.jpg" alt="Black and white stars in the sky">
+            <img class="hero img-content" src="../images/agi-evolution/slide2.jpg" alt="Black and white stars in the sky">
             <div class="hero-caption">Photo: Unsplash</div>
           </div>
           <p class="lead">
@@ -488,7 +520,7 @@
         <h2 class="reveal reveal-delay-1">知能が知能を改善するループが回ると、知能進化は生物進化から半独立化する</h2>
         <div class="panel reveal reveal-delay-2">
           <div>
-            <img class="hero" src="../images/agi-evolution/slide4.jpg" alt="Abstract network of lines on dark background">
+            <img class="hero img-fullbleed" src="../images/agi-evolution/slide4.jpg" alt="Abstract network of lines on dark background">
             <div class="hero-caption">Photo: Unsplash</div>
           </div>
           <p class="lead">
@@ -537,7 +569,7 @@
         <h2 class="reveal reveal-delay-1">AGI以後の進化は、電子生命の成立ではなく、まず人間-電子知性のハイブリッド相として始まる</h2>
         <div class="panel reveal reveal-delay-2">
           <div>
-            <img class="hero" src="../images/agi-evolution/slide5.jpg" alt="Abstract wavy lines on dark background">
+            <img class="hero" src="../images/agi-evolution/slide5.jpg" alt="Abstract dark grey flowing waves on black background">
             <div class="hero-caption">Photo: Unsplash</div>
           </div>
           <p class="lead">
@@ -606,7 +638,7 @@
         Slide 2: <a href="https://unsplash.com/photos/sOWdd0vya4E">Stars in monochrome</a> /
         Slide 3: <a href="https://unsplash.com/photos/Ccr1f7xxzMg">Earth from space</a> /
         Slide 4: <a href="https://unsplash.com/photos/8z1SGcgkOiA">Abstract lines</a> /
-        Slide 5: <a href="https://unsplash.com/photos/2zJ3m80fSU4">Abstract waves</a>
+        Slide 5: <a href="https://unsplash.com/photos/JdX0OeTj5S0">Dark grey flowing waves</a>
       </p>
     </footer>
 

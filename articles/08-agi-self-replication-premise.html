@@ -99,6 +99,29 @@
 
       .hero:hover { filter: grayscale(0) contrast(1); }
 
+      /* ── Image Placement Variations (Session 2) ── */
+      .hero.img-fullbleed {
+        width: 100vw;
+        margin-left: calc(50% - 50vw);
+        margin-right: calc(50% - 50vw);
+        max-width: none;
+        aspect-ratio: 21 / 9;
+      }
+      .hero.img-wide {
+        width: min(1280px, calc(100vw - 48px));
+        position: relative;
+        left: 50%;
+        transform: translateX(-50%);
+        max-width: none;
+      }
+      .hero.img-content {
+        max-width: 680px;
+        margin-left: auto;
+        margin-right: auto;
+        aspect-ratio: 4 / 3;
+      }
+
+
       .hero-caption {
         font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
         font-feature-settings: normal;
@@ -323,6 +346,15 @@
       @media (max-width: 768px) {
         .slide { padding: 64px 24px 48px; }
         .hero { aspect-ratio: 16 / 9; }
+        .hero.img-fullbleed, .hero.img-wide {
+          aspect-ratio: 16 / 9;
+          width: 100%;
+          margin: 0;
+          left: 0;
+          transform: none;
+          position: static;
+        }
+        .hero.img-content { max-width: 100%; aspect-ratio: 16 / 9; }
         .grid-2, .grid-3, .timeline { grid-template-columns: 1fr; }
         .nav { right: 12px; }
         .compare th, .compare td { padding: 14px 10px; }
@@ -353,7 +385,7 @@
         <h1 class="reveal reveal-delay-1">産業爆発の隠れた前提は、ロボットがロボットを作ることだ</h1>
         <div class="panel reveal reveal-delay-2">
           <div>
-            <img class="hero" src="../images/agi-self-replication-premise/slide1.jpg" alt="Monochrome industrial machine against a dark background">
+            <img class="hero img-content" src="../images/agi-self-replication-premise/slide1.jpg" alt="Monochrome industrial machine against a dark background">
             <div class="hero-caption">Photo: Unsplash</div>
           </div>
           <p class="lead">
@@ -394,7 +426,7 @@
         <h2 class="reveal reveal-delay-1">物理労働の限界費用がゼロに落ちた瞬間、経済の文法が書き換わる</h2>
         <div class="panel reveal reveal-delay-2">
           <div>
-            <img class="hero" src="../images/agi-self-replication-premise/slide2.jpg" alt="Dark abstract architectural structure in monochrome">
+            <img class="hero img-fullbleed" src="../images/agi-self-replication-premise/slide2.jpg" alt="Dark abstract architectural structure in monochrome">
             <div class="hero-caption">Photo: Unsplash</div>
           </div>
           <p class="lead">
@@ -477,7 +509,7 @@
         <h2 class="reveal reveal-delay-1">自己複製と技術爆発が噛み合ったとき、産業爆発は単なる副産物になる</h2>
         <div class="panel reveal reveal-delay-2">
           <div>
-            <img class="hero" src="../images/agi-self-replication-premise/slide4.jpg" alt="Concentric circular ripples on a dark surface suggesting feedback loops">
+            <img class="hero img-wide" src="../images/agi-self-replication-premise/slide4.jpg" alt="Concentric circular ripples on a dark surface suggesting feedback loops">
             <div class="hero-caption">Photo: Unsplash</div>
           </div>
           <p class="lead">

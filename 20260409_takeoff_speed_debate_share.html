@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>テイクオフ速度論 — なぜ賢い人々は1,000倍もズレるのか — AGI HUB</title>
+    <style>
+      :root {
+        --black: #000;
+        --body-text: #1a1a1a;
+        --meta: #757575;
+        --light-gray: #999;
+        --border: #e5e5e5;
+        --bg: #fff;
+        --ease: cubic-bezier(0.22, 1, 0.36, 1);
+      }
+
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+      html { scroll-behavior: smooth; }
+
+      body {
+        font-family: HelveticaNeue, "Helvetica Neue", Helvetica, Arial,
+          游ゴシック体, YuGothic, "游ゴシック Medium", "Yu Gothic Medium",
+          游ゴシック, "Yu Gothic", "ヒラギノ角ゴ ProN W3", "Hiragino Kaku Gothic ProN",
+          "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", "MS ゴシック", "MS Gothic",
+          sans-serif;
+        font-feature-settings: "palt";
+        font-size: 16px;
+        line-height: 1.75;
+        color: var(--body-text);
+        background: var(--bg);
+        -webkit-font-smoothing: antialiased;
+        overflow-x: hidden;
+        word-wrap: break-word;
+      }
+
+      .progress {
+        position: fixed; top: 0; left: 0;
+        height: 2px; background: var(--black);
+        width: 0%; z-index: 100;
+        transition: width 0.3s var(--ease);
+      }
+
+      .nav {
+        position: fixed; right: 24px; top: 50%;
+        transform: translateY(-50%);
+        display: grid; gap: 16px; z-index: 50;
+      }
+
+      .nav button {
+        width: 8px; height: 8px;
+        border-radius: 999px;
+        border: 1.5px solid var(--meta);
+        background: transparent; cursor: pointer;
+        transition: all 0.3s var(--ease);
+      }
+
+      .nav button.active {
+        background: var(--black);
+        border-color: var(--black);
+        transform: scale(1.4);
+      }
+
+      main { scroll-snap-type: y mandatory; }
+
+      .slide {
+        position: relative;
+        min-height: 100vh;
+        max-width: 1120px;
+        margin: 0 auto;
+        padding: 80px 48px 64px;
+        display: grid;
+        grid-template-rows: auto auto 1fr auto;
+        gap: 32px;
+        scroll-snap-align: start;
+      }
+
+      .slide + .slide { border-top: 1px solid var(--border); }
+
+      .hero {
+        width: 100%;
+        aspect-ratio: 16 / 7;
+        object-fit: cover;
+        display: block;
+        filter: grayscale(0.6) contrast(1.1);
+        transition: filter 0.6s var(--ease);
+      }
+
+      .hero:hover { filter: grayscale(0) contrast(1); }
+
+      .hero-caption {
+        font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 11px;
+        letter-spacing: 0.083em;
+        color: var(--light-gray);
+        margin-top: 8px;
+        text-transform: uppercase;
+      }
+
+      .credits {
+        max-width: 1120px;
+        margin: 0 auto;
+        padding: 48px 48px 80px;
+        border-top: 1px solid var(--border);
+      }
+
+      .credits p {
+        font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 11px;
+        letter-spacing: 0.047em;
+        line-height: 2;
+        color: var(--light-gray);
+      }
+
+      .credits a {
+        color: var(--meta);
+        text-decoration: none;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .credits a:hover {
+        color: var(--black);
+        border-bottom-color: var(--black);
+      }
+
+      .reveal {
+        opacity: 0;
+        transform: translateY(24px);
+        transition: opacity 0.6s var(--ease), transform 0.6s var(--ease);
+      }
+      .reveal.visible { opacity: 1; transform: translateY(0); }
+      .reveal-delay-1 { transition-delay: 0.1s; }
+      .reveal-delay-2 { transition-delay: 0.2s; }
+      .reveal-delay-3 { transition-delay: 0.35s; }
+
+      .eyebrow {
+        font-family: "SF Mono", "Fira Code", "Fira Mono", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 11px;
+        font-weight: 400;
+        letter-spacing: 0.083em;
+        text-transform: uppercase;
+        color: var(--meta);
+      }
+
+      h1, h2 {
+        color: var(--black);
+        font-weight: 700;
+        line-height: 1.625;
+        letter-spacing: normal;
+        max-width: 22ch;
+      }
+
+      h1 { font-size: clamp(28px, 4vw, 32px); }
+      h2 { font-size: clamp(24px, 3.5vw, 32px); }
+
+      .lead {
+        max-width: 780px;
+        font-size: 16px;
+        line-height: 1.75;
+        color: var(--body-text);
+      }
+
+      .lead + .lead { margin-top: 8px; }
+
+      .panel { display: grid; gap: 24px; align-content: start; }
+      .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
+      .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+
+      .card {
+        padding: 24px 0;
+        border-top: 2px solid var(--black);
+      }
+
+      .card strong { color: var(--black); }
+
+      .card p {
+        font-size: 16px;
+        line-height: 1.75;
+        color: var(--body-text);
+      }
+
+      .tag {
+        display: inline-block;
+        font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 11px;
+        letter-spacing: 0.083em;
+        color: var(--meta);
+        margin-bottom: 12px;
+      }
+
+      .bullets { display: grid; gap: 16px; }
+
+      .point {
+        padding-left: 16px;
+        border-left: 2px solid var(--black);
+        font-size: 16px;
+        line-height: 1.75;
+        color: var(--body-text);
+      }
+
+      .point strong { color: var(--black); }
+
+      .timeline {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 1px;
+        background: var(--border);
+      }
+
+      .timeline-step {
+        display: grid;
+        gap: 8px;
+        padding: 20px 16px;
+        background: var(--bg);
+      }
+
+      .timeline-step.highlight { background: var(--black); }
+      .timeline-step.highlight .num,
+      .timeline-step.highlight p,
+      .timeline-step.highlight strong { color: var(--bg); }
+
+      .timeline-step .num {
+        font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 11px;
+        font-weight: 400;
+        letter-spacing: 0.083em;
+        text-transform: uppercase;
+        color: var(--meta);
+      }
+
+      .timeline-step p {
+        font-size: 15px;
+        line-height: 1.65;
+        color: var(--body-text);
+      }
+
+      .timeline-step strong { color: var(--black); }
+
+      .compare {
+        width: 100%;
+        border-collapse: collapse;
+        border-top: 2px solid var(--black);
+        border-bottom: 2px solid var(--black);
+      }
+
+      .compare th,
+      .compare td {
+        padding: 18px 16px;
+        text-align: left;
+        font-size: 15px;
+        line-height: 1.65;
+        color: var(--body-text);
+        border-bottom: 1px solid var(--border);
+        vertical-align: top;
+      }
+
+      .compare th {
+        font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 11px;
+        letter-spacing: 0.083em;
+        text-transform: uppercase;
+        color: var(--meta);
+        font-weight: 400;
+        border-bottom: 1px solid var(--black);
+      }
+
+      .compare td strong { color: var(--black); }
+
+      .compare tr:last-child td { border-bottom: none; }
+
+      .note {
+        font-size: 16px;
+        line-height: 1.75;
+        color: var(--body-text);
+        padding: 24px 0;
+        border-top: 1px solid var(--border);
+        border-bottom: 1px solid var(--border);
+      }
+
+      .note strong { color: var(--black); }
+
+      .footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: end;
+        gap: 16px;
+        font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 11px;
+        letter-spacing: 0.083em;
+        color: var(--light-gray);
+        text-transform: uppercase;
+      }
+
+      .slide-count {
+        font-weight: 700;
+        color: var(--black);
+      }
+
+      @media (max-width: 768px) {
+        .slide { padding: 64px 24px 48px; }
+        .grid-2, .grid-3, .timeline { grid-template-columns: 1fr; }
+        .nav { right: 12px; }
+        .compare { font-size: 13px; }
+        .compare th, .compare td { padding: 14px 10px; }
+        .hero { aspect-ratio: 16 / 9; }
+        .credits { padding: 32px 24px 64px; }
+      }
+
+      @media print {
+        .slide { min-height: auto; page-break-after: always; padding: 24px 0; }
+        .nav, .progress { display: none; }
+        .reveal { opacity: 1; transform: none; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="progress" id="progress"></div>
+
+    <aside class="nav" aria-label="Slide navigation">
+      <button data-target="slide-1" class="active" aria-label="Slide 1"></button>
+      <button data-target="slide-2" aria-label="Slide 2"></button>
+      <button data-target="slide-3" aria-label="Slide 3"></button>
+      <button data-target="slide-4" aria-label="Slide 4"></button>
+      <button data-target="slide-5" aria-label="Slide 5"></button>
+    </aside>
+
+    <main>
+      <!-- ═══════════ Slide 1 ═══════════ -->
+      <section class="slide" id="slide-1">
+        <div class="eyebrow reveal">The Spread</div>
+        <h1 class="reveal reveal-delay-1">同じ事実を見ていながら、予測は1,000倍ずれる</h1>
+        <div class="panel reveal reveal-delay-2">
+          <div>
+            <img class="hero" src="images/takeoff-speed-debate/slide1.jpg" alt="Abstract monochrome geometry">
+            <div class="hero-caption">Photo: Unsplash</div>
+          </div>
+          <p class="lead">
+            AGIが登場した後、世界はどれくらいの速度で変わるのか。この問いに対する真剣な論者たちの回答を並べると、推定値は<strong>数日から10年まで、3桁以上のレンジ</strong>に広がる。Eliezer Yudkowskyは数日から数週間、Daniel Kokotajloは1年以内、ForethoughtのTom Davidsonは数年、Epoch AIのEge Erdilらは10年程度。最速と最遅の間にはおよそ1,000倍のスケール差がある。同じ論文を読み、同じデータを参照している研究者たちが、ここまでずれる。
+          </p>
+          <p class="lead">
+            だが話はそう単純ではない。これらの論者は全員、AGI以降に人類史上例のない加速的変化が起こるという点では一致している。Ajeya Cotraの表現を借りれば、彼らは全員「AGIピル」を飲んでいる。分かれているのは変化の有無ではなく、速度である。そしてこの速度の違いは、単なる数字の揺らぎではない。人類がAIに追いつくための時間的猶予がどれだけあるか、制御メカニズムをいつまでに整えるべきか、いまどんな準備を始めるべきか、すべてがここから導かれる。
+          </p>
+          <p class="lead">
+            問いを立て直したい。<strong>なぜ同じ方向を見ている賢い人々が、1,000倍もズレるのか</strong>。その答えを辿ると、テイクオフ速度論は単なる未来予測ではなく、知能と物理世界の関係についての哲学的な分岐に行き着く。賢さだけでどこまで行けるのか。計算資源とデータは本当にボトルネックなのか。AIは実験を省略できるのか。各論者の立場は、これらの問いへの異なる答えの組み合わせとして理解できる。
+          </p>
+          <p class="lead">
+            本稿では、テイクオフ速度をめぐる4つの主要な立場を並べ、その分岐の根拠を解剖する。そして最後に、速度の違いが<strong>p(doom)</strong>——AIによる破滅的帰結の確率——とどう相関するかを見ていく。速いと言う者ほど悲観し、遅いと言う者ほど楽観する。これは偶然ではなく、構造的な理由がある。
+          </p>
+          <div class="grid-3">
+            <div class="card">
+              <span class="tag">01</span>
+              <p><strong>3桁のレンジ</strong><br>最速と最遅の差は数日対10年、およそ1,000倍。これほどの開きがある予測領域は、現代の科学議論のなかでも稀である。天気予報でも景気予測でもない、未来そのものの速度論。</p>
+            </div>
+            <div class="card">
+              <span class="tag">02</span>
+              <p><strong>全員が同じ方向</strong><br>速度はずれても向きは一致している。Forethought、Epoch AI、AI Futures Projectのいずれも、AGI以後に数百年分の変化が数十年以内に起こるスケール感を共有している。分岐は速度のみ。</p>
+            </div>
+            <div class="card">
+              <span class="tag">03</span>
+              <p><strong>時間差＝準備差</strong><br>数日なら制御は絶望的、10年ならアライメント研究の時間がある。速度の違いはそのまま「人類が持つ準備時間」の違いであり、どの立場を取るかが政策判断を規定する。</p>
+            </div>
+          </div>
+        </div>
+        <div class="footer reveal reveal-delay-3">
+          <span>速度の分岐は未来予測であり、同時に時間予算の問題である</span>
+          <span class="slide-count">1 / 5</span>
+        </div>
+      </section>
+
+      <!-- ═══════════ Slide 2 ═══════════ -->
+      <section class="slide" id="slide-2">
+        <div class="eyebrow reveal">Four Positions</div>
+        <h2 class="reveal reveal-delay-1">4人の論者を並べると、スペクトラムの全貌が見える</h2>
+        <div class="panel reveal reveal-delay-2">
+          <div>
+            <img class="hero" src="images/takeoff-speed-debate/slide2.jpg" alt="Monochrome architectural abstraction">
+            <div class="hero-caption">Photo: Unsplash</div>
+          </div>
+          <p class="lead">
+            テイクオフ速度論の地形を把握するには、主要な4論者を並べるのが早い。最速のYudkowskyから最遅のEpoch AIまで、速度推定とp(doom)、そして立場の特徴を一枚の表に落とす。そこから読み取れるのは、速度の違いが単なる数字のばらつきではなく、<strong>AIと物理世界の関係をどう見るか</strong>という根本的な世界観の違いであることだ。
+          </p>
+          <p class="lead">
+            Yudkowskyは最も急進的な立場を取る。MIRIの創設者として2000年代初頭からAI安全性を訴えてきた彼は、知能にはある種の離散的な閾値が存在し、それを超えた瞬間に臨界点のような爆発が起こると考えている。実験のボトルネックも物理世界との相互作用も、彼の視野ではほとんど制約にならない。超知的AIはアインシュタインが限られたデータから一般相対性理論を導いたように、既存のデータだけから技術ツリーを再構成できる、という立場である。
+          </p>
+          <p class="lead">
+            Kokotajloはやや穏健だが、依然として急進的な部類に入る。元OpenAIガバナンス研究者であり、AGI開発が「無謀に」進められていると警告して約200万ドル相当の株式報酬を放棄してまで退職した人物。AI 2027の中心著者として、AGI開発後1年以内に超知能に到達するシナリオを描いた。Davidsonの定量モデルで言えば、これは上位20%程度に相当する積極的シナリオである。
+          </p>
+          <p class="lead">
+            Davidsonはテイクオフ論において最も精緻な定量モデルを提供している。Forethoughtでの分析によれば、ソフトウェアの知能爆発は<strong>約60%の確率で3年分のAI進歩を1年以内に圧縮する</strong>が、10年分を1年に圧縮する確率は約20%。YudkowskyほどでもKokotajloほどでもない中間的立場だが、歴史的に見れば依然として驚異的な加速である。そしてEpoch AIのErdilとBesirogluは最も慎重で、アライメントに対しても楽観的。彼らはMechanizeというAI労働自動化スタートアップを創業しており、10年というスケール感は「社会が問題を逐次的に解決していく時間がある」という楽観と整合している。
+          </p>
+          <table class="compare">
+            <thead>
+              <tr>
+                <th>論者</th>
+                <th>テイクオフ速度</th>
+                <th>p(doom)</th>
+                <th>立場の特徴</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Eliezer Yudkowsky</strong><br>MIRI創設者</td>
+                <td>数日〜数週間</td>
+                <td>&gt; 95%</td>
+                <td>離散的な知能閾値を想定。実験不要、理論だけで技術再構成可能と見る。「If Anyone Builds It, Everyone Dies」の著者</td>
+              </tr>
+              <tr>
+                <td><strong>Daniel Kokotajlo</strong><br>元OpenAI / AI Futures Project</td>
+                <td>1年以内</td>
+                <td>〜70%<br>（努力次第で20-30%に低下可能）</td>
+                <td>AI 2027の中心著者。Davidsonモデルの上位20%シナリオに相当。時間は少ないが努力の余地はあると見る</td>
+              </tr>
+              <tr>
+                <td><strong>Tom Davidson</strong><br>Forethought</td>
+                <td>数年</td>
+                <td>明示せず<br>（深刻に受け止めている）</td>
+                <td>最も精緻な定量モデル。60%の確率で3年分を1年に圧縮と推定。クーデターリスクも定量分析している</td>
+              </tr>
+              <tr>
+                <td><strong>Epoch AI</strong><br>Erdil &amp; Besiroglu</td>
+                <td>10年程度</td>
+                <td>低い<br>（アライメントのフレーミング自体に懐疑的）</td>
+                <td>広範な自動化を重視。規制と社会的摩擦を除けば確率は高いと見る。Mechanize共同創業者</td>
+              </tr>
+            </tbody>
+          </table>
+          <p class="lead">
+            この表が示しているのは、4人が<strong>対立しているのではなく、同じ山の違う斜面にいる</strong>ということだ。全員がAGI以後の加速的変化を予測している。違うのは、その加速が数日でピークに達するのか、10年かけて並走しながら進むのかという速度論の部分だけである。そしてこの違いは、次のスライドで見るように、ある一つの経済学的な論点に集約される。
+          </p>
+        </div>
+        <div class="footer reveal reveal-delay-3">
+          <span>4論者は対立していない。同じ山の違う斜面にいる</span>
+          <span class="slide-count">2 / 5</span>
+        </div>
+      </section>
+
+      <!-- ═══════════ Slide 3 ═══════════ -->
+      <section class="slide" id="slide-3">
+        <div class="eyebrow reveal">The Divergence</div>
+        <h2 class="reveal reveal-delay-1">分岐点は一つ — 「代替の弾力性」をどう見るか</h2>
+        <div class="panel reveal reveal-delay-2">
+          <div>
+            <img class="hero" src="images/takeoff-speed-debate/slide3.jpg" alt="Abstract division line in monochrome">
+            <div class="hero-caption">Photo: Unsplash</div>
+          </div>
+          <p class="lead">
+            4論者の速度推定がなぜ1,000倍もずれるのか。その根本的な理由は、経済学者が<strong>「インプット間の代替の弾力性」</strong>と呼ぶ論点に集約される。AIの自己改善には二種類のインプットが必要だ。ひとつは認知的労働——アルゴリズム改善、コード最適化、理論の再構築。もうひとつは物理的インプット——計算資源、実験データ、エネルギー。この二つが互いにどれだけ代替可能かが、テイクオフ速度を規定する。
+          </p>
+          <p class="lead">
+            代替可能性が高いなら、賢いアルゴリズムで計算資源の不足を補えるため、AIの認知能力が上がるだけで爆発的な自己改善が起こりうる。物理的インフラの拡張を待つ必要がない。逆に二つが補完的なら、どちらか一方だけが増えても上限にぶつかる。計算資源やデータの蓄積なしには知能爆発は頭打ちになる。<strong>速度論は、この一点の見方の違いから逆算される</strong>。
+          </p>
+          <p class="lead">
+            Yudkowskyとkokotajloは代替可能性が高い——あるいは事実上制限がない——と考える。Yudkowskyが「既存のデータと計算資源だけで技術ツリーを再構成できる」と主張しているのは、この立場の極端な表れである。Davidsonはこれを定量的に分析し、経済学の標準的な推定値をAI R&amp;Dに外挿することに複数の反論を提示した。結論として彼は、AI R&amp;Dにおける代替の弾力性は経済学の標準値よりかなり高く、計算資源のボトルネックは知能爆発の後期段階まで深刻にはならないと論じている。
+          </p>
+          <p class="lead">
+            一方でEpoch AIは真逆の立場を取る。彼らの研究では、歴史的に最も大きなアルゴリズム改善——たとえばトランスフォーマーアーキテクチャの導入による10〜50倍の効率改善——は、大規模な計算資源があって初めて効果を発揮する「計算資源依存型」のイノベーションだったことが実証されている。計算資源が固定された状態で達成できるアルゴリズム改善は<strong>約3.5倍程度</strong>にとどまる。桁違いの能力向上には計算資源の拡大が不可欠だったのであり、ソフトウェアのフィードバックループだけで爆発的な変化が駆動されるシナリオは考えにくい、というのが彼らの見方である。
+          </p>
+          <div class="grid-2">
+            <div class="card">
+              <p><strong>速い派の前提</strong>（Yudkowsky / Kokotajlo / Davidson）</p>
+              <div class="bullets" style="margin-top: 16px">
+                <p class="point"><strong>代替の弾力性は高い</strong> 認知的労働が十分に賢くなれば、物理的インプットの不足を補える。計算資源は制約にならないか、なっても後期に初めて効く。</p>
+                <p class="point"><strong>実験は省略可能</strong> 超知的AIは既存データから人間よりはるかに多くの情報を引き出せる。より速く効率的な実験を設計でき、場合によっては実験そのものをスキップできる。</p>
+                <p class="point"><strong>生産プロセスの再編成が速い</strong> 長期的にはボトルネックは緩和される。超高速で思考するAGIなら、その再編成を数日から数週間で完了できる可能性がある。</p>
+                <p class="point"><strong>労働者が賢くなる効果</strong> 経済学の標準的な推定値は「労働者がより賢くなる」効果を含んでおらず、AI R&amp;Dではまさにそれが核心的なダイナミクスになる。</p>
+              </div>
+            </div>
+            <div class="card">
+              <p><strong>遅い派の前提</strong>（Epoch AI）</p>
+              <div class="bullets" style="margin-top: 16px">
+                <p class="point"><strong>計算資源が根本的ボトルネック</strong> アルゴリズム改善は計算資源依存型。固定された計算環境で達成できる効率改善は約3.5倍が上限。桁違いの能力向上には計算資源の拡大が必要。</p>
+                <p class="point"><strong>モラベックのパラドクス</strong> AIは推論やコーディングには優れていてもエージェント的な実世界タスクでは遅く高コストになる。ベンチマーク進歩が経済インパクトに直結しない。</p>
+                <p class="point"><strong>産業全体の発展が必要</strong> チップ製造、エネルギー供給、データの蓄積といった産業インフラの拡張なしには能力向上が続かない。知能爆発は産業爆発と並走せざるを得ない。</p>
+                <p class="point"><strong>AI研究者の仕事の自動化は困難</strong> 一般的なリモートワークの自動化と同程度に難しい。アルゴリズム効率の測定自体も不確実で、ソフトウェア単独の爆発は考えにくい。</p>
+              </div>
+            </div>
+          </div>
+          <p class="lead">
+            この対立は実は<strong>経験的に決着させにくい</strong>。なぜなら超知的AIが実際に出現するまで、外挿の妥当性は検証できないからだ。Davidsonが指摘するように、経済学の推定値はインプット比率が2倍程度しか変動しない範囲で測定されたもので、AI研究者が桁違いに増えるシナリオへの外挿は極めて不確実である。つまりどちらの立場も、厳密には「賭け」に近い。違うのは、何に賭けるかの倫理的感覚である。
+          </p>
+        </div>
+        <div class="footer reveal reveal-delay-3">
+          <span>速度論の分岐は、経済学の一論点に集約される</span>
+          <span class="slide-count">3 / 5</span>
+        </div>
+      </section>
+
+      <!-- ═══════════ Slide 4 ═══════════ -->
+      <section class="slide" id="slide-4">
+        <div class="eyebrow reveal">Speed And Doom</div>
+        <h2 class="reveal reveal-delay-1">速いと言う者ほど悲観する。これは偶然ではない</h2>
+        <div class="panel reveal reveal-delay-2">
+          <div>
+            <img class="hero" src="images/takeoff-speed-debate/slide4.jpg" alt="Dark monochrome gradient">
+            <div class="hero-caption">Photo: Unsplash</div>
+          </div>
+          <p class="lead">
+            4論者のテイクオフ速度とp(doom)を並べると、<strong>強い負の相関</strong>が見える。速いと言う者ほど破滅確率を高く見積もり、遅いと言う者ほど楽観的になる。Yudkowskyは数日かつp(doom)95%以上。Kokotajloは1年以内かつ約70%。Davidsonは数年かつ深刻だが数値未明示。Epoch AIは10年かつ低い。これは偶然の一致ではなく、構造的な理由がある。
+          </p>
+          <p class="lead">
+            理由は単純だ。テイクオフが速いほど、人間がAIの急速な能力向上に対応し、制御メカニズムを整備し、アライメントを達成するための時間的余裕が少なくなる。数日で超知能が出現するなら、人間がその過程を監視し介入する余地はほとんどない。逆にテイクオフが10年かけて緩やかに進むなら、途中で問題を発見し修正する機会が何度もある。<strong>速度の予測は、そのまま時間予算の予測</strong>であり、時間予算はそのまま悲観か楽観かを決定する。
+          </p>
+          <p class="lead">
+            Yudkowskyにとってアライメント問題は、人類がまだ解決の糸口すら掴めていない根本的な難問である。解決される前に超知能が出現する確率が極めて高い、だから破滅はほぼ確実、という論理だ。Kokotajloはやや柔軟で、「アライメントへの実質的な努力が行われれば20〜30%まで下げられる可能性がある」と述べている。1年以内という速度では安全策を講じる時間は限られるが、努力次第で結果は変わりうる。希望と絶望の中間に彼はいる。
+          </p>
+          <p class="lead">
+            対照的にEpoch AIのErdilとBesirogluは、アライメントというフレーミング自体が誤りだと主張する。Dwarkesh Podcastでのインタビューによれば、彼らはAIのリスクは制御不能な超知能の暴走よりも、経済的・社会的な構造変化から来ると見ている。MechanizeというAI労働自動化を目指すスタートアップを共同創業した事実そのものが、彼らのAGI産業応用への楽観を示している。10年というテイクオフ速度は、社会がAIに適応し、問題を逐次的に解決していく時間的余裕を意味している。
+          </p>
+          <div class="grid-3">
+            <div class="card">
+              <span class="tag">Correlation</span>
+              <p><strong>速度 × p(doom)</strong><br>速度を速く見積もるほど破滅確率が高くなる。Yudkowsky（数日/95%）からEpoch AI（10年/低）まで、一貫した負の勾配。構造的な時間予算問題として理解できる。</p>
+            </div>
+            <div class="card">
+              <span class="tag">Mechanism</span>
+              <p><strong>時間予算＝対応余裕</strong><br>速ければ監視・介入・修正の機会が消える。遅ければ問題を逐次解決できる。速度論は未来予測であり、同時に「人類が問題と向き合える時間の長さ」の予測でもある。</p>
+            </div>
+            <div class="card">
+              <span class="tag">Implication</span>
+              <p><strong>立場選択＝倫理選択</strong><br>どの速度を信じるかは、どの時間予算で動くかの選択になる。Yudkowskyの立場は無期限停止を要求し、Epoch AIの立場は並走しながらの適応を許す。中間にいる者の行動は異なる。</p>
+            </div>
+          </div>
+          <p class="lead">
+            興味深いのは、この相関が<strong>自己強化的</strong>に働く点だ。速いと考える論者は「止めないと間に合わない」という結論に至り、開発停止を訴える。遅いと考える論者は「間に合う」と考えて開発を続ける動機を持つ。Erdilらが自らAI自動化スタートアップを創業しているのは象徴的で、速度の見立てがそのまま行動選択を規定している。速度論は予測であると同時に、行動への前提条件になっている。
+          </p>
+        </div>
+        <div class="footer reveal reveal-delay-3">
+          <span>速度 × p(doom) — 時間予算が悲観と楽観を分ける</span>
+          <span class="slide-count">4 / 5</span>
+        </div>
+      </section>
+
+      <!-- ═══════════ Slide 5 ═══════════ -->
+      <section class="slide" id="slide-5">
+        <div class="eyebrow reveal">The Clock</div>
+        <h2 class="reveal reveal-delay-1">どの立場を取っても、準備の時間軸は限られている</h2>
+        <div class="panel reveal reveal-delay-2">
+          <div>
+            <img class="hero" src="images/takeoff-speed-debate/slide5.jpg" alt="Monochrome clock-like abstraction">
+            <div class="hero-caption">Photo: Unsplash</div>
+          </div>
+          <p class="lead">
+            ここまで見てきて、一つの問いが残る。<strong>どの立場を取るべきか</strong>。答えは明示しない。むしろ重要なのは、どの立場を取っても結論の一部は共有されるという事実のほうだ。Yudkowskyが正しければ人類にはほとんど時間がなく、Kokotajloが正しければ1年、Davidsonなら数年、Epoch AIでも10年。10年というのは楽観的な上限であって、歴史的な変化のスケールで言えばほとんど一瞬である。
+          </p>
+          <p class="lead">
+            4論者が共有しているもう一つの前提がある。AGI以後、<strong>10年程度で数百年分の変化が起こる</strong>というスケール感だ。Forethoughtの保守的なシナリオですら、10年間での累積的なAI研究努力量は人間だけの場合と比べて約1,000万倍に達する。積極的シナリオでは約100兆倍。テイクオフ速度の議論は、この到達点に至るまでの「助走距離」を問う議論であり、到達点そのものは論者間で一致している。
+          </p>
+          <p class="lead">
+            だから実務的な含意は単純だ。速い派を信じるなら、いますぐ制御メカニズムの整備を始めなければならない。遅い派を信じるなら、並走しながら逐次的に問題を解決する設計原理を準備する必要がある。どちらの立場でも、<strong>準備を始めるタイミングは「いま」</strong>である。違うのは準備のペースと優先順位であって、準備そのものの必要性ではない。
+          </p>
+          <p class="lead">
+            そしてもう一つ。この議論は日本ではほとんど知られていない。ForethoughtやEpoch AIの定量的分析、AI Futures Projectのシナリオモデル、Davidsonの代替弾力性の議論——これらは英語圏のAI安全性コミュニティでは中心的な論点だが、日本語での紹介は薄い。「ChatGPTがもう少し賢くなる」程度の認識で止まっている人々と、10年で数百年分の変化を真剣に予測している人々の間に、圧倒的な認識ギャップがある。このギャップを埋めることが、日本側からできる最初の一歩である。
+          </p>
+          <div class="note">
+            テイクオフ速度論は、数日か10年かという幅の大きい予測である。だが<strong>「どれが正しいか」を待つ余裕はない</strong>。速い派が正しければ、待っている間に間に合わなくなる。遅い派が正しくても、10年は歴史的には一瞬である。速度の議論は結論ではなく、前提の議論だ。どの速度を信じるかで準備のペースは変わるが、準備の必要性は変わらない。時計はすでに動き始めている。
+          </div>
+        </div>
+        <div class="footer reveal reveal-delay-3">
+          <span>速度は不明でも、準備の必要性は確定している</span>
+          <span class="slide-count">5 / 5</span>
+        </div>
+      </section>
+    </main>
+
+    <footer class="credits">
+      <p>
+        Photos: All images from <a href="https://unsplash.com">Unsplash</a> (free license).
+        References: Forethought Research (Davidson, MacAskill, Moorhouse, Hadshar), Epoch AI (Erdil &amp; Besiroglu), AI Futures Project (Kokotajlo &amp; Lifland), MIRI (Yudkowsky).
+      </p>
+    </footer>
+
+    <script>
+      const buttons = Array.from(document.querySelectorAll('.nav button'));
+      const slides = Array.from(document.querySelectorAll('.slide'));
+      const progress = document.getElementById('progress');
+
+      function setActive(id) {
+        buttons.forEach(b => b.classList.toggle('active', b.dataset.target === id));
+      }
+
+      buttons.forEach(b => {
+        b.addEventListener('click', () => {
+          document.getElementById(b.dataset.target)?.scrollIntoView({ behavior: 'smooth' });
+        });
+      });
+
+      const navObserver = new IntersectionObserver(entries => {
+        entries.forEach(e => { if (e.isIntersecting) setActive(e.target.id); });
+      }, { threshold: 0.5 });
+
+      slides.forEach(s => navObserver.observe(s));
+
+      const revealObserver = new IntersectionObserver(entries => {
+        entries.forEach(e => {
+          if (e.isIntersecting) {
+            e.target.classList.add('visible');
+          }
+        });
+      }, { threshold: 0.15, rootMargin: '0px 0px -60px 0px' });
+
+      document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+      window.addEventListener('scroll', () => {
+        const scrollTop = window.scrollY;
+        const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+        const pct = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+        progress.style.width = pct + '%';
+      }, { passive: true });
+
+      window.addEventListener('keydown', e => {
+        const idx = buttons.findIndex(b => b.classList.contains('active'));
+        if (e.key === 'ArrowDown' || e.key === 'PageDown') {
+          e.preventDefault();
+          slides[Math.min(idx + 1, slides.length - 1)]?.scrollIntoView({ behavior: 'smooth' });
+        }
+        if (e.key === 'ArrowUp' || e.key === 'PageUp') {
+          e.preventDefault();
+          slides[Math.max(idx - 1, 0)]?.scrollIntoView({ behavior: 'smooth' });
+        }
+      });
+    </script>
+  </body>
+</html>

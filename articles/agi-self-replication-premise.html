@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>産業爆発の隠れた前提 — ロボット自己複製が未来を二つに割る</title>
+    <style>
+      :root {
+        --black: #000;
+        --body-text: #1a1a1a;
+        --meta: #757575;
+        --light-gray: #999;
+        --border: #e5e5e5;
+        --bg: #fff;
+        --ease: cubic-bezier(0.22, 1, 0.36, 1);
+      }
+
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+      html { scroll-behavior: smooth; }
+
+      body {
+        font-family: HelveticaNeue, "Helvetica Neue", Helvetica, Arial,
+          游ゴシック体, YuGothic, "游ゴシック Medium", "Yu Gothic Medium",
+          游ゴシック, "Yu Gothic", "ヒラギノ角ゴ ProN W3", "Hiragino Kaku Gothic ProN",
+          "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", "MS ゴシック", "MS Gothic",
+          sans-serif;
+        font-feature-settings: "palt";
+        font-size: 16px;
+        line-height: 1.75;
+        color: var(--body-text);
+        background: var(--bg);
+        -webkit-font-smoothing: antialiased;
+        overflow-x: hidden;
+        word-wrap: break-word;
+      }
+
+      .progress {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 2px;
+        background: var(--black);
+        width: 0%;
+        z-index: 100;
+        transition: width 0.3s var(--ease);
+      }
+
+      .nav {
+        position: fixed;
+        right: 24px;
+        top: 50%;
+        transform: translateY(-50%);
+        display: grid;
+        gap: 16px;
+        z-index: 50;
+      }
+
+      .nav button {
+        width: 8px;
+        height: 8px;
+        border-radius: 999px;
+        border: 1.5px solid var(--meta);
+        background: transparent;
+        cursor: pointer;
+        transition: all 0.3s var(--ease);
+      }
+
+      .nav button.active {
+        background: var(--black);
+        border-color: var(--black);
+        transform: scale(1.4);
+      }
+
+      main { scroll-snap-type: y mandatory; }
+
+      .slide {
+        position: relative;
+        min-height: 100vh;
+        max-width: 1120px;
+        margin: 0 auto;
+        padding: 80px 48px 64px;
+        display: grid;
+        grid-template-rows: auto auto 1fr auto;
+        gap: 32px;
+        scroll-snap-align: start;
+      }
+
+      .slide + .slide { border-top: 1px solid var(--border); }
+
+      .hero {
+        width: 100%;
+        aspect-ratio: 16 / 7;
+        object-fit: cover;
+        display: block;
+        filter: grayscale(0.6) contrast(1.1);
+        transition: filter 0.6s var(--ease);
+      }
+
+      .hero:hover { filter: grayscale(0) contrast(1); }
+
+      .hero-caption {
+        font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 11px;
+        letter-spacing: 0.083em;
+        color: var(--light-gray);
+        margin-top: 8px;
+        text-transform: uppercase;
+      }
+
+      .reveal {
+        opacity: 0;
+        transform: translateY(24px);
+        transition: opacity 0.6s var(--ease), transform 0.6s var(--ease);
+      }
+
+      .reveal.visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .reveal-delay-1 { transition-delay: 0.1s; }
+      .reveal-delay-2 { transition-delay: 0.2s; }
+      .reveal-delay-3 { transition-delay: 0.35s; }
+
+      .eyebrow {
+        font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 11px;
+        font-weight: 400;
+        letter-spacing: 0.083em;
+        text-transform: uppercase;
+        color: var(--meta);
+      }
+
+      h1, h2 {
+        color: var(--black);
+        font-weight: 700;
+        line-height: 1.625;
+        letter-spacing: normal;
+        max-width: 24ch;
+      }
+
+      h1 { font-size: clamp(28px, 4vw, 34px); }
+      h2 { font-size: clamp(24px, 3.5vw, 32px); }
+
+      .lead {
+        max-width: 820px;
+        font-size: 16px;
+        line-height: 1.85;
+        color: var(--body-text);
+      }
+
+      .lead + .lead { margin-top: 10px; }
+
+      .panel { display: grid; gap: 24px; align-content: start; }
+      .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
+      .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+
+      .card {
+        padding: 24px 0;
+        border-top: 2px solid var(--black);
+      }
+
+      .card p {
+        font-size: 16px;
+        line-height: 1.75;
+        color: var(--body-text);
+      }
+
+      .card strong { color: var(--black); }
+
+      .tag {
+        display: inline-block;
+        font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 11px;
+        letter-spacing: 0.083em;
+        color: var(--meta);
+        margin-bottom: 12px;
+      }
+
+      .bullets { display: grid; gap: 16px; }
+
+      .point {
+        padding-left: 16px;
+        border-left: 2px solid var(--black);
+        font-size: 16px;
+        line-height: 1.75;
+        color: var(--body-text);
+      }
+
+      .point strong { color: var(--black); }
+
+      .timeline {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1px;
+        background: var(--border);
+      }
+
+      .timeline-step {
+        display: grid;
+        gap: 8px;
+        padding: 20px 16px;
+        background: var(--bg);
+      }
+
+      .timeline-step.highlight {
+        background: var(--black);
+      }
+
+      .timeline-step.highlight .num,
+      .timeline-step.highlight p,
+      .timeline-step.highlight strong {
+        color: var(--bg);
+      }
+
+      .timeline-step .num {
+        font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 11px;
+        letter-spacing: 0.083em;
+        text-transform: uppercase;
+        color: var(--meta);
+      }
+
+      .timeline-step p {
+        font-size: 15px;
+        line-height: 1.65;
+        color: var(--body-text);
+      }
+
+      .compare {
+        width: 100%;
+        border-collapse: collapse;
+        border-top: 2px solid var(--black);
+        border-bottom: 2px solid var(--black);
+      }
+
+      .compare th,
+      .compare td {
+        padding: 18px 16px;
+        text-align: left;
+        font-size: 15px;
+        line-height: 1.65;
+        color: var(--body-text);
+        border-bottom: 1px solid var(--border);
+        vertical-align: top;
+      }
+
+      .compare th {
+        font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 11px;
+        letter-spacing: 0.083em;
+        text-transform: uppercase;
+        color: var(--meta);
+        font-weight: 400;
+        border-bottom: 1px solid var(--black);
+      }
+
+      .compare td strong { color: var(--black); }
+      .compare tr:last-child td { border-bottom: none; }
+
+      .note {
+        font-size: 16px;
+        line-height: 1.75;
+        color: var(--body-text);
+        padding: 24px 0;
+        border-top: 1px solid var(--border);
+        border-bottom: 1px solid var(--border);
+      }
+
+      .note strong { color: var(--black); }
+
+      .footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: end;
+        gap: 16px;
+        font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 11px;
+        letter-spacing: 0.083em;
+        color: var(--light-gray);
+        text-transform: uppercase;
+      }
+
+      .slide-count {
+        font-weight: 700;
+        color: var(--black);
+      }
+
+      .credits {
+        max-width: 1120px;
+        margin: 0 auto;
+        padding: 48px 48px 80px;
+        border-top: 1px solid var(--border);
+      }
+
+      .credits p {
+        font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 11px;
+        letter-spacing: 0.047em;
+        line-height: 2;
+        color: var(--light-gray);
+      }
+
+      .credits a {
+        color: var(--meta);
+        text-decoration: none;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .credits a:hover {
+        color: var(--black);
+        border-bottom-color: var(--black);
+      }
+
+      @media (max-width: 768px) {
+        .slide { padding: 64px 24px 48px; }
+        .hero { aspect-ratio: 16 / 9; }
+        .grid-2, .grid-3, .timeline { grid-template-columns: 1fr; }
+        .nav { right: 12px; }
+        .compare th, .compare td { padding: 14px 10px; }
+        .credits { padding: 32px 24px 64px; }
+      }
+
+      @media print {
+        .slide { min-height: auto; page-break-after: always; padding: 24px 0; }
+        .nav, .progress { display: none; }
+        .reveal { opacity: 1; transform: none; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="progress" id="progress"></div>
+
+    <aside class="nav" aria-label="Slide navigation">
+      <button data-target="slide-1" class="active" aria-label="Slide 1"></button>
+      <button data-target="slide-2" aria-label="Slide 2"></button>
+      <button data-target="slide-3" aria-label="Slide 3"></button>
+      <button data-target="slide-4" aria-label="Slide 4"></button>
+      <button data-target="slide-5" aria-label="Slide 5"></button>
+    </aside>
+
+    <main>
+      <section class="slide" id="slide-1">
+        <div class="eyebrow reveal">The Premise Nobody Says Out Loud</div>
+        <h1 class="reveal reveal-delay-1">産業爆発の隠れた前提は、ロボットがロボットを作ることだ</h1>
+        <div class="panel reveal reveal-delay-2">
+          <div>
+            <img class="hero" src="../images/agi-self-replication-premise/slide1.jpg" alt="Monochrome industrial machine against a dark background">
+            <div class="hero-caption">Photo: Unsplash</div>
+          </div>
+          <p class="lead">
+            2025年5月、Forethought Researchが公開した論文「The Industrial Explosion」は、AGI以後の10年で地球上に数十億台のヒューマノイドが稼働し、水星が解体され、太陽の周囲にダイソンスウォームが出現しうると書いた。同じ月、Epoch AIのEge ErdilとTamay Besirogluは、標準的な半内生的成長モデルにAI労働を代入すると産出は超指数関数的に発散すると結論づけた。Carl Shulmanは80,000 Hoursのインタビューで、初期倍増時間はおよそ1年、経験曲線が重なれば数週間、最終的には数日に達すると述べている。
+          </p>
+          <p class="lead">
+            これらはSFではない。ノーベル経済学賞を受けたポール・ローマーの内生的成長理論を継承し、Chad Jonesの半内生的モデルで実証的に校正され、Bloom-Jones-Van Reenen-Webbの論文で測定された収穫逓減係数を入力とする、経済学の主流フレームワークが吐き出す数字である。
+          </p>
+          <p class="lead">
+            ここで問うべきは規模感の真偽ではなく、議論の骨格だ。これらの予測はどれも、ある一点で成立している。物理資本の自己複製が可能になるという仮定である。ロボットがロボットを作り、工場が工場を作る。言い換えれば、労働が資本と同じように蓄積可能な生産要素に変わるという仮定。この一点が成立しなければ、技術爆発は数字の上では起きても、物理経済は動かない。
+          </p>
+          <p class="lead">
+            多くのAGI論はこの仮定を前提に組み込まない。「AIが研究を加速する」で止める。だがForethoughtとEpochを注意深く読めば、彼らの産業爆発は例外なくロボット自己複製を暗黙の前提として持っている。AGIがGDPを桁で押し上げるという予測の裏側で、静かに要求されているのはこの一行だ。人間の手を介さずに物理資本が増殖できるかどうか。
+          </p>
+          <div class="grid-3">
+            <div class="card">
+              <span class="tag">01</span>
+              <p><strong>言及されない前提</strong><br>産業爆発の定量モデルはすべて、ロボットが自分自身を含む資本財を複製できる状態を仮定している。</p>
+            </div>
+            <div class="card">
+              <span class="tag">02</span>
+              <p><strong>仮定の帰結</strong><br>この一行が成立した瞬間、労働は資本化し、生産関数の性質そのものが切り替わる。</p>
+            </div>
+            <div class="card">
+              <span class="tag">03</span>
+              <p><strong>この記事の立場</strong><br>ロボット自己複製はAGIの応用ではない。産業爆発シナリオの必要条件であり、ここを越えるか否かで未来は二つに分岐する。</p>
+            </div>
+          </div>
+        </div>
+        <div class="footer reveal reveal-delay-3">
+          <span>産業爆発の全重量が、自己複製という一行の仮定に載っている</span>
+          <span class="slide-count">1 / 5</span>
+        </div>
+      </section>
+
+      <section class="slide" id="slide-2">
+        <div class="eyebrow reveal">What Self-Replication Actually Means</div>
+        <h2 class="reveal reveal-delay-1">物理労働の限界費用がゼロに落ちた瞬間、経済の文法が書き換わる</h2>
+        <div class="panel reveal reveal-delay-2">
+          <div>
+            <img class="hero" src="../images/agi-self-replication-premise/slide2.jpg" alt="Dark abstract architectural structure in monochrome">
+            <div class="hero-caption">Photo: Unsplash</div>
+          </div>
+          <p class="lead">
+            自己複製ロボットという言葉は誤解されやすい。一台のヒューマノイドが分裂するわけではない。Forethoughtが指摘する通り、実態は採掘・精錬・部品加工・組立・検査・物流・発電までを含む工場群全体の閉ループである。原材料を入れてロボットが出てくる、その一連の工程に人間の手が一つも介在しない状態を指す。単体の機械ではなく、産業システムそのものが自己複製の単位になる。
+          </p>
+          <p class="lead">
+            この状態が成立した瞬間に何が起きるのか。労働の限界費用がゼロに向かって落ちる。人間の労働者は再生産に20年かかり、生物学的な疲労と睡眠と賃金上昇圧力を伴う。ロボットは追加生産に必要なエネルギーと材料さえあれば、数日から数週間で増える。しかも稼働は24時間365日、病欠もストライキもない。経済学が200年間ボトルネックと扱ってきた「蓄積不可能な生産要素」が、資本と同じ性質を持つ蓄積可能な要素に転じる。
+          </p>
+          <p class="lead">
+            経済学の教科書で労働と資本を別の生産要素として書き分けてきた理由は、片方が人口動態に縛られ、もう片方が投資で積み増しできるという非対称性にあった。ロボット自己複製はこの非対称性を消す。Epoch AIのErdilとBesirogluが明言する通り、AIが労働を適切に代替するケースでは半内生的成長モデルは一様に超指数関数的成長を吐き出す。これはモデルのバグではない。労働制約が消えた経済の挙動そのものだ。
+          </p>
+          <div class="grid-2">
+            <div class="card">
+              <span class="tag">Before</span>
+              <div class="bullets">
+                <div class="point"><strong>労働は希少財</strong><br>再生産に20年、年間増加率1%未満、熟練労働はさらに遅い。</div>
+                <div class="point"><strong>資本は労働に縛られる</strong><br>工場を建てても運用と保守に人手が要り、拡大速度は人的供給で律速される。</div>
+                <div class="point"><strong>成長は線形に近い</strong><br>研究者数も設備も人口動態の外には出られず、GDP成長率は長期的に頭打ち。</div>
+              </div>
+            </div>
+            <div class="card">
+              <span class="tag">After</span>
+              <div class="bullets">
+                <div class="point"><strong>労働は資本化する</strong><br>エネルギーと材料を投じればロボットが増える。生産要素の二分法が崩れる。</div>
+                <div class="point"><strong>資本が資本を作る</strong><br>工場が工場を作り、発電所が発電所を作る。閉ループが成立する。</div>
+                <div class="point"><strong>成長は発散する</strong><br>投入が産出を増やし、産出が投入を増やすフィードバックが非線形に加速する。</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="footer reveal reveal-delay-3">
+          <span>労働を希少から蓄積可能に変える一行の仕様変更</span>
+          <span class="slide-count">2 / 5</span>
+        </div>
+      </section>
+
+      <section class="slide" id="slide-3">
+        <div class="eyebrow reveal">The Doubling Curve</div>
+        <h2 class="reveal reveal-delay-1">倍増時間は固定ではない。加速する指数関数が走り出す</h2>
+        <div class="panel reveal reveal-delay-2">
+          <div>
+            <img class="hero" src="../images/agi-self-replication-premise/slide3.jpg" alt="Abstract black background with curving lines suggesting exponential growth">
+            <div class="hero-caption">Photo: Unsplash</div>
+          </div>
+          <p class="lead">
+            自己複製だけでは足りない。倍増時間が固定された単なる指数関数では、100万台が10年で10億台になるに留まる。太陽系を改造する規模には遠い。産業爆発が数字として成立するには、倍増時間そのものが短縮していく必要がある。ここで効いてくるのが経験曲線だ。
+          </p>
+          <p class="lead">
+            製造業では累積生産量が倍増するたびにコストが一定の割合で下がる。太陽光パネル、リチウムイオン電池、半導体、電気自動車、液晶。どの産業でも観測されてきた経験則で、Our World in Dataが過去半世紀分のデータで追跡している。Forethoughtがロボット関連産業の係数を当てはめた結果、累積生産量が1〜5回倍増するごとに製造コストが半分に落ちる。コストが半減すれば同じ資源で倍の台数が作れる。倍増時間は前回より短くなる。
+          </p>
+          <p class="lead">
+            この経験曲線にAIによる設計改善が重なる。新素材、バッテリー、モーター制御、熱管理、関節機構。技術爆発で走っているAI研究の一部が設計最適化に流れ込み、ロボットは世代ごとに軽く速く安くなる。経験曲線の縦軸と技術進歩の縦軸が同時に下がる。Forethoughtの試算では、最初1年だった倍増時間が数ヶ月、数週間、最終的には数日まで加速する。地球のロボット収容能力に達する前に倍増時間が生物学的スケールに接近する。
+          </p>
+          <div class="timeline">
+            <div class="timeline-step">
+              <div class="num">Year 1</div>
+              <p><strong>倍増時間 約1年</strong><br>ヒューマノイドの初期生産。太陽光パネルや電気自動車が過去に見せた倍増ペースと同じ水準。</p>
+            </div>
+            <div class="timeline-step highlight">
+              <div class="num">Year 3-5</div>
+              <p><strong>倍増時間 数ヶ月</strong><br>経験曲線によるコスト低下が積み上がり、自己複製ループが閉じる。ここから物理経済は人間の認知を離れる。</p>
+            </div>
+            <div class="timeline-step">
+              <div class="num">Year 5-10</div>
+              <p><strong>倍増時間 数日</strong><br>技術爆発による設計改善が加わり、バクテリア並みの自己複製速度が射程に入る。</p>
+            </div>
+          </div>
+          <div class="note">
+            <strong>物理的な上限は高い</strong>。バクテリアは数時間、ショウジョウバエは数日、ラットは数週間で倍増する。これらは脳を持ち複雑な行動を取る自己複製システムだ。十分に進歩したロボットが同程度の速度で複製することは物理法則が禁じていない。水星に置いた太陽光パネルのエネルギーペイバックタイムは1日を切る。
+          </div>
+        </div>
+        <div class="footer reveal reveal-delay-3">
+          <span>経験曲線と技術爆発が重なった瞬間、指数関数は固定された関数をやめる</span>
+          <span class="slide-count">3 / 5</span>
+        </div>
+      </section>
+
+      <section class="slide" id="slide-4">
+        <div class="eyebrow reveal">From Replication To Explosion</div>
+        <h2 class="reveal reveal-delay-1">自己複製と技術爆発が噛み合ったとき、産業爆発は単なる副産物になる</h2>
+        <div class="panel reveal reveal-delay-2">
+          <div>
+            <img class="hero" src="../images/agi-self-replication-premise/slide4.jpg" alt="Concentric circular ripples on a dark surface suggesting feedback loops">
+            <div class="hero-caption">Photo: Unsplash</div>
+          </div>
+          <p class="lead">
+            ここまでの三段を繋ぎ直す。AGIが知能を自己加速する技術爆発は、単体では物理世界を変えない。新素材の論文がいくら出ても、それを作る工場と発電所がなければ図面のままで終わる。逆にロボットがロボットを作るだけでも足りない。倍増時間が固定されたままでは地球規模には届かない。産業爆発が成立するのは、二つのフィードバックが噛み合った瞬間に限られる。
+          </p>
+          <p class="lead">
+            噛み合い方は具体的だ。技術爆発側で走っているAI研究は、ロボット設計、制御、材料、バッテリー、製造プロセスの全レイヤーに同時に流れ込む。設計が改善されるたびに経験曲線の下降が加速する。経験曲線が下がるほど単位資源あたりの生産量が増え、増えた生産量がエネルギーと計算資源を増やす。増えたエネルギーがAI推論とロボット稼働の両方を賄い、増えたロボットが採掘と製造を加速し、増えた製造実績がさらにコストを下げる。入力が産出を増やし、産出が入力を増やす。ループの中に止める場所がない。
+          </p>
+          <p class="lead">
+            Shulmanの計算で経験曲線のコスト低下率を80%と置くと、倍増時間は数式上5年で発散する。現実にはエネルギー供給と熱放散と採掘速度で上限が来るが、その上限自体が物理法則で定まる水準にある。Forethoughtの評価では、数日で倍増する産業基盤があれば水星の解体は半年、1週間で倍増するペースでも太陽系レベルのエネルギー収集網の主要部が数年で構築できる。立ち止まる理由は物理ではなく、規制と戦略判断の側にしかない。
+          </p>
+          <table class="compare">
+            <thead>
+              <tr>
+                <th>Layer</th>
+                <th>Feedback</th>
+                <th>What Accelerates Next</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>知能</strong></td>
+                <td>AIがAI研究を加速。推論効率と計算量が年間25倍で増える試算。</td>
+                <td>ロボット設計、材料、制御ソフトの進化速度。</td>
+              </tr>
+              <tr>
+                <td><strong>物理</strong></td>
+                <td>ロボット自己複製ループが閉じ、労働が蓄積可能な要素に変わる。</td>
+                <td>エネルギー供給、採掘、製造、計算資源の同時拡大。</td>
+              </tr>
+              <tr>
+                <td><strong>経験曲線</strong></td>
+                <td>累積生産量の倍増ごとにコストが半減。倍増時間が短くなっていく。</td>
+                <td>次世代ロボットの設計サイクルと製造サイクルの両方。</td>
+              </tr>
+              <tr>
+                <td><strong>結果</strong></td>
+                <td>三層が同時に噛み合い、超指数関数的な拡大が始まる。</td>
+                <td>地球の産業基盤から太陽系スケールのインフラへ。</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="footer reveal reveal-delay-3">
+          <span>ロボット自己複製は点火装置であり、経験曲線と技術爆発が燃料を注ぎ続ける</span>
+          <span class="slide-count">4 / 5</span>
+        </div>
+      </section>
+
+      <section class="slide" id="slide-5">
+        <div class="eyebrow reveal">The Binary Future</div>
+        <h2 class="reveal reveal-delay-1">未来は二つに割れている。自己複製を越えるか、越えないか</h2>
+        <div class="panel reveal reveal-delay-2">
+          <div>
+            <img class="hero" src="../images/agi-self-replication-premise/slide5.jpg" alt="Planet Mercury against a black background">
+            <div class="hero-caption">Photo: Unsplash</div>
+          </div>
+          <p class="lead">
+            AGIをめぐる議論は「いつ来るか」で擬装されているが、本当の分岐点はそこにない。タイムラインはAnthropic、DeepMind、OpenAI、Epoch AI、Forethoughtの間ですでに5年から10年のレンジに収束している。分かれているのはタイミングではなく、ロボット自己複製が成立するかどうかの一点だ。ここを越えるシナリオと越えないシナリオで、2035年の風景は別の星になる。
+          </p>
+          <p class="lead">
+            越えない側の未来は、知能爆発が先行し、物理経済は従来の速度で追従する世界だ。ホワイトカラーが順に再編され、研究開発の生産性が数倍に上がり、ソフトウェア業界とコンテンツ産業が根本から再設計される。GDPは押し上がるが、桁で跳ねない。核融合やナノテクは論文段階を越えない。現在のイーサリアム経済やデジタル金融の延長が続き、物理インフラは依然として建設現場の工期に縛られる。
+          </p>
+          <p class="lead">
+            越えた側の未来は別物だ。AGI開発から数年でヒューマノイドが数億台単位で稼働し、太陽光パネルが砂漠と海洋を覆い、自動車工場はロボット工場に転換される。5〜10年で倍増時間が数日に達し、水星の解体と太陽周回軌道上のエネルギー収集網の建設が実務の射程に入る。Forethoughtが保守シナリオと呼ぶラインですら、研究努力量は人類のそれの1000万倍、積極シナリオなら100兆倍に達する。これは比喩ではなく、経済成長理論の主流モデルにAI労働量の推計値を代入した結果の数字だ。
+          </p>
+          <p class="lead">
+            立場を取る。ロボット自己複製はAGIの必要条件ではない。だが産業爆発シナリオのすべての重量がこの一点に載っている以上、この前提を議論の外に置くのは知的に不誠実だ。Forethought、Epoch、Shulmanの計算はどれも、物理法則には違反していない。工学的困難は確かに残るが、工学的困難は時間と資本と知能投入で削られる種類の障害である。規制と戦略判断が最後の変数になる。止める理由は物理の側にない。
+          </p>
+          <div class="grid-3">
+            <div class="card">
+              <span class="tag">Branch A</span>
+              <p><strong>自己複製を越える</strong><br>労働が資本化し、倍増時間が数日まで短縮する。10年で太陽系スケールの文明に移行する経路に入る。</p>
+            </div>
+            <div class="card">
+              <span class="tag">Branch B</span>
+              <p><strong>規制と摩擦で止まる</strong><br>安全保障の圧力と市民社会の合意形成がループを抑え込む。知能爆発だけが先行し、物理は追いつかない。</p>
+            </div>
+            <div class="card">
+              <span class="tag">The Real Question</span>
+              <p><strong>どちらを設計するか</strong><br>技術的実現性ではなく、政治的・戦略的判断が分岐を決める。両国家・両陣営が同じ計算を眺めている。</p>
+            </div>
+          </div>
+          <div class="note">
+            <strong>結論</strong>。産業爆発の数字は感情的な誇張ではなく、半内生的成長モデルと経験曲線と自己複製仮定の積である。この積の妥当性を疑うべき場所は、ロボット自己複製が物理と経済の両面で閉ループを作れるかどうかに尽きる。閉ループが作れるなら残りは時間の問題でしかない。作れないなら産業爆発は起きない。議論の半分はこの一点に引き戻されるべきだ。
+          </div>
+        </div>
+        <div class="footer reveal reveal-delay-3">
+          <span>ロボット自己複製は議論の前提であり、かつ最大の分岐点である</span>
+          <span class="slide-count">5 / 5</span>
+        </div>
+      </section>
+    </main>
+
+    <section class="credits">
+      <p>
+        Images: Unsplash /
+        <a href="https://unsplash.com/photos/dRMQiAubdws">dRMQiAubdws</a>,
+        <a href="https://unsplash.com/photos/BPE1FECj5lw">BPE1FECj5lw</a>,
+        <a href="https://unsplash.com/photos/PxwFM6RxuLw">PxwFM6RxuLw</a>,
+        <a href="https://unsplash.com/photos/xaprxwBym84">xaprxwBym84</a>,
+        <a href="https://unsplash.com/photos/71W3CWeZF7A">71W3CWeZF7A</a>,
+        <a href="https://unsplash.com/photos/4Ff1ZZdow30">4Ff1ZZdow30</a>.
+      </p>
+      <p>
+        Key sources:
+        <a href="https://www.anthropic.com/research/anthropic-economic-index-january-2026-report">Anthropic January 2026</a>,
+        <a href="https://www.anthropic.com/research/anthropic-economic-index-september-2025-report">Anthropic September 2025</a>,
+        <a href="https://www.nber.org/papers/w33509">AI and the Labor Market</a>,
+        <a href="https://www.nber.org/papers/w34859">Chaining Tasks</a>,
+        <a href="https://www.nber.org/papers/w34312">AI in R&amp;D</a>,
+        <a href="https://www.nber.org/papers/w34423">We Won't be Missed</a>,
+        <a href="https://www.nber.org/papers/w31815">Economic Growth under Transformative AI</a>,
+        <a href="https://arxiv.org/abs/2503.04941">GATE</a>,
+        <a href="https://www.forethought.org/research/preparing-for-the-intelligence-explosion">Forethought</a>,
+        <a href="https://ai-2027.com/race">AI 2027</a>,
+        <a href="https://ia.samaltman.com/">Sam Altman</a>,
+        <a href="https://www.darioamodei.com/essay/the-adolescence-of-technology">Dario Amodei</a>,
+        <a href="https://deepmind.google/blog/taking-a-responsible-path-to-agi/">DeepMind</a>,
+        <a href="https://nvidianews.nvidia.com/news/nvidia-launches-cosmos-world-foundation-model-platform-to-accelerate-physical-ai-development">NVIDIA</a>,
+        <a href="https://x.ai/memphis">xAI</a>.
+      </p>
+    </section>
+
+    <script>
+      const slides = [...document.querySelectorAll(".slide")];
+      const navButtons = [...document.querySelectorAll(".nav button")];
+      const progress = document.getElementById("progress");
+      const observer = new IntersectionObserver(
+        entries => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              entry.target.querySelectorAll(".reveal").forEach(el => el.classList.add("visible"));
+              const id = entry.target.id;
+              navButtons.forEach(button => button.classList.toggle("active", button.dataset.target === id));
+              const index = slides.findIndex(slide => slide.id === id);
+              progress.style.width = `${((index + 1) / slides.length) * 100}%`;
+            }
+          });
+        },
+        { threshold: 0.45 }
+      );
+
+      slides.forEach(slide => observer.observe(slide));
+
+      navButtons.forEach(button => {
+        button.addEventListener("click", () => {
+          document.getElementById(button.dataset.target)?.scrollIntoView({ behavior: "smooth" });
+        });
+      });
+    </script>
+  </body>
+</html>

@@ -1326,7 +1326,7 @@ figure.img .caption { margin-top: 10px; }
 .isotype .row.is-highlight .val { color: var(--accent); }
 
 /* ═════════════════════════════════════════════════════
-   Site Header — 全記事共通ナビゲーション
+   Site Header — 全ページ共通ナビゲーション（masthead統一）
    ═════════════════════════════════════════════════════ */
 .site-header {
   position: fixed;
@@ -1334,69 +1334,95 @@ figure.img .caption { margin-top: 10px; }
   left: 0;
   right: 0;
   z-index: 9999;
+  background: #000;
+  border-bottom: 1px solid #000;
+}
+.site-header-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 14px 48px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 24px;
-  height: 48px;
-  background: rgba(0, 0, 0, 0.85);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  font-family: var(--ff-body);
-  transition: transform 0.3s var(--ease, ease);
+  gap: 24px;
 }
 .site-header a { text-decoration: none; }
 .site-header .site-logo {
-  font-size: 14px;
+  font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+  font-feature-settings: normal;
+  font-size: 18px;
   font-weight: 700;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.1em;
   color: #fff;
-  text-transform: uppercase;
 }
-.site-header .site-back {
-  font-size: 13px;
-  color: rgba(255,255,255,0.7);
-  transition: color 0.2s;
-}
-.site-header .site-back:hover { color: #fff; }
-.site-header .site-back::before {
-  content: "←";
-  margin-right: 6px;
+.site-header .site-logo-mark {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  background: #fff;
+  margin-right: 10px;
+  vertical-align: 1px;
 }
 .site-header .site-nav-right {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 28px;
+  font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+  font-feature-settings: normal;
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.083em;
+  text-transform: uppercase;
 }
-/* Google Translate widget のデフォルトUIを上書き */
+.site-header .site-nav-right a {
+  color: #fff;
+  transition: opacity 0.3s ease;
+}
+.site-header .site-nav-right a:hover { opacity: 0.6; }
+@media (max-width: 900px) {
+  .site-header-inner { padding: 12px 24px; }
+  .site-header .site-nav-right { gap: 16px; }
+}
+@media (max-width: 600px) {
+  .site-header .site-nav-right a.site-nav-hide-mobile { display: none; }
+}
+/* Google Translate widget — ナビリンクと同じサイズに統一 */
 #google_translate_element {
   line-height: 1;
+  position: relative;
+}
+#google_translate_element .goog-te-gadget {
+  font-size: 0 !important;
+}
+#google_translate_element .goog-te-gadget > span {
+  display: none !important;
 }
 #google_translate_element select {
   appearance: none;
   -webkit-appearance: none;
-  background: rgba(255,255,255,0.12);
-  border: 1px solid rgba(255,255,255,0.25);
-  border-radius: 4px;
-  color: rgba(255,255,255,0.85);
-  font-family: var(--ff-body);
-  font-size: 12px;
-  padding: 4px 24px 4px 8px;
+  background: transparent;
+  border: none;
+  color: rgba(255,255,255,1);
+  font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+  font-size: 8px;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 2px 14px 2px 5px;
   cursor: pointer;
   outline: none;
-  transition: background 0.2s, border-color 0.2s;
-  /* カスタム矢印 */
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='rgba(255,255,255,0.7)'/%3E%3C/svg%3E");
+  transition: opacity 0.3s ease;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='6' height='4'%3E%3Cpath d='M0 0l3 4 3-4z' fill='rgba(255,255,255,0.5)'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
-  background-position: right 8px center;
+  background-position: right 0 center;
 }
 #google_translate_element select:hover {
-  background-color: rgba(255,255,255,0.2);
-  border-color: rgba(255,255,255,0.4);
+  opacity: 0.6;
 }
 #google_translate_element select option {
   background: #222;
   color: #fff;
+  font-size: 12px;
 }
 /* Google Translate が挿入するバナーを非表示 */
 .goog-te-banner-frame { display: none !important; }

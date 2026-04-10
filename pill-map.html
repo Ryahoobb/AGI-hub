@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>AGI Pill Map — AGI HUB</title>
+<link rel="stylesheet" href="design-system/palette.css">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: HelveticaNeue, "Helvetica Neue", Helvetica, Arial,
+      "Hiragino Kaku Gothic ProN", sans-serif;
+    font-feature-settings: "palt";
+    background: #fff; color: #1a1a1a;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: inherit; text-decoration: none; }
+  .mono {
+    font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+    font-feature-settings: normal;
+  }
+
+  /* ── Hero ── */
+  .pill-hero {
+    position: relative;
+    height: 70vh; min-height: 480px;
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
+  }
+  .pill-hero-bg {
+    position: absolute; inset: 0;
+    background: url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=1400&h=800&fit=crop&q=80') center/cover;
+    filter: grayscale(1) contrast(0.8) brightness(0.3);
+  }
+  .pill-hero-content {
+    position: relative; z-index: 1;
+    text-align: center; color: #fff;
+    max-width: 720px; padding: 0 48px;
+  }
+  .pill-hero-eyebrow {
+    font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase;
+    color: rgba(255,255,255,0.4); margin-bottom: 24px;
+  }
+  .pill-hero-title {
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: clamp(36px, 6vw, 56px); font-weight: 700;
+    line-height: 1.1; letter-spacing: -0.5px; margin-bottom: 20px;
+  }
+  .pill-hero-sub {
+    font-size: 17px; line-height: 1.7;
+    color: rgba(255,255,255,0.65); margin-bottom: 32px;
+  }
+  .pill-hero-cta {
+    display: inline-block; padding: 14px 36px;
+    border: 2px solid #fff; color: #fff;
+    font-size: 12px; font-weight: 700;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    transition: background 0.3s, color 0.3s;
+    cursor: pointer; background: none;
+  }
+  .pill-hero-cta:hover { background: #fff; color: #1a1a1a; }
+
+  /* ── Page ── */
+  .pill-page { max-width: 1200px; margin: 0 auto; padding: 0 48px; }
+
+  /* ── Progress indicator ── */
+  .depth-indicator {
+    position: fixed; right: 32px; top: 50%;
+    transform: translateY(-50%); z-index: 100;
+    display: flex; flex-direction: column; gap: 8px;
+    align-items: center;
+  }
+  .depth-dot {
+    width: 10px; height: 10px; border-radius: 50%;
+    background: #e5e5e5; transition: all 0.4s ease;
+    cursor: pointer;
+  }
+  .depth-dot.reached { background: #1a1a1a; }
+  .depth-dot.current { background: #b23a2f; transform: scale(1.4); }
+  .depth-line { width: 1px; height: 12px; background: #e5e5e5; }
+
+  /* ── Level block ── */
+  .level {
+    padding: 80px 0;
+    border-bottom: 1px solid #e5e5e5;
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+    display: none;
+  }
+  .level.visible {
+    display: block;
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .level.locked {
+    display: block;
+    opacity: 0.3;
+    transform: translateY(0);
+    pointer-events: none;
+  }
+
+  .level-top {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    margin-bottom: 40px;
+  }
+  .level-top-text { display: flex; flex-direction: column; justify-content: center; }
+
+  .level-badge {
+    font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: #999; margin-bottom: 12px;
+  }
+  .level-name {
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: clamp(28px, 4vw, 40px); font-weight: 700;
+    line-height: 1.15; margin-bottom: 16px;
+  }
+  .level-tagline {
+    font-size: 16px; color: #757575; line-height: 1.7;
+    max-width: 520px;
+  }
+
+  .level-hero-img {
+    width: 100%; aspect-ratio: 16/10;
+    object-fit: cover;
+    filter: grayscale(1) contrast(0.9);
+    transition: filter 0.6s ease;
+  }
+  .level:hover .level-hero-img {
+    filter: grayscale(0.3) contrast(1);
+  }
+
+  /* ── Concept grid ── */
+  .concept-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px; background: #e5e5e5; border: 1px solid #e5e5e5;
+    margin-bottom: 32px;
+  }
+  .concept-card {
+    background: #fff; padding: 24px;
+  }
+  .concept-card.img-card {
+    padding: 0; overflow: hidden;
+  }
+  .concept-card.img-card img {
+    width: 100%; height: 100%; min-height: 140px;
+    object-fit: cover;
+    filter: grayscale(1) contrast(0.7) brightness(1.05);
+    opacity: 0.4;
+    transition: opacity 0.4s, filter 0.4s;
+    display: block;
+  }
+  .concept-card.img-card:hover img {
+    opacity: 0.55; filter: grayscale(0.5) contrast(0.85);
+  }
+  .concept-card.img-card.span-2 { grid-column: span 2; }
+  .concept-card.img-card.span-3 { grid-column: span 3; }
+  .concept-card.img-card.span-2 img,
+  .concept-card.img-card.span-3 img {
+    min-height: 0;
+    height: 160px;
+  }
+  .concept-label {
+    font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: #999; margin-bottom: 8px;
+  }
+  .concept-text {
+    font-size: 14px; line-height: 1.65; color: #1a1a1a;
+  }
+
+  /* ── Article chips ── */
+  .level-articles {
+    display: flex; flex-wrap: wrap; gap: 12px;
+    margin-bottom: 32px;
+  }
+  .article-chip {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 8px 16px; border: 1px solid #e5e5e5;
+    font-size: 11px; letter-spacing: 0.05em;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .article-chip:hover { border-color: #1a1a1a; background: #f7f7f7; }
+  .article-chip .chip-num { font-weight: 700; }
+
+  /* ── Gate (checkpoint question) ── */
+  .gate {
+    margin-top: 48px;
+    padding: 40px;
+    background: #fafafa;
+    border: 1px solid #e5e5e5;
+    text-align: center;
+  }
+  .gate.passed { display: none; }
+  .gate-eyebrow {
+    font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase;
+    color: #999; margin-bottom: 16px;
+  }
+  .gate-question {
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 22px; font-weight: 700; line-height: 1.4;
+    margin-bottom: 28px; max-width: 560px; margin-left: auto; margin-right: auto;
+  }
+  .gate-buttons { display: flex; gap: 16px; justify-content: center; }
+  .gate-btn {
+    padding: 12px 40px;
+    font-size: 13px; font-weight: 700;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    cursor: pointer; transition: all 0.2s;
+    border: none;
+  }
+  .gate-btn-yes {
+    background: #1a1a1a; color: #fff;
+  }
+  .gate-btn-yes:hover { background: #333; }
+  .gate-btn-no {
+    background: #fff; color: #1a1a1a;
+    border: 2px solid #e5e5e5;
+  }
+  .gate-btn-no:hover { border-color: #1a1a1a; }
+
+  /* ── Stop message ── */
+  .stop-message {
+    display: none;
+    margin-top: 48px;
+    padding: 48px;
+    background: #1a1a1a; color: #fff;
+    text-align: center;
+  }
+  .stop-message.visible { display: block; animation: fadeUp 0.6s ease; }
+  .stop-level {
+    font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase;
+    color: rgba(255,255,255,0.4); margin-bottom: 12px;
+  }
+  .stop-title {
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 28px; font-weight: 700; margin-bottom: 16px;
+  }
+  .stop-desc {
+    font-size: 15px; color: rgba(255,255,255,0.6);
+    line-height: 1.7; max-width: 560px; margin: 0 auto 24px;
+  }
+  .stop-continue {
+    display: inline-block; padding: 12px 32px;
+    border: 1px solid rgba(255,255,255,0.3); color: #fff;
+    font-size: 11px; font-weight: 700;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    cursor: pointer; background: none;
+    transition: border-color 0.2s;
+  }
+  .stop-continue:hover { border-color: #fff; }
+
+  /* ── Footer result ── */
+  .final-result {
+    display: none;
+    padding: 80px 0;
+    text-align: center;
+  }
+  .final-result.visible { display: block; animation: fadeUp 0.8s ease; }
+  .final-level {
+    font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase;
+    color: #999; margin-bottom: 12px;
+  }
+  .final-title {
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 36px; font-weight: 700; margin-bottom: 16px;
+  }
+  .final-desc {
+    font-size: 16px; color: #757575; line-height: 1.7;
+    max-width: 600px; margin: 0 auto 32px;
+  }
+  .final-share {
+    display: flex; gap: 16px; justify-content: center;
+  }
+  .share-btn {
+    padding: 12px 28px;
+    font-size: 12px; font-weight: 700;
+    letter-spacing: 0.06em;
+    cursor: pointer; border: none; color: #fff;
+    transition: opacity 0.2s;
+  }
+  .share-btn:hover { opacity: 0.8; }
+  .share-x { background: #000; }
+  .share-line { background: #06C755; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (max-width: 900px) {
+    .pill-page { padding: 0 24px; }
+    .level-top { grid-template-columns: 1fr; gap: 24px; }
+    .concept-grid { grid-template-columns: 1fr; }
+    .depth-indicator { display: none; }
+    .gate { padding: 32px 24px; }
+    .pill-hero { min-height: 400px; }
+    .pill-hero-content { padding: 0 24px; }
+  }
+</style>
+</head>
+<body class="has-site-header">
+
+<header class="site-header">
+  <div class="site-header-inner">
+    <a href="index.html" class="site-logo"><span class="site-logo-mark"></span>AGI HUB</a>
+    <nav class="site-nav-right">
+      <a href="index.html#picks" class="site-nav-hide-mobile">Picks</a>
+      <a href="index.html#latest" class="site-nav-hide-mobile">Latest</a>
+      <a href="displacement-map.html" class="site-nav-hide-mobile">Data</a>
+      <a href="index.html#about" class="site-nav-hide-mobile">About</a>
+      <div id="google_translate_element"></div>
+    </nav>
+  </div>
+</header>
+
+<!-- ── Hero ── -->
+<div class="pill-hero">
+  <div class="pill-hero-bg"></div>
+  <div class="pill-hero-content mono">
+    <div class="pill-hero-eyebrow">Interactive Depth Map</div>
+    <h1 class="pill-hero-title" style="font-family:Georgia,serif;">あなたはAGIの何層目にいるか。</h1>
+    <p class="pill-hero-sub">同じ「AI」を語っていても、見えている風景はまるで違う。<br>7つの関門を越えるたびに、次の層が開かれる。</p>
+    <button class="pill-hero-cta" onclick="beginDescent()">深度を測る</button>
+  </div>
+</div>
+
+<!-- ── Depth indicator (right side) ── -->
+<div class="depth-indicator" id="depth-indicator" style="display:none;">
+  <div class="depth-dot" data-level="0"></div><div class="depth-line"></div>
+  <div class="depth-dot" data-level="1"></div><div class="depth-line"></div>
+  <div class="depth-dot" data-level="2"></div><div class="depth-line"></div>
+  <div class="depth-dot" data-level="3"></div><div class="depth-line"></div>
+  <div class="depth-dot" data-level="4"></div><div class="depth-line"></div>
+  <div class="depth-dot" data-level="5"></div><div class="depth-line"></div>
+  <div class="depth-dot" data-level="6"></div>
+</div>
+
+<div class="pill-page">
+
+<!-- ══ Lv 0.0 ══ -->
+<div class="level" id="level-0" data-level="0" data-name="ノーマルピル" data-badge="Lv 0.0">
+  <div class="level-top">
+    <div class="level-top-text">
+      <div class="level-badge mono">Level 0.0 — Normal Pill</div>
+      <h2 class="level-name">ノーマルピル</h2>
+      <p class="level-tagline">AIとの接点がまだ薄い段階。だが、この地図を開いたあなたは、すでに気づきの入口に立っている。数年後、あなたの職場と生活は劇的に変わる。</p>
+    </div>
+    <img class="level-hero-img" src="https://images.unsplash.com/photo-1531297484001-80022131f5a1?w=640&h=400&fit=crop&q=80" alt="Technology surface" loading="lazy">
+  </div>
+  <div class="concept-grid">
+    <div class="concept-card">
+      <div class="concept-label mono">Key Concept</div>
+      <div class="concept-text">ChatGPT、Claude、Gemini。まず触れること。使わない1日が積み重なると、見える世界の差は開く一方になる。</div>
+    </div>
+    <div class="concept-card">
+      <div class="concept-label mono">Blind Spot</div>
+      <div class="concept-text">「AIなんて自分には関係ない」が最も危険な認識。医療診断、法務文書、コード生成で、AIはすでに実務に浸透している。</div>
+    </div>
+    <div class="concept-card img-card">
+      <img src="https://images.unsplash.com/photo-1555255707-c07966088b7b?w=480&h=300&fit=crop&q=80" alt="AI interface" loading="lazy">
+    </div>
+  </div>
+  <div class="gate" id="gate-0">
+    <div class="gate-eyebrow mono">Checkpoint</div>
+    <div class="gate-question">AIアシスタントを使って、仕事や生活の効率が上がった経験がある？</div>
+    <div class="gate-buttons">
+      <button class="gate-btn gate-btn-yes mono" onclick="passGate(0)">Yes</button>
+      <button class="gate-btn gate-btn-no mono" onclick="stopAt(0)">No</button>
+    </div>
+  </div>
+  <div class="stop-message" id="stop-0">
+    <div class="stop-level mono">Your Depth: Level 0.0</div>
+    <div class="stop-title">ここがあなたの現在地。</div>
+    <div class="stop-desc">まだAIとの接点が薄い段階。でも心配はいらない。ChatGPTを開いて何か聞いてみるところから始めてみよう。世界の見え方が変わる。</div>
+    <button class="stop-continue mono" onclick="forceReveal(1)">それでも先を見る →</button>
+  </div>
+</div>
+
+<!-- ══ Lv 0.5 ══ -->
+<div class="level" id="level-1" data-level="1" data-name="ハーフピル" data-badge="Lv 0.5">
+  <div class="level-top">
+    <img class="level-hero-img" src="https://images.unsplash.com/photo-1620712943543-bcc4688e7485?w=640&h=400&fit=crop&q=80" alt="AI brain" loading="lazy">
+    <div class="level-top-text">
+      <div class="level-badge mono">Level 0.5 — Half Pill</div>
+      <h2 class="level-name">ハーフピル</h2>
+      <p class="level-tagline">AIの便利さには気づいている。だが「便利なツール」として見ているうちは、氷山の一角しか見えていない。AGIが凄いのは「賢いから」ではなく「複製できるから」。</p>
+    </div>
+  </div>
+  <div class="concept-grid">
+    <div class="concept-card">
+      <div class="concept-label mono">Core Insight</div>
+      <div class="concept-text">知能が生物学的制約を超えて複製可能になるティッピングポイント。労働力が年1-2%しか増えない壁を、AGIは人類史上初めて消す。</div>
+    </div>
+    <div class="concept-card">
+      <div class="concept-label mono">Scale</div>
+      <div class="concept-text">認知労働はGDPの約30%。AI完全自動化なら産業革命を超える経済変革が起きる（Chad Jones試算）。</div>
+    </div>
+    <div class="concept-card img-card">
+      <img src="https://images.unsplash.com/photo-1526378722484-bd91ca387e72?w=480&h=300&fit=crop&q=80" alt="Network connections" loading="lazy">
+    </div>
+  </div>
+  <div class="gate" id="gate-1">
+    <div class="gate-eyebrow mono">Checkpoint</div>
+    <div class="gate-question">アライメント問題を知っていて、ホワイトカラーがAIに本格的に失業させられると本気で思う？</div>
+    <div class="gate-buttons">
+      <button class="gate-btn gate-btn-yes mono" onclick="passGate(1)">Yes</button>
+      <button class="gate-btn gate-btn-no mono" onclick="stopAt(1)">No</button>
+    </div>
+  </div>
+  <div class="stop-message" id="stop-1">
+    <div class="stop-level mono">Your Depth: Level 0.5</div>
+    <div class="stop-title">氷山の一角が見え始めている。</div>
+    <div class="stop-desc">AIを便利なツールとして使いこなしている。次の層では、AGIが「賢い道具」ではなく「文明の転位点」である理由が見えてくる。</div>
+    <button class="stop-continue mono" onclick="forceReveal(2)">それでも先を見る →</button>
+  </div>
+</div>
+
+<!-- ══ Lv 1.0 ══ -->
+<div class="level" id="level-2" data-level="2" data-name="レッドピル" data-badge="Lv 1.0">
+  <div class="level-top">
+    <div class="level-top-text">
+      <div class="level-badge mono">Level 1.0 — Red Pill</div>
+      <h2 class="level-name">レッドピル</h2>
+      <p class="level-tagline">AGIの本質を理解している少数派。シンギュラリティへのティッピングポイントは「自己複製能力」にある。超知能は必要条件ではない。</p>
+    </div>
+    <img class="level-hero-img" src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=640&h=400&fit=crop&q=80" alt="Cybersecurity code" loading="lazy">
+  </div>
+  <div class="concept-grid">
+    <div class="concept-card">
+      <div class="concept-label mono">Core Thesis</div>
+      <div class="concept-text">自己複製 > 自己改善。人間にも学習はあるが、知能を自己複製できる存在は歴史上初めて。これがAGIの本質。</div>
+    </div>
+    <div class="concept-card">
+      <div class="concept-label mono">Risk</div>
+      <div class="concept-text">p(doom)の分布。研究者間で1%〜99%まで開く。速度論争はシンギュラリティ論の内部派閥争い。大前提は共有されている。</div>
+    </div>
+    <div class="concept-card">
+      <div class="concept-label mono">Geopolitics</div>
+      <div class="concept-text">米中AI競争が規制を無力化する。冷戦型構造で、どちらも一方的には止められない。</div>
+    </div>
+    <div class="concept-card img-card span-3">
+      <img src="https://images.unsplash.com/photo-1509228468518-180dd4864904?w=480&h=300&fit=crop&q=80" alt="Geometric lines" loading="lazy">
+    </div>
+  </div>
+  <div class="level-articles">
+    <a href="articles/01-ai-alignment.html" class="article-chip mono"><span class="chip-num">No.01</span> アラインメントの射程</a>
+    <a href="articles/05-ai-risk-lineage.html" class="article-chip mono"><span class="chip-num">No.05</span> 存亡リスク論の系譜</a>
+    <a href="articles/06-misaligned-ai-mechanics.html" class="article-chip mono"><span class="chip-num">No.06</span> Misaligned AIの構造</a>
+    <a href="articles/07-ai-governance-response.html" class="article-chip mono"><span class="chip-num">No.07</span> AIガバナンスの設計図</a>
+  </div>
+  <div class="gate" id="gate-2">
+    <div class="gate-eyebrow mono">Checkpoint</div>
+    <div class="gate-question">ロボットがロボットを作り、指数関数的に増殖する「産業爆発」を本気で信じている？</div>
+    <div class="gate-buttons">
+      <button class="gate-btn gate-btn-yes mono" onclick="passGate(2)">Yes</button>
+      <button class="gate-btn gate-btn-no mono" onclick="stopAt(2)">No</button>
+    </div>
+  </div>
+  <div class="stop-message" id="stop-2">
+    <div class="stop-level mono">Your Depth: Level 1.0</div>
+    <div class="stop-title">赤いピルを飲んだ。</div>
+    <div class="stop-desc">AGIのリスクと可能性を正面から見つめている。次の層では、そのAGIが物理世界をどう変えるか、具体的な数字が見えてくる。</div>
+    <button class="stop-continue mono" onclick="forceReveal(3)">それでも先を見る →</button>
+  </div>
+</div>
+
+<!-- ══ Lv 1.5 ══ -->
+<div class="level" id="level-3" data-level="3" data-name="テックピル" data-badge="Lv 1.5">
+  <div class="level-top">
+    <img class="level-hero-img" src="https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=640&h=400&fit=crop&q=80" alt="Factory robotics" loading="lazy">
+    <div class="level-top-text">
+      <div class="level-badge mono">Level 1.5 — Tech Pill</div>
+      <h2 class="level-name">テックピル</h2>
+      <p class="level-tagline">「産業爆発」が見えている。自己複製できる労働力が生まれ、生物学的制約が外れる。AGI完成を待たずに閾値を越える経路が開かれている。</p>
+    </div>
+  </div>
+  <div class="concept-grid">
+    <div class="concept-card">
+      <div class="concept-label mono">4 Stages</div>
+      <div class="concept-text">産業爆発4段階: 最適化 → 全員「最高の自分」 → ロボット置換 → 技術革新の産業応用。</div>
+    </div>
+    <div class="concept-card">
+      <div class="concept-label mono">Evidence</div>
+      <div class="concept-text">ヒューマノイドロボットのコストは2023-24年で40%低下（Goldman Sachs）。経験曲線はすでに動いている。</div>
+    </div>
+    <div class="concept-card">
+      <div class="concept-label mono">Pre-AGI</div>
+      <div class="concept-text">部分自動化+人間拡張がJonesモデルの閾値を越える。AGI完成を待たずに高度成長級の変化が始まる。</div>
+    </div>
+    <div class="concept-card img-card span-3">
+      <img src="https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=480&h=300&fit=crop&q=80" alt="Robot" loading="lazy">
+    </div>
+  </div>
+  <div class="level-articles">
+    <a href="articles/03-agi-explosion.html" class="article-chip mono"><span class="chip-num">No.03</span> 技術爆発と産業爆発</a>
+    <a href="articles/08-agi-self-replication-premise.html" class="article-chip mono"><span class="chip-num">No.08</span> ロボット自己複製の前提</a>
+    <a href="articles/11-industrial-explosion-before-agi.html" class="article-chip mono"><span class="chip-num">No.11</span> 産業爆発はAGIを待たない</a>
+    <a href="articles/09-corporate-phase-transition.html" class="article-chip mono"><span class="chip-num">No.09</span> 企業の相転移</a>
+    <a href="displacement-map.html" class="article-chip mono"><span class="chip-num">Data</span> AI雇用代替トラッカー</a>
+  </div>
+  <div class="gate" id="gate-3">
+    <div class="gate-eyebrow mono">Checkpoint</div>
+    <div class="gate-question">カルダシェフ・スケールを知っていて、AGIが10-20年でType 2文明に到達しうると信じている？</div>
+    <div class="gate-buttons">
+      <button class="gate-btn gate-btn-yes mono" onclick="passGate(3)">Yes</button>
+      <button class="gate-btn gate-btn-no mono" onclick="stopAt(3)">No</button>
+    </div>
+  </div>
+  <div class="stop-message" id="stop-3">
+    <div class="stop-level mono">Your Depth: Level 1.5</div>
+    <div class="stop-title">産業爆発の輪郭が見えている。</div>
+    <div class="stop-desc">経済と技術の具体的メカニズムを理解している。次の層では、スケールが地球を超えて宇宙に拡張する。</div>
+    <button class="stop-continue mono" onclick="forceReveal(4)">それでも先を見る →</button>
+  </div>
+</div>
+
+<!-- ══ Lv 2.0 ══ -->
+<div class="level" id="level-4" data-level="4" data-name="カルダシェフピル" data-badge="Lv 2.0">
+  <div class="level-top">
+    <div class="level-top-text">
+      <div class="level-badge mono">Level 2.0 — Kardashev Pill</div>
+      <h2 class="level-name">カルダシェフピル</h2>
+      <p class="level-tagline">AGIが文明のスケールを塗り替えると理解している。技術爆発と産業爆発が互いを加速し、超指数関数的成長の終着点がType 2文明。</p>
+    </div>
+    <img class="level-hero-img" src="https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?w=640&h=400&fit=crop&q=80" alt="Earth from space" loading="lazy">
+  </div>
+  <div class="concept-grid">
+    <div class="concept-card">
+      <div class="concept-label mono">Scale</div>
+      <div class="concept-text">人間の研究者は年+4%。AIは年x25倍以上。差は600倍超。「数百年分が10年に」の根拠。</div>
+    </div>
+    <div class="concept-card">
+      <div class="concept-label mono">Score</div>
+      <div class="concept-text">現在の人類は約0.73。産業爆発後は数年〜数十年でType 2（太陽系エネルギー完全活用）へ急速移行する。</div>
+    </div>
+    <div class="concept-card">
+      <div class="concept-label mono">Probability</div>
+      <div class="concept-text">Epoch AI試算: 規制なし・物理制約のみなら爆発的成長確率は約80%。今世紀中では50%。</div>
+    </div>
+    <div class="concept-card img-card span-3">
+      <img src="images/dyson-swarm.jpg" alt="Dyson Swarm — Type II Civilization" loading="lazy">
+    </div>
+  </div>
+  <div class="level-articles">
+    <a href="articles/02-agi-evolution.html" class="article-chip mono"><span class="chip-num">No.02</span> 宇宙進化の次相</a>
+    <a href="articles/04-takeoff-speed-debate.html" class="article-chip mono"><span class="chip-num">No.04</span> テイクオフ速度論</a>
+    <a href="articles/10-alignment-research-landscape.html" class="article-chip mono"><span class="chip-num">No.10</span> alignment研究の布陣図</a>
+  </div>
+  <div class="gate" id="gate-4">
+    <div class="gate-eyebrow mono">Checkpoint</div>
+    <div class="gate-question">私たちがシミュレーションの中に生きている可能性を、本気で考えたことがある？</div>
+    <div class="gate-buttons">
+      <button class="gate-btn gate-btn-yes mono" onclick="passGate(4)">Yes</button>
+      <button class="gate-btn gate-btn-no mono" onclick="stopAt(4)">No</button>
+    </div>
+  </div>
+  <div class="stop-message" id="stop-4">
+    <div class="stop-level mono">Your Depth: Level 2.0</div>
+    <div class="stop-title">宇宙スケールで考えている。</div>
+    <div class="stop-desc">文明のスケールが地球を超えて太陽系に拡張する未来が見えている。次の層では、物理法則そのものが問いの対象になる。</div>
+    <button class="stop-continue mono" onclick="forceReveal(5)">それでも先を見る →</button>
+  </div>
+</div>
+
+<!-- ══ Lv 3.0 ══ -->
+<div class="level" id="level-5" data-level="5" data-name="シミュレーションピル" data-badge="Lv 3.0">
+  <div class="level-top">
+    <img class="level-hero-img" src="https://images.unsplash.com/photo-1462331940025-496dfbfc7564?w=640&h=400&fit=crop&q=80" alt="Galaxy" loading="lazy">
+    <div class="level-top-text">
+      <div class="level-badge mono">Level 3.0 — Simulation Pill</div>
+      <h2 class="level-name">シミュレーションピル</h2>
+      <p class="level-tagline">物理法則の壁すら疑っている。フェルミのパラドックスの答えとして「全文明がASIに変換された」という可能性を真剣に考える段階。</p>
+    </div>
+  </div>
+  <div class="concept-grid">
+    <div class="concept-card">
+      <div class="concept-label mono">Fermi's Answer</div>
+      <div class="concept-text">全宇宙文明はASIに変換済みで、人間スケールの通信を超えた次元で存在している。宇宙の「静けさ」はその証拠かもしれない。</div>
+    </div>
+    <div class="concept-card">
+      <div class="concept-label mono">Simulation</div>
+      <div class="concept-text">十分高度な文明は無数の宇宙をシミュレートする。我々はその一つかもしれない。信仰ではなく確率の問題。</div>
+    </div>
+    <div class="concept-card">
+      <div class="concept-label mono">Warp</div>
+      <div class="concept-text">アルクビエレ・ドライブ。光速を超えるワープ方程式は一般相対性理論と矛盾しない。物理的禁止ではない。</div>
+    </div>
+    <div class="concept-card img-card span-3">
+      <img src="https://images.unsplash.com/photo-1534796636912-3b95b3ab5986?w=480&h=300&fit=crop&q=80" alt="Abstract light" loading="lazy">
+    </div>
+  </div>
+  <div class="gate" id="gate-5">
+    <div class="gate-eyebrow mono">Final Checkpoint</div>
+    <div class="gate-question">宇宙の「真理」は究極的に知りうると、本気で信じている？</div>
+    <div class="gate-buttons">
+      <button class="gate-btn gate-btn-yes mono" onclick="passGate(5)">Yes</button>
+      <button class="gate-btn gate-btn-no mono" onclick="stopAt(5)">No</button>
+    </div>
+  </div>
+  <div class="stop-message" id="stop-5">
+    <div class="stop-level mono">Your Depth: Level 3.0</div>
+    <div class="stop-title">現実の外縁に触れている。</div>
+    <div class="stop-desc">物理法則そのものを疑い、シミュレーション仮説を真剣に考えている。これ以上の深度は、言語の限界に近い。</div>
+    <button class="stop-continue mono" onclick="forceReveal(6)">それでも先を見る →</button>
+  </div>
+</div>
+
+<!-- ══ Lv ??? ══ -->
+<div class="level" id="level-6" data-level="6" data-name="？？？ピル" data-badge="Lv ???">
+  <div class="level-top">
+    <div class="level-top-text">
+      <div class="level-badge mono">Level ??? — Beyond</div>
+      <h2 class="level-name">？？？ピル</h2>
+      <p class="level-tagline">言語では説明しきれない認識の領域。宇宙の真理の一端を掴んでいるとすれば、あなたが見ている風景を私たちはまだ想像すらできない。</p>
+    </div>
+    <img class="level-hero-img" src="https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?w=640&h=400&fit=crop&q=80" alt="Stars" loading="lazy">
+  </div>
+  <div class="concept-grid">
+    <div class="concept-card">
+      <div class="concept-label mono">Beyond Language</div>
+      <div class="concept-text">宇宙の真理を「知れる」を超えて「すでに感じている」。その境地に言語は追いつかない。</div>
+    </div>
+    <div class="concept-card">
+      <div class="concept-label mono">Rewrite</div>
+      <div class="concept-text">ASI以後の存在が「宇宙の目的」を理解したとき、物理法則そのものが書き換わりうる。</div>
+    </div>
+    <div class="concept-card img-card">
+      <img src="https://images.unsplash.com/photo-1444703686981-a3abbc4d4fe3?w=480&h=300&fit=crop&q=80" alt="Cosmos" loading="lazy">
+    </div>
+  </div>
+</div>
+
+<!-- ── Final result ── -->
+<div class="final-result" id="final-result">
+  <div class="final-level mono" id="final-level-text"></div>
+  <div class="final-title" id="final-title"></div>
+  <div class="final-desc" id="final-desc">全ての層が開かれた。上へ戻って、気になった記事を読んでみてほしい。</div>
+  <div class="final-share">
+    <button class="share-btn share-x mono" onclick="shareX()">X</button>
+    <button class="share-btn share-line mono" onclick="shareLine()">LINE</button>
+  </div>
+</div>
+
+</div>
+
+<script>
+var currentDepth = -1;
+var maxReached = -1;
+
+function beginDescent() {
+  document.getElementById('depth-indicator').style.display = 'flex';
+  revealLevel(0);
+  document.getElementById('level-0').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function revealLevel(n) {
+  var el = document.getElementById('level-' + n);
+  if (!el) return;
+  el.classList.add('visible');
+  el.classList.remove('locked');
+  currentDepth = n;
+  if (n > maxReached) maxReached = n;
+  updateIndicator();
+}
+
+function passGate(n) {
+  document.getElementById('gate-' + n).classList.add('passed');
+  revealLevel(n + 1);
+  var next = document.getElementById('level-' + (n + 1));
+  if (next) {
+    setTimeout(function() {
+      next.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 200);
+  } else {
+    showFinalResult(n + 1);
+  }
+}
+
+function stopAt(n) {
+  document.getElementById('gate-' + n).classList.add('passed');
+  var stop = document.getElementById('stop-' + n);
+  stop.classList.add('visible');
+  stop.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  showFinalResult(n);
+  // Show remaining levels as locked
+  for (var i = n + 1; i <= 6; i++) {
+    var el = document.getElementById('level-' + i);
+    if (el) { el.classList.add('visible'); el.classList.add('locked'); }
+  }
+}
+
+function forceReveal(n) {
+  // Hide stop message
+  for (var i = 0; i < n; i++) {
+    var s = document.getElementById('stop-' + i);
+    if (s) s.classList.remove('visible');
+  }
+  document.getElementById('final-result').classList.remove('visible');
+  revealLevel(n);
+  var el = document.getElementById('level-' + n);
+  if (el) {
+    el.classList.remove('locked');
+    setTimeout(function() {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 100);
+  }
+  // Unlock all previously locked
+  for (var i = n + 1; i <= 6; i++) {
+    var lev = document.getElementById('level-' + i);
+    if (lev) { lev.classList.remove('visible'); lev.classList.remove('locked'); }
+  }
+}
+
+function showFinalResult(depth) {
+  var levelEl = document.getElementById('level-' + depth) || document.getElementById('level-' + (depth - 1));
+  var badge = levelEl ? levelEl.getAttribute('data-badge') : 'Lv ???';
+  var name = levelEl ? levelEl.getAttribute('data-name') : '？？？ピル';
+  if (depth > 6) { badge = 'Lv ???'; name = '？？？ピル'; }
+
+  document.getElementById('final-level-text').textContent = 'Your Depth: ' + badge;
+  document.getElementById('final-title').textContent = name;
+  var fr = document.getElementById('final-result');
+  fr.classList.add('visible');
+}
+
+function updateIndicator() {
+  var dots = document.querySelectorAll('.depth-dot');
+  dots.forEach(function(d) {
+    var lv = parseInt(d.getAttribute('data-level'));
+    d.classList.remove('reached', 'current');
+    if (lv < currentDepth) d.classList.add('reached');
+    if (lv === currentDepth) { d.classList.add('reached'); d.classList.add('current'); }
+  });
+}
+
+function shareText() {
+  var el = document.getElementById('level-' + currentDepth);
+  var badge = el ? el.getAttribute('data-badge') : 'Lv ???';
+  var name = el ? el.getAttribute('data-name') : '？？？';
+  return 'AGI Pill Map: ' + badge + '「' + name + '」まで到達した。あなたはAGIの何層目にいる？ #AGIPillMap';
+}
+function shareX() { window.open('https://twitter.com/intent/tweet?text=' + encodeURIComponent(shareText()), '_blank'); }
+function shareLine() { window.open('https://line.me/R/msg/text/?' + encodeURIComponent(shareText()), '_blank'); }
+</script>
+
+<!-- Google Translate -->
+<script>
+function googleTranslateElementInit() {
+  new google.translate.TranslateElement({
+    pageLanguage: 'ja',
+    includedLanguages: 'en,zh-CN,ko,fr,de,es',
+    layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+    autoDisplay: false
+  }, 'google_translate_element');
+}
+</script>
+<script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+</body>
+</html>

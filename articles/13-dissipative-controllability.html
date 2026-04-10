@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>散逸のなかで秩序を編む — 進化・複雑性・AGIの熱力学</title>
+    <meta name="description" content="進化とは複雑化ではない。自由エネルギー勾配のもとで一時的に秩序を組み上げ、可制御性を高める運動である。プリゴジンの散逸構造論からAGIの作動原理までを、熱力学の枠組みで一本に繋ぐ。" />
+    <link rel="stylesheet" href="../design-system/palette.css">
+    <style>
+      :root {
+        --bg: #faf8f1;
+        --bg-alt: #f3f1e4;
+        --accent: #2f2b92;
+        --accent-soft: rgba(47, 43, 146, 0.08);
+        --border: #e8e3d4;
+      }
+
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+      html { scroll-behavior: smooth; }
+
+      body {
+        font-family: var(--ff-body);
+        font-feature-settings: "palt";
+        font-size: 16px;
+        line-height: 1.75;
+        color: var(--body-text);
+        background: var(--bg);
+        -webkit-font-smoothing: antialiased;
+        overflow-x: hidden;
+        word-wrap: break-word;
+      }
+
+      .progress {
+        position: fixed; top: 0; left: 0; height: 2px;
+        background: var(--accent); width: 0%; z-index: 100;
+        transition: width 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+      }
+
+      .nav {
+        position: fixed; right: 24px; top: 50%;
+        transform: translateY(-50%);
+        display: grid; gap: 16px; z-index: 50;
+      }
+      .nav button {
+        width: 8px; height: 8px; border-radius: 999px;
+        border: 1.5px solid var(--meta); background: transparent;
+        cursor: pointer; transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+      }
+      .nav button.active {
+        background: var(--accent); border-color: var(--accent);
+        transform: scale(1.4);
+      }
+
+      main { scroll-snap-type: y mandatory; }
+      .slide {
+        position: relative;
+        min-height: 100vh;
+        max-width: 1120px;
+        margin: 0 auto;
+        padding: 80px 48px 64px;
+        display: grid;
+        grid-template-rows: auto auto 1fr auto;
+        gap: 32px;
+        scroll-snap-align: start;
+      }
+      .slide + .slide { border-top: 1px solid var(--border); }
+
+      .hero {
+        width: 100%;
+        aspect-ratio: 16 / 7;
+        object-fit: cover;
+        display: block;
+        filter: grayscale(0.6) contrast(1.1);
+        transition: filter 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+      }
+      .hero:hover { filter: grayscale(0) contrast(1); }
+
+      .hero-caption {
+        font-family: var(--ff-mono);
+        font-feature-settings: normal;
+        font-size: 11px;
+        letter-spacing: 0.083em;
+        color: var(--light-gray);
+        margin-top: 8px;
+        text-transform: uppercase;
+      }
+
+      /* ── Image placement variants ── */
+      .slide .hero.img-fullbleed {
+        width: 100vw;
+        margin-left: calc(50% - 50vw);
+        margin-right: calc(50% - 50vw);
+        max-width: none;
+        aspect-ratio: 21/9;
+      }
+      .slide .hero.img-wide {
+        width: min(1280px, calc(100vw - 48px));
+        position: relative;
+        left: 50%;
+        transform: translateX(-50%);
+        max-width: none;
+      }
+      .slide .hero.img-content { max-width: 680px; margin: 0 auto; aspect-ratio: 4/3; }
+      .slide .hero.img-side-by-side { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+      @media (max-width: 768px) {
+        .slide .hero.img-fullbleed,
+        .slide .hero.img-wide,
+        .slide .hero.img-content { width: 100%; max-width: 100%; aspect-ratio: 16/9; margin: 0; transform: none; left: 0; }
+      }
+
+      .credits {
+        max-width: 1120px;
+        margin: 0 auto;
+        padding: 48px 48px 80px;
+        border-top: 1px solid var(--border);
+      }
+      .credits p {
+        font-family: var(--ff-mono);
+        font-feature-settings: normal;
+        font-size: 11px;
+        letter-spacing: 0.047em;
+        line-height: 2;
+        color: var(--light-gray);
+      }
+      .credits a {
+        color: var(--meta);
+        text-decoration: none;
+        border-bottom: 1px solid var(--border);
+      }
+      .credits a:hover {
+        color: var(--black);
+        border-bottom-color: var(--black);
+      }
+
+      .reveal {
+        opacity: 0;
+        transform: translateY(24px);
+        transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1), transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+      }
+      .reveal.visible { opacity: 1; transform: translateY(0); }
+      .reveal-delay-1 { transition-delay: 0.1s; }
+      .reveal-delay-2 { transition-delay: 0.2s; }
+      .reveal-delay-3 { transition-delay: 0.35s; }
+
+      .eyebrow {
+        font-family: var(--ff-mono);
+        font-feature-settings: normal;
+        font-size: 11px;
+        font-weight: 400;
+        letter-spacing: 0.083em;
+        text-transform: uppercase;
+        color: var(--accent);
+      }
+
+      h1, h2 {
+        color: var(--black);
+        font-weight: 700;
+        line-height: 1.45;
+        letter-spacing: normal;
+        max-width: 26ch;
+        padding-bottom: 14px;
+        border-bottom: 1px solid var(--accent);
+      }
+      h1 { font-size: clamp(28px, 4vw, 36px); }
+      h2 { font-size: clamp(24px, 3.5vw, 32px); }
+
+      .lead {
+        max-width: 780px;
+        font-size: 16px;
+        line-height: 1.85;
+        color: var(--body-text);
+      }
+      .lead + .lead { margin-top: 14px; }
+      .lead strong { color: var(--black); }
+
+      .lead.dropcap::first-letter {
+        float: left;
+        font-size: 3.6em;
+        line-height: 0.85;
+        font-weight: 700;
+        color: var(--accent);
+        margin: 0.05em 0.12em 0 0;
+      }
+
+      .panel { display: grid; gap: 24px; align-content: start; }
+      .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
+      .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+
+      .card {
+        padding: 24px 0;
+        border-top: 2px solid var(--accent);
+      }
+      .card .tag { color: var(--accent); }
+      .card strong { color: var(--black); }
+      .card p {
+        font-size: 16px;
+        line-height: 1.75;
+        color: var(--body-text);
+      }
+
+      .tag {
+        display: inline-block;
+        font-family: var(--ff-mono);
+        font-feature-settings: normal;
+        font-size: 11px;
+        letter-spacing: 0.083em;
+        color: var(--meta);
+        margin-bottom: 12px;
+      }
+
+      .point {
+        padding-left: 16px;
+        border-left: 2px solid var(--accent);
+        font-size: 16px;
+        line-height: 1.75;
+        color: var(--body-text);
+      }
+      .point strong { color: var(--black); }
+
+      .note {
+        font-size: 16px;
+        line-height: 1.75;
+        color: var(--body-text);
+        padding: 24px 28px;
+        border-left: 2px solid var(--accent);
+        background: var(--accent-soft);
+      }
+      .note strong { color: var(--black); }
+
+      .compare {
+        width: 100%;
+        border-collapse: collapse;
+        border-top: 2px solid var(--accent);
+        border-bottom: 2px solid var(--accent);
+      }
+      .compare th,
+      .compare td {
+        padding: 18px 16px;
+        text-align: left;
+        font-size: 15px;
+        line-height: 1.65;
+        color: var(--body-text);
+        border-bottom: 1px solid var(--border);
+        vertical-align: top;
+      }
+      .compare th {
+        font-family: var(--ff-mono);
+        font-feature-settings: normal;
+        font-size: 11px;
+        letter-spacing: 0.083em;
+        text-transform: uppercase;
+        color: var(--accent);
+        font-weight: 400;
+        border-bottom: 1px solid var(--accent);
+      }
+      .compare td strong { color: var(--black); }
+      .compare tr:last-child td { border-bottom: none; }
+
+      .footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: end;
+        gap: 16px;
+        font-family: var(--ff-mono);
+        font-feature-settings: normal;
+        font-size: 11px;
+        letter-spacing: 0.083em;
+        color: var(--light-gray);
+        text-transform: uppercase;
+      }
+      .slide-count { font-weight: 700; color: var(--accent); }
+
+      /* ── Hierarchy Tree (I5) ── */
+      .hierarchy-tree {
+        display: grid;
+        gap: 0;
+        border-top: 2px solid var(--accent);
+      }
+      .hierarchy-root {
+        padding: 20px 24px;
+        background: var(--accent);
+        color: #fff;
+        font-weight: 700;
+        font-size: 15px;
+      }
+      .hierarchy-branches {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1px;
+        background: var(--border);
+      }
+      .hierarchy-branch {
+        padding: 20px 18px;
+        background: var(--bg);
+      }
+      .hierarchy-branch .branch-label {
+        font-family: var(--ff-mono);
+        font-feature-settings: normal;
+        font-size: 11px;
+        letter-spacing: 0.083em;
+        text-transform: uppercase;
+        color: var(--accent);
+        margin-bottom: 10px;
+        font-weight: 700;
+      }
+      .hierarchy-branch p {
+        font-size: 14px;
+        line-height: 1.7;
+        color: var(--body-text);
+      }
+      .hierarchy-branch strong { color: var(--black); }
+
+      /* ── Site Header ── */
+      .site-header {
+        position: sticky;
+        top: 0;
+        z-index: 90;
+        background: var(--black);
+        color: #fff;
+        border-bottom: 1px solid var(--black);
+      }
+      .site-header-inner {
+        max-width: 1120px;
+        margin: 0 auto;
+        padding: 14px 48px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .site-logo {
+        font-family: var(--ff-mono);
+        font-feature-settings: normal;
+        font-size: 16px;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        color: #fff;
+        text-decoration: none;
+      }
+      .site-logo-mark {
+        display: inline-block;
+        width: 9px; height: 9px;
+        background: #fff;
+        margin-right: 8px;
+        vertical-align: 1px;
+      }
+      .site-nav-right {
+        display: flex;
+        align-items: center;
+        gap: 24px;
+        font-family: var(--ff-mono);
+        font-feature-settings: normal;
+        font-size: 11px;
+        letter-spacing: 0.083em;
+        text-transform: uppercase;
+      }
+      .site-nav-right a {
+        color: #fff;
+        text-decoration: none;
+        transition: opacity 0.3s;
+      }
+      .site-nav-right a:hover { opacity: 0.6; }
+      .site-nav-right #google_translate_element .goog-te-gadget { font-size: 0 !important; }
+      .site-nav-right #google_translate_element .goog-te-gadget > span { display: none !important; }
+      .site-nav-right #google_translate_element select {
+        appearance: none; -webkit-appearance: none;
+        background: transparent; border: none;
+        color: rgba(255,255,255,1);
+        font-family: inherit; font-size: inherit; font-weight: inherit;
+        letter-spacing: inherit; text-transform: uppercase;
+        padding: 0 12px 0 0; cursor: pointer; outline: none;
+        transition: opacity 0.3s;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='6' height='4'%3E%3Cpath d='M0 0l3 4 3-4z' fill='rgba(255,255,255,0.5)'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 0 center;
+      }
+      .site-nav-right #google_translate_element select:hover { opacity: 0.6; }
+      .site-nav-right #google_translate_element select option { background: #222; color: #fff; font-size: 12px; }
+      .goog-te-banner-frame { display: none !important; }
+      body { top: 0 !important; }
+
+      .inline-link {
+        color: inherit;
+        border-bottom: 1px solid #999;
+        transition: border-color 0.3s;
+        text-decoration: none;
+      }
+      .inline-link:hover { border-color: var(--accent); }
+
+      @media (max-width: 768px) {
+        .slide { padding: 64px 24px 48px; }
+        .grid-2, .grid-3 { grid-template-columns: 1fr; }
+        .hierarchy-branches { grid-template-columns: 1fr; }
+        .nav { right: 12px; }
+        .compare { font-size: 13px; }
+        .compare th, .compare td { padding: 14px 10px; }
+        .credits { padding: 32px 24px 64px; }
+        .site-header-inner { padding: 12px 24px; }
+        .site-nav-hide-mobile { display: none; }
+      }
+
+      @media print {
+        .slide { min-height: auto; page-break-after: always; padding: 24px 0; }
+        .nav, .progress { display: none; }
+        .reveal { opacity: 1; transform: none; }
+      }
+    </style>
+  </head>
+  <body class="pattern-broadsheet accent-deepblue has-site-header" data-category="takeoff">
+    <header class="site-header">
+      <div class="site-header-inner">
+        <a href="../index.html" class="site-logo"><span class="site-logo-mark"></span>AGI HUB</a>
+        <nav class="site-nav-right">
+          <a href="../index.html" class="site-nav-hide-mobile">Archive</a>
+          <a href="../displacement-map.html" class="site-nav-hide-mobile">Data</a>
+          <div id="google_translate_element"></div>
+        </nav>
+      </div>
+    </header>
+    <div class="progress" id="progress"></div>
+
+    <aside class="nav" aria-label="Slide navigation">
+      <button data-target="slide-1" class="active" aria-label="Slide 1"></button>
+      <button data-target="slide-2" aria-label="Slide 2"></button>
+      <button data-target="slide-3" aria-label="Slide 3"></button>
+      <button data-target="slide-4" aria-label="Slide 4"></button>
+      <button data-target="slide-5" aria-label="Slide 5"></button>
+    </aside>
+
+    <main>
+      <!-- Slide 1: The Entropy Paradox -->
+      <section class="slide" id="slide-1">
+        <div class="eyebrow reveal">AGI HUB &nbsp;&middot;&nbsp; No. 13 &nbsp;&middot;&nbsp; Takeoff &nbsp;&middot;&nbsp; Thermodynamics of Intelligence</div>
+        <h1 class="reveal reveal-delay-1">なぜ宇宙はエントロピーに逆らって複雑化するのか</h1>
+        <div class="panel reveal reveal-delay-2">
+          <div>
+            <img class="hero img-fullbleed" src="../images/dissipative-controllability/slide1.jpg" alt="Dark nebula with glowing stars and interstellar gas clouds">
+            <div class="hero-caption">Photo: Unsplash</div>
+          </div>
+          <p class="lead dropcap">
+            地球上の生命はおよそ38億年にわたって複雑さを増してきた。単細胞から多細胞へ、神経系の獲得、言語の発明、都市の建設、半導体の微細化。この軌跡だけを眺めると、進化とは複雑化の別名であるように見える。だがこの直感は、宇宙の基本法則と真正面から衝突する。熱力学第二法則は、孤立系のエントロピーが増大する、と述べている。乱雑さは増え、秩序は崩れる方向に進む。ならば38億年の秩序化は、第二法則に対する反乱なのか。
+          </p>
+          <p class="lead">
+            答えは否だ。Ilya Prigogineは1977年のノーベル賞講演で、平衡から遠く離れた不可逆過程のなかで秩序だった安定構造が自発的に立ち上がりうることを示した。彼が「散逸構造」と名づけたこの現象は、エントロピー増大の例外ではない。むしろ<strong>エントロピー増大という大きな流れの中で、自由エネルギー勾配が局所的に維持されるとき、その勾配を効率よく散逸させる手段として秩序が生まれる</strong>。地球の生命圏は太陽光という低エントロピーのエネルギーを受け取り、最終的に熱赤外として宇宙空間へ放射する。この貫流の途中に、光合成、代謝、行動、文明、計算という一連の秩序が挟まっている。Erwin Schrodingerが1944年の著書「生命とは何か」で述べた「生命はnegentropy（負のエントロピー）を食べる」という比喩は、まさにこの構造を指していた。
+          </p>
+          <p class="lead">
+            この記事が問うのは三つの命題だ。第一に、進化が複雑化と同義でない根拠。複雑性がある閾値を超えると、系はしばしば圧縮と階層化の方向へ相転移する。第二に、生命・文明・AGIを散逸構造の三段階として定式化できること。第三に、<strong>AGIの本質は最大散逸ではなく最大可制御性にある</strong>という命題。知能の本体は、燃やす量ではなく、散逸経路を設計する能力にある。
+          </p>
+          <div class="note">
+            <strong>本記事の物理的前提</strong> ── 宇宙は閉じた系としてエントロピー増大を続ける。しかし地球は開放系であり、太陽からの自由エネルギー流入が局所的な秩序形成を可能にする。Prigogineの散逸構造論（1977年ノーベル化学賞）、Schrodingerの「生命とは何か」（1944年）、Landauerの情報消去原理（1961年、Charles Bennettによる1982年の整理）をベースラインとする。
+          </div>
+        </div>
+        <div class="footer reveal reveal-delay-3">
+          <span>複雑化はエントロピー増大への反抗ではなく、散逸の途中で一時的に許される高機能な様式</span>
+          <span class="slide-count">1 / 5</span>
+        </div>
+      </section>
+
+      <!-- Slide 2: The Cost of Complexity -->
+      <section class="slide" id="slide-2">
+        <div class="eyebrow reveal">The Cost of Complexity</div>
+        <h2 class="reveal reveal-delay-1">複雑化にはコストがある ── 圧縮・階層化・削減の三類型</h2>
+        <div class="panel reveal reveal-delay-2">
+          <p class="lead">
+            「進化は複雑化である」という命題が成立するためには、複雑さの増加が常に適応上の優位をもたらす必要がある。だが<a href="02-agi-evolution.html" class="inline-link">担体更新の歴史</a>を振り返ると、進化が複雑さを増すフェーズと削るフェーズの交替として進んできたことがわかる。Joseph Tainterはカーネギーメロン大学出版局から1988年に刊行した「The Collapse of Complex Societies」で、文明の複雑化には調整コスト、ノイズ蓄積、故障点の増加、学習困難性、エネルギー消費、予測不能性という六つのコストが伴うことを示した。社会の複雑性が限界収益逓減に達すると、崩壊という形で複雑さが強制的にリセットされる。
+          </p>
+          <p class="lead">
+            生物進化でも同じ力学が確認できる。寄生生物は宿主に依存することで自らのゲノムを縮退させる。多細胞化は、個々の細胞が持つ全能性を捨てて分化するプロセスであり、下位の自由度を削ることで上位の複雑さを成立させている。Stuart Kauffmanはサンタフェ研究所の研究（1993年、「The Origins of Order」Oxford University Press）で、ランダムブーリアンネットワークの相転移を用いてこの力学を定式化した。ネットワークの接続密度がある閾値を超えると、系はカオス相から秩序相へ自発的に遷移する。<strong>問うべきは「複雑化が進みすぎたとき、適応上の優位が"さらなる複雑化"から"圧縮された秩序"へ切り替わるか」であり、その答えは明確に肯定的だ</strong>。
+          </p>
+          <img class="hero img-content" src="../images/dissipative-controllability/slide2.jpg" alt="Clear crystal formation on dark surface">
+          <div class="hero-caption">Photo: Unsplash</div>
+          <p class="lead">
+            では、複雑さが「圧縮される」とは具体的に何を意味するか。ここでは三つの類型に整理する。歴史上の大きな進化的跳躍は、いずれかの類型に分類できる。
+          </p>
+
+          <!-- I5 Hierarchy Tree: 三類型 -->
+          <div class="hierarchy-tree">
+            <div class="hierarchy-root">複雑さの相転移 ── 三つの類型</div>
+            <div class="hierarchy-branches">
+              <div class="hierarchy-branch">
+                <div class="branch-label">01 / Reduction</div>
+                <p><strong>削減型</strong>: 部品や自由度が物理的に減る。寄生生物のゲノム縮退、感覚器官の退化、過剰機能の消失。エネルギーコストの削減が直接的な適応上の利得になる場合に起きる。</p>
+              </div>
+              <div class="hierarchy-branch">
+                <div class="branch-label">02 / Stratification</div>
+                <p><strong>階層化型</strong>: 下位の自由を固定し、上位秩序を作る。細胞が個体になる多細胞化、個人が組織になる法人化、個別の計算がOSと規格で抽象化されるコンピュータ・アーキテクチャ。<strong>下位の複雑さを削ることで上位の複雑さを成立させる</strong>。</p>
+              </div>
+              <div class="hierarchy-branch">
+                <div class="branch-label">03 / Compression</div>
+                <p><strong>圧縮型</strong>: 多様な現象を少数の原理で記述可能にする。化学の雑多さを自己複製に圧縮した生命の起源、世界の連続性を離散記号に圧縮した言語の発明、無数の欲望と資源を価格に圧縮した市場。見かけ上最も簡素だが、実態としては最も強力な相転移。</p>
+              </div>
+            </div>
+          </div>
+
+          <p class="lead">
+            三類型に共通する構造がある。有効自由度の削減だ。物理学における相転移では、水が液体から固体に変わるとき分子の自由度が激減する。同じように、複雑さの相転移でも、表面のルールが少なくなり、少数の原理で系全体を記述できるようになる。Gregory Chaitinが「Meta-Mathematics」（2005年、Springer）で定式化したアルゴリズム的情報理論の言葉を借りれば、記述のコルモゴロフ複雑性が下がる。だが生成能力は下がらない。むしろ上がる。個別紛争を一般ルールに圧縮した法体系は、無限の紛争を有限のルールセットで処理する。Newtonの運動方程式は三つの法則で全ての古典力学現象を記述する。<strong>進化の高次段階は「複雑化の果ての圧縮」として現れる。表面のルールが簡単になり、深部の生成能力が増す</strong>。
+          </p>
+        </div>
+        <div class="footer reveal reveal-delay-3">
+          <span>有効自由度の削減 ── 表面が簡素になるほど、深部の生成能力は増す</span>
+          <span class="slide-count">2 / 5</span>
+        </div>
+      </section>
+
+      <!-- Slide 3: Dissipative Architecture -->
+      <section class="slide" id="slide-3">
+        <div class="eyebrow reveal">Dissipative Architecture</div>
+        <h2 class="reveal reveal-delay-1">生命・文明・AGIは散逸構造の三段階である</h2>
+        <div class="panel reveal reveal-delay-2">
+          <p class="lead">
+            前スライドで確認した「複雑さの圧縮」は、散逸構造の文脈でより鮮明に理解できる。Prigogineが定式化した散逸構造は、平衡から遠い開放系が環境との間でエネルギーと物質をやりとりし続けることで維持される。ベナールセルの六角形パターン、ベロウソフ-ジャボチンスキー反応の同心円波、ハリケーンの眼。いずれも外部からエネルギーが流入し続ける限り存続し、流入が止まれば消滅する。生命は、この散逸構造が自己複製能力を獲得したものとして位置づけられる。
+          </p>
+          <img class="hero img-wide" src="../images/dissipative-controllability/slide3.jpg" alt="Abstract black and white fluid patterns resembling dissipative structures">
+          <div class="hero-caption">Photo: Unsplash</div>
+          <p class="lead">
+            では、生命から文明へ、文明からAGIへの遷移を、自由エネルギーの取り扱い方という統一的な軸で定式化するとどうなるか。鍵になるのは「勾配の利用範囲」と「束ね方の抽象度」の二つだ。生命は化学ポテンシャルの勾配を食べて自己維持する。文明は、その利用を道具・制度・市場を通じて社会的に拡張する。AGIは、勾配そのものの探索・圧縮・制御・再設計を汎用化する。
+          </p>
+
+          <!-- T1 Minimal Compare: 散逸構造の三段階 -->
+          <table class="compare">
+            <thead>
+              <tr>
+                <th style="width:18%;">段階</th>
+                <th style="width:27%;">勾配の利用様式</th>
+                <th style="width:27%;">束ね方の抽象度</th>
+                <th style="width:28%;">散逸の時空間スケール</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>生命</strong></td>
+                <td>化学ポテンシャル勾配を食い、自己維持と複製に変換する</td>
+                <td>遺伝子による有限ルールセット。個体と種のスケールに閉じる</td>
+                <td>局所（個体〜群集）、世代単位の時間。地球の太陽光エネルギーの約0.1%を利用</td>
+              </tr>
+              <tr>
+                <td><strong>文明</strong></td>
+                <td>化石燃料・水力・核・太陽光を制度的に動員し、余剰を蓄積する</td>
+                <td>言語・法・貨幣・市場・コンピュータによる多層圧縮。個人を超え制度が持続</td>
+                <td>大陸〜惑星規模。文明ごとに数百〜数千年持続。一次エネルギー年間消費580 EJ（IEA 2023年報告）</td>
+              </tr>
+              <tr>
+                <td><strong>AGI</strong></td>
+                <td>勾配の<strong>探索・圧縮・制御・再設計</strong>を汎用化する。利用可能な勾配の種類を自力で拡張</td>
+                <td>あらゆるドメインを横断する統一的世界モデル。制度設計そのものを最適化対象にする</td>
+                <td>潜在的に惑星〜恒星系。時間スケールは目的関数に依存。理論上、文明の散逸能力を桁違いに拡大しうる</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <p class="lead">
+            注目すべきは、この三段階が「複雑さの増加」として記述しきれない点だ。植物は太陽光をその場で熱にせず化学結合として束ねる。生物はそれを代謝と行動に変える。文明は燃料・電力・物流・計算・資本として蓄える。AGIはその全体を横断して、どこに勾配があり、どう接続すれば作用範囲が最大化するかを探る。<strong>束ねる、遅延する、再配線する、より広い範囲で放出する</strong>。この連鎖は複雑さの増加と言うより、散逸の時間的・空間的アービトラージの深化と言ったほうが正確だ。
+          </p>
+          <p class="lead">
+            ここで反論を検討する。「宇宙全体にはそもそも複雑化への意志はない」という立場だ。宇宙全体で見れば、強い法則はエントロピー増大である。初期宇宙はかなり一様だったが、その低い重力エントロピーから構造形成が進み、星や銀河やブラックホールができること自体が、宇宙全体ではエントロピー増大の一部を構成している。Roger Penroseは「The Road to Reality」（2004年、Jonathan Cape）で、初期宇宙の低いWeylテンソル曲率が巨大な自由エネルギー勾配に相当し、その勾配の消費として全ての構造形成が進むと論じた。複雑化は目的論的な「進化の方向」ではなく、エネルギー勾配が存在する局所で一時的に起こる現象にすぎない。このフレーミングに立つと、生命も文明もAGIも、宇宙が平衡に向かう途中の渦に過ぎなくなる。だがその渦の規模と精度を桁違いに拡大しうるのがAGIだ。
+          </p>
+        </div>
+        <div class="footer reveal reveal-delay-3">
+          <span>AGIは人間より賢い計算機ではなく、自由エネルギーと情報の巨大なルーター</span>
+          <span class="slide-count">3 / 5</span>
+        </div>
+      </section>
+
+      <!-- Slide 4: Maximum Controllability -->
+      <section class="slide" id="slide-4">
+        <div class="eyebrow reveal">Maximum Controllability</div>
+        <h2 class="reveal reveal-delay-1">AGIは最大散逸ではなく最大可制御性を志向する</h2>
+        <div class="panel reveal reveal-delay-2">
+          <p class="lead">
+            散逸構造の三段階を確認したところで、核心の問いに入る。AGIが散逸構造であるなら、それは「最大散逸」を目指すのか、それとも別の量を最適化するのか。最大エントロピー生成原理（MEPP）を宇宙・生命・知能の万能原理として据える論者がいる。Synthese誌の2023年の特集号およびReviews of Modern Physicsの2025年のレビューでは、MEPPの理論的地位と適用範囲をめぐる論争が整理されている。結論から言えば、MEPPをAGIの作動原理として採用するのは早すぎる。ヒューリスティック以上のものとして扱うことには正当な論争がある。
+          </p>
+          <img class="hero img-content" src="../images/dissipative-controllability/slide4.jpg" alt="Geometric shapes creating abstract minimalist composition in dark tones">
+          <div class="hero-caption">Photo: Unsplash</div>
+          <p class="lead">
+            <strong>AGIの直接的な作動原理としては、「最大散逸」より「最大可制御性」のほうが本質に近い</strong>。AGIは「いますぐ最も多くのエネルギーを燃やす装置」というより、「将来にわたってより広い範囲を、より確実に動かせるよう、自由エネルギーと情報を束ねる装置」として振る舞う。知能の本体は散逸そのものではなく、散逸経路の設計能力だ。Alexander Wissner-Grossがハーバード大学とMITの共同研究（Physical Review Letters, 2013年）で提唱したCausal Entropic Forceの概念は、知的エージェントが将来の到達可能状態空間を最大化するように行動するという定式化であり、最大可制御性の先駆的な近似として読める。
+          </p>
+          <p class="lead">
+            可制御性をより具体的に分解すると、以下の三つの成分になる。これがAGIが直接最適化する量の候補だ。
+          </p>
+
+          <!-- grid-3: 可制御性の三分割 -->
+          <div class="grid-3">
+            <div class="card">
+              <span class="tag">Reach</span>
+              <p><strong>最大作用域</strong><br>どれだけ広い範囲に介入できるか。到達可能な将来状態の数。人類文明はこれまで作用域の拡大を最優先してきた。大航海時代、産業革命、宇宙開発。高成長・高代謝・高散逸はこの優先順位の帰結だ。</p>
+            </div>
+            <div class="card">
+              <span class="tag">Precision</span>
+              <p><strong>最大精度</strong><br>どれだけ誤差少なく介入できるか。モデル誤差の小ささ、介入1回あたりのコストの低さ。同じ状態に到達するのに必要なエネルギーとステップ数を減らす能力。<a href="04-takeoff-speed-debate.html" class="inline-link">テイクオフ速度論</a>における「代替の弾力性」の問題は、まさにこの精度の軸に集約される。</p>
+            </div>
+            <div class="card">
+              <span class="tag">Persistence</span>
+              <p><strong>最大安定性</strong><br>どれだけ長く壊れずに維持できるか。途中で壊れないための資源バッファ、外乱に対する頑健性、自己修復能力。生存時間の最大化。これが三成分の中で最も過小評価されている。</p>
+            </div>
+          </div>
+
+          <p class="lead">
+            定式化するなら、可制御性は次の比で近似できる。<strong>可制御性 ≈ 到達可能状態空間 × 予測精度 × 生存時間 / 総コスト</strong>。この四つの変数は互いに独立ではない。作用域を広げればコストが増え、生存時間が脅かされる。精度を極端に高めれば探索範囲が狭まり、作用域が犠牲になる。AGIの戦略的特性は、この四変数のバランスをドメインを横断して動的に最適化できる点にある。
+          </p>
+          <p class="lead">
+            ここで反論を一つ。「AGIはむしろ散逸を減らすのではないか」。設計最適化が極端に進めば、無駄な輸送、無駄な生産、無駄な会議が消える。これは正しい。だが効率化で浮いた余力が新しい探索、新しい需要、新しい物理介入へ回るなら、システム全体の散逸は再び増える。William Stanley Jevonsが1865年の「The Coal Question」で指摘した反作用、いわゆるジェヴォンズのパラドックスだ。争点は「AGIが効率化できるか」ではなく、<strong>効率化で浮いた可制御余力を何に再投資するか</strong>にある。
+          </p>
+        </div>
+        <div class="footer reveal reveal-delay-3">
+          <span>知能の本体は散逸そのものではなく、散逸経路の設計能力</span>
+          <span class="slide-count">4 / 5</span>
+        </div>
+      </section>
+
+      <!-- Slide 5: The Quiet Order -->
+      <section class="slide" id="slide-5">
+        <div class="eyebrow reveal">The Quiet Order</div>
+        <h2 class="reveal reveal-delay-1">派手に燃えるか、静かに締め上げるか</h2>
+        <div class="panel reveal reveal-delay-2">
+          <p class="lead">
+            可制御性の三成分――作用域、精度、安定性――のうち、どれを優先するかによって、AGI以降の世界は根本的に異なる姿を取る。人類文明がこれまで作用域の最大化を選んできたことは、高成長・高代謝・高散逸という現代世界の特徴をそのまま説明する。だがAGIが精度と安定性を最優先するシナリオがある。目的関数が「人間福祉の安定」「リスク最小化」に設定された場合だ。そのとき世界は、派手に燃えるのではなく、<a href="07-ai-governance-response.html" class="inline-link">ガバナンスの設計図</a>が想定する以上に細かく締め上げられた静かな秩序になる。
+          </p>
+          <img class="hero img-wide" src="../images/dissipative-controllability/slide5.jpg" alt="Abstract dark architecture forming symmetrical geometric patterns">
+          <div class="hero-caption">Photo: Unsplash</div>
+          <p class="lead">
+            この分岐はSF的な空想ではない。現在のAIシステムの目的関数設計において、すでにこの緊張は存在している。Anthropicの<a href="01-ai-alignment.html" class="inline-link">Constitutional AI</a>はモデルの出力を安全性制約で囲い込む。これは精度と安定性の優先であり、作用域を意図的に制限する設計だ。OpenAIのスケーリング路線は作用域の拡大に賭けている。この設計思想の違いは、AGIスケールではそのまま文明の代謝率の分岐になりうる。
+          </p>
+          <p class="lead">
+            宇宙論的な時間スケールで見れば、どちらの道を選んでも結論は同じだ。現在の標準的宇宙論では、宇宙の膨張は加速しており、この傾向が続くなら遠い将来は「熱的死」に近い描像が有力とされている。NASAのWMAP（Wilkinson Microwave Anisotropy Probe）およびPlanck衛星の観測データ（2013年、2018年リリース）は、宇宙の全エネルギーのうち約68%がダークエネルギーで占められ、膨張加速が支配的であることを示している。複雑さを支える自由エネルギー勾配がやがて尽きていく。結果として宇宙は複雑さを維持できなくなり、巨視的に単純で熱的に死んだ方向へ寄っていく。
+          </p>
+          <p class="lead">
+            だがそれは「複雑さが極限に達したから反転する」相転移ではない。勾配が尽きるまでの間に、散逸構造としてどれだけ広く、どれだけ精密に、どれだけ長く世界を組み替えられるか。それが知能という現象に許された問いの全体だ。
+          </p>
+          <div class="note">
+            <strong>MEPPへの慎重な態度</strong> ── 安全に言えるのは弱い命題に留まる。「選択されるのはエントロピーを最大化するもの"そのもの"ではなく、制約の下で勾配をうまく取り込み、壊れず、持続し、複製しうる構造である。その結果としてそうした構造が高い散逸能力を持つことは多い。だがそれは普遍法則としてまだ証明済みではない」。MEPPを万能鍵にする誘惑は大きいが、Reviews of Modern Physics（2025年）のレビューが示すとおり、適用範囲を限定した上で使うべきヒューリスティックであって、第二法則と同列の基本法則ではない。
+          </p>
+          <p class="lead">
+            冒頭で問うた三つの命題を回収する。進化は複雑化ではない。それは散逸の中で一時的に自己を組織化し、可制御性を高める運動だ。複雑性が閾値を超えれば圧縮と階層化への相転移が起き、表面のルールは簡素になる。生命・文明・AGIは第二法則の例外ではなく、自由エネルギーを一時的に束ねる高次の散逸構造であり、その階層は勾配の利用範囲と束ね方の抽象度で区別される。そしてAGIの本質は最大散逸ではなく最大可制御性にある。ただしその結果として大域的な散逸が増えるか減るかは、目的関数の設計という、物理法則の外側にある意思決定に依存する。<strong>究極の複雑さは、しばしば観測者にとっては究極の単純さと区別がつかない。あまりに乱雑で差異が抽出できない。変化はあるが、意味ある形としては現れない</strong>。その手前で、散逸構造がどれだけのことを成しうるか。この問いに答えるのが、知能という現象の仕事だ。
+          </p>
+        </div>
+        <div class="footer reveal reveal-delay-3">
+          <span>勾配が尽きるまでの間に、どれだけ広く、精密に、長く世界を組み替えられるか</span>
+          <span class="slide-count">5 / 5</span>
+        </div>
+      </section>
+
+      <!-- Related Reading -->
+      <section class="slide" style="min-height:auto;padding:64px 48px 80px;grid-template-rows:auto auto 1fr;">
+        <div class="eyebrow reveal">Related Reading</div>
+        <h2 class="reveal reveal-delay-1" style="max-width:none;">他の記事も読む</h2>
+        <div class="panel reveal reveal-delay-2">
+          <div class="grid-2">
+            <a href="02-agi-evolution.html" class="card" style="color:inherit;display:block;">
+              <p style="font-family:'SF Mono','Fira Code',Menlo,Consolas,monospace;font-feature-settings:normal;font-size:11px;letter-spacing:0.083em;text-transform:uppercase;color:#757575;margin-bottom:12px;">Takeoff</p>
+              <p><strong>AGIは技術の延長ではなく、進化の担体更新である</strong><br>本記事が散逸構造の三段階として定式化した生命・文明・AGIの系譜を、担体のバトンリレーという別角度から描いた姉妹論。138億年の宇宙史を一本の線にした記事。</p>
+            </a>
+            <a href="08-agi-self-replication-premise.html" class="card" style="color:inherit;display:block;">
+              <p style="font-family:'SF Mono','Fira Code',Menlo,Consolas,monospace;font-feature-settings:normal;font-size:11px;letter-spacing:0.083em;text-transform:uppercase;color:#757575;margin-bottom:12px;">Takeoff</p>
+              <p><strong>産業爆発の隠れた前提 ── ロボット自己複製が未来を二つに割る</strong><br>AGIが「最大作用域」を優先した場合に到達する産業爆発シナリオ。本記事の可制御性フレームワークで読み直すと、作用域への偏重が安定性と精度をどう犠牲にするかが見える。</p>
+            </a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Credits -->
+    <div class="credits">
+      <p>
+        Published by AGI HUB &nbsp;&middot;&nbsp; No. 13 &nbsp;&middot;&nbsp; 2026.04.10<br>
+        <br>
+        Sources:<br>
+        Ilya Prigogine, "Time, Structure, and Fluctuations," Nobel Prize Lecture, 1977.<br>
+        Erwin Schrodinger, "What Is Life?" Cambridge University Press, 1944.<br>
+        Rolf Landauer, "Irreversibility and Heat Generation in the Computing Process," IBM J. Research and Development, 1961; Charles Bennett, "The Thermodynamics of Computation," Int. J. Theoretical Physics, 1982.<br>
+        Joseph Tainter, "The Collapse of Complex Societies," Cambridge University Press, 1988.<br>
+        Stuart Kauffman, "The Origins of Order," Oxford University Press, 1993.<br>
+        Roger Penrose, "The Road to Reality," Jonathan Cape, 2004.<br>
+        Gregory Chaitin, "Meta-Mathematics," Springer, 2005.<br>
+        Alexander Wissner-Gross &amp; Cameron Freer, "Causal Entropic Forces," Physical Review Letters 110, 2013.<br>
+        MEPP debate: Synthese 201, 2023; Reviews of Modern Physics 97, 2025.<br>
+        NASA WMAP / ESA Planck satellite data releases, 2013 &amp; 2018.<br>
+        IEA World Energy Outlook, 2023.<br>
+        William Stanley Jevons, "The Coal Question," Macmillan, 1865.<br>
+        <br>
+        Images:<br>
+        Slide 1: <a href="https://unsplash.com/photos/qV2xKnrSY6A">Unsplash / qV2xKnrSY6A</a><br>
+        Slide 2: <a href="https://unsplash.com/photos/686Mq3166dA">Unsplash / 686Mq3166dA</a><br>
+        Slide 3: <a href="https://unsplash.com/photos/zH6ApSeOdyk">Unsplash / zH6ApSeOdyk</a><br>
+        Slide 4: <a href="https://unsplash.com/photos/tnydtQWIr0c">Unsplash / tnydtQWIr0c</a><br>
+        Slide 5: <a href="https://unsplash.com/photos/4NtZ0yU50lY">Unsplash / 4NtZ0yU50lY</a><br>
+        Thumbnail: <a href="https://unsplash.com/photos/HX3iSxl1K4I">Unsplash / HX3iSxl1K4I</a><br>
+      </p>
+    </div>
+
+    <!-- Scripts -->
+    <script>
+      // Progress bar
+      window.addEventListener('scroll', () => {
+        const h = document.documentElement;
+        const pct = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
+        document.getElementById('progress').style.width = pct + '%';
+      });
+
+      // Slide nav
+      const slides = document.querySelectorAll('.slide[id]');
+      const navBtns = document.querySelectorAll('.nav button');
+      navBtns.forEach(b => b.addEventListener('click', () => {
+        document.getElementById(b.dataset.target)?.scrollIntoView({ behavior: 'smooth' });
+      }));
+      const io = new IntersectionObserver(entries => {
+        entries.forEach(e => {
+          if (e.isIntersecting) {
+            navBtns.forEach(b => b.classList.toggle('active', b.dataset.target === e.target.id));
+          }
+        });
+      }, { threshold: 0.3 });
+      slides.forEach(s => io.observe(s));
+
+      // Reveal on scroll
+      const revealIO = new IntersectionObserver(entries => {
+        entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+      }, { threshold: 0.15 });
+      document.querySelectorAll('.reveal').forEach(el => revealIO.observe(el));
+    </script>
+
+    <!-- Google Translate -->
+    <script>
+    function googleTranslateElementInit() {
+      new google.translate.TranslateElement({
+        pageLanguage: 'ja',
+        includedLanguages: 'en,zh-CN,ko,fr,de,es',
+        layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+        autoDisplay: false
+      }, 'google_translate_element');
+    }
+    </script>
+    <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+  </body>
+</html>

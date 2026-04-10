@@ -1,0 +1,1061 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>AGI Discussion Map — AGI HUB</title>
+<link rel="stylesheet" href="design-system/palette.css">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: HelveticaNeue, "Helvetica Neue", Helvetica, Arial,
+      "Hiragino Kaku Gothic ProN", sans-serif;
+    font-feature-settings: "palt";
+    background: #fff;
+    color: #1a1a1a;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+  a { color: inherit; text-decoration: none; }
+
+  .page-header {
+    max-width: 1200px; margin: 0 auto;
+    padding: 48px 48px 0;
+  }
+  .page-title {
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 42px; font-weight: 700; line-height: 1.1;
+    letter-spacing: -0.5px; margin-bottom: 8px;
+  }
+  .page-subtitle { font-size: 16px; color: #757575; margin-bottom: 4px; }
+  .page-date {
+    font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+    font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: #999; margin-bottom: 24px;
+  }
+
+  /* ── Canvas ── */
+  #graph-container {
+    width: 100%; height: 70vh; min-height: 500px;
+    position: relative; border-top: 1px solid #e5e5e5;
+    border-bottom: 1px solid #e5e5e5;
+    cursor: grab;
+  }
+  #graph-container:active { cursor: grabbing; }
+  #graph-canvas { width: 100%; height: 100%; display: block; }
+
+  /* ── Tooltip ── */
+  .graph-tooltip {
+    position: fixed; pointer-events: none;
+    background: #1a1a1a; color: #fff;
+    padding: 12px 16px; max-width: 280px;
+    font-size: 13px; line-height: 1.5;
+    opacity: 0; transition: opacity 0.15s ease;
+    z-index: 100;
+  }
+  .graph-tooltip.visible { opacity: 1; }
+  .graph-tooltip .tt-label {
+    font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+    font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: rgba(255,255,255,0.5); margin-bottom: 4px;
+  }
+  .graph-tooltip .tt-name { font-weight: 700; margin-bottom: 4px; }
+  .graph-tooltip .tt-desc { color: rgba(255,255,255,0.7); font-size: 12px; }
+  .graph-tooltip .tt-action {
+    margin-top: 8px;
+    font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+    font-size: 9px; letter-spacing: 0.08em; text-transform: uppercase;
+    color: rgba(255,255,255,0.9);
+  }
+
+  /* ── Legend ── */
+  .legend {
+    max-width: 1200px; margin: 0 auto;
+    padding: 24px 48px;
+    display: flex; gap: 32px; flex-wrap: wrap;
+    font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+    font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase;
+    color: #999;
+  }
+  .legend-item { display: flex; align-items: center; gap: 8px; }
+  .legend-dot {
+    width: 10px; height: 10px; border-radius: 50%;
+  }
+  .legend-dot.domain { background: #1a1a1a; }
+  .legend-dot.linked { background: #1a1a1a; border: 2px solid #b23a2f; }
+  .legend-dot.upcoming { background: #d9d9d9; }
+  .legend-line { width: 20px; height: 1px; background: #c4c4c4; }
+
+  /* ── Info panel ── */
+  .info-panel {
+    max-width: 1200px; margin: 0 auto;
+    padding: 0 48px 64px;
+  }
+  .info-coverage {
+    font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+    font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: #757575; margin-bottom: 12px;
+  }
+  .info-bar { height: 4px; background: #e5e5e5; border-radius: 2px; margin-bottom: 8px; overflow: hidden; }
+  .info-fill { height: 100%; background: #1a1a1a; border-radius: 2px; }
+  .info-stat {
+    font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+    font-size: 11px; color: #999;
+  }
+
+  /* ── Grid section ── */
+  .grid-section {
+    max-width: 1200px; margin: 0 auto;
+    padding: 0 48px 80px;
+  }
+  .grid-section-title {
+    font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+    font-size: 13px; font-weight: 700; letter-spacing: 0.1em;
+    text-transform: uppercase; margin-bottom: 48px;
+    padding-bottom: 16px; border-bottom: 2px solid #1a1a1a;
+  }
+  .domain { margin-bottom: 48px; border-top: 2px solid #1a1a1a; padding-top: 20px; }
+  .domain-header { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 24px; gap: 16px; }
+  .domain-name {
+    font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+    font-size: 13px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+  }
+  .domain-count {
+    font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+    font-size: 11px; color: #999; letter-spacing: 0.08em;
+  }
+  .domain-desc { font-size: 15px; color: #757575; line-height: 1.6; max-width: 720px; margin-bottom: 24px; }
+  .topic-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 1px; background: #e5e5e5; border: 1px solid #e5e5e5;
+  }
+  .topic {
+    background: #fff; padding: 20px 24px; display: flex;
+    flex-direction: column; min-height: 120px;
+    transition: background 0.2s ease; cursor: default;
+    position: relative; overflow: hidden;
+  }
+  .topic.has-link { cursor: pointer; }
+  .topic.has-link:hover { background: #f7f7f7; }
+  .topic.has-img { padding-top: 0; }
+  .topic-img {
+    width: calc(100% + 48px); margin: 0 -24px 16px;
+    height: 120px; object-fit: cover; display: block;
+    filter: grayscale(1) contrast(0.8) brightness(1.1);
+    opacity: 0.4;
+    transition: opacity 0.4s ease, filter 0.4s ease;
+  }
+  .topic:hover .topic-img {
+    opacity: 0.55; filter: grayscale(0.6) contrast(0.9);
+  }
+  .topic-label {
+    font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+    font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: #999; margin-bottom: 8px;
+  }
+  .topic-label .article-num { color: #1a1a1a; font-weight: 700; }
+  .topic-name { font-size: 16px; font-weight: 700; line-height: 1.35; margin-bottom: 8px; color: #1a1a1a; }
+  .topic-desc { font-size: 13px; line-height: 1.55; color: #757575; flex: 1; }
+  .topic-status {
+    margin-top: 12px;
+    font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+    font-size: 9px; letter-spacing: 0.08em; text-transform: uppercase;
+  }
+  .topic-status.linked { color: #1a1a1a; font-weight: 700; }
+  .topic-status.coming { color: #c4c4c4; }
+
+  @media (max-width: 900px) {
+    .page-header { padding: 32px 24px 0; }
+    .legend { padding: 16px 24px; }
+    .info-panel { padding: 0 24px 48px; }
+    .grid-section { padding: 0 24px 64px; }
+    .topic-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body class="has-site-header">
+
+<header class="site-header">
+  <div class="site-header-inner">
+    <a href="index.html" class="site-logo"><span class="site-logo-mark"></span>AGI HUB</a>
+    <nav class="site-nav-right">
+      <a href="index.html" class="site-nav-hide-mobile">Archive</a>
+      <a href="displacement-map.html" class="site-nav-hide-mobile">Data</a>
+      <div id="google_translate_element"></div>
+    </nav>
+  </div>
+</header>
+
+<div class="page-header">
+  <h1 class="page-title">AGI議論の体系</h1>
+  <p class="page-subtitle">知能、アラインメント、文明の次相をめぐる論点の全体地図</p>
+  <div class="page-date">11 domains / 55 topics</div>
+</div>
+
+<div id="graph-container">
+  <canvas id="graph-canvas"></canvas>
+</div>
+<div class="graph-tooltip" id="tooltip"></div>
+
+<div class="legend">
+  <div class="legend-item"><div class="legend-dot domain"></div>ドメイン</div>
+  <div class="legend-item"><div class="legend-dot linked"></div>記事あり</div>
+  <div class="legend-item"><div class="legend-dot upcoming"></div>Coming Soon</div>
+  <div class="legend-item"><div class="legend-line"></div>関連</div>
+</div>
+
+<div class="info-panel">
+  <div class="info-coverage">Editorial Coverage</div>
+  <div class="info-bar"><div class="info-fill" style="width: 22%;"></div></div>
+  <div class="info-stat">12 / 55 topics covered (22%) — 11 articles + 1 dashboard</div>
+</div>
+
+
+<!-- ── Topic Grid (detailed) ── -->
+<div class="grid-section">
+  <div class="grid-section-title">All Topics by Domain</div>
+
+  <!-- ═══ 1. 知能の本質 ═══ -->
+  <div class="domain">
+    <div class="domain-header">
+      <h2 class="domain-name">01 — 知能の本質</h2>
+      <span class="domain-count">6 topics</span>
+    </div>
+    <p class="domain-desc">「知能」とは何か。生物学・認知科学・計算理論の交差点から、AGIの前提を問い直す。</p>
+    <div class="topic-grid">
+      <a href="articles/02-agi-evolution.html" class="topic has-link">
+        <div class="topic-label"><span class="article-num">No. 02</span></div>
+        <div class="topic-name">進化と知能 — 担体更新</div>
+        <div class="topic-desc">138億年の宇宙史における知能の位置づけ。生物学的基盤から離れる転位点としてのAGI。</div>
+        <div class="topic-status linked">Read Article →</div>
+      </a>
+      <div class="topic has-img">
+        <img class="topic-img" src="https://picsum.photos/seed/100/480/240" alt="知能の定義と測定" loading="lazy">
+        <div class="topic-label">upcoming</div>
+        <div class="topic-name">知能の定義と測定</div>
+        <div class="topic-desc">ARC-AGI、チューリングテスト、汎化能力。「知能がある」と言える条件は何か。</div>
+        <div class="topic-status coming">Coming Soon</div>
+      </div>
+      <div class="topic has-img">
+        <img class="topic-img" src="https://picsum.photos/seed/107/480/240" alt="意識と知能の関係" loading="lazy">
+        <div class="topic-label">upcoming</div>
+        <div class="topic-name">意識と知能の関係</div>
+        <div class="topic-desc">意識がなくても知能は成立するか。ハードプロブレム、統合情報理論、機能主義。</div>
+        <div class="topic-status coming">Coming Soon</div>
+      </div>
+      <div class="topic has-img">
+        <img class="topic-img" src="https://picsum.photos/seed/114/480/240" alt="具現化された認知" loading="lazy">
+        <div class="topic-label">upcoming</div>
+        <div class="topic-name">具現化された認知</div>
+        <div class="topic-desc">Embodied Cognition。身体を持たないAIに世界理解は可能か。</div>
+        <div class="topic-status coming">Coming Soon</div>
+      </div>
+      <div class="topic has-img">
+        <img class="topic-img" src="https://picsum.photos/seed/121/480/240" alt="集合知能" loading="lazy">
+        <div class="topic-label">upcoming</div>
+        <div class="topic-name">集合知能</div>
+        <div class="topic-desc">個体の限界を超える知能。群知能、市場、マルチエージェントシステム。</div>
+        <div class="topic-status coming">Coming Soon</div>
+      </div>
+      <div class="topic has-img">
+        <img class="topic-img" src="https://picsum.photos/seed/128/480/240" alt="動物の知能と機械の知能" loading="lazy">
+        <div class="topic-label">upcoming</div>
+        <div class="topic-name">動物の知能と機械の知能</div>
+        <div class="topic-desc">タコ、カラス、霊長類。生物知能の多様性が人工知能の設計に示唆すること。</div>
+        <div class="topic-status coming">Coming Soon</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ 2. AGIへの技術的経路 ═══ -->
+  <div class="domain">
+    <div class="domain-header">
+      <h2 class="domain-name">02 — AGIへの技術的経路</h2>
+      <span class="domain-count">7 topics</span>
+    </div>
+    <p class="domain-desc">現在の技術がAGIにどう到達しうるか。スケーリング則、アーキテクチャ、エージェント化の最前線。</p>
+    <div class="topic-grid">
+      <div class="topic has-img">
+        <img class="topic-img" src="https://picsum.photos/seed/135/480/240" alt="スケーリング仮説と限界" loading="lazy">
+        <div class="topic-label">upcoming</div>
+        <div class="topic-name">スケーリング仮説と限界</div>
+        <div class="topic-desc">Chinchilla則、べき乗則の外挿、データの壁。スケーリングはどこまで通用するか。</div>
+        <div class="topic-status coming">Coming Soon</div>
+      </div>
+      <div class="topic has-img">
+        <img class="topic-img" src="https://picsum.photos/seed/142/480/240" alt="アーキテクチャの進化" loading="lazy">
+        <div class="topic-label">upcoming</div>
+        <div class="topic-name">アーキテクチャの進化</div>
+        <div class="topic-desc">Transformer以降。SSM、MoE、思考連鎖、テスト時計算。次のブレイクスルーの候補群。</div>
+        <div class="topic-status coming">Coming Soon</div>
+      </div>
+      <div class="topic has-img">
+        <img class="topic-img" src="https://picsum.photos/seed/149/480/240" alt="世界モデルと因果推論" loading="lazy">
+        <div class="topic-label">upcoming</div>
+        <div class="topic-name">世界モデルと因果推論</div>
+        <div class="topic-desc">LLMは世界を「理解」しているか。Yann LeCunのJEPA、因果推論、System 2的思考。</div>
+        <div class="topic-status coming">Coming Soon</div>
+      </div>
+      <div class="topic has-img">
+        <img class="topic-img" src="https://picsum.photos/seed/156/480/240" alt="エージェントAI" loading="lazy">
+        <div class="topic-label">upcoming</div>
+        <div class="topic-name">エージェントAI</div>
+        <div class="topic-desc">ツール使用、自律行動、マルチステップ推論。LLMが「考える」から「動く」へ。</div>
+        <div class="topic-status coming">Coming Soon</div>
+      </div>
+      <div class="topic has-img">
+        <img class="topic-img" src="https://picsum.photos/seed/163/480/240" alt="AGIの定義とベンチマーク" loading="lazy">
+        <div class="topic-label">upcoming</div>
+        <div class="topic-name">AGIの定義とベンチマーク</div>
+        <div class="topic-desc">Levels of AGI（DeepMind）、経済的チューリングテスト。いつ「達成」と言えるか。</div>
+        <div class="topic-status coming">Coming Soon</div>
+      </div>
+      <div class="topic has-img">
+        <img class="topic-img" src="https://picsum.photos/seed/170/480/240" alt="マルチモーダル統合" loading="lazy">
+        <div class="topic-label">upcoming</div>
+        <div class="topic-name">マルチモーダル統合</div>
+        <div class="topic-desc">視覚、言語、音声、触覚。モダリティの統合は知能の統合か。</div>
+        <div class="topic-status coming">Coming Soon</div>
+      </div>
+      <div class="topic has-img">
+        <img class="topic-img" src="https://picsum.photos/seed/177/480/240" alt="ニューロシンボリック統合" loading="lazy">
+        <div class="topic-label">upcoming</div>
+        <div class="topic-name">ニューロシンボリック統合</div>
+        <div class="topic-desc">記号的推論とニューラルネットの融合。GARYの再評価とハイブリッドアプローチ。</div>
+        <div class="topic-status coming">Coming Soon</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ 3. テイクオフと爆発 ═══ -->
+  <div class="domain">
+    <div class="domain-header">
+      <h2 class="domain-name">03 — テイクオフと爆発</h2>
+      <span class="domain-count">6 topics</span>
+    </div>
+    <p class="domain-desc">AGI到達後に何が起きるか。フィードバックループの加速と、その速度を決める変数群。</p>
+    <div class="topic-grid">
+      <a href="articles/03-agi-explosion.html" class="topic has-link">
+        <div class="topic-label"><span class="article-num">No. 03</span></div>
+        <div class="topic-name">技術爆発と産業爆発</div>
+        <div class="topic-desc">AIがAIを改良するループと、ロボットがロボットを作る自己複製ループの定量分析。</div>
+        <div class="topic-status linked">Read Article →</div>
+      </a>
+      <a href="articles/04-takeoff-speed-debate.html" class="topic has-link">
+        <div class="topic-label"><span class="article-num">No. 04</span></div>
+        <div class="topic-name">テイクオフ速度論争</div>
+        <div class="topic-desc">数日か10年か。同じ事実から3桁ズレる理由を代替の弾力性で解剖する。</div>
+        <div class="topic-status linked">Read Article →</div>
+      </a>
+      <a href="articles/08-agi-self-replication-premise.html" class="topic has-link">
+        <div class="topic-label"><span class="article-num">No. 08</span></div>
+        <div class="topic-name">ロボット自己複製の前提</div>
+        <div class="topic-desc">産業爆発が賭けている隠れた前提。倍増時間、物理ボトルネック、カルダシェフ・スケール。</div>
+        <div class="topic-status linked">Read Article →</div>
+      </a>
+      <a href="articles/11-industrial-explosion-before-agi.html" class="topic has-link">
+        <div class="topic-label"><span class="article-num">No. 11</span></div>
+        <div class="topic-name">部分自動化による産業爆発</div>
+        <div class="topic-desc">AGIを待たずに閾値を越える経路。Jonesモデル、AR/AI支援、Human as a Service。</div>
+        <div class="topic-status linked">Read Article →</div>
+      </a>
+      <div class="topic has-img">
+        <img class="topic-img" src="https://picsum.photos/seed/184/480/240" alt="再帰的自己改善" loading="lazy">
+        <div class="topic-label">upcoming</div>
+        <div class="topic-name">再帰的自己改善</div>
+        <div class="topic-desc">AIが自身のコードを書き換えるシナリオ。I.J. Goodの知能爆発仮説の現代的検証。</div>
+        <div class="topic-status coming">Coming Soon</div>
+      </div>
+      <div class="topic has-img">
+        <img class="topic-img" src="https://picsum.photos/seed/191/480/240" alt="収穫逓減 vs 収穫逓増" loading="lazy">
+        <div class="topic-label">upcoming</div>
+        <div class="topic-name">収穫逓減 vs 収穫逓増</div>
+        <div class="topic-desc">知能の改善にかかるコストは増えるか減るか。指数関数を止める物理的制約。</div>
+        <div class="topic-status coming">Coming Soon</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ 4. アラインメント ═══ -->
+  <div class="domain">
+    <div class="domain-header">
+      <h2 class="domain-name">04 — アラインメント</h2>
+      <span class="domain-count">7 topics</span>
+    </div>
+    <p class="domain-desc">人間の意図とAIの行動をどう一致させるか。技術的アラインメント研究の全容。</p>
+    <div class="topic-grid">
+      <a href="articles/01-ai-alignment.html" class="topic has-link">
+        <div class="topic-label"><span class="article-num">No. 01</span></div>
+        <div class="topic-name">アラインメントの射程</div>
+        <div class="topic-desc">Yudkowskyの論証を分解し、防御・整合・共創の3層で射程を再定義する。</div>
+        <div class="topic-status linked">Read Article →</div>
+      </a>
+      <a href="articles/06-misaligned-ai-mechanics.html" class="topic has-link">
+        <div class="topic-label"><span class="article-num">No. 06</span></div>
+        <div class="topic-name">Misaligned AIの構造</div>
+        <div class="topic-desc">Specification Gaming、Goal Misgeneralization、欺瞞的アライメント。誤整合の内部機序。</div>
+        <div class="topic-status linked">Read Article →</div>
+      </a>
+      <a href="articles/10-alignment-research-landscape.html" class="topic has-link">
+        <div class="topic-label"><span class="article-num">No. 10</span></div>
+        <div class="topic-name">alignment研究の布陣図</div>
+        <div class="topic-desc">Anthropic、OpenAI、DeepMind、MIRI、ARC。全員が語るalignmentの同床異夢。</div>
+        <div class="topic-status linked">Read Article →</div>
+      </a>
+      <div class="topic has-img">
+        <img class="topic-img" src="https://picsum.photos/seed/198/480/240" alt="スケーラブル・オーバーサイト" loading="lazy">
+        <div class="topic-label">upcoming</div>
+        <div class="topic-name">スケーラブル・オーバーサイト</div>
+        <div class="topic-desc">人間より賢いAIをどう監督するか。IDA、Debate、Recursive Reward Modeling。</div>
+        <div class="topic-status coming">Coming Soon</div>
+      </div>
+      <div class="topic has-img">
+        <img class="topic-img" src="https://picsum.photos/seed/205/480/240" alt="機械的解釈可能性" loading="lazy">
+        <div class="topic-label">upcoming</div>
+        <div class="topic-name">機械的解釈可能性</div>
+        <div class="topic-desc">ニューラルネットの内部を読む。Superposition、SAE、回路分析。Anthropicの最前線。</div>
+        <div class="topic-status coming">Coming Soon</div>
+      </div>
+      <div class="topic has-img">
+        <img class="topic-img" src="https://picsum.photos/seed/212/480/240" alt="RLHF / Constitutional AI / DPO" loading="lazy">
+        <div class="topic-label">upcoming</div>
+        <div class="topic-name">RLHF / Constitutional AI / DPO</div>
+        <div class="topic-desc">価値観の注入手法。人間のフィードバックから憲法的アプローチへの進化。</div>
+        <div class="topic-status coming">Coming Soon</div>
+      </div>
+      <div class="topic has-img">
+        <img class="topic-img" src="https://picsum.photos/seed/219/480/240" alt="修正可能性（Corrigibility）" loading="lazy">
+        <div class="topic-label">upcoming</div>
+        <div class="topic-name">修正可能性（Corrigibility）</div>
+        <div class="topic-desc">AIが自身の停止ボタンを押させるか。シャットダウン問題と制御の哲学的基盤。</div>
+        <div class="topic-status coming">Coming Soon</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ 5. リスクと安全性 ═══ -->
+  <div class="domain">
+    <div class="domain-header">
+      <h2 class="domain-name">05 — リスクと安全性</h2>
+      <span class="domain-count">6 topics</span>
+    </div>
+    <p class="domain-desc">AGIがもたらしうる存亡リスク、破局シナリオ、そしてリスク評価の方法論。</p>
+    <div class="topic-grid">
+      <a href="articles/05-ai-risk-lineage.html" class="topic has-link">
+        <div class="topic-label"><span class="article-num">No. 05</span></div>
+        <div class="topic-name">AI存亡リスク論の系譜</div>
+        <div class="topic-desc">1991年のExtropianから2023年の政府声明まで。30年の系譜を一本の線で辿る。</div>
+        <div class="topic-status linked">Read Article →</div>
+      </a>
+      <div class="topic has-img">
+        <img class="topic-img" src="https://picsum.photos/seed/226/480/240" alt="p(doom)の分布" loading="lazy">
+        <div class="topic-label">upcoming</div>
+        <div class="topic-name">p(doom)の分布</div>
+        <div class="topic-desc">研究者間で1%〜99%まで開く破滅確率。なぜ合意できないのか、何が分布を動かすのか。</div>
+        <div class="topic-status coming">Coming Soon</div>
+      </div>
+      <div class="topic has-img">
+        <img class="topic-img" src="https://picsum.photos/seed/233/480/240" alt="バイオリスクとサイバーリスク" loading="lazy">
+        <div class="topic-label">upcoming</div>
+        <div class="topic-name">バイオリスクとサイバーリスク</div>
+        <div class="topic-desc">AIが生物兵器設計やゼロデイ発見を加速するシナリオ。既に起きている事例と防衛策。</div>
+        <div class="topic-status coming">Coming Soon</div>
+      </div>
+      <div class="topic has-img">
+        <img class="topic-img" src="https://picsum.photos/seed/240/480/240" alt="権力集中リスク" loading="lazy">
+        <div class="topic-label">upcoming</div>
+        <div class="topic-name">権力集中リスク</div>
+        <div class="topic-desc">AGIを持つ者が持たない者を支配する構造。ロック・イン問題と不可逆性。</div>
+        <div class="topic-status coming">Coming Soon</div>
+      </div>
+      <div class="topic has-img">
+        <img class="topic-img" src="https://picsum.photos/seed/247/480/240" alt="自律型兵器" loading="lazy">
+        <div class="topic-label">upcoming</div>
+        <div class="topic-name">自律型兵器</div>
+        <div class="topic-desc">LAWS（致死性自律型兵器システム）。人間の判断をループから外すことの倫理と現実。</div>
+        <div class="topic-status coming">Coming Soon</div>
+      </div>
+      <div class="topic has-img">
+        <img class="topic-img" src="https://picsum.photos/seed/254/480/240" alt="偶発的リスク vs 構造的リスク" loading="lazy">
+        <div class="topic-label">upcoming</div>
+        <div class="topic-name">偶発的リスク vs 構造的リスク</div>
+        <div class="topic-desc">事故か設計か。AIリスクの分類学と、それぞれに必要な対策の違い。</div>
+        <div class="topic-status coming">Coming Soon</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ 6. ガバナンスと規制 ═══ -->
+  <div class="domain">
+    <div class="domain-header">
+      <h2 class="domain-name">06 — ガバナンスと規制</h2>
+      <span class="domain-count">6 topics</span>
+    </div>
+    <p class="domain-desc">止められない技術にどう向き合うか。規制、国際協力、開発者コミュニティの自律。</p>
+    <div class="topic-grid">
+      <a href="articles/07-ai-governance-response.html" class="topic has-link">
+        <div class="topic-label"><span class="article-num">No. 07</span></div>
+        <div class="topic-name">AIガバナンスの設計図</div>
+        <div class="topic-desc">Compute Governance、情報セキュリティ、国際協力、d/acc。7つのレバー。</div>
+        <div class="topic-status linked">Read Article →</div>
+      </a>
+      <div class="topic has-img">
+        <img class="topic-img" src="https://picsum.photos/seed/261/480/240" alt="Compute Governance" loading="lazy">
+        <div class="topic-label">upcoming</div>
+        <div class="topic-name">Compute Governance</div>
+        <div class="topic-desc">計算資源の追跡と制御。チップ規制、クラウド監視、KYC。最も具体的なレバー。</div>
+        <div class="topic-status coming">Coming Soon</div>
+      </div>
+      <div class="topic has-img">
+        <img class="topic-img" src="https://picsum.photos/seed/268/480/240" alt="AI安全サミットと国際条約" loading="lazy">
+        <div class="topic-label">upcoming</div>
+        <div class="topic-name">AI安全サミットと国際条約</div>
+        <div class="topic-desc">Bletchley、ソウル、パリ。核不拡散条約モデルはAIに適用できるか。</div>
+        <div class="topic-status coming">Coming Soon</div>
+      </div>
+      <div class="topic has-img">
+        <img class="topic-img" src="https://picsum.photos/seed/275/480/240" alt="オープン vs クローズド論争" loading="lazy">
+        <div class="topic-label">upcoming</div>
+        <div class="topic-name">オープン vs クローズド論争</div>
+        <div class="topic-desc">Metaのオープンウェイト戦略とAnthropicの段階的公開。安全と民主化のトレードオフ。</div>
+        <div class="topic-status coming">Coming Soon</div>
+      </div>
+      <div class="topic has-img">
+        <img class="topic-img" src="https://picsum.photos/seed/282/480/240" alt="規制キャプチャー" loading="lazy">
+        <div class="topic-label">upcoming</div>
+        <div class="topic-name">規制キャプチャー</div>
+        <div class="topic-desc">規制する側がされる側に取り込まれる構造。BigTechのロビイングと回転ドア問題。</div>
+        <div class="topic-status coming">Coming Soon</div>
+      </div>
+      <div class="topic has-img">
+        <img class="topic-img" src="https://picsum.photos/seed/289/480/240" alt="d/acc — 防衛的加速主義" loading="lazy">
+        <div class="topic-label">upcoming</div>
+        <div class="topic-name">d/acc — 防衛的加速主義</div>
+        <div class="topic-desc">Vitalik Buterinの提唱。減速でも加速でもない第三の道。防衛技術への選択的投資。</div>
+        <div class="topic-status coming">Coming Soon</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ 7. 経済と労働 ═══ -->
+  <div class="domain">
+    <div class="domain-header">
+      <h2 class="domain-name">07 — 経済と労働</h2>
+      <span class="domain-count">6 topics</span>
+    </div>
+    <p class="domain-desc">AIが経済の構造をどう変えるか。雇用、企業組織、富の分配。</p>
+    <div class="topic-grid">
+      <a href="articles/09-corporate-phase-transition.html" class="topic has-link">
+        <div class="topic-label"><span class="article-num">No. 09</span></div>
+        <div class="topic-name">企業の相転移</div>
+        <div class="topic-desc">L0からL6まで、意思決定の所在を軸に企業組織の変形を追う。水の沸点と同じ相転移。</div>
+        <div class="topic-status linked">Read Article →</div>
+      </a>
+      <a href="displacement-map.html" class="topic has-link">
+        <div class="topic-label"><span class="article-num">Data</span></div>
+        <div class="topic-name">AI雇用代替トラッカー</div>
+        <div class="topic-desc">企業が公式に発表した人員削減を追跡するダッシュボード。170件、20カ国、1.2M人。</div>
+        <div class="topic-status linked">View Dashboard →</div>
+      </a>
+      <div class="topic has-img">
+        <img class="topic-img" src="https://picsum.photos/seed/296/480/240" alt="UBIとポスト労働社会" loading="lazy">
+        <div class="topic-label">upcoming</div>
+        <div class="topic-name">UBIとポスト労働社会</div>
+        <div class="topic-desc">ユニバーサル・ベーシックインカム。労働なき所得は社会を維持できるか。</div>
+        <div class="topic-status coming">Coming Soon</div>
+      </div>
+      <div class="topic has-img">
+        <img class="topic-img" src="https://picsum.photos/seed/303/480/240" alt="資本と労働の分配" loading="lazy">
+        <div class="topic-label">upcoming</div>
+        <div class="topic-name">資本と労働の分配</div>
+        <div class="topic-desc">AIが資本の取り分を増やし、労働の取り分を減らすメカニズム。Pikettyの r > g の加速版。</div>
+        <div class="topic-status coming">Coming Soon</div>
+      </div>
+      <div class="topic has-img">
+        <img class="topic-img" src="https://picsum.photos/seed/310/480/240" alt="スキル変化と再教育" loading="lazy">
+        <div class="topic-label">upcoming</div>
+        <div class="topic-name">スキル変化と再教育</div>
+        <div class="topic-desc">消える仕事と生まれる仕事。リスキリングの現実と限界。</div>
+        <div class="topic-status coming">Coming Soon</div>
+      </div>
+      <div class="topic has-img">
+        <img class="topic-img" src="https://picsum.photos/seed/317/480/240" alt="AIネイティブ企業" loading="lazy">
+        <div class="topic-label">upcoming</div>
+        <div class="topic-name">AIネイティブ企業</div>
+        <div class="topic-desc">創業時からAIを前提とした組織設計。人間10人+AI1000体の企業は何ができるか。</div>
+        <div class="topic-status coming">Coming Soon</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ 8. 倫理と哲学 ═══ -->
+  <div class="domain">
+    <div class="domain-header">
+      <h2 class="domain-name">08 — 倫理と哲学</h2>
+      <span class="domain-count">5 topics</span>
+    </div>
+    <p class="domain-desc">AGIが提起する根本的な問い。道徳的地位、人間の尊厳、思想的系譜。</p>
+    <div class="topic-grid">
+      <div class="topic has-img">
+        <img class="topic-img" src="https://picsum.photos/seed/324/480/240" alt="AIの道徳的地位" loading="lazy">
+        <div class="topic-label">upcoming</div>
+        <div class="topic-name">AIの道徳的地位</div>
+        <div class="topic-desc">AIに権利はあるか。意識、苦痛、利害。道徳的考慮の対象を拡張する条件。</div>
+        <div class="topic-status coming">Coming Soon</div>
+      </div>
+      <div class="topic has-img">
+        <img class="topic-img" src="https://picsum.photos/seed/331/480/240" alt="人間の尊厳と自律性" loading="lazy">
+        <div class="topic-label">upcoming</div>
+        <div class="topic-name">人間の尊厳と自律性</div>
+        <div class="topic-desc">AIが人間より賢い世界で「人間であること」に固有の価値はあるか。</div>
+        <div class="topic-status coming">Coming Soon</div>
+      </div>
+      <div class="topic has-img">
+        <img class="topic-img" src="https://picsum.photos/seed/338/480/240" alt="長期主義と効果的利他主義" loading="lazy">
+        <div class="topic-label">upcoming</div>
+        <div class="topic-name">長期主義と効果的利他主義</div>
+        <div class="topic-desc">未来世代の利益を現在の意思決定に反映する思想。AI安全研究への資金フローの背景。</div>
+        <div class="topic-status coming">Coming Soon</div>
+      </div>
+      <div class="topic has-img">
+        <img class="topic-img" src="https://picsum.photos/seed/345/480/240" alt="デジタル意識" loading="lazy">
+        <div class="topic-label">upcoming</div>
+        <div class="topic-name">デジタル意識</div>
+        <div class="topic-desc">シリコン上に意識は宿るか。中国語の部屋、哲学的ゾンビ、機能主義の限界。</div>
+        <div class="topic-status coming">Coming Soon</div>
+      </div>
+      <div class="topic has-img">
+        <img class="topic-img" src="https://picsum.photos/seed/352/480/240" alt="ポスト・ヒューマニズム" loading="lazy">
+        <div class="topic-label">upcoming</div>
+        <div class="topic-name">ポスト・ヒューマニズム</div>
+        <div class="topic-desc">人間を超える存在との共存。トランスヒューマニズム、BMI、人間性の再定義。</div>
+        <div class="topic-status coming">Coming Soon</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ 9. 社会と文化 ═══ -->
+  <div class="domain">
+    <div class="domain-header">
+      <h2 class="domain-name">09 — 社会と文化</h2>
+      <span class="domain-count">5 topics</span>
+    </div>
+    <p class="domain-desc">AIが変える日常。情報、教育、創造性、人間関係。</p>
+    <div class="topic-grid">
+      <div class="topic has-img">
+        <img class="topic-img" src="https://picsum.photos/seed/359/480/240" alt="情報エコシステムの変容" loading="lazy">
+        <div class="topic-label">upcoming</div>
+        <div class="topic-name">情報エコシステムの変容</div>
+        <div class="topic-desc">ディープフェイク、合成メディア、信頼の崩壊。「本物」の概念が溶ける世界。</div>
+        <div class="topic-status coming">Coming Soon</div>
+      </div>
+      <div class="topic has-img">
+        <img class="topic-img" src="https://picsum.photos/seed/366/480/240" alt="教育の再設計" loading="lazy">
+        <div class="topic-label">upcoming</div>
+        <div class="topic-name">教育の再設計</div>
+        <div class="topic-desc">AIが答えを知っている世界で「学ぶ」とは何か。暗記から問いの立て方へ。</div>
+        <div class="topic-status coming">Coming Soon</div>
+      </div>
+      <div class="topic has-img">
+        <img class="topic-img" src="https://picsum.photos/seed/373/480/240" alt="創造性とAI" loading="lazy">
+        <div class="topic-label">upcoming</div>
+        <div class="topic-name">創造性とAI</div>
+        <div class="topic-desc">AIアートは芸術か。人間の創造性の再定義と、新しい共創の形。</div>
+        <div class="topic-status coming">Coming Soon</div>
+      </div>
+      <div class="topic has-img">
+        <img class="topic-img" src="https://picsum.photos/seed/380/480/240" alt="AIコンパニオンと人間関係" loading="lazy">
+        <div class="topic-label">upcoming</div>
+        <div class="topic-name">AIコンパニオンと人間関係</div>
+        <div class="topic-desc">AIとの親密な関係。孤独の解消か、人間関係の代替か。</div>
+        <div class="topic-status coming">Coming Soon</div>
+      </div>
+      <div class="topic has-img">
+        <img class="topic-img" src="https://picsum.photos/seed/387/480/240" alt="デジタルデバイド 2.0" loading="lazy">
+        <div class="topic-label">upcoming</div>
+        <div class="topic-name">デジタルデバイド 2.0</div>
+        <div class="topic-desc">AIリテラシーの格差が生む新たな不平等。グローバルサウスとの断絶。</div>
+        <div class="topic-status coming">Coming Soon</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ 10. 地政学 ═══ -->
+  <div class="domain">
+    <div class="domain-header">
+      <h2 class="domain-name">10 — 地政学</h2>
+      <span class="domain-count">4 topics</span>
+    </div>
+    <p class="domain-desc">AI覇権をめぐる国家間競争。半導体、軍事、標準化。</p>
+    <div class="topic-grid">
+      <div class="topic has-img">
+        <img class="topic-img" src="https://picsum.photos/seed/394/480/240" alt="米中AI競争" loading="lazy">
+        <div class="topic-label">upcoming</div>
+        <div class="topic-name">米中AI競争</div>
+        <div class="topic-desc">チップ輸出規制、人材争奪、論文数の逆転。二つの超大国のAI戦略を解剖する。</div>
+        <div class="topic-status coming">Coming Soon</div>
+      </div>
+      <div class="topic has-img">
+        <img class="topic-img" src="https://picsum.photos/seed/401/480/240" alt="半導体サプライチェーン" loading="lazy">
+        <div class="topic-label">upcoming</div>
+        <div class="topic-name">半導体サプライチェーン</div>
+        <div class="topic-desc">TSMC、ASML、NVIDIA。AIの心臓部を握る企業群と地政学的脆弱性。</div>
+        <div class="topic-status coming">Coming Soon</div>
+      </div>
+      <div class="topic has-img">
+        <img class="topic-img" src="https://picsum.photos/seed/408/480/240" alt="AI軍事利用" loading="lazy">
+        <div class="topic-label">upcoming</div>
+        <div class="topic-name">AI軍事利用</div>
+        <div class="topic-desc">ドローン自律化、サイバー作戦、情報戦。AIが変える戦争の形。</div>
+        <div class="topic-status coming">Coming Soon</div>
+      </div>
+      <div class="topic has-img">
+        <img class="topic-img" src="https://picsum.photos/seed/415/480/240" alt="テクノロジー・ナショナリズム" loading="lazy">
+        <div class="topic-label">upcoming</div>
+        <div class="topic-name">テクノロジー・ナショナリズム</div>
+        <div class="topic-desc">AIの国産化競争。EU AI Act、中国のAI規制、日本のAI戦略の比較。</div>
+        <div class="topic-status coming">Coming Soon</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ 11. ポストAGI ═══ -->
+  <div class="domain">
+    <div class="domain-header">
+      <h2 class="domain-name">11 — ポストAGI</h2>
+      <span class="domain-count">5 topics</span>
+    </div>
+    <p class="domain-desc">AGI到達後の世界。超知能、文明の分岐、宇宙。思弁的だが避けて通れない問い。</p>
+    <div class="topic-grid">
+      <div class="topic has-img">
+        <img class="topic-img" src="https://picsum.photos/seed/422/480/240" alt="超知能（ASI）のシナリオ" loading="lazy">
+        <div class="topic-label">upcoming</div>
+        <div class="topic-name">超知能（ASI）のシナリオ</div>
+        <div class="topic-desc">人間の知能を遥かに超える存在。ユートピアからディストピアまでのシナリオ空間。</div>
+        <div class="topic-status coming">Coming Soon</div>
+      </div>
+      <div class="topic has-img">
+        <img class="topic-img" src="https://picsum.photos/seed/429/480/240" alt="人機共創の設計" loading="lazy">
+        <div class="topic-label">upcoming</div>
+        <div class="topic-name">人機共創の設計</div>
+        <div class="topic-desc">AIと人間がどう協働するか。アラインメントの先にある共創層の具体的デザイン。</div>
+        <div class="topic-status coming">Coming Soon</div>
+      </div>
+      <div class="topic has-img">
+        <img class="topic-img" src="https://picsum.photos/seed/436/480/240" alt="ポスト稀少性経済" loading="lazy">
+        <div class="topic-label">upcoming</div>
+        <div class="topic-name">ポスト稀少性経済</div>
+        <div class="topic-desc">AIとロボットが無限に生産できる世界。稀少性に基づく経済学は終わるか。</div>
+        <div class="topic-status coming">Coming Soon</div>
+      </div>
+      <div class="topic has-img">
+        <img class="topic-img" src="https://picsum.photos/seed/443/480/240" alt="マルチエージェント社会" loading="lazy">
+        <div class="topic-label">upcoming</div>
+        <div class="topic-name">マルチエージェント社会</div>
+        <div class="topic-desc">数十億のAIエージェントが自律的に活動する世界の統治構造。</div>
+        <div class="topic-status coming">Coming Soon</div>
+      </div>
+      <div class="topic has-img">
+        <img class="topic-img" src="https://picsum.photos/seed/450/480/240" alt="文明の分岐点" loading="lazy">
+        <div class="topic-label">upcoming</div>
+        <div class="topic-name">文明の分岐点</div>
+        <div class="topic-desc">カルダシェフ・スケール、フェルミのパラドックス、大フィルター仮説。AGIは人類のグレートフィルターか。</div>
+        <div class="topic-status coming">Coming Soon</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Coverage ── -->
+  <div class="coverage" id="coverage">
+    <div class="coverage-title">Editorial Coverage</div>
+    <div class="coverage-bar"><div class="coverage-fill" style="width: 22%;"></div></div>
+    <div class="coverage-stat">12 / 55 topics covered (22%) — 11 articles + 1 dashboard</div>
+  </div>
+
+</div>
+</div>
+
+<script>
+(function() {
+  // ── Data ──
+  var domains = [
+    { id: 'd1', name: '知能の本質', x: 0.15, y: 0.25 },
+    { id: 'd2', name: '技術的経路', x: 0.35, y: 0.15 },
+    { id: 'd3', name: 'テイクオフと爆発', x: 0.55, y: 0.2 },
+    { id: 'd4', name: 'アラインメント', x: 0.75, y: 0.15 },
+    { id: 'd5', name: 'リスクと安全性', x: 0.85, y: 0.35 },
+    { id: 'd6', name: 'ガバナンスと規制', x: 0.8, y: 0.55 },
+    { id: 'd7', name: '経済と労働', x: 0.55, y: 0.7 },
+    { id: 'd8', name: '倫理と哲学', x: 0.3, y: 0.75 },
+    { id: 'd9', name: '社会と文化', x: 0.15, y: 0.6 },
+    { id: 'd10', name: '地政学', x: 0.65, y: 0.5 },
+    { id: 'd11', name: 'ポストAGI', x: 0.4, y: 0.45 },
+  ];
+
+  var topics = [
+    // d1: 知能の本質
+    { id: 't1', domain: 'd1', name: '進化と知能', desc: '138億年の宇宙史における知能の位置づけ', link: 'articles/02-agi-evolution.html', article: 'No.02' },
+    { id: 't2', domain: 'd1', name: '知能の定義と測定', desc: 'ARC-AGI、汎化能力。「知能がある」の条件' },
+    { id: 't3', domain: 'd1', name: '意識と知能', desc: 'ハードプロブレム、統合情報理論、機能主義' },
+    { id: 't4', domain: 'd1', name: '具現化された認知', desc: '身体なきAIに世界理解は可能か' },
+    { id: 't5', domain: 'd1', name: '集合知能', desc: '群知能、市場、マルチエージェント' },
+    // d2: 技術的経路
+    { id: 't6', domain: 'd2', name: 'スケーリング仮説', desc: 'べき乗則の外挿、データの壁' },
+    { id: 't7', domain: 'd2', name: 'アーキテクチャ進化', desc: 'Transformer以降。SSM、MoE、テスト時計算' },
+    { id: 't8', domain: 'd2', name: '世界モデル', desc: 'LeCunのJEPA、因果推論、System 2的思考' },
+    { id: 't9', domain: 'd2', name: 'エージェントAI', desc: 'ツール使用、自律行動、マルチステップ推論' },
+    { id: 't10', domain: 'd2', name: 'AGI定義', desc: 'Levels of AGI、経済的チューリングテスト' },
+    // d3: テイクオフ
+    { id: 't11', domain: 'd3', name: '技術爆発と産業爆発', desc: 'AIのフィードバックループの定量分析', link: 'articles/03-agi-explosion.html', article: 'No.03' },
+    { id: 't12', domain: 'd3', name: 'テイクオフ速度論争', desc: '数日か10年か。3桁ズレる理由', link: 'articles/04-takeoff-speed-debate.html', article: 'No.04' },
+    { id: 't13', domain: 'd3', name: 'ロボット自己複製', desc: '産業爆発の隠れた前提', link: 'articles/08-agi-self-replication-premise.html', article: 'No.08' },
+    { id: 't14', domain: 'd3', name: '部分自動化の産業爆発', desc: 'AGIを待たず閾値を越える経路', link: 'articles/11-industrial-explosion-before-agi.html', article: 'No.11' },
+    { id: 't15', domain: 'd3', name: '再帰的自己改善', desc: 'AIが自身のコードを書き換える' },
+    { id: 't16', domain: 'd3', name: '収穫逓減vs逓増', desc: '知能改善のコスト構造' },
+    // d4: アラインメント
+    { id: 't17', domain: 'd4', name: 'アラインメントの射程', desc: '防御・整合・共創の3層モデル', link: 'articles/01-ai-alignment.html', article: 'No.01' },
+    { id: 't18', domain: 'd4', name: 'Misaligned AIの構造', desc: '誤整合の内部機序を5つの概念で解像', link: 'articles/06-misaligned-ai-mechanics.html', article: 'No.06' },
+    { id: 't19', domain: 'd4', name: '研究の布陣図', desc: '同床異夢のalignment研究', link: 'articles/10-alignment-research-landscape.html', article: 'No.10' },
+    { id: 't20', domain: 'd4', name: 'スケーラブル・オーバーサイト', desc: '超知能の監督方法' },
+    { id: 't21', domain: 'd4', name: '機械的解釈可能性', desc: 'ニューラルネットの内部を読む' },
+    { id: 't22', domain: 'd4', name: 'RLHF / CAI / DPO', desc: '価値観の注入手法の進化' },
+    { id: 't23', domain: 'd4', name: '修正可能性', desc: 'シャットダウン問題と制御の哲学' },
+    // d5: リスク
+    { id: 't24', domain: 'd5', name: '存亡リスク論の系譜', desc: '30年の系譜を一本の線で辿る', link: 'articles/05-ai-risk-lineage.html', article: 'No.05' },
+    { id: 't25', domain: 'd5', name: 'p(doom)の分布', desc: '1%〜99%の破滅確率' },
+    { id: 't26', domain: 'd5', name: 'バイオ・サイバーリスク', desc: 'AIが攻撃能力を加速するシナリオ' },
+    { id: 't27', domain: 'd5', name: '権力集中リスク', desc: 'ロック・インと不可逆性' },
+    { id: 't28', domain: 'd5', name: '自律型兵器', desc: 'LAWS、人間のループ外し' },
+    // d6: ガバナンス
+    { id: 't29', domain: 'd6', name: 'AIガバナンスの設計図', desc: '7つのレバーで地雷原を抜ける', link: 'articles/07-ai-governance-response.html', article: 'No.07' },
+    { id: 't30', domain: 'd6', name: 'Compute Governance', desc: '計算資源の追跡と制御' },
+    { id: 't31', domain: 'd6', name: 'AI安全サミット', desc: '国際条約モデルの適用可能性' },
+    { id: 't32', domain: 'd6', name: 'オープンvsクローズド', desc: '安全と民主化のトレードオフ' },
+    { id: 't33', domain: 'd6', name: '規制キャプチャー', desc: 'BigTechのロビイングと回転ドア' },
+    { id: 't34', domain: 'd6', name: 'd/acc', desc: 'Buterin提唱の防衛的加速主義' },
+    // d7: 経済
+    { id: 't35', domain: 'd7', name: '企業の相転移', desc: '意思決定の所在で組織変形を追う', link: 'articles/09-corporate-phase-transition.html', article: 'No.09' },
+    { id: 't36', domain: 'd7', name: 'AI雇用代替トラッカー', desc: '170件、20カ国、1.2M人を追跡', link: 'displacement-map.html', article: 'Data' },
+    { id: 't37', domain: 'd7', name: 'UBIとポスト労働', desc: '労働なき所得は社会を維持できるか' },
+    { id: 't38', domain: 'd7', name: '資本と労働の分配', desc: 'r > g の加速版' },
+    { id: 't39', domain: 'd7', name: 'AIネイティブ企業', desc: '人間10人+AI1000体の企業' },
+    // d8: 倫理
+    { id: 't40', domain: 'd8', name: 'AIの道徳的地位', desc: 'AIに権利はあるか' },
+    { id: 't41', domain: 'd8', name: '人間の尊厳', desc: 'AIが賢い世界で人間の固有価値' },
+    { id: 't42', domain: 'd8', name: '長期主義とEA', desc: '未来世代の利益とAI安全研究' },
+    { id: 't43', domain: 'd8', name: 'デジタル意識', desc: 'シリコン上に意識は宿るか' },
+    { id: 't44', domain: 'd8', name: 'ポスト・ヒューマニズム', desc: 'BMI、人間性の再定義' },
+    // d9: 社会
+    { id: 't45', domain: 'd9', name: '情報エコシステム', desc: 'ディープフェイク、真実の崩壊' },
+    { id: 't46', domain: 'd9', name: '教育の再設計', desc: 'AIが答えを知る世界で学ぶとは' },
+    { id: 't47', domain: 'd9', name: '創造性とAI', desc: 'AIアートは芸術か' },
+    { id: 't48', domain: 'd9', name: 'AIコンパニオン', desc: '孤独の解消か人間関係の代替か' },
+    // d10: 地政学
+    { id: 't49', domain: 'd10', name: '米中AI競争', desc: 'チップ規制、人材争奪' },
+    { id: 't50', domain: 'd10', name: '半導体サプライチェーン', desc: 'TSMC、ASML、NVIDIA' },
+    { id: 't51', domain: 'd10', name: 'AI軍事利用', desc: 'ドローン自律化、情報戦' },
+    { id: 't52', domain: 'd10', name: 'テクノナショナリズム', desc: 'EU/中国/日本のAI規制比較' },
+    // d11: ポストAGI
+    { id: 't53', domain: 'd11', name: '超知能シナリオ', desc: 'ユートピアからディストピアまで' },
+    { id: 't54', domain: 'd11', name: '人機共創の設計', desc: 'アラインメントの先の共創層' },
+    { id: 't55', domain: 'd11', name: 'ポスト稀少性経済', desc: '稀少性に基づく経済学の終わり' },
+  ];
+
+  // Cross-domain edges
+  var crossEdges = [
+    ['d1','d2'], ['d2','d3'], ['d3','d4'], ['d4','d5'], ['d5','d6'],
+    ['d6','d7'], ['d6','d10'], ['d7','d8'], ['d7','d9'], ['d8','d11'],
+    ['d3','d11'], ['d1','d8'], ['d2','d11'], ['d4','d6'], ['d5','d10'],
+    ['d3','d7'], ['d1','d11'],
+  ];
+
+  // ── Canvas setup ──
+  var container = document.getElementById('graph-container');
+  var canvas = document.getElementById('graph-canvas');
+  var ctx = canvas.getContext('2d');
+  var tooltip = document.getElementById('tooltip');
+  var dpr = window.devicePixelRatio || 1;
+  var W, H;
+
+  function resize() {
+    W = container.clientWidth;
+    H = container.clientHeight;
+    canvas.width = W * dpr;
+    canvas.height = H * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+  resize();
+  window.addEventListener('resize', function() { resize(); draw(); });
+
+  // ── Position nodes ──
+  function positionNodes() {
+    var pad = 60;
+    domains.forEach(function(d) {
+      d.px = pad + d.x * (W - pad * 2);
+      d.py = pad + d.y * (H - pad * 2);
+    });
+
+    var domainMap = {};
+    domains.forEach(function(d) { domainMap[d.id] = d; });
+
+    topics.forEach(function(t, i) {
+      var dom = domainMap[t.domain];
+      var siblings = topics.filter(function(s) { return s.domain === t.domain; });
+      var idx = siblings.indexOf(t);
+      var count = siblings.length;
+      var angle = (Math.PI * 2 * idx / count) - Math.PI / 2;
+      var radius = 55 + count * 6;
+      t.px = dom.px + Math.cos(angle) * radius;
+      t.py = dom.py + Math.sin(angle) * radius;
+    });
+  }
+  positionNodes();
+
+  // ── Draw ──
+  function draw() {
+    positionNodes();
+    ctx.clearRect(0, 0, W, H);
+
+    var domainMap = {};
+    domains.forEach(function(d) { domainMap[d.id] = d; });
+
+    // Cross-domain edges
+    ctx.strokeStyle = '#e5e5e5';
+    ctx.lineWidth = 1;
+    crossEdges.forEach(function(e) {
+      var a = domainMap[e[0]], b = domainMap[e[1]];
+      ctx.beginPath();
+      ctx.moveTo(a.px, a.py);
+      ctx.lineTo(b.px, b.py);
+      ctx.stroke();
+    });
+
+    // Domain-topic edges
+    ctx.strokeStyle = '#d9d9d9';
+    ctx.lineWidth = 0.5;
+    topics.forEach(function(t) {
+      var dom = domainMap[t.domain];
+      ctx.beginPath();
+      ctx.moveTo(dom.px, dom.py);
+      ctx.lineTo(t.px, t.py);
+      ctx.stroke();
+    });
+
+    // Topic nodes
+    topics.forEach(function(t) {
+      var r = t.link ? 6 : 4;
+      ctx.beginPath();
+      ctx.arc(t.px, t.py, r, 0, Math.PI * 2);
+      if (t.link) {
+        ctx.fillStyle = '#1a1a1a';
+        ctx.fill();
+        ctx.strokeStyle = '#b23a2f';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+      } else {
+        ctx.fillStyle = '#d9d9d9';
+        ctx.fill();
+      }
+    });
+
+    // Domain nodes
+    domains.forEach(function(d) {
+      ctx.beginPath();
+      ctx.arc(d.px, d.py, 14, 0, Math.PI * 2);
+      ctx.fillStyle = '#1a1a1a';
+      ctx.fill();
+
+      // Label
+      ctx.font = '700 10px "SF Mono", "Fira Code", Menlo, monospace';
+      ctx.fillStyle = '#1a1a1a';
+      ctx.textAlign = 'center';
+      ctx.fillText(d.name, d.px, d.py + 28);
+    });
+
+    // Domain numbers
+    domains.forEach(function(d) {
+      var num = d.id.replace('d', '');
+      ctx.font = '700 9px "SF Mono", Menlo, monospace';
+      ctx.fillStyle = '#fff';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(num, d.px, d.py);
+    });
+  }
+  draw();
+
+  // ── Interaction ──
+  var allNodes = domains.concat(topics);
+
+  canvas.addEventListener('mousemove', function(e) {
+    var rect = canvas.getBoundingClientRect();
+    var mx = e.clientX - rect.left;
+    var my = e.clientY - rect.top;
+    var hit = null;
+    var hitDist = Infinity;
+
+    allNodes.forEach(function(n) {
+      var dx = mx - n.px, dy = my - n.py;
+      var dist = Math.sqrt(dx*dx + dy*dy);
+      var threshold = n.id.startsWith('d') ? 14 : 8;
+      if (dist < threshold && dist < hitDist) {
+        hit = n;
+        hitDist = dist;
+      }
+    });
+
+    if (hit) {
+      canvas.style.cursor = hit.link ? 'pointer' : 'default';
+      var tt = tooltip;
+      if (hit.id.startsWith('d')) {
+        var count = topics.filter(function(t) { return t.domain === hit.id; }).length;
+        var linked = topics.filter(function(t) { return t.domain === hit.id && t.link; }).length;
+        tt.innerHTML = '<div class="tt-label">Domain</div><div class="tt-name">' + hit.name + '</div><div class="tt-desc">' + count + ' topics / ' + linked + ' covered</div>';
+      } else {
+        var label = hit.article ? hit.article : 'Coming Soon';
+        var action = hit.link ? '<div class="tt-action">Click to read →</div>' : '';
+        tt.innerHTML = '<div class="tt-label">' + label + '</div><div class="tt-name">' + hit.name + '</div><div class="tt-desc">' + (hit.desc || '') + '</div>' + action;
+      }
+      tt.style.left = (e.clientX + 16) + 'px';
+      tt.style.top = (e.clientY - 10) + 'px';
+      tt.classList.add('visible');
+    } else {
+      canvas.style.cursor = 'grab';
+      tooltip.classList.remove('visible');
+    }
+  });
+
+  canvas.addEventListener('click', function(e) {
+    var rect = canvas.getBoundingClientRect();
+    var mx = e.clientX - rect.left;
+    var my = e.clientY - rect.top;
+
+    topics.forEach(function(t) {
+      if (!t.link) return;
+      var dx = mx - t.px, dy = my - t.py;
+      if (Math.sqrt(dx*dx + dy*dy) < 10) {
+        window.location.href = t.link;
+      }
+    });
+  });
+
+  canvas.addEventListener('mouseleave', function() {
+    tooltip.classList.remove('visible');
+  });
+})();
+</script>
+
+<!-- Google Translate -->
+<script>
+function googleTranslateElementInit() {
+  new google.translate.TranslateElement({
+    pageLanguage: 'ja',
+    includedLanguages: 'en,zh-CN,ko,fr,de,es',
+    layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+    autoDisplay: false
+  }, 'google_translate_element');
+}
+</script>
+<script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+</body>
+</html>

@@ -473,260 +473,208 @@
 
       <!-- ═══════════ Slide 2 ═══════════ -->
       <section class="slide" id="slide-2">
-        <div class="eyebrow reveal">Compute As A Chokepoint</div>
-        <h2 class="reveal reveal-delay-1">AIチップは物理物であり、ガバナンスの物理的な接点になる</h2>
+        <div class="eyebrow reveal">Compute As The Strongest Lever</div>
+        <h2 class="reveal reveal-delay-1">Compute Governanceはなぜ最強のガバナンス手段か — 物理層という根拠</h2>
         <div class="panel reveal reveal-delay-2">
           <div>
             <img class="hero img-content" src="../images/ai-governance-response/slide2.jpg" alt="Monochrome concrete wall texture">
             <div class="hero-caption">Photo: Unsplash</div>
           </div>
           <p class="lead">
-            AIガバナンスで最も実装可能性が高い手段がCompute Governanceである。データやアルゴリズムは容易にコピー・送信・保存できるため、規制の執行が難しい。対照的にAIチップは物理的な存在で、製造には極めて複雑なグローバル・サプライチェーンが必要になる。少数の企業と国家が主要なステップを独占しており、どの国も単独では最先端チップを量産できない。この非対称性が規制の実効性を担保する。
+            データとアルゴリズムは容易にコピーできる。重みファイルは数百GBであれ、秘密裏に持ち出せる。しかしAIチップは違う。最先端の半導体を製造するには、ASML製の極端紫外線露光装置と、台湾のTSMC、韓国のSamsungが抱える何万人もの熟練エンジニアと、数十年蓄積した工程知識が一体でなければならない。この工程をゼロから再現するのに要する時間は、どれだけ資金を投じても10年単位と見られている。物理的製造プロセスの複雑さが、規制の執行可能性を担保するのはこの意味においてである。
           </p>
           <p class="lead">
-            GPT-4クラスのフロンティアモデルは数万個のAIチップで訓練された。より高度なAIにはさらに多くの計算資源が要る。政府が大規模なチップ使用を規制できれば、フロンティアAI開発に対して事実上の<strong>許認可権</strong>を持つことになる。米国が中国への半導体輸出規制を強化しているのはこの文脈だ。安全協定の検証手段としても有望で、暗号技術を組み合わせれば、プライバシーを保ったまま遵守を確認できる可能性がある。
+            最先端のフロンティアモデルは数万個から十数万個のGPU・TPU類で訓練される。この規模の計算クラスターは、データセンターへの電力供給と冷却インフラという物理的フットプリントを不可避的に持つ。衛星画像で検出でき、電力消費で追跡でき、チップのシリアル番号でトレースできる。AIアルゴリズム自体は透明でも不透明でもあり得るが、<strong>計算規模を隠すことは本質的に困難</strong>だ。ここにCompute Governanceの強みがある。
+          </p>
+          <p class="lead">
+            実装の中心的なアイデアは、各チップへの一意識別子の組み込みと、暗号証明によるリモート検証の組み合わせである。チップの位置と稼働状況を、機密ワークロードの内容を開示せずに確認できれば、国際的な安全協定の検証手段として機能する。核施設の現場査察に対応する機能を、物理的な現地立ち入りなしで実現できる可能性がある。この発想は2023年時点ですでにYoung et al.の論文で概念的に整理されており、米国商務省の政策議論にも入り込んでいる。
           </p>
           <div class="grid-2">
             <div class="card">
-              <p><strong>Compute Governanceの4つのレバー</strong></p>
+              <p><strong>物理層ゆえの執行可能性</strong></p>
               <div class="bullets" style="margin-top: 16px">
-                <p class="point"><strong>供給の監視</strong> チップに一意IDを付与し、作業証明で所在を確認する。攻撃者が特定数以上のチップへアクセスできないようにする設計が議論されている。</p>
-                <p class="point"><strong>ワークロードの監視</strong> AIシステムが特定サイズ以下、特定パラメータ内でのみ訓練されるよう、計算リソース側で制約をかける。</p>
-                <p class="point"><strong>遵守の検証</strong> 現場検査とチップ位置確認で監視の改ざんを防ぐ。ゼロ知識証明を使えば機密を開示せずに遵守を証明できる。</p>
-                <p class="point"><strong>遵守の強制</strong> チップをリモートで無効化する、署名されていないワークロードを拒否する。最終手段としての執行。</p>
+                <p class="point"><strong>製造の集中</strong> 最先端チップの製造ラインはTSMCとSamsungの2社に事実上集約されている。供給側の2社が規制に協調すれば、他の規制手段なしに輸出先と使用量を制御できる。</p>
+                <p class="point"><strong>エネルギーの可視性</strong> 大規模な計算クラスターは電力消費の観点で検出可能だ。1〜10MW以上の電力需要を持つデータセンターは、衛星画像と電力網データで三角測量できる。</p>
+                <p class="point"><strong>暗号検証の可能性</strong> ゼロ知識証明を使えば、チップが何を計算しているかを明かさずに、規定の計算量を超えていないことを証明できる。プライバシーと遵守の検証が両立する。</p>
+                <p class="point"><strong>リモート無効化</strong> チップファームウェアレベルで署名されていないワークロードを拒否する、あるいは特定規模以上の並列訓練を物理的に禁止するスイッチを組み込む。最終的な執行力。</p>
               </div>
             </div>
             <div class="card">
-              <p><strong>それでも残る構造的限界</strong></p>
+              <p><strong>構造的な有効期限 — それでも最強である理由</strong></p>
               <div class="bullets" style="margin-top: 16px">
-                <p class="point"><strong>ハードウェア効率の向上</strong> アルゴリズムとチップの進化で、特定能力のAIを訓練するのに必要な計算量は年々減っていく。規制は時間稼ぎにしかならない。</p>
-                <p class="point"><strong>十分な資金力の抜け穴</strong> リソースを潤沢に持つ主体は、型落ちチップを大量投入することで最先端に追いつく可能性がある。チップ依存を前提にした戦略には耐用期限がある。</p>
-                <p class="point"><strong>計算の分散化</strong> 新しいハードウェア・パラダイムがデータセンター集約を壊すと、物理的追跡が困難になる。PC監視まで踏み込めば倫理的に受け入れがたい。</p>
-                <p class="point"><strong>規制対象の偏り</strong> データセンター向けネットワーク機器など、AIチップ以外の特殊ハードウェアにも介入余地があるが、この領域の研究は手薄なままだ。</p>
+                <p class="point"><strong>アルゴリズム効率の進歩</strong> 同じ能力のモデルを訓練するのに必要な計算量は年率で下がり続けている。規制閾値が固定なら、有効期限が生まれる。閾値は定期改定が前提になる。</p>
+                <p class="point"><strong>旧型チップの大量投入</strong> 輸出規制の対象外の旧世代チップを大量に組み合わせる戦略は、中国がすでに実行している。完全な遮断は不可能だが、著しくコストを上げる効果は残る。</p>
+                <p class="point"><strong>代替ハードウェアの出現</strong> ニューロモルフィックチップや光コンピューティングが実用化された場合、GPU中心の規制体系は範囲外の技術を見落とす。規制は技術の進化と追いかけっこになる。</p>
+                <p class="point"><strong>それでも物理層が最強</strong> データ・アルゴリズム・知識は漏れやすく、規制の執行が困難だ。物理的な製造工程と電力供給だけが、国際的な検証を伴う実効的な規制の接点になる。これは代替可能な性質ではない。</p>
               </div>
             </div>
           </div>
           <div class="note">
-            Compute Governanceは万能ではない。ハードウェア効率の向上とアルゴリズムの進歩によって、規制の有効期限は短くなっていく。だが「一時的な措置」であっても、安全のために重要な時間を稼げる。ガバナンス手段の中で<strong>最も物理層に近く、最も執行しやすい</strong>接点であることに変わりはない。
+            Compute Governanceの有効期限は確かに存在する。だがガバナンス手段の中でこれだけが<strong>物理的フットプリントを持ち、第三者による客観的な検証が可能</strong>である。条約の検証可能性という国際安全保障の基本要件を満たす唯一の候補がここにある。時間稼ぎであることを批判する前に、安全のための時間を稼ぐことの戦略的価値を問わなければならない。
           </div>
         </div>
         <div class="footer reveal reveal-delay-3">
-          <span>チップという物理物が、国際協力の検証手段になる</span>
+          <span>物理的フットプリントだけが、国際的な検証を伴う規制の接点になる</span>
           <span class="slide-count">2 / 5</span>
         </div>
       </section>
 
       <!-- ═══════════ Slide 3 ═══════════ -->
       <section class="slide" id="slide-3">
-        <div class="eyebrow reveal">Seven Levers</div>
-        <h2 class="reveal reveal-delay-1">ガバナンスは7つのレバーで構成される</h2>
+        <div class="eyebrow reveal">d/acc As A Counter-Argument</div>
+        <h2 class="reveal reveal-delay-1">分散化はCompute Governanceを無力化するか — d/accの論理</h2>
         <div class="panel reveal reveal-delay-2">
           <div>
             <img class="hero img-wide" src="../images/ai-governance-response/slide3.jpg" alt="Grayscale aerial view of dense city grid">
             <div class="hero-caption">Photo: Unsplash</div>
           </div>
           <p class="lead">
-            AIガバナンスを単一の政策として語ると、必ずどこかが抜け落ちる。現実に必要なのは、異なる層で異なる時間軸で効く複数のレバーを同時に動かすことだ。地雷原の比喩を借りれば、地雷を踏む確率を下げるレバー、踏んだときの被害を抑えるレバー、被害からの回復を速めるレバーが別々に設計されなければならない。代表的な対策類型を並べると、AI Alignment研究が示してきた典型が浮かび上がる。
+            Compute Governanceへの最も正面からの反論はこうだ。中央集権的なチップ管理は、それ自体が危険な権力集中を招く。規制主体が誰であれ、計算資源の許認可権を持つ存在は、それを使ってAI研究の方向性を実質的に支配できる。加えて、分散型ハードウェアや量子コンピューティング、ニューロモルフィックプロセッサが普及した暁には、データセンター集中を前提としたCompute Governance自体が機能不全に陥る。中央集権的な禁止が失効した世界で何が残るか。Vitalik Buterinが提示したd/acc（defensive acceleration）の論理は、この問いへの応答として読める。
           </p>
-          <div class="timeline">
-            <div class="timeline-step highlight">
-              <div class="num">Lever 1</div>
-              <p><strong>アライメント研究</strong><br>地雷原を安全に通り抜ける道筋を描く。技術的労力の直接投入。</p>
+          <p class="lead">
+            d/accの核心は、加速そのものへの反対ではなく、<strong>加速する技術を選り分ける</strong>という考え方だ。攻撃優位の技術、つまり一握りの主体が破壊的に使える技術の開発を相対的に遅らせ、防御優位の技術、つまり多くの主体が外部からの攻撃に抗えるようにする技術の開発を加速する。この選別原理はNick Bostromが2002年に提唱したDifferential Technological Developmentに由来し、Buterinはそこに民主的・分散的・防御的という要素を付け加えた。
+          </p>
+          <p class="lead">
+            d/accがCompute Governanceに突きつける問いは具体的だ。暗号技術、ゼロ知識証明、分散型検証プロトコルが十分に発展した社会では、計算資源の物理的な管理なしに、悪意ある大規模計算を抑止できるか。Buterinの論文では、答えは部分的にYesだとされる。プライバシーを保ちながら大規模計算を検出するゼロ知識ベースのモニタリングは、物理的な現地査察の代替になりうる。しかし分散化がCompute Governanceを完全に無力化するという結論には至らない。分散化した計算環境でも、巨大な訓練クラスターの協調は物理的な調整コストを持つからだ。
+          </p>
+          <div class="grid-2">
+            <div class="card">
+              <p><strong>d/accが指摘するCompute Governanceの弱点</strong></p>
+              <div class="bullets" style="margin-top: 16px">
+                <p class="point"><strong>権力集中のリスク</strong> チップの許認可権を持つ規制主体は、研究の方向性を事実上決定する。過去の原子力規制委員会が特定の炉型を優遇したのと同じダイナミクスが起きる可能性がある。</p>
+                <p class="point"><strong>技術前提の陳腐化</strong> ニューロモルフィックチップや光コンピューティングが実用化された場合、GPU特化の規制体系は盲点を抱える。規制は常に現在の技術を前提に設計される。</p>
+                <p class="point"><strong>地政学的分断の加速</strong> 米国主導のCompute Governanceは、そこから排除された国家連合が独自の半導体エコシステムを作るインセンティブを強める。規制が研究の多極化を加速する逆説。</p>
+                <p class="point"><strong>小規模な悪意ある行為者への無力さ</strong> 国家レベルの大規模訓練は規制できても、個人や小集団による特化型の危険なモデル開発は、計算規模の閾値以下に収まれば見えない。</p>
+              </div>
             </div>
-            <div class="timeline-step">
-              <div class="num">Lever 2</div>
-              <p><strong>脅威評価</strong><br>地雷について他者に警告する。能力と整合性の評価をガバナンスに接続する。</p>
-            </div>
-            <div class="timeline-step">
-              <div class="num">Lever 3</div>
-              <p><strong>競争の緩和</strong><br>地雷原を慎重に進むための時間と余地を確保する。ライセンス制や規制協調で競争圧を下げる。</p>
-            </div>
-            <div class="timeline-step">
-              <div class="num">Lever 4</div>
-              <p><strong>選択的情報共有</strong><br>安全技術は広く共有し、危険なモデル重みは秘匿する。情報戦略そのものがガバナンス手段になる。</p>
-            </div>
-            <div class="timeline-step">
-              <div class="num">Lever 5</div>
-              <p><strong>グローバル監視</strong><br>危険なプロジェクトの兆候を世界的に検出する。プライバシー保護と両立する設計が問われる。</p>
+            <div class="card">
+              <p><strong>それでもd/accはCompute Governanceを代替できない</strong></p>
+              <div class="bullets" style="margin-top: 16px">
+                <p class="point"><strong>防御技術の生産ラグ</strong> 暗号技術やバイオセキュリティインフラは、危険なAIが現れてから後付けで防御するのでは間に合わない可能性がある。Compute Governanceは開発前の予防であり、d/accは開発後の対応に近い。</p>
+                <p class="point"><strong>分散化には物理的な床がある</strong> フロンティアモデルの訓練は分散しても、推論を含む全体の計算量は集中する傾向がある。完全な分散化は現在のアーキテクチャでは困難で、物理的な集中点は残る。</p>
+                <p class="point"><strong>検証の信頼性問題</strong> 暗号証明によるリモート検証は理論的には機能するが、チップ自体が改ざんされていた場合の対処が残課題だ。物理的な監査なしに完全な信頼を置けるかは未解決である。</p>
+                <p class="point"><strong>d/accの守備範囲</strong> Buterinが想定する防御技術は、主にサイバーセキュリティ、バイオセキュリティ、情報防御の領域だ。AIそのものの開発管理をd/accが代替するという主張は、d/acc論文の主旨でもない。</p>
+              </div>
             </div>
           </div>
-          <p class="lead">
-            これらに加えて、AI開発組織自体が自主的に実装できる対策がある。産業規模の安全対策としてDeepMind、Centre for the Governance of AI、OpenAI、Anthropic、Alignment Research Centerが共同で提案したモデル評価フレームワークでは、危険な能力の評価と、危険な傾向（アライメント）の評価を分けて扱う。そしてその結果を<strong>責任あるトレーニング、責任ある展開、透明性、適切なセキュリティ</strong>という4つのガバナンスプロセスに組み込む。これが現時点で最もまとまった業界側の自主対策の姿だ。
-          </p>
-          <table class="compare">
-            <thead>
-              <tr>
-                <th>対策カテゴリ</th>
-                <th>具体的な実装</th>
-                <th>現在の成熟度</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td><strong>モデル評価</strong><br>独立監査人による開発中・配備前・更新前のテスト</td>
-                <td>危険な能力（生物兵器支援、欺瞞）と危険な傾向（制御抵抗）を2カテゴリに分けて評価する</td>
-                <td>2023年時点で評価技術は未成熟。能力評価の研究が進行中</td>
-              </tr>
-              <tr>
-                <td><strong>開発前の脅威評価</strong><br>訓練計画そのものの事前審査</td>
-                <td>訓練計算量に関するモデル拡張速度を評価基準とする。比較的単純だが場当たり的</td>
-                <td>方法論は技術的に未熟。多くがアドホック</td>
-              </tr>
-              <tr>
-                <td><strong>情報セキュリティ</strong><br>モデル重みと知的財産の盗難防止</td>
-                <td>強力な国家主体からの防御が必要。オープンソース化の抑制が出発点となる</td>
-                <td>攻撃面が広く、並外れた努力が要求される段階</td>
-              </tr>
-              <tr>
-                <td><strong>段階的なAPIデプロイ</strong><br>AI開発者が仲介役となる配備形態</td>
-                <td>危険なプロンプトと出力を監視、ロールアウト速度を制限、危険なインタラクションをブロック</td>
-                <td>主要ラボで実装済み。ジェイルブレイクへの耐性が継続課題</td>
-              </tr>
-              <tr>
-                <td><strong>安全な訓練手法</strong><br>人間の利益に沿った挙動を確実に拒否できる訓練</td>
-                <td>Bengioが「制御可能にする方法はまだわかっていない」と述べる段階。ブレークスルー待ち</td>
-                <td>研究段階。実運用に耐える手法は未確立</td>
-              </tr>
-            </tbody>
-          </table>
-          <p class="lead">
-            この表を見てわかるのは、<strong>多くの対策がまだ研究段階にある</strong>ということだ。ガバナンスが整ってから開発が始まるのではなく、開発が先行する中で対策を追いかけている。内部告発者の保護、ライセンス要件、規制当局への情報開示義務といった間接的な制度設計は、この「追いかける側」を補強するための仕掛けとして位置づけられる。
-          </p>
+          <div class="note">
+            d/accはCompute Governanceを無力化しない。両者は守備範囲が異なる。Compute Governanceは<strong>開発前の予防</strong>であり、d/accは<strong>技術の選別と防御層の強化</strong>である。前者が失効した世界で後者が初めて重要になる、という関係ではなく、並行して機能すべき異なる層の対策だ。一方を選べばよいという発想が間違っている。
+          </div>
         </div>
         <div class="footer reveal reveal-delay-3">
-          <span>7つのレバーを同時に動かす — 単一の処方箋はない</span>
+          <span>d/accはCompute Governanceへの反論ではなく、その補完層である</span>
           <span class="slide-count">3 / 5</span>
         </div>
       </section>
 
       <!-- ═══════════ Slide 4 ═══════════ -->
       <section class="slide" id="slide-4">
-        <div class="eyebrow reveal">d/acc And Defense In Depth</div>
-        <h2 class="reveal reveal-delay-1">中央集権を避けながら防御を厚くするための設計思想</h2>
+        <div class="eyebrow reveal">Coexistence Conditions</div>
+        <h2 class="reveal reveal-delay-1">物理層と分散層が共存できる条件 — 棲み分けの設計論</h2>
         <div class="panel reveal reveal-delay-2">
           <div>
             <img class="hero" src="../images/ai-governance-response/slide4.jpg" alt="Monochrome suspension bridge infrastructure">
             <div class="hero-caption">Photo: Unsplash</div>
           </div>
           <p class="lead">
-            Compute Governanceや国際条約のような中央集権的な手段だけでガバナンスを組み立てるのは危険でもある。過度に集権的な体制は別種のリスク、つまり権力集中と価値観の固定化を招きやすい。Ethereum考案者のVitalik Buterinは2023年に<strong>d/acc（defensive / decentralized / democratic / differential acceleration）</strong>という概念を提唱した。e/acc（効果的加速主義）への応答として打ち出されたもので、加速しながら防御的・分散的・民主的・差分的な技術を優先するという考え方だ。
+            Compute Governanceとd/accは対立するアプローチではなく、守備範囲の異なる二つの層だ。しかし両者を単純に並べるだけでは、現実のガバナンスには使えない。具体的な棲み分けがなければ、どちらが主導権を持つべき局面なのかが不明瞭になり、政策上の優先順位が定まらない。棲み分けの設計には、技術の成熟度、脅威の種類、そして規制の実行コストという三つの軸が必要だ。
           </p>
           <p class="lead">
-            Differential Technological Developmentはもともと2002年にNick Bostromが提唱したアイデアで、危険な技術の開発を遅らせ、有益な技術、特に存亡リスクを軽減する技術の開発を加速する、という選別原理である。Buterinはこれに防御的という要素を加えて、技術を「攻撃優位と防御優位」で切り分け、後者を選択的に加速することでリスクと便益のバランスを取る戦略を描いた。暗号技術、ゼロ知識証明、予測市場、プライバシー保護AIなどが、防御優位の技術群として具体的に挙げられている。
+            Compute Governanceが主たる防衛線になるのは、フロンティアモデルの訓練という特定の場面に限られる。1,000億パラメータ以上の大規模言語モデルや、マルチモーダルな大規模マルチエージェントシステムの訓練は、現時点では数万個以上のGPUクラスターと、数百MWオーダーの電力インフラを必要とする。この物理的な必要条件が存在する間は、Compute Governanceは実効的な制御点として機能できる。逆にいえば、この条件が技術的に崩れた時点でCompute Governanceは主たる役割を終える。
           </p>
-          <div class="grid-2">
-            <div class="card">
-              <p><strong>d/accが想定する4つの防御層</strong></p>
-              <div class="bullets" style="margin-top: 16px">
-                <p class="point"><strong>マクロ物理的防御</strong> 核戦争のような大規模破壊に対するサプライチェーン強靭化、多惑星文明化、独立した生存インフラの構築。</p>
-                <p class="point"><strong>ミクロ物理的防御</strong> バイオセキュリティ。パンデミック検出、空気質改善、オープンソースワクチン、遠紫外線照射などの公衆衛生インフラ。</p>
-                <p class="point"><strong>サイバーセキュリティ</strong> ブロックチェーンとゼロ知識証明を核とした、オープンで安全で自由なインターネット。中央集権ソフトウェアへの依存を下げる。</p>
-                <p class="point"><strong>情報防御</strong> フェイクニュース、心理プロファイリングによる大衆操作への対策。コミュニティノートや予測市場など制度的な検証装置。</p>
-              </div>
-            </div>
-            <div class="card">
-              <p><strong>深層防護 — 3層の防御設計</strong></p>
-              <div class="bullets" style="margin-top: 16px">
-                <p class="point"><strong>第1層: 予防</strong> Compute Governance、国際的な訓練規制、ライセンス制、非認可プロジェクトの検知と隔離。大惨事が発生する可能性そのものを下げる。</p>
-                <p class="point"><strong>第2層: 対応</strong> 情報セキュリティ対策、核酸観測所によるバイオ攻撃検知、ワクチン迅速配布体制。大惨事が文明の将来を脅かす段階に進むのを防ぐ。</p>
-                <p class="point"><strong>第3層: 回復力</strong> 核・バイオ・ナノ攻撃に耐えるシェルター、種子貯蔵、文化遺産の分散保存。最終的な絶滅を防ぐ冗長性。</p>
-                <p class="point"><strong>原子力安全の系譜</strong> Defence in depthは原子炉安全工学で確立された概念で、Future of Humanity Instituteが存亡リスク低減に応用した。単一の失敗が全体を壊さない設計原理。</p>
-              </div>
-            </div>
-          </div>
           <p class="lead">
-            d/accと深層防護は性質が異なるが、方向は同じだ。<strong>単一の防御線に依存しない</strong>。中央集権的な禁止と分散的な強靭化、予防と対応と回復を、同じ戦略の中に組み込む。Buterinが重要なのは、AI安全性コミュニティと暗号技術コミュニティの対話を実際に駆動している点である。MIRIへの寄付を続け、プライバシー保護のもとでAI監視を可能にする暗号プロトコルの設計を呼びかけてきた。AIガバナンスと暗号技術は別領域ではなく、交差点にこそ実装可能な手段が潜んでいる。
+            一方d/accが主たる防衛線になるのは、大規模な中央集権的開発が一段落し、AIが広く分散した後の社会的安定性の問題だ。情報操作への耐性、バイオセキュリティインフラ、分散型の検証可能な意思決定プロセス。これらはAIの開発段階の問題ではなく、高度なAIが普及した後の社会の強靭性の問題である。防御優位の技術に選択的に投資する原則は、AIが開発者の手を離れた後に機能する層を担う。
           </p>
-          <figure class="info info-wide">
-            <p class="info-title">深層防護 — 3段の防御パイプライン</p>
-            <p class="info-subtitle">原子炉安全工学で確立された概念を、AI存亡リスクに転用する</p>
-            <div class="process">
-              <div class="step">
-                <div class="n">Layer 01</div>
-                <h4 class="title">予防</h4>
-                <p class="desc">Compute Governance、訓練規制、ライセンス制。大惨事が発生する確率そのものを下げる。</p>
-              </div>
-              <div class="step">
-                <div class="n">Layer 02</div>
-                <h4 class="title">対応</h4>
-                <p class="desc">情報セキュリティ、核酸観測所、ワクチン迅速配布。発生した事象が文明規模に拡大するのを止める。</p>
-              </div>
-              <div class="step">
-                <div class="n">Layer 03</div>
-                <h4 class="title">回復力</h4>
-                <p class="desc">シェルター、種子貯蔵、分散保存。単一の失敗が全体を壊さない冗長性を残す。</p>
-              </div>
-            </div>
-            <p class="info-source">Future of Humanity Institute / d/acc framework</p>
-          </figure>
+          <table class="compare">
+            <thead>
+              <tr>
+                <th>アプローチ</th>
+                <th>最も有効な局面</th>
+                <th>限界が来る条件</th>
+                <th>代替手段</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Compute Governance</strong><br>物理層の管理</td>
+                <td>フロンティアモデルの大規模訓練フェーズ。計算クラスターが物理的集中点として存在する間。</td>
+                <td>分散型学習プロトコルの成熟、チップ設計の多様化、量子・ニューロモルフィック代替の実用化。</td>
+                <td>エネルギーグリッドと電力消費モニタリング、衛星画像による施設検知、AIが生成するデータの透かし技術。</td>
+              </tr>
+              <tr>
+                <td><strong>d/acc</strong><br>防御技術の選別加速</td>
+                <td>AIが普及段階に入り、能力の規制よりも社会的影響への対処が主要課題になったとき。</td>
+                <td>防御技術そのものが攻撃に転用される場合。暗号技術の乱用、バイオ防衛技術のデュアルユース問題。</td>
+                <td>Compute Governanceによる開発前の予防との組み合わせ。d/acc単独では初期段階の大規模リスクを抑えられない。</td>
+              </tr>
+              <tr>
+                <td><strong>国際条約と検証</strong><br>規範の制度化</td>
+                <td>米中その他の主要国が安全保障上の利益を共有していると認識したとき。核・化学兵器条約の類推。</td>
+                <td>地政学的な信頼の欠如。検証手段の不存在。条約から排除されたアクターが代替ルートを発展させる。</td>
+                <td>信頼醸成措置（CBMs）の積み重ねによる段階的制度化。拘束力のない技術的標準から着手する。</td>
+              </tr>
+              <tr>
+                <td><strong>産業の自主規制</strong><br>責任ある開発慣行</td>
+                <td>規制の整備が追いつかない開発速度の速い局面で、ラボ自身が先行基準を設けるとき。</td>
+                <td>競争圧力が安全への投資を削る場合。自主規制の基準が競合他社に対して不利になるとき。</td>
+                <td>責任ある拡張ポリシー（RSP）などの明示的な安全基準。第三者監査の義務化による外部からの制約。</td>
+              </tr>
+            </tbody>
+          </table>
           <div class="note">
-            Compute Governanceが上流で計算資源を絞るアプローチなら、d/accは下流で防御技術を広げるアプローチである。どちらか一方だけでは不十分で、<strong>両者が補完的に機能したときに初めて</strong>「開発を続けながら破局を回避する」という矛盾した要求に応えられる設計になる。
+            棲み分けの設計で最も重要な認識は、<strong>各アプローチには有効期限があり、それぞれが他のアプローチが機能しにくい局面で補完に回る</strong>、という構造だ。Compute Governanceが主導権を持つ今の局面の後に、d/accと国際条約が引き継ぐ設計を今から準備することが、ガバナンスの実務的な課題になっている。
           </div>
         </div>
         <div class="footer reveal reveal-delay-3">
-          <span>d/acc — 防御的・分散的・民主的・差分的に加速する</span>
+          <span>各アプローチは有効期限を持ち、それぞれが他の補完に回る</span>
           <span class="slide-count">4 / 5</span>
         </div>
       </section>
 
       <!-- ═══════════ Slide 5 ═══════════ -->
       <section class="slide" id="slide-5">
-        <div class="eyebrow reveal">Whose Values, Which Consensus</div>
-        <h2 class="reveal reveal-delay-1">民意をAIに反映する問いが、次のガバナンスの中心になる</h2>
+        <div class="eyebrow reveal">2030 Forecast</div>
+        <h2 class="reveal reveal-delay-1">2030年の予測 — 生き残るレバー、陳腐化するレバー</h2>
         <div class="panel reveal reveal-delay-2">
           <div>
             <img class="hero img-fullbleed" src="../images/ai-governance-response/slide5.jpg" alt="Abstract monochrome topographic map">
             <div class="hero-caption">Photo: Unsplash</div>
           </div>
           <p class="lead">
-            AIガバナンスを構成する諸レバーは、最終的にひとつの問いに収束する。<strong>どの価値観にAIを整合させるのか</strong>。技術的アラインメントが「AIを人間の意図に沿わせる方法」を問うのに対して、価値整合の問いは「どの人間の、どの意図に沿わせるか」を問う。これは技術ではなく政治の問題であり、ガバナンスの設計思想が民主制度と交差する地点でもある。
+            ガバナンスの議論は「完成しない」という逃げ方をしやすい。完成しないことは事実だが、だからといって評価を先送りするのは知的怠慢だ。2026年時点で動いているガバナンス手段の中で、2030年時点で有効なまま残るものと、陳腐化しているものを予測する。予測は外れうるが、外れ方を見ることで議論の前提がどこにあるかが明確になる。
           </p>
           <p class="lead">
-            先駆的な考え方にEliezer YudkowskyのCEV（Coherent Extrapolated Volition）がある。人類が十分に長く議論した結果として収束するはずの意志をAIに実装する、という発想だ。だが本人が論文を出した直後に「時代遅れ」と撤回した。実装の困難さに加えて、そもそも人間の価値観が収束する保証がない、という二重の問題を抱えていたからだ。Max TegmarkはLife3.0で功利主義、多様性、自主性、継承性の4原則を提唱したが、完全な成分化は極めて困難と認めている。
+            生き残ると予測するレバーが三つある。第一はCompute Governanceの中核的な機能、すなわちチップの製造監視と大規模クラスターへの輸出規制だ。TSMCとASMLが2030年時点でも最先端製造を独占している蓋然性は高く、物理層の集中は当面続く。閾値の調整は必要だが、制度の有効性は残る。第二はAIの安全性評価の義務化、具体的にはEUのAI Actに類する法的枠組みによる能力評価の義務化だ。EUのAI Actは2024年に施行され、2030年までにはG7主要国が類似の評価枠組みを導入する可能性が高い。第三は産業の責任ある拡張ポリシー（RSP/ASL）だ。AnthropicのASLや類似の自主基準は、競合他社も採用せざるを得ない産業慣行として定着するだろう。
           </p>
-          <div class="grid-3">
-            <div class="card">
-              <span class="tag">Track 1</span>
-              <p><strong>DeepMindの試み</strong><br>言語モデルを人間のフィードバックで微調整し、政治的問題への多様な意見を入力として、功利主義やロールズ的平等主義といった社会的厚生関数を最大化するコンセンサス文を生成する。価値観の集約を技術的課題として扱う。</p>
-            </div>
-            <div class="card">
-              <span class="tag">Track 2</span>
-              <p><strong>OpenAI Collective Alignment</strong><br>多様な世界中の公的意見をAIに反映するシステム開発を担うチームを編成。「誰の価値観か」の問いを、組織内部に独立した研究対象として立て直した。</p>
-            </div>
-            <div class="card">
-              <span class="tag">Track 3</span>
-              <p><strong>国際協力とバイオセキュリティ</strong><br>核酸観測所による病原体の早期検知、空気質改善、オープンソースのワクチンと検査。Balviなどの非営利組織が資金を投じ、公衆衛生インフラを防御層として再構築している。</p>
-            </div>
-          </div>
           <p class="lead">
-            価値観の民主的反映は、既存のガバナンスレバーと別系統ではない。Compute Governanceが計算資源を絞っている間に、国際協力が規範を作り、情報セキュリティが重要情報を守り、d/accが防御技術を広げる。そしてその総体を<strong>誰の価値観に基づいて運用するか</strong>を決める制度設計が、民意のAIへの反映という問いに当たる。技術と政治と倫理がここで合流する。どこか一つだけで解決できる問題ではない。
+            一方、陳腐化すると予測するレバーも三つある。第一はパラメータ数を基準にした規制だ。モデルアーキテクチャの多様化により、パラメータ数と能力の関係は2030年時点では現在より不明確になる。混合エキスパートモデルや状態空間モデルの普及が、能力評価の基準としてのパラメータ数を意味のない指標にする。第二は完全なオープンソース禁止の発想だ。Llama、Mistralといったオープンソースモデルの普及スピードは規制の速度を超えており、2030年には「禁止」という手段が技術的に実行不能な水準に達している。第三は二国間の輸出規制の枠組みだ。中国の独自半導体エコシステムの構築が2030年までに一定の成果を上げると、米国単独の輸出規制の実効性は大きく低下する。
           </p>
           <div class="grid-2">
             <div class="card">
-              <p><strong>残された論点</strong></p>
+              <p><strong>2030年時点で生き残るレバー（予測）</strong></p>
               <div class="bullets" style="margin-top: 16px">
-                <p class="point"><strong>オープンソースの扱い</strong> オープンソースモデルを強く規制すべきか。バイオテロリスクを理由にした規制強化論と、規制のデメリットを重く見る反論が並立している。メリットとデメリットの定量比較はまだ不十分だ。</p>
-                <p class="point"><strong>強権化のリスク</strong> 高度なAIを管理するために、全人類の監視や強力な警察権が議論される可能性がある。長期主義から自動的に強権が導かれるわけではないが、議論の種は確実に存在する。</p>
-                <p class="point"><strong>黒いボール問題</strong> オープンソースモデルの能力がクローズドモデルを追い越した瞬間、既存ガバナンスの前提が崩れる。Nick Bostromが警告する「脆弱な世界」が現実化する条件は何か。</p>
-                <p class="point"><strong>暗号技術との交差</strong> ゼロ知識証明、安全マルチパーティ計算、同型暗号、スマートコントラクト。AIガバナンスの検証手段として、これらをどこまで実装可能な制度に落とせるか。</p>
+                <p class="point"><strong>チップ製造監視と輸出規制</strong> TSMCとASMLの集中が続く限り有効。2030年に完全に崩れる可能性は低い。ただし閾値の定期改定が必要条件。</p>
+                <p class="point"><strong>能力評価の法的義務化</strong> EU AI Actの波及でG7各国が類似の評価スキームを持つ。危険能力の評価手法は未成熟だが、枠組みとして定着する。</p>
+                <p class="point"><strong>RSP/ASLに類する産業自主基準</strong> 競争上の差別化よりも、訴訟リスクと規制先取りのインセンティブが自主基準の採用を促す。産業慣行として根付く。</p>
+                <p class="point"><strong>暗号技術を使った遵守検証</strong> ゼロ知識証明によるリモート検証は2030年までに実証段階を越える。物理的現地査察の補完として機能し始める。</p>
               </div>
             </div>
             <div class="card">
-              <p><strong>実装への含意</strong></p>
+              <p><strong>2030年時点で陳腐化するレバー（予測）</strong></p>
               <div class="bullets" style="margin-top: 16px">
-                <p class="point"><strong>組織の自主対策</strong> モデル評価、情報セキュリティ、段階的APIデプロイ、内部告発者保護、安全文化。これらは規制を待たずに今日から実装できる領域で、ベストプラクティスが徐々に形成されている。</p>
-                <p class="point"><strong>国際協定の前哨戦</strong> 軍備管理、環境条約、原子力規制の歴史には学ぶべき教訓がある。AIガバナンスも過去の事例から類推しながら制度化を進めるほかない。</p>
-                <p class="point"><strong>防御技術への投資</strong> 暗号、バイオセキュリティ、情報防御、予測市場。d/acc的な防御層への投資は、中央集権的規制を補完する独立したガバナンス資源になる。</p>
-                <p class="point"><strong>民主的プロセスの設計</strong> AIに反映する価値観をどう集約するか。技術者だけでなく哲学者、政治学者、市民の参加を制度化する仕組みが不足している。</p>
+                <p class="point"><strong>パラメータ数基準の規制</strong> 混合エキスパートモデルと効率化アーキテクチャの普及で、パラメータ数は能力の代理指標として機能しなくなる。EUのGPAI基準はすでに圧力を受けている。</p>
+                <p class="point"><strong>オープンソース全面禁止論</strong> 2030年には規制以前にオープンウェイトモデルが広く普及している。封じ込めは技術的に実行不能になる。議論の焦点は「禁止か否か」から「活用の条件」に移る。</p>
+                <p class="point"><strong>米国単独の輸出規制の全面的実効性</strong> 中国独自の半導体エコシステムが一定の成熟に達する。NVIDIAの代替品は劣るが、2030年時点では実用的な水準に近づいている可能性がある。</p>
+                <p class="point"><strong>「一時停止」のある種の発想</strong> 開発一時停止の実行可能性は2030年時点でさらに低下する。産業規模と国家安全保障の両側の論理が加速方向に働く。議論は存続するが、実現の経路は消えている。</p>
               </div>
             </div>
           </div>
           <div class="note">
-            ガバナンスは完成形を持たない。<strong>開発が進むたびに制度を追いかけ、制度が整うたびに新しい能力が追いつく</strong>。この循環の速度を制御しながら、単一の失敗が全体を壊さない冗長性を設計し続けるしかない。d/accが示すように、防御的な技術を選び取ること自体が意思決定であり、その選び方が次の10年の文明の形を左右する。止められない技術への応答は、止めることではなく、進みながら設計することだ。
+            この予測が外れるとすれば、どちらの方向に外れるか。Compute Governanceの有効性が予測より長続きする方向で外れるシナリオは、中国の独自半導体エコシステムの構築が大幅に遅延する場合だ。予測より早く崩れる方向で外れるシナリオは、量子コンピューティングか光コンピューティングのいずれかが2028年までに実用段階に入る場合だ。<strong>後者のシナリオでは、2030年時点のガバナンスの主軸はd/acc的な防御技術に移っている</strong>。どちらに外れても、AIガバナンスの問いが消えることはない。
           </div>
         </div>
         <div class="footer reveal reveal-delay-3">
-          <span>ガバナンスは完成しない — 設計を続けるほかない</span>
+          <span>2030年、生き残るレバーと陳腐化するレバーは今から見えている</span>
           <span class="slide-count">5 / 5</span>
         </div>
       </section>

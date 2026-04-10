@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>alignment研究の布陣図 — 全員が同じ問題を解いているわけではない</title>
+    <link rel="stylesheet" href="../design-system/palette.css">
+    <style>
+      /* ══════════════════════════════════════
+         AGI HUB Editorial Style — Broadsheet
+         Monotone + Deep Blue Accent, Flat
+         ══════════════════════════════════════ */
+
+      :root {
+        --black: #000;
+        --body-text: #1a1a1a;
+        --mid: #585858;
+        --meta: #757575;
+        --light-gray: #999;
+        --border: #e8e3d4;
+        --bg: #faf8f1;
+        --bg-alt: #f3f1e4;
+        --accent: #2f2b92;
+        --accent-soft: rgba(47, 43, 146, 0.08);
+        --ff-serif: "Playfair Display", "Noto Serif JP", Georgia, serif;
+        --ease: cubic-bezier(0.22, 1, 0.36, 1);
+      }
+
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+      html { scroll-behavior: smooth; }
+
+      body {
+        font-family: HelveticaNeue, "Helvetica Neue", Helvetica, Arial,
+          游ゴシック体, YuGothic, "游ゴシック Medium", "Yu Gothic Medium",
+          游ゴシック, "Yu Gothic", "ヒラギノ角ゴ ProN W3", "Hiragino Kaku Gothic ProN",
+          "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", "MS ゴシック", "MS Gothic",
+          sans-serif;
+        font-feature-settings: "palt";
+        font-size: 16px;
+        line-height: 1.75;
+        color: var(--body-text);
+        background: var(--bg);
+        -webkit-font-smoothing: antialiased;
+        overflow-x: hidden;
+        word-wrap: break-word;
+      }
+
+      /* ── Progress Bar ── */
+      .progress {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 2px;
+        background: var(--accent);
+        width: 0%;
+        z-index: 100;
+        transition: width 0.3s var(--ease);
+      }
+
+      /* ── Navigation Dots ── */
+      .nav {
+        position: fixed;
+        right: 24px;
+        top: 50%;
+        transform: translateY(-50%);
+        display: grid;
+        gap: 16px;
+        z-index: 50;
+      }
+
+      .nav button {
+        width: 8px;
+        height: 8px;
+        border-radius: 999px;
+        border: 1.5px solid var(--meta);
+        background: transparent;
+        cursor: pointer;
+        transition: all 0.3s var(--ease);
+      }
+
+      .nav button.active {
+        background: var(--accent);
+        border-color: var(--accent);
+        transform: scale(1.4);
+      }
+
+      /* ── Slides ── */
+      main { scroll-snap-type: y mandatory; }
+
+      .slide {
+        position: relative;
+        min-height: 100vh;
+        max-width: 1120px;
+        margin: 0 auto;
+        padding: 80px 48px 64px;
+        display: grid;
+        grid-template-rows: auto auto 1fr auto;
+        gap: 32px;
+        scroll-snap-align: start;
+      }
+
+      .slide + .slide { border-top: 1px solid var(--border); }
+
+      /* ── Hero Image ── */
+      .hero {
+        width: 100%;
+        aspect-ratio: 16 / 7;
+        object-fit: cover;
+        display: block;
+        filter: grayscale(0.6) contrast(1.1);
+        transition: filter 0.6s var(--ease);
+      }
+
+      .hero:hover { filter: grayscale(0) contrast(1); }
+
+      /* ── Image Placement Variations ── */
+      .hero.img-fullbleed {
+        width: 100vw;
+        margin-left: calc(50% - 50vw);
+        margin-right: calc(50% - 50vw);
+        max-width: none;
+        aspect-ratio: 21 / 9;
+      }
+      .hero.img-wide {
+        width: min(1280px, calc(100vw - 48px));
+        position: relative;
+        left: 50%;
+        transform: translateX(-50%);
+        max-width: none;
+      }
+      .hero.img-content {
+        max-width: 680px;
+        margin-left: auto;
+        margin-right: auto;
+        aspect-ratio: 4 / 3;
+      }
+
+      .hero-caption {
+        font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 11px;
+        letter-spacing: 0.083em;
+        color: var(--light-gray);
+        margin-top: 8px;
+        text-transform: uppercase;
+      }
+
+      /* ── Photo Credits ── */
+      .credits {
+        max-width: 1120px;
+        margin: 0 auto;
+        padding: 48px 48px 80px;
+        border-top: 1px solid var(--border);
+      }
+
+      .credits p {
+        font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 11px;
+        letter-spacing: 0.047em;
+        line-height: 2;
+        color: var(--light-gray);
+      }
+
+      .credits a {
+        color: var(--meta);
+        text-decoration: none;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .credits a:hover {
+        color: var(--black);
+        border-bottom-color: var(--black);
+      }
+
+      /* ── Scroll Animation ── */
+      .reveal {
+        opacity: 0;
+        transform: translateY(24px);
+        transition: opacity 0.6s var(--ease), transform 0.6s var(--ease);
+      }
+      .reveal.visible { opacity: 1; transform: translateY(0); }
+      .reveal-delay-1 { transition-delay: 0.1s; }
+      .reveal-delay-2 { transition-delay: 0.2s; }
+      .reveal-delay-3 { transition-delay: 0.35s; }
+
+      /* ── Eyebrow Label ── */
+      .eyebrow {
+        font-family: "SF Mono", "Fira Code", "Fira Mono", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 11px;
+        font-weight: 400;
+        letter-spacing: 0.083em;
+        text-transform: uppercase;
+        color: var(--accent);
+      }
+
+      /* ── Headings (Broadsheet: serif, accent underline) ── */
+      h1, h2 {
+        color: var(--black);
+        font-family: var(--ff-serif);
+        font-weight: 700;
+        line-height: 1.45;
+        letter-spacing: normal;
+        max-width: 26ch;
+        padding-bottom: 14px;
+        border-bottom: 1px solid var(--accent);
+      }
+
+      h1 { font-size: clamp(30px, 4.4vw, 40px); }
+      h2 { font-size: clamp(26px, 3.8vw, 34px); }
+
+      /* ── Broadsheet drop cap (first lead paragraph of slide 1) ── */
+      #slide-1 .lead:first-of-type::first-letter {
+        font-family: var(--ff-serif);
+        font-size: 4.5em;
+        line-height: 0.85;
+        float: left;
+        padding: 6px 10px 0 0;
+        font-weight: 700;
+        color: var(--accent);
+      }
+
+      /* ── Lead / Body ── */
+      .lead {
+        max-width: 780px;
+        font-size: 16px;
+        line-height: 1.75;
+        color: var(--body-text);
+      }
+
+      .lead + .lead { margin-top: 8px; }
+
+      /* ── Panels & Grids ── */
+      .panel { display: grid; gap: 24px; align-content: start; }
+      .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
+      .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+
+      /* ── Cards ── */
+      .card {
+        padding: 24px 0;
+        border-top: 2px solid var(--accent);
+      }
+
+      .card .tag { color: var(--accent); }
+      .card strong { color: var(--black); }
+
+      .card p {
+        font-size: 16px;
+        line-height: 1.75;
+        color: var(--body-text);
+      }
+
+      /* ── Tag ── */
+      .tag {
+        display: inline-block;
+        font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 11px;
+        letter-spacing: 0.083em;
+        color: var(--meta);
+        margin-bottom: 12px;
+      }
+
+      /* ── Bullets ── */
+      .bullets { display: grid; gap: 16px; }
+
+      .point {
+        padding-left: 16px;
+        border-left: 2px solid var(--accent);
+        font-size: 16px;
+        line-height: 1.75;
+        color: var(--body-text);
+      }
+
+      .point strong { color: var(--black); }
+
+      /* ── Timeline ── */
+      .timeline {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 1px;
+        background: var(--border);
+      }
+
+      .timeline-step {
+        display: grid;
+        gap: 8px;
+        padding: 20px 16px;
+        background: var(--bg);
+      }
+
+      .timeline-step.highlight {
+        background: var(--accent);
+      }
+      .timeline-step.highlight .num,
+      .timeline-step.highlight p,
+      .timeline-step.highlight strong {
+        color: var(--bg);
+      }
+
+      .timeline-step .num {
+        font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 11px;
+        font-weight: 400;
+        letter-spacing: 0.083em;
+        text-transform: uppercase;
+        color: var(--meta);
+      }
+
+      .timeline-step p {
+        font-size: 15px;
+        line-height: 1.65;
+        color: var(--body-text);
+      }
+
+      .timeline-step strong { color: var(--black); }
+
+      /* ── Compare Table ── */
+      .compare {
+        width: 100%;
+        border-collapse: collapse;
+        border-top: 2px solid var(--accent);
+        border-bottom: 2px solid var(--accent);
+      }
+
+      .compare th,
+      .compare td {
+        padding: 18px 16px;
+        text-align: left;
+        font-size: 15px;
+        line-height: 1.65;
+        color: var(--body-text);
+        border-bottom: 1px solid var(--border);
+        vertical-align: top;
+      }
+
+      .compare th {
+        font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 11px;
+        letter-spacing: 0.083em;
+        text-transform: uppercase;
+        color: var(--accent);
+        font-weight: 400;
+        border-bottom: 1px solid var(--accent);
+      }
+
+      .compare td strong { color: var(--black); }
+
+      .compare tr:last-child td { border-bottom: none; }
+
+      /* ── Note / Pull Quote ── */
+      .note {
+        font-family: var(--ff-serif);
+        font-size: 22px;
+        line-height: 1.55;
+        color: var(--body-text);
+        padding: 24px 28px;
+        margin: 8px 0;
+        border-left: 3px solid var(--accent);
+        background: var(--accent-soft);
+        font-weight: 500;
+      }
+
+      .note strong { color: var(--accent); }
+
+      /* ── Footer ── */
+      .footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: end;
+        gap: 16px;
+        font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 11px;
+        letter-spacing: 0.083em;
+        color: var(--light-gray);
+        text-transform: uppercase;
+      }
+
+      .slide-count {
+        font-weight: 700;
+        color: var(--accent);
+      }
+
+      /* ── SVG Infographic ── */
+      .infographic-container {
+        width: 100%;
+        max-width: 900px;
+        margin: 16px auto;
+        overflow-x: auto;
+      }
+
+      .infographic-container svg {
+        display: block;
+        width: 100%;
+        height: auto;
+      }
+
+      .info-source {
+        font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 10px;
+        letter-spacing: 0.06em;
+        color: var(--light-gray);
+        margin-top: 8px;
+        text-transform: uppercase;
+      }
+
+      /* ── Responsive ── */
+      @media (max-width: 768px) {
+        .slide { padding: 64px 24px 48px; }
+        .grid-2, .grid-3, .timeline { grid-template-columns: 1fr; }
+        .nav { right: 12px; }
+        .compare { font-size: 13px; }
+        .compare th, .compare td { padding: 14px 10px; }
+        .hero { aspect-ratio: 16 / 9; }
+        .hero.img-fullbleed, .hero.img-wide {
+          aspect-ratio: 16 / 9;
+          width: 100%;
+          margin: 0;
+          left: 0;
+          transform: none;
+          position: static;
+        }
+        .hero.img-content { max-width: 100%; aspect-ratio: 16 / 9; }
+        .credits { padding: 32px 24px 64px; }
+      }
+
+      /* ── Print ── */
+      @media print {
+        .slide { min-height: auto; page-break-after: always; padding: 24px 0; }
+        .nav, .progress { display: none; }
+        .reveal { opacity: 1; transform: none; }
+      }
+    </style>
+  </head>
+  <body class="pattern-broadsheet accent-deepblue" data-category="lineage">
+    <div class="progress" id="progress"></div>
+
+    <aside class="nav" aria-label="Slide navigation">
+      <button data-target="slide-1" class="active" aria-label="Slide 1"></button>
+      <button data-target="slide-2" aria-label="Slide 2"></button>
+      <button data-target="slide-3" aria-label="Slide 3"></button>
+      <button data-target="slide-4" aria-label="Slide 4"></button>
+      <button data-target="slide-5" aria-label="Slide 5"></button>
+    </aside>
+
+    <main>
+      <!-- ═══════════ Slide 1 ═══════════ -->
+      <section class="slide" id="slide-1">
+        <div class="eyebrow reveal">AGI HUB &nbsp;&middot;&nbsp; No. 10 &nbsp;&middot;&nbsp; Lineage &nbsp;&middot;&nbsp; The Alignment Illusion</div>
+        <h1 class="reveal reveal-delay-1">全員が「alignment」を語っているが、解こうとしている問題が違う</h1>
+        <div class="panel reveal reveal-delay-2">
+          <div>
+            <img class="hero img-fullbleed" src="../images/alignment-research-landscape/slide1.jpg" alt="Abstract dark landscape with layered peaks">
+            <div class="hero-caption">Photo: Unsplash</div>
+          </div>
+          <p class="lead">
+            2024年末時点で、AI alignmentに直接関わる研究者の数は推定300-400人。そのうち約200人が企業の安全性チームに所属し、残りが独立研究機関とアカデミアに散在する。alignment研究に年間で投じられる資金は推定3-5億ドル。OpenAI、Anthropic、Google DeepMindの3社だけで全体の60%以上を占める。Open Philanthropyが残りの大部分を非営利機関に配分している。数字だけ見れば、alignment研究は急拡大している。2019年に50人前後だった研究者は5年で8倍に増えた。
+          </p>
+          <p class="lead">
+            しかし、この「拡大」の内実は均質ではない。Anthropicが解こうとしている問題と、MIRIが解こうとしている問題は、同じ「alignment」という単語を使いながら、射程が根本的に異なる。Anthropicの<a href="01-ai-alignment.html" style="color:inherit;border-bottom:1px solid #999;transition:border-color 0.3s;">Constitutional AI</a>は現行のLLMを安全に運用するための即効薬だ。MIRIのAgent Foundationsは超知能が出現した後の数学的整合性を扱う。前者の時間軸は数か月から数年、後者は数十年。前者は実験結果で検証できるが、後者は対象がまだ存在しない。
+          </p>
+          <p class="lead">
+            この記事は、alignment研究の布陣図を描く。誰が、どの問題を、どの時間軸で、誰のカネで解こうとしているか。全体像が見えると、一つの事実が浮かび上がる。<strong>alignment研究は、一つの分野ではない。同じ看板を掲げた複数の分野が、協力しているふりをしながら、互いに別の山を登っている。</strong>この構造を理解しなければ、「alignmentは解決に向かっている」とも「alignmentは絶望的だ」とも、正確に言えない。
+          </p>
+          <div class="grid-3">
+            <div class="card">
+              <span class="tag">01</span>
+              <p><strong>研究者300-400人</strong><br>alignment研究に専従する研究者の推定総数（2024年末）。2019年の約50人から急増したが、AI研究全体の推定30万人と比較すると0.1%に過ぎない。能力開発に投じられる人材の1,000分の1がalignmentに回っている計算になる。</p>
+            </div>
+            <div class="card">
+              <span class="tag">02</span>
+              <p><strong>年間3-5億ドル</strong><br>alignment研究に投じられる年間資金の推定値。企業の安全性チーム人件費を含む。対照的に、OpenAIの2024年の総支出は推定85億ドル前後。Anthropicの総調達額は約76億ドル。安全性研究はフロンティアモデル開発コストの5-10%程度とみられる。</p>
+            </div>
+            <div class="card">
+              <span class="tag">03</span>
+              <p><strong>5つの問い</strong><br>alignment研究は少なくとも5つの異なる問いを扱っている。現行モデルの制御、解釈可能性、危険な能力の検出、超知能の数学的整合性、そしてalignment概念そのものへの批判。この5つは相補的であると同時に、前提が互いに矛盾する場合がある。</p>
+            </div>
+          </div>
+        </div>
+        <div class="footer reveal reveal-delay-3">
+          <span>同じ看板の下で、別の山を登っている</span>
+          <span class="slide-count">1 / 5</span>
+        </div>
+      </section>
+
+      <!-- ═══════════ Slide 2 ═══════════ -->
+      <section class="slide" id="slide-2">
+        <div class="eyebrow reveal">The Corporate Arms</div>
+        <h2 class="reveal reveal-delay-1">企業4社は、alignmentの異なる側面に社運を賭けている</h2>
+        <div class="panel reveal reveal-delay-2">
+          <div>
+            <img class="hero img-wide" src="../images/alignment-research-landscape/slide2.jpg" alt="Monochrome cityscape with modern buildings under cloudy sky">
+            <div class="hero-caption">Photo: Unsplash</div>
+          </div>
+          <p class="lead">
+            フロンティアモデルを開発する4社 — Anthropic、OpenAI、Google DeepMind、Meta — は、いずれも安全性チームを持つ。しかし、各社がalignmentの中で何を最優先課題と見なしているかは大きく異なる。その差は企業の出自に起因する。Anthropicは2021年にOpenAIの安全性チームから独立した組織であり、安全性研究が存在意義の中心にある。OpenAIのSuperalignmentチームは2023年7月に発足し、2024年5月に事実上解散した。Google DeepMindは2014年からRLHFを開発してきた研究機関が母体であり、スケーラブルな手法を志向する。Metaはオープンウェイトという戦略的選択によって、安全性の定義そのものが他3社と異なる。
+          </p>
+          <p class="lead">
+            各社のアプローチを並べると、alignmentという概念が企業によってどう再定義されているかが見える。Anthropicにとってのalignmentは、モデルが自社の憲法（Constitution）に従うことだ。OpenAIにとっては、弱いAIで強いAIを監督するスケーラブルな仕組みの構築だった。DeepMindにとっては、人間のフィードバックを効率的に学習に組み込む技術である。Metaにとっては、オープンなモデルをコミュニティが検証できる状態を維持することだ。
+          </p>
+
+          <table class="compare">
+            <thead>
+              <tr>
+                <th>Organization</th>
+                <th>Core Approach</th>
+                <th>Key Method</th>
+                <th>Time Horizon</th>
+                <th>Status (2025)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Anthropic</strong></td>
+                <td>Constitutional AI + Interpretability</td>
+                <td>RLHF/RLAIF、Monosemanticity（回路解析）、RSP（Responsible Scaling Policy）</td>
+                <td>現行モデル + 次世代</td>
+                <td>安全性チーム100人超。Claude開発と安全性研究が一体化</td>
+              </tr>
+              <tr>
+                <td><strong>OpenAI</strong></td>
+                <td>Superalignment（解散後は分散体制）</td>
+                <td>Weak-to-strong generalization、Preparedness Framework</td>
+                <td>超知能の制御</td>
+                <td>2024年5月にIlya Sutskever退社、Jan Leike辞任。チーム解散。安全性機能はPreparedness等に分散</td>
+              </tr>
+              <tr>
+                <td><strong>Google DeepMind</strong></td>
+                <td>Scalable Alignment</td>
+                <td>RLHF（2017年原論文）、Debate、Constitutional手法の独自実装</td>
+                <td>現行モデル + スケーリング</td>
+                <td>Gemini Safetyチームとalignment研究チームが並存。産業応用との統合が強み</td>
+              </tr>
+              <tr>
+                <td><strong>Meta FAIR</strong></td>
+                <td>Open-weight安全性</td>
+                <td>Llama Guard、Purple Llama（安全性ツールキット）、外部検証への依存</td>
+                <td>モデル公開後の制御</td>
+                <td>Llama 3/3.1のオープンウェイト公開。安全性は「公開前のフィルタリング + コミュニティ検証」の二段構え</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <p class="lead">
+            注目すべきはOpenAIのSuperalignment解散である。2023年7月、Ilya Sutskeverの主導で「4年以内に超知能のalignmentを解く」と宣言し、社内計算資源の20%を充てると公約した。しかし2024年5月、共同リーダーのJan Leikeが「安全性の文化が光沢ある製品に敗れた」とXに投稿して辞任。同日Sutskeverも退社を発表した。Leikeは直後にAnthropicに移籍している。この一件は、フロンティア企業における安全性研究と商業的圧力の構造的緊張を象徴する。
+          </p>
+
+          <div class="note">
+            企業のalignment研究は、自社モデルを安全に出荷するための<strong>品質管理</strong>と、長期的なAI安全のための<strong>基礎研究</strong>の二面を持つ。この二面が矛盾するとき、品質管理が勝つ。OpenAI Superalignmentの顛末はその最も明瞭な事例だが、構造的圧力はどの企業にも存在する。
+          </div>
+        </div>
+        <div class="footer reveal reveal-delay-3">
+          <span>Superalignment解散は、構造的緊張の表出にすぎない</span>
+          <span class="slide-count">2 / 5</span>
+        </div>
+      </section>
+
+      <!-- ═══════════ Slide 3 ═══════════ -->
+      <section class="slide" id="slide-3">
+        <div class="eyebrow reveal">The Independents</div>
+        <h2 class="reveal reveal-delay-1">独立機関とアカデミアは、企業が問えない問いを引き受ける</h2>
+        <div class="panel reveal reveal-delay-2">
+          <div>
+            <img class="hero img-content" src="../images/alignment-research-landscape/slide3.jpg" alt="Dark library shelves with books and ladder">
+            <div class="hero-caption">Photo: Unsplash</div>
+          </div>
+          <p class="lead">
+            企業の安全性チームが「出荷可能な安全性」を追求するのに対し、独立研究機関は商業的制約なしにalignmentの根本問題に取り組む。その代償として、彼らの研究成果が実装に反映される保証はない。しかし、この自由こそが独立機関の存在価値である。企業が問えない問い — たとえば「そもそもフロンティアモデルの開発を続けるべきか」や「現在のalignment手法はすべて表層的ではないか」 — を、独立機関だけが問える。
+          </p>
+          <p class="lead">
+            <a href="05-ai-risk-lineage.html" style="color:inherit;border-bottom:1px solid #999;transition:border-color 0.3s;">No.05「AI存亡リスク論の系譜」</a>で辿った通り、alignment研究は独立機関から始まった。MIRIは2000年にEliezer YudkowskyがSingularity Institute for Artificial Intelligenceとして設立した組織であり、alignment概念の母体にあたる。ARCは2021年にPaul ChristianoがOpenAIを離れて設立した。CAISは2022年にDan Hendrycksが率いる形で始動した。Redwood Researchは2021年にNate ThomasとBuck Shlegerisが設立した。いずれも設立から5年以内の若い組織である。
+          </p>
+
+          <div class="grid-2">
+            <div class="card">
+              <span class="tag">A</span>
+              <p><strong>MIRI (Machine Intelligence Research Institute)</strong></p>
+              <div class="bullets" style="margin-top: 16px">
+                <p class="point"><strong>研究方向</strong> Agent Foundations — 超知能の数学的整合性。論理的不確実性、決定理論、埋め込みエージェンシーなど、現行のMLパラダイムとは直交する問題群を扱う。</p>
+                <p class="point"><strong>特異性</strong> 2023年に方針転換。Yudkowskyが「技術的alignment研究は無力」と判断し、国際的な規制（計算資源の管理、開発停止条約）を主張する方向に軸足を移した。研究組織としての活動は縮小中。</p>
+                <p class="point"><strong>人材の輩出</strong> MIRI出身者はAnthropic、OpenAI、ARC、Redwoodに散在している。思想的影響は研究者を通じて企業に浸透している。</p>
+              </div>
+            </div>
+            <div class="card">
+              <span class="tag">B</span>
+              <p><strong>ARC (Alignment Research Center)</strong></p>
+              <div class="bullets" style="margin-top: 16px">
+                <p class="point"><strong>研究方向</strong> Evals — モデルの危険な能力を評価する手法の開発。GPT-4リリース前にOpenAIから委託されたred-teamingで注目された。</p>
+                <p class="point"><strong>Paul Christiano</strong> 元OpenAIの安全性研究者で、RLHFの共同考案者。理論的alignment研究と実証的評価の両方に足を置く稀有な存在。ARC Evalsはモデル評価の業界標準に近い位置を占めつつある。</p>
+                <p class="point"><strong>立ち位置</strong> 企業が「私たちのモデルは安全です」と言うとき、それを独立に検証する機能を担う。監査法人に近い役割。</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <div class="card">
+              <span class="tag">C</span>
+              <p><strong>CAIS (Center for AI Safety) / Redwood Research</strong></p>
+              <div class="bullets" style="margin-top: 16px">
+                <p class="point"><strong>CAIS</strong> Dan Hendrycksが率いる。安全性ベンチマークの開発（MMLU、TruthfulQA等に関与）と、2023年5月の22語声明の発出元。研究より政策と計測に重心がある。</p>
+                <p class="point"><strong>Redwood Research</strong> Adversarial training、Causal scrubbingなど、モデルの内部挙動を操作・検証する手法を開発。Anthropicの解釈可能性研究と技術的に近い問題を扱うが、企業の外側から取り組む。</p>
+              </div>
+            </div>
+            <div class="card">
+              <span class="tag">D</span>
+              <p><strong>アカデミア</strong></p>
+              <div class="bullets" style="margin-top: 16px">
+                <p class="point"><strong>UC Berkeley CHAI</strong> Stuart Russellが2016年に設立。CIRL（Cooperative Inverse Reinforcement Learning）を提唱。「AIの目的を人間が明示的に与えるのではなく、AIが人間の行動から推論する」という枠組み。</p>
+                <p class="point"><strong>Oxford FHI（閉鎖）</strong> Nick Bostromが2005年に設立したFuture of Humanity Institute。2024年4月に閉鎖。大学官僚制との軋轢が原因とされる。後継の一部はGovAI（Centre for the Governance of AI）として独立。</p>
+                <p class="point"><strong>Cambridge CSER / MIT FutureTech</strong> 存亡リスク研究の拠点だが、alignment固有の技術研究よりガバナンスと政策に重心がある。Max Tegmarkの活動はFLI（Future of Life Institute）と重なる。</p>
+              </div>
+            </div>
+          </div>
+
+          <p class="lead">
+            独立機関に共通する課題は人材流出である。alignment研究者の市場価値は高く、Anthropic、OpenAI、DeepMindは積極的に採用する。MIRI出身のChris Olah（Anthropicの解釈可能性チームのリーダー）、ARC出身のBeth Barnesなど、独立機関で育った人材が企業に移る例は多い。この流れは研究成果の産業移転としては健全だが、独立機関の組織的持続性を蝕む。特にMIRIの縮小は、非営利でalignment研究を維持する困難さの象徴である。
+          </p>
+        </div>
+        <div class="footer reveal reveal-delay-3">
+          <span>独立機関が問いを作り、企業が実装し、人材は企業に流れる</span>
+          <span class="slide-count">3 / 5</span>
+        </div>
+      </section>
+
+      <!-- ═══════════ Slide 4 ═══════════ -->
+      <section class="slide" id="slide-4">
+        <div class="eyebrow reveal">Follow the Money</div>
+        <h2 class="reveal reveal-delay-1">alignment研究の資金構造は、一つの財団と数社の企業に集中している</h2>
+        <div class="panel reveal reveal-delay-2">
+          <div>
+            <img class="hero img-wide" src="../images/alignment-research-landscape/slide4.jpg" alt="Abstract golden curved lines on black background">
+            <div class="hero-caption">Photo: Unsplash</div>
+          </div>
+          <p class="lead">
+            alignment研究の資金源は大きく3層に分かれる。第1層は企業の自己資金。Anthropic、OpenAI、Google DeepMindの安全性チーム人件費と計算資源は、各社の事業予算から出る。第2層はOpen Philanthropy。Dustin Moskovitz（Facebook共同創設者）とCari Tuna夫妻が設立した財団で、alignment研究の外部資金として最大の出し手である。第3層はSurvival and Flourishing Fund（SFF）、Long-Term Future Fund、各種の小規模助成金。
+          </p>
+          <p class="lead">
+            Open Philanthropyの影響は突出している。ARC、MIRI、CAIS、Redwood Research、UC Berkeley CHAI、Cambridge CSER。主要な独立研究機関のほぼすべてがOpen Philanthropyから助成を受けている。2022年から2024年の累計で、Open PhilanthropyがAI安全分野に拠出した金額は推定2-3億ドル。alignment研究の非企業資金の過半を一つの財団が賄っている。
+          </p>
+
+          <!-- SVG Infographic: Funding Flow -->
+          <figure class="infographic-container">
+            <svg viewBox="0 0 880 520" xmlns="http://www.w3.org/2000/svg" style="font-family:HelveticaNeue,'Helvetica Neue',Helvetica,Arial,sans-serif;">
+              <!-- Background -->
+              <rect width="880" height="520" fill="#faf8f1"/>
+
+              <!-- Title -->
+              <text x="440" y="32" text-anchor="middle" font-size="13" font-weight="700" fill="#2f2b92" letter-spacing="0.08em" style="text-transform:uppercase;">Alignment Research Funding Flow (Estimated, 2024)</text>
+
+              <!-- Funding Sources (Top) -->
+              <rect x="20" y="60" width="200" height="52" fill="#2f2b92" rx="3"/>
+              <text x="120" y="84" text-anchor="middle" font-size="12" font-weight="700" fill="#faf8f1">Open Philanthropy</text>
+              <text x="120" y="100" text-anchor="middle" font-size="11" fill="rgba(250,248,241,0.7)">est. $80-120M/yr (AI Safety)</text>
+
+              <rect x="240" y="60" width="160" height="52" fill="#2f2b92" rx="3"/>
+              <text x="320" y="84" text-anchor="middle" font-size="12" font-weight="700" fill="#faf8f1">SFF / LTFF</text>
+              <text x="320" y="100" text-anchor="middle" font-size="11" fill="rgba(250,248,241,0.7)">est. $10-20M/yr</text>
+
+              <rect x="420" y="60" width="440" height="52" fill="#1a1a1a" rx="3"/>
+              <text x="640" y="84" text-anchor="middle" font-size="12" font-weight="700" fill="#faf8f1">Corporate Self-Funding (Anthropic / OpenAI / DeepMind / Meta)</text>
+              <text x="640" y="100" text-anchor="middle" font-size="11" fill="rgba(250,248,241,0.5)">est. $200-300M/yr (safety team budgets + compute)</text>
+
+              <!-- Flow lines from Open Philanthropy -->
+              <line x1="120" y1="112" x2="120" y2="160" stroke="#2f2b92" stroke-width="2" stroke-dasharray="4 3"/>
+              <line x1="120" y1="160" x2="80" y2="200" stroke="#2f2b92" stroke-width="2"/>
+              <line x1="120" y1="160" x2="200" y2="200" stroke="#2f2b92" stroke-width="2"/>
+              <line x1="120" y1="160" x2="320" y2="200" stroke="#2f2b92" stroke-width="1.5"/>
+              <line x1="120" y1="160" x2="440" y2="200" stroke="#2f2b92" stroke-width="1"/>
+
+              <!-- Flow lines from SFF -->
+              <line x1="320" y1="112" x2="320" y2="160" stroke="#2f2b92" stroke-width="1.5" stroke-dasharray="4 3"/>
+              <line x1="320" y1="160" x2="200" y2="200" stroke="#2f2b92" stroke-width="1"/>
+              <line x1="320" y1="160" x2="440" y2="200" stroke="#2f2b92" stroke-width="1"/>
+
+              <!-- Flow lines from Corporate -->
+              <line x1="500" y1="112" x2="500" y2="200" stroke="#1a1a1a" stroke-width="2" stroke-dasharray="4 3"/>
+              <line x1="600" y1="112" x2="600" y2="200" stroke="#1a1a1a" stroke-width="2" stroke-dasharray="4 3"/>
+              <line x1="720" y1="112" x2="720" y2="200" stroke="#1a1a1a" stroke-width="2" stroke-dasharray="4 3"/>
+              <line x1="830" y1="112" x2="830" y2="200" stroke="#1a1a1a" stroke-width="1.5" stroke-dasharray="4 3"/>
+
+              <!-- Recipients Row 1: Independent Orgs -->
+              <text x="20" y="196" font-size="10" font-weight="700" fill="#757575" letter-spacing="0.06em" style="text-transform:uppercase;">Independent Orgs</text>
+
+              <rect x="20" y="208" width="140" height="72" fill="none" stroke="#2f2b92" stroke-width="1.5" rx="2"/>
+              <text x="90" y="230" text-anchor="middle" font-size="12" font-weight="700" fill="#1a1a1a">MIRI</text>
+              <text x="90" y="246" text-anchor="middle" font-size="10" fill="#757575">Agent Foundations</text>
+              <text x="90" y="262" text-anchor="middle" font-size="10" fill="#757575">Shrinking (2023-)</text>
+
+              <rect x="172" y="208" width="140" height="72" fill="none" stroke="#2f2b92" stroke-width="1.5" rx="2"/>
+              <text x="242" y="230" text-anchor="middle" font-size="12" font-weight="700" fill="#1a1a1a">ARC</text>
+              <text x="242" y="246" text-anchor="middle" font-size="10" fill="#757575">Evals / Red-teaming</text>
+              <text x="242" y="262" text-anchor="middle" font-size="10" fill="#757575">P. Christiano (ex-OpenAI)</text>
+
+              <rect x="324" y="208" width="140" height="72" fill="none" stroke="#2f2b92" stroke-width="1.5" rx="2"/>
+              <text x="394" y="230" text-anchor="middle" font-size="12" font-weight="700" fill="#1a1a1a">CAIS / Redwood</text>
+              <text x="394" y="246" text-anchor="middle" font-size="10" fill="#757575">Benchmarks / Adv. training</text>
+              <text x="394" y="262" text-anchor="middle" font-size="10" fill="#757575">D. Hendrycks / N. Thomas</text>
+
+              <!-- Recipients Row 1: Corporate Safety Teams -->
+              <text x="480" y="196" font-size="10" font-weight="700" fill="#757575" letter-spacing="0.06em" style="text-transform:uppercase;">Corporate Safety Teams</text>
+
+              <rect x="480" y="208" width="100" height="72" fill="#1a1a1a" rx="2"/>
+              <text x="530" y="232" text-anchor="middle" font-size="11" font-weight="700" fill="#faf8f1">Anthropic</text>
+              <text x="530" y="248" text-anchor="middle" font-size="9" fill="rgba(250,248,241,0.6)">Constitutional AI</text>
+              <text x="530" y="262" text-anchor="middle" font-size="9" fill="rgba(250,248,241,0.6)">Interpretability</text>
+
+              <rect x="590" y="208" width="100" height="72" fill="#1a1a1a" rx="2"/>
+              <text x="640" y="232" text-anchor="middle" font-size="11" font-weight="700" fill="#faf8f1">OpenAI</text>
+              <text x="640" y="248" text-anchor="middle" font-size="9" fill="rgba(250,248,241,0.6)">Preparedness</text>
+              <text x="640" y="262" text-anchor="middle" font-size="9" fill="rgba(250,248,241,0.6)">(ex-Superalignment)</text>
+
+              <rect x="700" y="208" width="100" height="72" fill="#1a1a1a" rx="2"/>
+              <text x="750" y="232" text-anchor="middle" font-size="11" font-weight="700" fill="#faf8f1">DeepMind</text>
+              <text x="750" y="248" text-anchor="middle" font-size="9" fill="rgba(250,248,241,0.6)">Scalable Align.</text>
+              <text x="750" y="262" text-anchor="middle" font-size="9" fill="rgba(250,248,241,0.6)">RLHF origin</text>
+
+              <rect x="810" y="208" width="60" height="72" fill="#1a1a1a" rx="2"/>
+              <text x="840" y="232" text-anchor="middle" font-size="11" font-weight="700" fill="#faf8f1">Meta</text>
+              <text x="840" y="248" text-anchor="middle" font-size="9" fill="rgba(250,248,241,0.6)">Open wt.</text>
+              <text x="840" y="262" text-anchor="middle" font-size="9" fill="rgba(250,248,241,0.6)">Llama Guard</text>
+
+              <!-- Talent Flow Arrows (bottom) -->
+              <text x="20" y="320" font-size="10" font-weight="700" fill="#757575" letter-spacing="0.06em" style="text-transform:uppercase;">Talent Flow (Key Moves, 2021-2024)</text>
+
+              <!-- Arrows -->
+              <defs>
+                <marker id="arrow" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="#2f2b92"/></marker>
+              </defs>
+
+              <line x1="90" y1="340" x2="530" y2="340" stroke="#2f2b92" stroke-width="1.5" marker-end="url(#arrow)"/>
+              <text x="310" y="336" text-anchor="middle" font-size="9" fill="#2f2b92">C. Olah → Anthropic Interp. team lead</text>
+
+              <line x1="640" y1="360" x2="530" y2="360" stroke="#2f2b92" stroke-width="1.5" marker-end="url(#arrow)"/>
+              <text x="585" y="356" text-anchor="middle" font-size="9" fill="#2f2b92">J. Leike → Anthropic (2024)</text>
+
+              <line x1="640" y1="380" x2="242" y2="380" stroke="#2f2b92" stroke-width="1.5" marker-end="url(#arrow)"/>
+              <text x="441" y="376" text-anchor="middle" font-size="9" fill="#2f2b92">P. Christiano → ARC (2021)</text>
+
+              <line x1="640" y1="400" x2="750" y2="400" stroke="#757575" stroke-width="1" stroke-dasharray="3 3" marker-end="url(#arrow)"/>
+              <text x="695" y="396" text-anchor="middle" font-size="9" fill="#757575">I. Sutskever → SSI (2024)</text>
+
+              <!-- Legend -->
+              <rect x="20" y="440" width="840" height="60" fill="#f3f1e4" rx="2"/>
+              <text x="36" y="462" font-size="10" font-weight="700" fill="#1a1a1a">Legend:</text>
+              <line x1="80" y1="459" x2="110" y2="459" stroke="#2f2b92" stroke-width="2" stroke-dasharray="4 3"/>
+              <text x="116" y="463" font-size="10" fill="#757575">Philanthropic funding</text>
+              <line x1="260" y1="459" x2="290" y2="459" stroke="#1a1a1a" stroke-width="2" stroke-dasharray="4 3"/>
+              <text x="296" y="463" font-size="10" fill="#757575">Corporate self-funding</text>
+              <line x1="440" y1="459" x2="470" y2="459" stroke="#2f2b92" stroke-width="1.5" marker-end="url(#arrow)"/>
+              <text x="476" y="463" font-size="10" fill="#757575">Talent migration</text>
+              <text x="36" y="486" font-size="9" fill="#999">Funding amounts are estimates based on public disclosures, 990 filings, and press reports. Actual figures may differ.</text>
+            </svg>
+            <p class="info-source">Public disclosures, 990 filings, press reports / AGI HUB editorial</p>
+          </figure>
+
+          <p class="lead">
+            この資金構造が研究方向に影響を与えていないと考えるのは楽観的すぎる。Open Philanthropyは効果的利他主義（EA）運動と深く結びついており、EA運動は存亡リスク（x-risk）を重視する。結果として、Open Philanthropyの助成先は「AIが人類を絶滅させるリスク」を研究する機関に偏る傾向がある。alignment研究のうち、<a href="06-misaligned-ai-mechanics.html" style="color:inherit;border-bottom:1px solid #999;transition:border-color 0.3s;">誤整合の構造</a>や超知能の制御を扱う研究は資金を得やすい。一方で、「AIの公平性」「バイアス除去」「労働市場への影響」といった、x-riskとは直接結びつかないが社会的に重要なテーマは、alignment研究の資金フローから外れがちである。
+          </p>
+          <p class="lead">
+            2022年11月のFTX破綻はこの構造を直撃した。Sam Bankman-Friedとその関連組織（FTX Foundation、Alameda Research）は、EA運動とalignment研究の主要資金源の一つだった。推定で数億ドル規模の助成が凍結または消失した。SFFやLTFFの一部資金もFTX関連だった。Open Philanthropy単独への依存度はさらに高まった。
+          </p>
+
+          <div class="note">
+            alignment研究の独立性は、<strong>カネの出どころの多様性</strong>に依存する。現状、非企業資金の大部分が一つの財団に集中し、その財団がEA運動のx-risk重視を反映する以上、研究テーマの分布は資金提供者の世界観に影響される。これは善意の偏りだが、偏りであることに変わりはない。
+          </div>
+        </div>
+        <div class="footer reveal reveal-delay-3">
+          <span>カネの出どころが一つに集中するとき、研究の独立性は構造的に脅かされる</span>
+          <span class="slide-count">4 / 5</span>
+        </div>
+      </section>
+
+      <!-- ═══════════ Slide 5 ═══════════ -->
+      <section class="slide" id="slide-5">
+        <div class="eyebrow reveal">2030 Forecast</div>
+        <h2 class="reveal reveal-delay-1">2030年に残るのは「解釈可能性」と「評価」、淘汰されるのは「数学的整合性」</h2>
+        <div class="panel reveal reveal-delay-2">
+          <div>
+            <img class="hero img-fullbleed" src="../images/alignment-research-landscape/slide5.jpg" alt="Empty road stretching toward horizon">
+            <div class="hero-caption">Photo: Unsplash</div>
+          </div>
+          <p class="lead">
+            ここまで描いた布陣図から、2030年のalignment研究の勢力図を予測する。もちろん予測は外れうるが、逃げ表現で括弧付きの「かもしれない」を並べるより、根拠を示した上で言い切った方が検証可能である。
+          </p>
+          <p class="lead">
+            予測の軸は「スケーリング則の継続」という前提条件である。2025年時点で、GPT-4クラスのモデルが2026年から2027年にかけてさらに1-2桁スケールする見通しが複数の推計から示されている。この前提が成立するなら、alignmentへの実需は急増する。企業は「出荷する前にモデルが何をしているか理解する」必要に迫られる。この実需に最も直接応えるアプローチが、解釈可能性（Interpretability）と評価（Evals）である。
+          </p>
+
+          <div class="timeline">
+            <div class="timeline-step highlight">
+              <div class="num">Winner</div>
+              <p><strong>Interpretability</strong><br>Anthropicのモノセマンティシティ研究（2023年のToy Models of Superposition、2024年のScaling Monosemanticity論文）は、モデルの内部状態を人間が読める形に変換する道を開いた。この研究路線はモデルのスケーリングと並走できるため、企業の実需に直結する。2030年にはalignment研究の主流になっている。</p>
+            </div>
+            <div class="timeline-step highlight">
+              <div class="num">Winner</div>
+              <p><strong>Evals (評価)</strong><br>ARCが先鞭をつけた独立評価は、<a href="07-ai-governance-response.html" style="color:inherit;border-bottom:1px solid #fff;transition:border-color 0.3s;">AI規制</a>の標準化と結びつく。政府が「モデルを公開する前に評価しろ」と要求する限り、評価手法への需要は消えない。EU AI ActやUS Executive Orderが制度的にevalを要求する方向性は不可逆。</p>
+            </div>
+            <div class="timeline-step">
+              <div class="num">Survive</div>
+              <p><strong>Constitutional AI / RLHF系</strong><br>現行モデルの制御手法として生き残るが、「alignment研究」というよりプロダクトエンジニアリングの一部に吸収される。研究としての独自性は薄まる。</p>
+            </div>
+            <div class="timeline-step">
+              <div class="num">Decline</div>
+              <p><strong>Agent Foundations</strong><br>MIRIの数学的alignment研究は、対象が超知能に限定されているため実証が困難。MIRI自身が2023年に研究方針を転換した。後継者が現れなければ、2030年にはアカデミアの少数派論文として残存する程度になる。</p>
+            </div>
+            <div class="timeline-step">
+              <div class="num">Wild Card</div>
+              <p><strong>d/acc批判</strong><br>Vitalik Buterinが提唱するd/acc（Defensive Acceleration）は、alignment研究そのものを「中央集権的発想」と批判する。オープンウェイト、分散型検証、プライバシー技術による防御を主張。2030年にalignment研究の主流にはならないが、企業主導のalignmentへの対抗言語として影響力を持つ。</p>
+            </div>
+          </div>
+
+          <p class="lead">
+            これらの予測を一言で要約すると、<strong>alignment研究は哲学から工学に移行する</strong>。MIRIが2000年に始めた「超知能と人類の関係をどう設計するか」という哲学的問いは、「モデルの内部を可視化し、危険な振る舞いを公開前に検出する」という工学的問いに置き換わりつつある。この移行は良くも悪くも不可避である。工学的問いへの回答は計測可能で、資金を呼び、規制と接続する。哲学的問いへの回答は計測困難で、資金を失い、政策に反映されにくい。
+          </p>
+          <p class="lead">
+            ただし、ここに一つの危険が潜む。工学的alignmentが「モデルを安全に出荷する技術」に矮小化されるとき、Yudkowskyが本来提起した「知能の爆発的拡大に人類はどう対処するか」という問いは宙に浮く。2030年時点でAGI（汎用人工知能）が達成されていなければ、この問いは学者の空論にとどまる。しかし<a href="03-agi-explosion.html" style="color:inherit;border-bottom:1px solid #999;transition:border-color 0.3s;">技術爆発</a>が現実になれば、工学的alignmentでは手が届かない領域が一気に露出する。「布陣図」は結局のところ、最悪のシナリオに対する備えが十分かどうかを問うための地図である。
+          </p>
+
+          <div class="note">
+            alignment研究の布陣図を描いてみると、一つの不都合な事実が浮かぶ。<strong>最も資金と人材を集めているアプローチは「現行モデルの安全性」であり、最も資金と人材を失っているアプローチは「超知能の制御」である。</strong>前者が解ける問題と後者が解くべき問題のあいだには、深い溝がある。その溝を埋める組織は、2025年時点では存在しない。
+          </div>
+        </div>
+        <div class="footer reveal reveal-delay-3">
+          <span>哲学から工学へ — だが工学では届かない領域が残る</span>
+          <span class="slide-count">5 / 5</span>
+        </div>
+      </section>
+
+      <!-- ═══════════ Related Reading ═══════════ -->
+      <section class="slide" style="min-height:auto;padding:64px 48px 80px;grid-template-rows:auto auto 1fr;">
+        <div class="eyebrow reveal">Related Reading</div>
+        <h2 class="reveal reveal-delay-1" style="max-width:none;">他の記事も読む</h2>
+        <div class="panel reveal reveal-delay-2">
+          <div class="grid-2">
+            <a href="05-ai-risk-lineage.html" class="card" style="color:inherit;display:block;">
+              <p style="font-family:'SF Mono','Fira Code',Menlo,Consolas,monospace;font-feature-settings:normal;font-size:11px;letter-spacing:0.083em;text-transform:uppercase;color:#757575;margin-bottom:12px;">Lineage</p>
+              <p><strong>AI存亡リスク論の系譜 — Extropianメーリングリストから政府声明まで</strong><br>本記事が空間的布陣図なら、No.05は時間的系譜。1991年のメーリングリストから2023年のブレッチリー宣言まで、alignment研究を生み出した思想がどう伝播したかを30年の線で辿る。</p>
+            </a>
+            <a href="06-misaligned-ai-mechanics.html" class="card" style="color:inherit;display:block;">
+              <p style="font-family:'SF Mono','Fira Code',Menlo,Consolas,monospace;font-feature-settings:normal;font-size:11px;letter-spacing:0.083em;text-transform:uppercase;color:#757575;margin-bottom:12px;">Mechanism</p>
+              <p><strong>Misaligned AIの構造 — なぜ有能なAIが人間の意図から外れるのか</strong><br>各研究機関が「alignment」の名の下に解こうとしている技術的問題とは何か。Specification Gaming、Goal Misgeneralization、欺瞞的アライメントなど、誤整合の内部機序を解剖する記事。</p>
+            </a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="credits">
+      <p>
+        Photos: All images from <a href="https://unsplash.com">Unsplash</a> (free license).
+        Slide 1: <a href="https://unsplash.com/photos/HxtvH28DSVM">Dark landscape</a> /
+        Slide 2: <a href="https://unsplash.com/photos/l5Naj0J1SsA">Monochrome cityscape</a> /
+        Slide 3: <a href="https://unsplash.com/photos/lc7xcWebECc">Library shelves</a> /
+        Slide 4: <a href="https://unsplash.com/photos/USoEC0FfhLw">Golden curves</a> /
+        Slide 5: <a href="https://unsplash.com/photos/1e5DdiCqrKE">Empty road</a> /
+        Thumbnail: <a href="https://unsplash.com/photos/LVADbQTjMcE">Chess pieces</a>
+      </p>
+    </footer>
+
+    <script>
+      const buttons = Array.from(document.querySelectorAll('.nav button'));
+      const slides = Array.from(document.querySelectorAll('.slide'));
+      const progress = document.getElementById('progress');
+
+      function setActive(id) {
+        buttons.forEach(b => b.classList.toggle('active', b.dataset.target === id));
+      }
+
+      buttons.forEach(b => {
+        b.addEventListener('click', () => {
+          document.getElementById(b.dataset.target)?.scrollIntoView({ behavior: 'smooth' });
+        });
+      });
+
+      const navObserver = new IntersectionObserver(entries => {
+        entries.forEach(e => { if (e.isIntersecting) setActive(e.target.id); });
+      }, { threshold: 0.5 });
+
+      slides.forEach(s => navObserver.observe(s));
+
+      const revealObserver = new IntersectionObserver(entries => {
+        entries.forEach(e => {
+          if (e.isIntersecting) {
+            e.target.classList.add('visible');
+          }
+        });
+      }, { threshold: 0.15, rootMargin: '0px 0px -60px 0px' });
+
+      document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+      window.addEventListener('scroll', () => {
+        const scrollTop = window.scrollY;
+        const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+        const pct = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+        progress.style.width = pct + '%';
+      }, { passive: true });
+
+      window.addEventListener('keydown', e => {
+        const idx = buttons.findIndex(b => b.classList.contains('active'));
+        if (e.key === 'ArrowDown' || e.key === 'PageDown') {
+          e.preventDefault();
+          slides[Math.min(idx + 1, slides.length - 1)]?.scrollIntoView({ behavior: 'smooth' });
+        }
+        if (e.key === 'ArrowUp' || e.key === 'PageUp') {
+          e.preventDefault();
+          slides[Math.max(idx - 1, 0)]?.scrollIntoView({ behavior: 'smooth' });
+        }
+      });
+    </script>
+  </body>
+</html>

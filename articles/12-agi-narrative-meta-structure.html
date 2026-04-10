@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>語る者の資格 — AGIナラティブのメタ構造</title>
+    <meta name="description" content="AGIを作らない者がAGIを語るとは何をしているのか。ナラティブの4機能・5層構造・4つの役割を解剖し、語る行為そのものの責任と限界を問う。" />
+    <link rel="stylesheet" href="../design-system/palette.css">
+    <style>
+      :root {
+        --black: #000;
+        --body-text: #1a1a1a;
+        --mid: #585858;
+        --meta: #757575;
+        --light-gray: #999;
+        --border: #ddd5bd;
+        --bg: #f3f1e9;
+        --bg-alt: #ebe7d3;
+        --accent: #b23a2f;
+        --accent-soft: rgba(178, 58, 47, 0.09);
+        --ease: cubic-bezier(0.22, 1, 0.36, 1);
+      }
+
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+      html { scroll-behavior: smooth; }
+
+      body {
+        font-family: HelveticaNeue, "Helvetica Neue", Helvetica, Arial,
+          游ゴシック体, YuGothic, "游ゴシック Medium", "Yu Gothic Medium",
+          游ゴシック, "Yu Gothic", "ヒラギノ角ゴ ProN W3", "Hiragino Kaku Gothic ProN",
+          "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", "MS ゴシック", "MS Gothic",
+          sans-serif;
+        font-feature-settings: "palt";
+        font-size: 16px;
+        line-height: 1.75;
+        color: var(--body-text);
+        background: var(--bg);
+        -webkit-font-smoothing: antialiased;
+        overflow-x: hidden;
+        word-wrap: break-word;
+      }
+
+      .progress {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 2px;
+        background: var(--accent);
+        width: 0%;
+        z-index: 100;
+        transition: width 0.3s var(--ease);
+      }
+
+      .nav {
+        position: fixed;
+        right: 24px;
+        top: 50%;
+        transform: translateY(-50%);
+        display: grid;
+        gap: 16px;
+        z-index: 50;
+      }
+
+      .nav button {
+        width: 8px;
+        height: 8px;
+        border-radius: 999px;
+        border: 1.5px solid var(--meta);
+        background: transparent;
+        cursor: pointer;
+        transition: all 0.3s var(--ease);
+      }
+
+      .nav button.active {
+        background: var(--accent);
+        border-color: var(--accent);
+        transform: scale(1.4);
+      }
+
+      main { scroll-snap-type: y mandatory; }
+
+      .slide {
+        position: relative;
+        min-height: 100vh;
+        max-width: 1120px;
+        margin: 0 auto;
+        padding: 80px 48px 64px;
+        display: grid;
+        grid-template-rows: auto auto 1fr auto;
+        gap: 32px;
+        scroll-snap-align: start;
+      }
+
+      .slide + .slide { border-top: 1px solid var(--border); }
+
+      .hero {
+        width: 100%;
+        aspect-ratio: 16 / 7;
+        object-fit: cover;
+        display: block;
+        filter: grayscale(0.6) contrast(1.1);
+        transition: filter 0.6s var(--ease);
+      }
+
+      .hero:hover { filter: grayscale(0) contrast(1); }
+
+      /* ── Image Placement Variations ── */
+      .slide .hero.img-fullbleed {
+        width: 100vw;
+        margin-left: calc(50% - 50vw);
+        margin-right: calc(50% - 50vw);
+        max-width: none;
+        aspect-ratio: 21/9;
+      }
+      .slide .hero.img-wide {
+        width: min(1280px, calc(100vw - 48px));
+        position: relative;
+        left: 50%;
+        transform: translateX(-50%);
+        max-width: none;
+      }
+      .slide .hero.img-content { max-width: 680px; margin: 0 auto; aspect-ratio: 4/3; }
+      .slide .hero.img-side-by-side { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+      @media (max-width: 768px) {
+        .slide .hero.img-fullbleed,
+        .slide .hero.img-wide,
+        .slide .hero.img-content { width: 100%; max-width: 100%; aspect-ratio: 16/9; margin: 0; transform: none; left: 0; }
+      }
+
+      .hero-caption {
+        font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 11px;
+        letter-spacing: 0.083em;
+        color: var(--light-gray);
+        margin-top: 8px;
+        text-transform: uppercase;
+      }
+
+      .credits {
+        max-width: 1120px;
+        margin: 0 auto;
+        padding: 48px 48px 80px;
+        border-top: 1px solid var(--border);
+      }
+
+      .credits p {
+        font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 11px;
+        letter-spacing: 0.047em;
+        line-height: 2;
+        color: var(--light-gray);
+      }
+
+      .credits a {
+        color: var(--meta);
+        text-decoration: none;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .credits a:hover {
+        color: var(--black);
+        border-bottom-color: var(--black);
+      }
+
+      .reveal {
+        opacity: 0;
+        transform: translateY(24px);
+        transition: opacity 0.6s var(--ease), transform 0.6s var(--ease);
+      }
+      .reveal.visible { opacity: 1; transform: translateY(0); }
+      .reveal-delay-1 { transition-delay: 0.1s; }
+      .reveal-delay-2 { transition-delay: 0.2s; }
+      .reveal-delay-3 { transition-delay: 0.35s; }
+
+      .eyebrow {
+        font-family: "SF Mono", "Fira Code", "Fira Mono", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        color: var(--accent);
+      }
+
+      h1, h2 {
+        color: var(--black);
+        font-weight: 800;
+        line-height: 1.35;
+        letter-spacing: -0.01em;
+        max-width: 24ch;
+        padding-bottom: 16px;
+        border-bottom: 3px double var(--accent);
+      }
+
+      h1 { font-size: clamp(30px, 4.4vw, 38px); }
+      h2 { font-size: clamp(26px, 3.8vw, 34px); }
+
+      .lead {
+        max-width: 780px;
+        font-size: 16px;
+        line-height: 1.75;
+        color: var(--body-text);
+      }
+
+      .lead + .lead { margin-top: 8px; }
+
+      .panel { display: grid; gap: 24px; align-content: start; }
+      .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
+      .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+
+      .card {
+        padding: 24px 20px 24px 0;
+        border-top: 3px solid var(--accent);
+        background: transparent;
+      }
+
+      .card .tag { color: var(--accent); font-weight: 700; }
+      .card strong { color: var(--black); }
+
+      .card p {
+        font-size: 16px;
+        line-height: 1.75;
+        color: var(--body-text);
+      }
+
+      .tag {
+        display: inline-block;
+        font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 11px;
+        letter-spacing: 0.083em;
+        color: var(--meta);
+        margin-bottom: 12px;
+      }
+
+      .bullets { display: grid; gap: 16px; }
+
+      .point {
+        padding-left: 16px;
+        border-left: 3px solid var(--accent);
+        font-size: 16px;
+        line-height: 1.75;
+        color: var(--body-text);
+      }
+
+      .note {
+        border-left: 4px solid var(--accent);
+        padding: 20px 24px;
+        background: var(--accent-soft);
+        margin: 32px 0;
+        font-size: 17px;
+        line-height: 1.75;
+      }
+      .note strong { color: var(--accent); }
+
+      .footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 11px;
+        letter-spacing: 0.047em;
+        color: var(--light-gray);
+        padding-top: 24px;
+        border-top: 1px solid var(--border);
+      }
+
+      .slide-count { text-transform: uppercase; }
+
+      /* Investigation: pullquote */
+      blockquote.pullquote {
+        border-left: 4px solid var(--accent);
+        margin: 40px 0;
+        padding: 16px 0 16px 24px;
+        font-size: 20px;
+        font-weight: 600;
+        line-height: 1.55;
+        color: var(--black);
+        max-width: 640px;
+      }
+
+      blockquote.pullquote cite {
+        display: block;
+        margin-top: 12px;
+        font-size: 13px;
+        font-weight: 400;
+        color: var(--meta);
+        font-style: normal;
+      }
+
+      /* Investigation: evidence table */
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 15px;
+        line-height: 1.6;
+        margin: 24px 0;
+      }
+      table th {
+        background: var(--black);
+        color: #fff;
+        font-weight: 700;
+        text-align: left;
+        padding: 12px 16px;
+        font-size: 12px;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+      }
+      table td {
+        padding: 12px 16px;
+        border-bottom: 1px solid var(--border);
+        vertical-align: top;
+      }
+      table tr:last-child td { border-bottom: none; }
+
+      /* Inline link style */
+      .inline-link {
+        color: inherit;
+        border-bottom: 1px solid #999;
+        transition: border-color 0.3s;
+      }
+      .inline-link:hover { border-bottom-color: var(--accent); }
+
+      @media (max-width: 768px) {
+        .slide { padding: 48px 20px 40px; gap: 20px; }
+        .grid-2, .grid-3 { grid-template-columns: 1fr; }
+        .nav { display: none; }
+        h1 { font-size: 26px; }
+        h2 { font-size: 22px; }
+        .footer { flex-direction: column; gap: 8px; }
+      }
+    </style>
+  </head>
+  <body class="pattern-investigation has-site-header" data-category="governance">
+    <header class="site-header">
+      <div class="site-header-inner">
+        <a href="../index.html" class="site-logo"><span class="site-logo-mark"></span>AGI HUB</a>
+        <nav class="site-nav-right">
+          <a href="../index.html" class="site-nav-hide-mobile">Archive</a>
+          <a href="../displacement-map.html" class="site-nav-hide-mobile">Data</a>
+          <div id="google_translate_element"></div>
+        </nav>
+      </div>
+    </header>
+    <div class="progress" id="progress"></div>
+
+    <aside class="nav" aria-label="Slide navigation">
+      <button data-target="slide-1" class="active" aria-label="Slide 1"></button>
+      <button data-target="slide-2" aria-label="Slide 2"></button>
+      <button data-target="slide-3" aria-label="Slide 3"></button>
+      <button data-target="slide-4" aria-label="Slide 4"></button>
+      <button data-target="slide-5" aria-label="Slide 5"></button>
+    </aside>
+
+    <main>
+      <!-- ═══════════ Slide 1/5 ═══════════ -->
+      <section class="slide" id="slide-1">
+        <div class="eyebrow reveal">AGI HUB · No. 12 · Governance · The Naming Act</div>
+        <h1 class="reveal reveal-delay-1">作らない者が語る、その行為の正体</h1>
+        <img class="hero img-fullbleed reveal reveal-delay-2" src="../images/agi-narrative-meta-structure/slide1.jpg" alt="Abstract waves of light and shadow — narrative as structure">
+        <div class="panel reveal reveal-delay-2">
+          <p class="lead">AGIを実際に作るのはAnthropicであり、OpenAIであり、DeepMindだ。数十億ドルの計算資源と数千人の研究者が、次の知能のかたちを鋳造している。では、それを作らない者がAGIについて語るとき、その人間は何をしているのか。</p>
+          <p class="lead">この問いは、AGI HUBがこれまで11本の記事で行ってきたこと自体に向けられる。<a href="01-ai-alignment.html" class="inline-link">アラインメント問題の構造</a>を論じ、<a href="04-takeoff-speed-debate.html" class="inline-link">テイクオフ速度の論争</a>を整理し、<a href="07-ai-governance-response.html" class="inline-link">ガバナンスの設計図</a>を描いた。だがそのどれも、AGIそのものを1行たりとも書いていない。書いたのはナラティブだ。</p>
+          <p class="lead">Sheila Jasanoffはハーバード大学のSTSプログラムで「sociotechnical imaginaries」という概念を提唱した（Jasanoff & Kim, 2015, <em>Dreamscapes of Modernity</em>, University of Chicago Press）。技術の未来像は純粋な予測ではない。望ましい社会秩序の像を暗黙に含んでおり、その像が現在の政策・投資・組織行動を方向づける。AGIを語るとは、AGIの未来を予測することではなく、AGIが存在する社会の姿を先に書くことだ。</p>
+          <p class="lead">この先行的な記述行為には、少なくとも4つの機能がある。</p>
+          <div class="grid-2">
+            <div class="card">
+              <span class="tag">01 — 未来の命名</span>
+              <p>何が起きるのかに名前を与える。「AI導入」と呼ぶか「判断主体の置換」と呼ぶかで、対応すべき問題の輪郭が変わる。命名は認知の枠を決める行為であり、中立的な記述ではない。</p>
+            </div>
+            <div class="card">
+              <span class="tag">02 — 因果の編集</span>
+              <p>バラバラの事象を一本の因果鎖として接続する。スケーリング則の発見、チップ輸出規制、Anthropicの安全性研究。個別にはただの出来事だが、因果の線で繋ぐと「物語」になり、次に何が起きるかの期待が生まれる。</p>
+            </div>
+            <div class="card">
+              <span class="tag">03 — 正当性の競争</span>
+              <p>何を恐れるべきか、何を守るべきかを競う。勝ったナラティブが法律、予算配分、企業の行動規範の前提になる。p(doom)論争はリスクの予測ではなく、正当性の競争だ。</p>
+            </div>
+            <div class="card">
+              <span class="tag">04 — 主体形成</span>
+              <p>人々に「自分は何者としてこの変化に関わるのか」を与える。研究者か、規制者か、受益者か、被害者か。ナラティブはアイデンティティの配分装置として機能する。</p>
+            </div>
+          </div>
+        </div>
+        <div class="footer reveal reveal-delay-3">
+          <span>語りは予測ではない。社会の自己記述の先行版だ</span>
+          <span class="slide-count">1 / 5</span>
+        </div>
+      </section>
+
+      <!-- ═══════════ Slide 2/5 ═══════════ -->
+      <section class="slide" id="slide-2">
+        <div class="eyebrow reveal">Five Layers Deep</div>
+        <h2 class="reveal reveal-delay-1">ナラティブの5層を剥がす</h2>
+        <img class="hero img-content reveal reveal-delay-2" src="../images/agi-narrative-meta-structure/slide2.jpg" alt="Geological strata layers — narrative depth">
+        <div class="panel reveal reveal-delay-2">
+          <p class="lead">あらゆるAGIナラティブには、少なくとも5つの層が重なっている。表面だけを読むと「AGIはこう来る」という予測に見えるが、その下には語り手の目的、利害、認識論的前提、そして聞き手に期待する行動が埋まっている。</p>
+          <p class="lead">Robert Shillerはイェール大学で「narrative economics」を提唱し、物語がウイルス的に拡散して経済行動を変えるメカニズムを記述した（Shiller, 2019, <em>Narrative Economics</em>, Princeton University Press）。AGIナラティブにも同じ構造が作動している。しかしShillerの枠組みだけでは足りない。AGIナラティブは経済行動だけでなく、制度設計、人間観、主権のありかたまで規定しようとする。だから5層まで掘り下げる必要がある。</p>
+
+          <table>
+            <thead>
+              <tr>
+                <th>層</th>
+                <th>問い</th>
+                <th>具体例</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>第1層: 対象</strong></td>
+                <td>AGIはどう来るか、社会はどう変わるか</td>
+                <td>テイクオフ速度論、産業爆発モデル</td>
+              </tr>
+              <tr>
+                <td><strong>第2層: 機能</strong></td>
+                <td>その物語は何のために語られているか</td>
+                <td>警告、動員、資本調達、正当化</td>
+              </tr>
+              <tr>
+                <td><strong>第3層: 利害</strong></td>
+                <td>誰が得をし、誰が損をする物語か</td>
+                <td>開発企業の「安全性リーダー」ポジション獲得</td>
+              </tr>
+              <tr>
+                <td><strong>第4層: 認識論</strong></td>
+                <td>何を証拠として採用し、何を切り捨てているか</td>
+                <td>スケーリング則の外挿 vs 質的転換の仮説</td>
+              </tr>
+              <tr>
+                <td><strong>第5層: 実践</strong></td>
+                <td>聞いた人に何をさせるのか</td>
+                <td>投資、規制支持、キャリア転換、無関心</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <p class="lead">Jens Beckertはマックス・プランク社会研究所で「fictional expectations」の概念を展開した（Beckert, 2016, <em>Imagined Futures</em>, Harvard University Press）。資本主義経済において、行為者は不確実な未来についての「虚構の期待」に基づいて意思決定する。期待が虚構であることは問題ではない。問題は、その虚構がどのような行動を組織し、誰の利益に奉仕するかだ。</p>
+          <p class="lead">AGI HUBの既存記事をこの5層で読み直すと、各記事がどの層を主に扱い、どの層を暗黙の前提として残していたかが見える。<a href="05-ai-risk-lineage.html" class="inline-link">AI存亡リスク論の系譜（No. 05）</a>は第1層と第3層の交差を扱った。30年にわたるリスク言説の系譜を辿ったが、その系譜を辿ること自体が「リスク言説の正統性を歴史的に証明する」という第2層の機能を帯びている。記事を書いた時点では、その自己言及的な構造を明示していなかった。</p>
+
+          <blockquote class="pullquote">
+            ナラティブの第1層だけを読んで「正しいか間違っているか」を判定するのは、地表だけ見て地盤の安定性を語るようなものだ。
+          </blockquote>
+        </div>
+        <div class="footer reveal reveal-delay-3">
+          <span>すべてのAGI言説は5層の利害構造を持つ</span>
+          <span class="slide-count">2 / 5</span>
+        </div>
+      </section>
+
+      <!-- ═══════════ Slide 3/5 ═══════════ -->
+      <section class="slide" id="slide-3">
+        <div class="eyebrow reveal">Four Roles, Four Failures</div>
+        <h2 class="reveal reveal-delay-1">語る者の4つの役割と固有の失敗</h2>
+        <img class="hero img-wide reveal reveal-delay-2" src="../images/agi-narrative-meta-structure/slide3.jpg" alt="Symmetrical concrete structure — roles and their mirror failures">
+        <div class="panel reveal reveal-delay-2">
+          <p class="lead">AGIを作らない者が語る行為には、4つの異なる役割がある。各役割には固有の価値があり、同時に固有の失敗モードがある。Hanne Borup、Nik Brown、Kornelia Konrad、Lente van Lente はヨーク大学の研究で「sociology of expectations」を体系化した（Borup et al., 2006, "The Sociology of Expectations in Science and Technology," <em>Technology Analysis & Strategic Management</em>, Vol. 18, No. 3/4）。期待は未来の予測ではなく、現在の資源配分と制度設計を組織する「遂行的」な装置だ。語る者が採用する役割によって、遂行される現実が変わる。</p>
+
+          <table>
+            <thead>
+              <tr>
+                <th>役割</th>
+                <th>機能</th>
+                <th>固有の失敗</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>予報者</strong></td>
+                <td>何が起こるかを述べる。蓋然性の地図を描く</td>
+                <td>誇張と過小評価。Eliezer YudkowskyのFOOM仮説は数日単位のテイクオフを主張し、Epoch AIの定量モデルは10年単位を想定する。3桁の開きが生じる</td>
+              </tr>
+              <tr>
+                <td><strong>翻訳者</strong></td>
+                <td>技術者の世界を政策・企業・市民の言語に変換する</td>
+                <td>単純化しすぎ。「AIが仕事を奪う」は翻訳の産物だが、原文にあった条件分岐とニュアンスが消えている</td>
+              </tr>
+              <tr>
+                <td><strong>立法前の設計者</strong></td>
+                <td>制度・規範・責任分配の叩き台を作る</td>
+                <td>机上の空論化。EU AI Actの初期草案は、現場の実装可能性と乖離した分類体系を提示した</td>
+              </tr>
+              <tr>
+                <td><strong>文明批評家</strong></td>
+                <td>AGIを鏡として人間観・労働観・価値観を問い直す</td>
+                <td>詩的空転。「AGIは人間とは何かを問い直す」と述べるだけで、具体的に何が変わるかを示さない</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <p class="lead">この4役割は排他的ではない。1本の記事が予報者と翻訳者を兼ねることは頻繁にある。問題は、自分がどの役割を演じているかを自覚しないまま語ることだ。予報者のつもりで書いた文章が、読者には正当性の競争として受け取られる。翻訳者のつもりの解説が、立法前の設計図として引用される。</p>
+          <p class="lead">Hannah Arendtは『人間の条件』（1958年）で、人間の固有性は生産性（making）ではなく、新しい始まりを作る行為（action）と複数性（plurality）にあると論じた。AGIナラティブの語り手は、AGIを「作る」ことはできない。だが「新しい始まりを作る行為」としてのナラティブ構築は、Arendt的な意味での行為そのものだ。その行為に伴う責任を、役割の自覚なしに引き受けることはできない。</p>
+
+          <aside class="note">
+            <strong>自己監査の問い:</strong> この記事自体はどの役割を演じているか。文明批評家の役割が最も近い。その固有の失敗は詩的空転だ。空転しないためには、具体的な判断基準と実装手順にまで降りる必要がある。Slide 5でその着地を試みる。
+          </aside>
+        </div>
+        <div class="footer reveal reveal-delay-3">
+          <span>役割の無自覚は、語りの責任の放棄に等しい</span>
+          <span class="slide-count">3 / 5</span>
+        </div>
+      </section>
+
+      <!-- ═══════════ Slide 4/5 ═══════════ -->
+      <section class="slide" id="slide-4">
+        <div class="eyebrow reveal">The Narrative Arms Race</div>
+        <h2 class="reveal reveal-delay-1">有効なナラティブと危険なナラティブ</h2>
+        <img class="hero reveal reveal-delay-2" src="../images/agi-narrative-meta-structure/slide4.jpg" alt="Glass structure with iridescent light — fragile narratives">
+        <div class="panel reveal reveal-delay-2">
+          <p class="lead">ナラティブには強度がある。社会の自己理解を更新し、具体的な制度設計につながるナラティブと、聞き手を麻痺させるか空転させるナラティブがある。その差は修辞の巧拙ではなく、構造の差だ。</p>
+
+          <p class="lead" style="margin-top:16px;"><strong>有効に機能する4つのナラティブ類型</strong></p>
+
+          <div class="grid-2">
+            <div class="card">
+              <span class="tag">憲法改正ナラティブ</span>
+              <p>AGIは道具の進歩ではなく、社会の基本ルールを書き換える出来事だという認識。労働法、知的財産権、人格概念、民主主義の前提条件。これらが同時に書き換え対象になる事態を、道具論で処理することはできない。</p>
+            </div>
+            <div class="card">
+              <span class="tag">移行コスト配分ナラティブ</span>
+              <p>AGIが来るかどうかではなく、移行の痛みを誰が払うかに焦点を置く。技術的可能性の議論から政治経済学の議論へ軸をずらすことで、具体的な政策設計に着地する。</p>
+            </div>
+            <div class="card">
+              <span class="tag">人間再定義ナラティブ</span>
+              <p>労働中心の自己理解から、判断・関係性・公共参加を中心とした自己理解への移行。Arendtの行為論に基づけば、人間の固有性は生産能力ではなく、複数性のなかで新しい始まりを作る能力にある。</p>
+            </div>
+            <div class="card">
+              <span class="tag">主権ナラティブ</span>
+              <p>AGIの意味づけまで開発企業に独占させる必要はない。技術の一次生産者が意味の一次生産者を兼ねることの危険。社会がAGIの意味を自分で定義する権利を手放さないこと。</p>
+            </div>
+          </div>
+
+          <p class="lead" style="margin-top:32px;"><strong>回避すべき4つのナラティブ類型</strong></p>
+
+          <table>
+            <thead>
+              <tr>
+                <th>ナラティブ</th>
+                <th>主張</th>
+                <th>構造的な害</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>救世主</strong></td>
+                <td>AGIが全部解決する</td>
+                <td>責任の所在を消す。「AGIが解決するから今は動かなくていい」という不作為を正当化する</td>
+              </tr>
+              <tr>
+                <td><strong>終末</strong></td>
+                <td>全部終わる</td>
+                <td>麻痺を生む。p(doom)=99%という数字は、行動を促すどころか、あらゆる対策の無意味さを暗示する</td>
+              </tr>
+              <tr>
+                <td><strong>補助輪</strong></td>
+                <td>ちょっと助けるだけ</td>
+                <td>移行の深さを過小評価する。「AIは人間の判断を支援するツール」という枠組みは、<a href="09-corporate-phase-transition.html" class="inline-link">組織の相転移（No. 09）</a>で描いた非連続変化を覆い隠す</td>
+              </tr>
+              <tr>
+                <td><strong>精神論</strong></td>
+                <td>人間らしさが大事</td>
+                <td>中身が空洞。「人間にしかできないこと」の定義が曖昧なまま、感情的な安心材料として消費される</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <p class="lead">ナラティブの有効性と危険性を判定するのは、社会学と哲学の仕事だ。社会学はナラティブの作動原理を与える。誰が得をし、どう拡散し、どの制度を正当化するか。哲学はナラティブの正当性基準を与える。何を守るべきかの定義、概念の厳密化、論理の一貫性の検証。Stanford Encyclopedia of Philosophyの"Philosophy of Technology"項目（Franssen et al., 2023年改訂）は、技術の哲学が「技術そのものの分析」から「技術が人間社会や文化にとって何を意味するか」へ重心を移したと記述している。AGIナラティブの検証は、この移行後の技術哲学の中核的課題だ。</p>
+
+          <blockquote class="pullquote">
+            ナラティブは理解を与えるが、同時に酔いも与える。自己目的化したナラティブは、真理の探求ではなく所属シグナルになる。
+          </blockquote>
+
+          <p class="lead">この盲点を最も鋭く突くのは、ナラティブが「間違った行動」を促す場合だ。「どうせAGIで全部変わる」は、現在の制度改善を放棄する免罪符として機能する。語る者はしばしば「実際に何を変えたいか」を曖昧にする。その曖昧さ自体が、ナラティブの構造的な欠陥だ。</p>
+        </div>
+        <div class="footer reveal reveal-delay-3">
+          <span>ナラティブの選択は、中立的な知的行為ではない</span>
+          <span class="slide-count">4 / 5</span>
+        </div>
+      </section>
+
+      <!-- ═══════════ Slide 5/5 ═══════════ -->
+      <section class="slide" id="slide-5">
+        <div class="eyebrow reveal">The Secondary Producer</div>
+        <h2 class="reveal reveal-delay-1">二次生産者の仕事</h2>
+        <img class="hero img-content reveal reveal-delay-2" src="../images/agi-narrative-meta-structure/slide5.jpg" alt="Forest in mist — the secondary producer works in ambiguity">
+        <div class="panel reveal reveal-delay-2">
+          <p class="lead">Slide 1で提起した問いに戻る。AGIを作らない者がAGIを語るとは何をしているのか。</p>
+          <p class="lead">答えは「社会的現実の二次生産」だ。技術の一次生産者（開発企業）がAGIを作る。二次生産者がやるのは、その技術が到来したときに人間社会が自分をどう理解し、どう再配列するかの「自己記述」を先に書くことだ。その本質は、予言ではなく準備。扇動ではなく構造化。楽観でも悲観でもなく選択肢の可視化にある。</p>
+          <p class="lead">だが「二次生産者」は免罪符ではない。二次生産にも失敗モードがある。ナラティブが自己目的化すれば、現実への介入能力を失った知的遊戯に堕ちる。自分のナラティブがどの層で作動し、誰の利害に奉仕し、聞き手にどんな行動を促すかを監査する仕組みが必要になる。</p>
+
+          <p class="lead" style="margin-top:24px;"><strong>ナラティブ設計の10セクション</strong></p>
+          <p class="lead">以下は、AGIナラティブを設計する際に自分自身に課すべきチェック構造だ。完成したナラティブを事後的に点検するのではなく、設計段階でこの構造を通すことで、構造的な欠陥を予防する。</p>
+
+          <div class="grid-3">
+            <div class="card">
+              <span class="tag">01 基本情報</span>
+              <p>想定読者は誰か。目的は何か。読後に取ってほしい行動は何か。これを書けないナラティブは設計されていない。</p>
+            </div>
+            <div class="card">
+              <span class="tag">02 問題定義</span>
+              <p>何が誤認されているか。本当の問いは何か。既存の枠組みのどこが不十分か。</p>
+            </div>
+            <div class="card">
+              <span class="tag">03 ナラティブの核</span>
+              <p>15字版、50字版、300字版のコアメッセージ。命名の戦い: 何と呼ぶかで勝負が決まる。</p>
+            </div>
+            <div class="card">
+              <span class="tag">04 現実認識</span>
+              <p>技術、倫理、制度、事業の4軸で現状を記述する。1軸だけの分析は盲点を作る。</p>
+            </div>
+            <div class="card">
+              <span class="tag">05 因果チェーン</span>
+              <p>5段以内。各段の接続に飛躍を置かない。飛躍があれば、そこが論証の最も弱い環だ。</p>
+            </div>
+            <div class="card">
+              <span class="tag">06 主体マップ</span>
+              <p>推進者、受益者、被害層、抵抗勢力。誰がいないかを確認する。不在の主体がナラティブの盲点だ。</p>
+            </div>
+            <div class="card">
+              <span class="tag">07 感情設計</span>
+              <p>危機感、配分の不正義、行動可能性の三点セット。危機感だけでは麻痺を生み、行動可能性だけでは軽さになる。</p>
+            </div>
+            <div class="card">
+              <span class="tag">08 反対仮説</span>
+              <p>自分のナラティブに対する最強の反論を書く。応答できないなら、そのナラティブは未熟だ。</p>
+            </div>
+            <div class="card">
+              <span class="tag">09 実装設計</span>
+              <p>誰に何をさせるか。どの媒体に落とすか。行動変容につながらないナラティブは、消費されて終わる。</p>
+            </div>
+          </div>
+
+          <aside class="note" style="margin-top:24px;">
+            <strong>10 — 自己監査:</strong> このナラティブ自身をSlide 2の5層で分析せよ。対象レベルで何を主張し、機能レベルで何を狙い、利害レベルで誰が得をし、認識論レベルで何を切り捨て、実践レベルで何をさせようとしているか。自分のナラティブを自分で監査できないなら、他者のナラティブを監査する資格もない。
+          </aside>
+
+          <p class="lead" style="margin-top:24px;">AGIを作れない。だが、AGIが到来したときに社会がどう反応し、何を守り、何を手放すかの選択肢を事前に構造化することはできる。その仕事を「二次生産」と呼ぶなら、二次生産者は一次生産者と同じだけの厳密さを自分に課さなければならない。ナラティブの品質管理は、コードの品質管理と同じように構造化できる。そしてその構造化を怠ったナラティブは、流通した瞬間に害になる。</p>
+
+          <blockquote class="pullquote">
+            技術の一次生産者ではなくても、社会的現実の二次生産者にはなれる。だが二次生産にも工学がいる。
+          </blockquote>
+        </div>
+        <div class="footer reveal reveal-delay-3">
+          <span>語る資格は、語る構造を持つことで初めて生まれる</span>
+          <span class="slide-count">5 / 5</span>
+        </div>
+      </section>
+
+      <!-- ═══════════ Related Reading ═══════════ -->
+      <section class="slide" style="min-height:auto;padding:64px 48px 80px;grid-template-rows:auto auto 1fr;">
+        <div class="eyebrow reveal">Related Reading</div>
+        <h2 class="reveal reveal-delay-1" style="max-width:none;">他の記事も読む</h2>
+        <div class="panel reveal reveal-delay-2">
+          <div class="grid-2">
+            <a href="07-ai-governance-response.html" class="card" style="color:inherit;display:block;">
+              <p style="font-family:'SF Mono','Fira Code',Menlo,Consolas,monospace;font-feature-settings:normal;font-size:11px;letter-spacing:0.083em;text-transform:uppercase;color:#757575;margin-bottom:12px;">Governance</p>
+              <p><strong>止められない技術にどう向き合うか — AIガバナンスの設計図</strong><br>本記事が「ナラティブの構造」を扱ったのに対し、No. 07はナラティブが着地する先である「制度設計」を7つのレバーで描いた。語りと制度の接続点を確認できる。</p>
+            </a>
+            <a href="05-ai-risk-lineage.html" class="card" style="color:inherit;display:block;">
+              <p style="font-family:'SF Mono','Fira Code',Menlo,Consolas,monospace;font-feature-settings:normal;font-size:11px;letter-spacing:0.083em;text-transform:uppercase;color:#757575;margin-bottom:12px;">Lineage</p>
+              <p><strong>AI存亡リスク論の系譜 — Extropianメーリングリストから政府声明まで</strong><br>30年にわたるリスクナラティブの系譜。本記事のSlide 2で述べた「系譜を辿ること自体がナラティブの正統化機能を持つ」という構造を、実例で検証できる。</p>
+            </a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="credits">
+      <p>
+        Photos: All images from <a href="https://unsplash.com">Unsplash</a> (free license).
+        Slugs: cdI3mxAQXZg, 0Vs1H0ZRFjE, XBTWeDtB4mc, sC2Twgvu3lg, 7fP8ONsZcyw.
+        Thumbnail: EhfeT-TNuBM.
+        References: Jasanoff &amp; Kim (2015) <em>Dreamscapes of Modernity</em>, University of Chicago Press;
+        Shiller (2019) <em>Narrative Economics</em>, Princeton University Press;
+        Beckert (2016) <em>Imagined Futures</em>, Harvard University Press;
+        Borup et al. (2006) "The Sociology of Expectations in Science and Technology," <em>Technology Analysis &amp; Strategic Management</em>, Vol. 18;
+        Arendt (1958) <em>The Human Condition</em>, University of Chicago Press;
+        Franssen et al. (2023) "Philosophy of Technology," <em>Stanford Encyclopedia of Philosophy</em>.
+      </p>
+    </footer>
+
+    <script>
+      const buttons = Array.from(document.querySelectorAll('.nav button'));
+      const slides = Array.from(document.querySelectorAll('.slide'));
+      const progress = document.getElementById('progress');
+
+      function setActive(id) {
+        buttons.forEach(b => b.classList.toggle('active', b.dataset.target === id));
+      }
+
+      buttons.forEach(b => {
+        b.addEventListener('click', () => {
+          document.getElementById(b.dataset.target)?.scrollIntoView({ behavior: 'smooth' });
+        });
+      });
+
+      const navObserver = new IntersectionObserver(entries => {
+        entries.forEach(e => { if (e.isIntersecting) setActive(e.target.id); });
+      }, { threshold: 0.5 });
+
+      slides.forEach(s => navObserver.observe(s));
+
+      const revealObserver = new IntersectionObserver(entries => {
+        entries.forEach(e => {
+          if (e.isIntersecting) {
+            e.target.classList.add('visible');
+          }
+        });
+      }, { threshold: 0.15, rootMargin: '0px 0px -60px 0px' });
+
+      document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+      window.addEventListener('scroll', () => {
+        const scrollTop = window.scrollY;
+        const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+        const pct = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+        progress.style.width = pct + '%';
+      }, { passive: true });
+
+      window.addEventListener('keydown', e => {
+        const idx = buttons.findIndex(b => b.classList.contains('active'));
+        if (e.key === 'ArrowDown' || e.key === 'PageDown') {
+          e.preventDefault();
+          slides[Math.min(idx + 1, slides.length - 1)]?.scrollIntoView({ behavior: 'smooth' });
+        }
+        if (e.key === 'ArrowUp' || e.key === 'PageUp') {
+          e.preventDefault();
+          slides[Math.max(idx - 1, 0)]?.scrollIntoView({ behavior: 'smooth' });
+        }
+      });
+    </script>
+
+    <!-- Google Translate Widget -->
+    <script>
+    function googleTranslateElementInit() {
+      new google.translate.TranslateElement({
+        pageLanguage: 'ja',
+        includedLanguages: 'en,zh-CN,ko,fr,de,es',
+        layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+        autoDisplay: false
+      }, 'google_translate_element');
+    }
+    </script>
+    <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+  </body>
+</html>

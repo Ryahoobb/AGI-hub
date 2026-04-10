@@ -228,7 +228,12 @@
         border-collapse: collapse;
         border-top: 2px solid var(--accent);
         border-bottom: 2px solid var(--accent);
+        table-layout: fixed;
       }
+      table.compare col:nth-child(1) { width: 12%; }
+      table.compare col:nth-child(2) { width: 24%; }
+      table.compare col:nth-child(3) { width: 30%; }
+      table.compare col:nth-child(4) { width: 34%; }
       table.compare th,
       table.compare td {
         padding: 18px 16px;
@@ -371,6 +376,9 @@
             だからといってAが無理だから全部空虚になるわけではない。歴史上、社会的変革の多くは結果が保証されたから実行されたのではなかった。産業革命期のラッダイト運動は機械化を止められなかったが、工場法の成立を早めた。運動の直接目的は達成されなくても、副次効果が次の段階の土台になった。B、C、Dの価値は、Aの成否とは独立に評価すべきだ。
           </p>
           <table class="compare">
+            <colgroup>
+              <col><col><col><col>
+            </colgroup>
             <thead>
               <tr>
                 <th>類型</th>

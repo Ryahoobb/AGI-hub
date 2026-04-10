@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>「アラインメント」は西洋の問いか — 主体が客体を制御するという前提を解体する</title>
+    <link rel="stylesheet" href="../design-system/palette.css">
+    <style>
+      :root {
+        --black: #000;
+        --body-text: #1a1a1a;
+        --mid: #585858;
+        --meta: #757575;
+        --light-gray: #999;
+        --border: #ddd5bd;
+        --bg: #f3f1e9;
+        --bg-alt: #ebe7d3;
+        --accent: #b23a2f;
+        --accent-soft: rgba(178, 58, 47, 0.09);
+        --ease: cubic-bezier(0.22, 1, 0.36, 1);
+      }
+
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+      html { scroll-behavior: smooth; }
+
+      body {
+        font-family: HelveticaNeue, "Helvetica Neue", Helvetica, Arial,
+          游ゴシック体, YuGothic, "游ゴシック Medium", "Yu Gothic Medium",
+          游ゴシック, "Yu Gothic", "ヒラギノ角ゴ ProN W3", "Hiragino Kaku Gothic ProN",
+          "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", "MS ゴシック", "MS Gothic",
+          sans-serif;
+        font-feature-settings: "palt";
+        font-size: 16px;
+        line-height: 1.75;
+        color: var(--body-text);
+        background: var(--bg);
+        -webkit-font-smoothing: antialiased;
+        overflow-x: hidden;
+        word-wrap: break-word;
+      }
+
+      .progress {
+        position: fixed; top: 0; left: 0; height: 2px;
+        background: var(--accent); width: 0%;
+        z-index: 100; transition: width 0.3s var(--ease);
+      }
+
+      .nav {
+        position: fixed; right: 24px; top: 50%;
+        transform: translateY(-50%);
+        display: grid; gap: 16px; z-index: 50;
+      }
+      .nav button {
+        width: 8px; height: 8px; border-radius: 999px;
+        border: 1.5px solid var(--meta);
+        background: transparent; cursor: pointer;
+        transition: all 0.3s var(--ease);
+      }
+      .nav button.active {
+        background: var(--accent);
+        border-color: var(--accent);
+        transform: scale(1.4);
+      }
+
+      main { scroll-snap-type: y mandatory; }
+
+      .slide {
+        position: relative;
+        min-height: 100vh;
+        max-width: 1120px;
+        margin: 0 auto;
+        padding: 80px 48px 64px;
+        display: grid;
+        grid-template-rows: auto auto 1fr auto;
+        gap: 32px;
+        scroll-snap-align: start;
+      }
+      .slide + .slide { border-top: 1px solid var(--border); }
+
+      .hero {
+        width: 100%;
+        aspect-ratio: 16 / 7;
+        object-fit: cover;
+        display: block;
+        filter: grayscale(0.6) contrast(1.1);
+        transition: filter 0.6s var(--ease);
+      }
+      .hero:hover { filter: grayscale(0) contrast(1); }
+
+      .slide .hero.img-fullbleed {
+        width: 100vw;
+        margin-left: calc(50% - 50vw);
+        margin-right: calc(50% - 50vw);
+        max-width: none;
+        aspect-ratio: 21 / 9;
+      }
+      .slide .hero.img-wide {
+        width: min(1280px, calc(100vw - 48px));
+        position: relative;
+        left: 50%;
+        transform: translateX(-50%);
+        max-width: none;
+      }
+      .slide .hero.img-content {
+        max-width: 680px;
+        margin-left: auto;
+        margin-right: auto;
+        aspect-ratio: 4 / 3;
+      }
+      .slide .hero.img-side-by-side {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+        aspect-ratio: auto;
+      }
+      .slide .hero.img-side-by-side img {
+        width: 100%;
+        aspect-ratio: 4 / 3;
+        object-fit: cover;
+        filter: grayscale(0.6) contrast(1.1);
+      }
+
+      .hero-caption {
+        font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 11px;
+        letter-spacing: 0.083em;
+        color: var(--light-gray);
+        margin-top: 8px;
+        text-transform: uppercase;
+      }
+
+      .credits {
+        max-width: 1120px;
+        margin: 0 auto;
+        padding: 48px 48px 80px;
+        border-top: 1px solid var(--border);
+      }
+      .credits p {
+        font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 11px;
+        letter-spacing: 0.047em;
+        line-height: 2;
+        color: var(--light-gray);
+      }
+      .credits a {
+        color: var(--meta);
+        text-decoration: none;
+        border-bottom: 1px solid var(--border);
+      }
+      .credits a:hover { color: var(--black); border-bottom-color: var(--black); }
+
+      .reveal {
+        opacity: 0;
+        transform: translateY(24px);
+        transition: opacity 0.6s var(--ease), transform 0.6s var(--ease);
+      }
+      .reveal.visible { opacity: 1; transform: translateY(0); }
+      .reveal-delay-1 { transition-delay: 0.1s; }
+      .reveal-delay-2 { transition-delay: 0.2s; }
+      .reveal-delay-3 { transition-delay: 0.35s; }
+
+      .eyebrow {
+        font-family: "SF Mono", "Fira Code", "Fira Mono", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        color: var(--accent);
+      }
+
+      h1, h2 {
+        color: var(--black);
+        font-weight: 800;
+        line-height: 1.35;
+        letter-spacing: -0.01em;
+        max-width: 28ch;
+        padding-bottom: 16px;
+        border-bottom: 3px double var(--accent);
+      }
+      h1 { font-size: clamp(30px, 4.4vw, 38px); }
+      h2 { font-size: clamp(26px, 3.8vw, 34px); }
+
+      .lead {
+        max-width: 780px;
+        font-size: 16px;
+        line-height: 1.85;
+        color: var(--body-text);
+      }
+      .lead + .lead { margin-top: 14px; }
+      .lead strong { color: var(--black); }
+
+      .panel { display: grid; gap: 24px; align-content: start; }
+      .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
+      .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+
+      .card {
+        padding: 24px 20px 24px 0;
+        border-top: 3px solid var(--accent);
+        background: transparent;
+      }
+      .card .tag { color: var(--accent); font-weight: 700; }
+      .card strong { color: var(--black); }
+      .card p {
+        font-size: 15px;
+        line-height: 1.75;
+        color: var(--body-text);
+      }
+
+      .tag {
+        display: inline-block;
+        font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 11px;
+        letter-spacing: 0.083em;
+        color: var(--meta);
+        margin-bottom: 12px;
+      }
+
+      .bullets { display: grid; gap: 14px; }
+      .point {
+        padding-left: 16px;
+        border-left: 3px solid var(--accent);
+        font-size: 15px;
+        line-height: 1.75;
+        color: var(--body-text);
+      }
+      .point strong { color: var(--black); }
+
+      .timeline {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 1px;
+        background: var(--border);
+      }
+      .timeline-step {
+        display: grid;
+        gap: 8px;
+        padding: 20px 16px;
+        background: var(--bg);
+      }
+      .timeline-step.highlight { background: var(--accent); }
+      .timeline-step.highlight .num,
+      .timeline-step.highlight p,
+      .timeline-step.highlight strong { color: var(--bg); }
+      .timeline-step .num {
+        font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 11px;
+        font-weight: 400;
+        letter-spacing: 0.083em;
+        text-transform: uppercase;
+        color: var(--meta);
+      }
+      .timeline-step p {
+        font-size: 14px;
+        line-height: 1.6;
+        color: var(--body-text);
+      }
+      .timeline-step strong { color: var(--black); }
+
+      table.compare {
+        width: 100%;
+        border-collapse: collapse;
+        border-top: 3px solid var(--accent);
+        border-bottom: 3px double var(--accent);
+        background: var(--bg);
+      }
+      table.compare th,
+      table.compare td {
+        padding: 18px 16px;
+        text-align: left;
+        font-size: 14px;
+        line-height: 1.65;
+        color: var(--body-text);
+        border-bottom: 1px solid var(--border);
+        vertical-align: top;
+      }
+      table.compare th {
+        font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 11px;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--accent);
+        font-weight: 700;
+        border-bottom: 1px solid var(--accent);
+        background: var(--accent-soft);
+      }
+      table.compare td strong { color: var(--black); }
+      table.compare tr:last-child td { border-bottom: none; }
+
+      .note {
+        font-size: 16px;
+        line-height: 1.75;
+        color: var(--body-text);
+        padding: 24px 28px;
+        margin: 12px 0;
+        border-left: 4px solid var(--accent);
+        background: var(--accent-soft);
+        position: relative;
+      }
+      .note::before {
+        content: "EVIDENCE";
+        display: block;
+        font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.15em;
+        color: var(--accent);
+        margin-bottom: 10px;
+      }
+      .note strong { color: var(--accent); }
+
+      .footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: end;
+        gap: 16px;
+        font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 11px;
+        letter-spacing: 0.083em;
+        color: var(--light-gray);
+        text-transform: uppercase;
+      }
+      .slide-count { font-weight: 700; color: var(--accent); }
+
+      @media (max-width: 768px) {
+        .slide { padding: 64px 24px 48px; }
+        .grid-2, .grid-3, .timeline { grid-template-columns: 1fr; }
+        .nav { right: 12px; }
+        table.compare { font-size: 12px; }
+        table.compare th, table.compare td { padding: 14px 10px; }
+        .hero { aspect-ratio: 16 / 9; }
+        .slide .hero.img-fullbleed,
+        .slide .hero.img-wide,
+        .slide .hero.img-content {
+          width: 100%; max-width: 100%;
+          aspect-ratio: 16 / 9;
+          margin: 0; transform: none; left: 0; position: static;
+        }
+        .slide .hero.img-side-by-side { grid-template-columns: 1fr; }
+        .credits { padding: 32px 24px 64px; }
+      }
+
+      @media print {
+        .slide { min-height: auto; page-break-after: always; padding: 24px 0; }
+        .nav, .progress { display: none; }
+        .reveal { opacity: 1; transform: none; }
+      }
+    </style>
+  </head>
+  <body class="pattern-investigation has-site-header" data-category="governance">
+    <header class="site-header">
+      <div class="site-header-inner">
+        <a href="../index.html" class="site-logo"><span class="site-logo-mark"></span>AGI HUB</a>
+        <nav class="site-nav-right">
+          <a href="../index.html" class="site-nav-hide-mobile">Archive</a>
+          <a href="../displacement-map.html" class="site-nav-hide-mobile">Data</a>
+          <div id="google_translate_element"></div>
+        </nav>
+      </div>
+    </header>
+    <div class="progress" id="progress"></div>
+
+    <aside class="nav" aria-label="Slide navigation">
+      <button data-target="slide-1" class="active" aria-label="Slide 1"></button>
+      <button data-target="slide-2" aria-label="Slide 2"></button>
+      <button data-target="slide-3" aria-label="Slide 3"></button>
+      <button data-target="slide-4" aria-label="Slide 4"></button>
+      <button data-target="slide-5" aria-label="Slide 5"></button>
+    </aside>
+
+    <main>
+      <!-- ═══════════ Slide 1 ═══════════ -->
+      <section class="slide" id="slide-1">
+        <div class="eyebrow reveal">AGI HUB &nbsp;·&nbsp; No. 17 &nbsp;·&nbsp; Governance &nbsp;·&nbsp; The Subject-Object Assumption &nbsp;·&nbsp; 2026.04.11</div>
+        <h1 class="reveal reveal-delay-1">「誰かが作れば全員が死ぬ」の前提を疑う</h1>
+        <div class="panel reveal reveal-delay-2">
+          <img class="hero img-fullbleed" src="../images/alignment-as-western-problem/slide1.jpg" alt="Dark water surface with gentle concentric ripples">
+          <div class="hero-caption">Photo: Unsplash / Zero Take</div>
+          <p class="lead">
+            Eliezer Yudkowskyは2023年の論考と2025年の同名書籍で、同じ一文を繰り返している。<strong>「If anyone builds it, everyone dies.」</strong>誰かがそれを作れば、全員が死ぬ。この切り詰めた一文の強度は、問題設定そのものを自明視していることから来ている。作る側の主体が存在し、作られる客体が存在し、後者の振る舞いを前者が制御できるかどうかが議論の全てだ、という構えだ。議論の激しさとは裏腹に、この構えは揺らがない。揺らがせてはいけない前提として扱われている。
+          </p>
+          <p class="lead">
+            反対側に立つ加速派も、実は同じ構えを共有している。Marc Andreessenが2023年にa16zで公開した『Techno-Optimist Manifesto』は、Yudkowskyとは正反対の結論を出すが、そこに通底するのは「人間の主体性こそが技術を制御する力である」という主張だ。進めろ、と言うときも、止めろ、と言うときも、両者は制御の二項を前提としている。対立しているのは解答であって、問いではない。
+          </p>
+          <p class="lead">
+            問いの側を疑うことができるだろうか。「制御する主体」と「制御される客体」という非対称は、2000年以上にわたって西洋が鍛え上げた特殊な思考形式だとしたら。別の思想伝統——道家の無為、龍樹の縁起、西田幾多郎の場所論——には、制御以前の秩序を考えるための別の設計原理が埋まっている。それらは「AIを甘く見る楽観論」ではない。<strong>制御不能性を前提にしたうえで秩序をどう成立させるかという、別の設計問題</strong>だ。本稿はこの仮説を、哲学史と現代サイバネティクスの接点から検討する。
+          </p>
+          <p class="lead">
+            以下のタイムラインは、制御という概念が西洋思想の内部でどう鍛えられてきたかの骨格を示す。Descartesの方法から現代のアラインメント論争まで、一本の系譜が通っていることを確認することから議論は始まる。Yudkowskyの強度は、この系譜の論理的完遂の強度である。
+          </p>
+          <div class="timeline">
+            <div class="timeline-step">
+              <div class="num">1637</div>
+              <p><strong>Descartes『方法序説』</strong><br>cogitoがres extensaを分節・支配する作法を鋳造</p>
+            </div>
+            <div class="timeline-step">
+              <div class="num">1781</div>
+              <p><strong>Kant『純粋理性批判』</strong><br>超越論的主体が現象を構成する側に立つ</p>
+            </div>
+            <div class="timeline-step">
+              <div class="num">1948</div>
+              <p><strong>Wiener『Cybernetics』</strong><br>書名に"Control"を刻み、制御を学問化</p>
+            </div>
+            <div class="timeline-step">
+              <div class="num">2014</div>
+              <p><strong>Bostrom『Superintelligence』</strong><br>制御問題をAIの中心議題に据える</p>
+            </div>
+            <div class="timeline-step highlight">
+              <div class="num">2023-25</div>
+              <p><strong>Yudkowsky "If anyone builds it"</strong><br>制御概念の論理的完遂として不可能論</p>
+            </div>
+          </div>
+        </div>
+        <div class="footer reveal reveal-delay-3">
+          <span>対立しているのは解答である。問いの方を疑えるか</span>
+          <span class="slide-count">1 / 5</span>
+        </div>
+      </section>
+
+      <!-- ═══════════ Slide 2 ═══════════ -->
+      <section class="slide" id="slide-2">
+        <div class="eyebrow reveal">The Western Genealogy Of Control</div>
+        <h2 class="reveal reveal-delay-1">制御概念の系譜学 — デカルトからサイバネティクスへ</h2>
+        <div class="panel reveal reveal-delay-2">
+          <img class="hero img-content" src="../images/alignment-as-western-problem/slide2.jpg" alt="Close-up of a vintage steam engine's mechanical parts">
+          <div class="hero-caption">Photo: Unsplash / Georg Eiermann</div>
+          <p class="lead">
+            前スライドで提示した系譜を、もう少し解像度を上げて見る必要がある。Descartes『方法序説』(1637)の第2部で定式化された méthode は、単なる研究作法ではなかった。それは主体が対象を認識し、分節し、再構成する一連の手続きであり、その根底には「考える私 (cogito)」と「延長実体 (res extensa)」という非対称が据えられていた。世界を客体として突き放し、主体の側から操作可能なものに変える。この構造がDescartesの発明だ。Kantは『純粋理性批判』(1781)でこれをさらに純化し、主体を「現象を構成する側」に位置づけた。世界の秩序は、主体の認識形式が与える秩序である。
+          </p>
+          <p class="lead">
+            時代を下ると、この哲学的構造が工学に直接翻訳される瞬間が来る。Norbert Wienerが1948年にMIT Pressから刊行した『Cybernetics: Or Control and Communication in the Animal and the Machine』は、書名に"Control"の一語を刻んだ。Wienerはフィードバックループを制御の概念装置として定式化し、その歴史的原型としてJames Wattが1788年に実用化した遠心調速機 (centrifugal governor) を引いた。蒸気機関の回転が速くなるとボールが遠心力で持ち上がり、リンク機構を通じて蒸気弁を絞る。回転が遅くなれば逆に開く。単純な物理装置だが、当時のエンジニアはこれを見て驚いた。<strong>機械が自分で自分を調整している</strong>、と。
+          </p>
+          <p class="lead">
+            この驚きこそがcontrol理論の原風景であり、同時にそれは「制御する側 / 制御される側」の二項構造を機械に内面化させた歴史的瞬間でもあった。ガバナーは自動的だが、その「自動」の意味は、設計者が設定した目標回転数に向かって系を引き戻す、という非対称のうえで成立している。設計者は系の外にいて、目標を与える主体である。系は内にいて、目標に従う客体である。Wienerの仕事は、この非対称を動物と機械の両方に拡張したことにある。
+          </p>
+          <p class="lead">
+            W. Ross Ashbyが1956年に書いた『An Introduction to Cybernetics』は、この構図にひとつの不吉な定理を加えた。<strong>Law of Requisite Variety</strong>——調整者の内部多様性が被調整系の内部多様性以上でなければ、制御は論理的に不可能である。計算機の用語で言えば、コントローラのビット数が被コントローラのビット数より少ないと、いかなるフィードバックも有効ではない。この定理は当時の工学者には些細な数学的命題に見えたかもしれないが、70年後にこの一文は予言として読まれることになる。
+          </p>
+          <p class="lead">
+            Yudkowskyの不可能論——「誰かが作れば全員が死ぬ」——の論理的骨格は、実はAshbyの定理の極限形である。人間側の内部多様性が、人間を遥かに上回る内部多様性を持つAIシステムに追いつけなくなった瞬間、制御という設計概念は論理的に破綻する。Yudkowskyが感覚的に言っているものを、Ashbyは68年前に定理として書いていた。<strong>したがってアラインメント不可能論は、西洋が鍛えた「制御」という概念の、論理的な完遂の形をとっている</strong>。それは一貫している。問題は、その一貫性が特殊な問題設定の内部でしか成立しない、ということだ。
+          </p>
+          <table class="compare">
+            <thead>
+              <tr>
+                <th>時点</th>
+                <th>概念装置</th>
+                <th>主体-客体の構造</th>
+                <th>帰結</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>1637<br>Descartes</strong></td>
+                <td>méthode<br>cogito / res extensa</td>
+                <td>主体が客体を分節し、操作対象に変える</td>
+                <td>世界を突き放して再構成する作法の確立</td>
+              </tr>
+              <tr>
+                <td><strong>1781<br>Kant</strong></td>
+                <td>超越論的主体<br>カテゴリー</td>
+                <td>主体が現象を構成する側に立つ</td>
+                <td>認識の秩序は主体が与えるものになる</td>
+              </tr>
+              <tr>
+                <td><strong>1788 / 1948<br>Watt / Wiener</strong></td>
+                <td>centrifugal governor<br>feedback loop</td>
+                <td>設計者(外)が目標を与え、機械(内)が追従する</td>
+                <td>工学的に翻訳された主体-客体の非対称</td>
+              </tr>
+              <tr>
+                <td><strong>1956<br>Ashby</strong></td>
+                <td>Requisite Variety定理</td>
+                <td>コントローラ &geq; 被コントローラ が必要</td>
+                <td>多様性不足の瞬間、制御は論理的に崩壊する</td>
+              </tr>
+              <tr>
+                <td><strong>2023-25<br>Yudkowsky</strong></td>
+                <td>アラインメント不可能論</td>
+                <td>人間 &lt; AGI が閾値を越える時点を問題化</td>
+                <td>制御概念の論理的完遂としての死刑宣告</td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="note">
+            Yudkowskyの強度は、彼が特別に悲観的だからではない。<strong>西洋が鍛えた「制御」の概念を、最後まで論理的に押し切ったときに必然的に到達する場所に彼が立っているから</strong>だ。ここで重要な帰結がひとつ出る。もし問題が「制御」の概念そのものにあるのだとしたら、悲観派と楽観派のどちらを選ぶかではなく、両者が前提としている思考形式の外に出る必要がある、ということになる。次のスライドは、その外側を探す。
+          </div>
+        </div>
+        <div class="footer reveal reveal-delay-3">
+          <span>制御不可能論は制御概念の論理的完遂である</span>
+          <span class="slide-count">2 / 5</span>
+        </div>
+      </section>
+
+      <!-- ═══════════ Slide 3 ═══════════ -->
+      <section class="slide" id="slide-3">
+        <div class="eyebrow reveal">Wu Wei, Dependent Origination, Basho</div>
+        <h2 class="reveal reveal-delay-1">制御以前の秩序 — 道家・龍樹・西田</h2>
+        <div class="panel reveal reveal-delay-2">
+          <img class="hero img-wide" src="../images/alignment-as-western-problem/slide3.jpg" alt="Misty blue mountains rising above calm water">
+          <div class="hero-caption">Photo: Unsplash / Zhang liven</div>
+          <p class="lead">
+            制御の概念の外側に何があるか。道家、中観仏教、京都学派。この三つの思想には、異なる出発点から同じ方向を指す論理がある。本稿は神秘主義的な読み方を採らない。<strong>これらを設計原理として読み替える</strong>。素引用は摩耗している。重要なのは、古典の言葉が現代複雑系の数学的な語彙とどこで噛み合うかだ。
+          </p>
+          <p class="lead">
+            老子『道徳経』第37章。楼観台本系統の原典は紀元前4世紀頃に成立したとされる。<strong>「道常無為而無不為」</strong>——道は常に何も為さないが、為さないことがない。蜂屋邦夫訳(岩波文庫 2008)はこれを「道は何事もしないが、何事もなされないことはない」と訳す。通常の解釈は「自然に任せれば全てうまくいく」という神秘主義に寄るが、本稿はもっと冷徹に読む。無為とは、中央制御点の不在が系の自己組織化を阻害しない状態を指す。制御主体を系の外に立てずとも秩序が立ち上がる条件、と翻訳すれば、これは現代複雑系の言葉になる。
+          </p>
+          <p class="lead">
+            具体例で接続しよう。W. Ross Ashbyが1948年に実装したhomeostatという装置がある。4つのユニットが互いの出力を互いの入力としてフィードバックしあい、外から目標を与えられないまま平衡状態に収束する機械だった。Ashbyはこれを<strong>ultrastability</strong>と呼んだ。目標を外部から与える必要がない安定性、というこの概念は、老子の無為と原理的に近い。Ashbyは道徳経を読んだ形跡はないが、両者はまったく別の出発点から同じ構造に到達している。このことが重要だ。道家の無為は東洋の神秘ではなく、<strong>制御者不在の安定性という設計問題への、独自の解答</strong>として読める。
+          </p>
+          <p class="lead">
+            龍樹『中論』(2-3世紀)の中心概念は縁起 (pratītyasamutpāda) である。梶山雄一・上山春平訳『仏教の思想3 空の論理』(1969、角川ソフィア文庫1997に再録)が日本語の決定版と見なされる。縁起はよく「すべては相互依存する」と翻訳されるが、龍樹の論理的射程はそれより鋭い。<strong>「主体」も「客体」も、それ自体として独立に存在する自性 (svabhāva) を持たない</strong>。両者は関係の中で一時的に成立する差分にすぎない。中論第24章は、この論理を四句分別の形で展開する。
+          </p>
+          <p class="lead">
+            これがアラインメント議論に持ち込むものは破壊的だ。「制御するAI研究者」と「制御されるAIシステム」という分離そのものが、成立根拠を失う。研究者は研究という関係の中で研究者になり、AIシステムはそのシステムが置かれた開発・運用・利用の関係の中でシステムになる。両者は独立に存在する実体ではない。Francisco Varela、Evan Thompson、Eleanor Roschが1991年に書いた『The Embodied Mind』(MIT Press)は、現代認知科学にこの論理を持ち込んだ最初の体系的な仕事だった。Varelaは1987年頃からDalai Lamaが主宰するMind and Life Instituteで中観仏教を再読し、晩年にはenactivism(行為的認知)の基礎にこれを据えた。認知は主体が客体を表象することではなく、<strong>相互に規定しあう系の中で立ち上がる現象</strong>である、という主張だ。
+          </p>
+          <p class="lead">
+            西田幾多郎『場所』(初出1926『哲学研究』誌)は、この論理を日本の哲学で独立に提示した仕事である。西田は1920年代の『働くものから見るものへ』でアリストテレス以来の<strong>「主語の論理」</strong>を批判した。西洋論理は、主語 (substance) が述語 (attribute) を持つという非対称の上に立っている。私は赤い、椅子は固い、AIは有害だ。西田はこの主述の非対称を逆転させる。述語こそが場所であり、主語(個物)はその場所の中に包まれる。
+          </p>
+          <p class="lead">
+            西田が好んで使った例は「この赤」という知覚だ。「私がこの赤を見ている」という記述は、実は二重の前提を密輸している。まず「私」という主体の自存性、次に「赤」という客体の独立性。西田はこう書き直す——<strong>「見るという場所の中に、私と赤が同時に立ち上がっている」</strong>。視覚は主体の機能ではなく、主体と客体の両方を同時に成立させる場である。主体は視覚という場所に包まれて初めて成立する。逆ではない。
+          </p>
+          <p class="lead">
+            AGI議論への転用は直接的だ。「AI研究者がAIシステムを制御する」という記述そのものが、成立する前に二重の密輸をしている。AI研究者はAI研究という場所の中で初めて研究者として成立する。AIシステムは開発・運用・社会受容という場所の中で初めてシステムとして成立する。両者は場所の述語である。「主体が客体を制御する」という構文が、そもそも出発点として採れない。これは制御を放棄せよ、という話ではない。<strong>制御という記述自体が、別の記述に置き換えられなければならない</strong>、という話だ。
+          </p>
+          <div class="grid-3">
+            <div class="card">
+              <span class="tag">老子 · 無為</span>
+              <p><strong>中央制御点なしの自己組織化</strong><br>道徳経37章の無為を、制御者不在の秩序形成として読み替える。Ashbyのultrastabilityがこれに対応する数学的概念を用意する。</p>
+            </div>
+            <div class="card">
+              <span class="tag">龍樹 · 縁起</span>
+              <p><strong>主体-客体の分離そのものの解体</strong><br>自性の否定は、制御する主体を独立実体として立てることを禁じる。Varelaのenactivismが認知科学版の翻訳を示す。</p>
+            </div>
+            <div class="card">
+              <span class="tag">西田 · 場所</span>
+              <p><strong>述語の論理による主述非対称の逆転</strong><br>場所が個物を包む構造では、主体-客体の記述自体が別形式に書き換わる。多エージェント系の相互規定の設計語彙として使える。</p>
+            </div>
+          </div>
+          <div class="note">
+            道家、龍樹、西田——出自も時代も異なる三つの思想は、<strong>制御という概念を採らずに秩序を考える</strong>という一点で収束する。これを神秘主義に逃げるのではなく、現代複雑系の数学的語彙と接続するとき、初めて工学的な意味が立ち上がる。次のスライドはこの接続点を三つの設計原理として定式化する。
+          </div>
+        </div>
+        <div class="footer reveal reveal-delay-3">
+          <span>制御の外側には、別の秩序設計の語彙がすでにある</span>
+          <span class="slide-count">3 / 5</span>
+        </div>
+      </section>
+
+      <!-- ═══════════ Slide 4 ═══════════ -->
+      <section class="slide" id="slide-4">
+        <div class="eyebrow reveal">Operative Consequences</div>
+        <h2 class="reveal reveal-delay-1">制御なき秩序は設計可能か — 三つの設計原理</h2>
+        <div class="panel reveal reveal-delay-2">
+          <div class="hero img-side-by-side">
+            <img src="../images/alignment-as-western-problem/slide4a.jpg" alt="Modern brutalist concrete building with geometric design">
+            <img src="../images/alignment-as-western-problem/slide4b.jpg" alt="Symmetrical concrete building with geometric pattern">
+          </div>
+          <div class="hero-caption">Photo: Unsplash / Rowan Heuvel × Mike Hindle</div>
+          <p class="lead">
+            ここまでは哲学史の解剖だった。問題は「だから何か」である。哲学的なスケッチを、ガバナンスの設計問題として何に翻訳できるか。本稿は三つの具体的な設計原理を提示する。いずれも、道家・龍樹・西田の論理を現代の工学的語彙に通してある。反論にも先回りして答える。
+          </p>
+          <p class="lead">
+            <strong>原理1: Requisite Varietyの相互化</strong>。Ashbyの定理を、一方向の制御関係ではなく双方向の学習関係として書き直す。コントローラと被コントローラが一方的に多様性を供給するのではなく、互いに互いの多様性を学習しあう構造を設計する。興味深いことに、これはStuart Russellが『Human Compatible』(2019, Viking)で提示した<strong>assistance games</strong>の方向と近い場所に辿り着く。Russellは西洋哲学の内側から、人間の価値関数をAIに注入するのではなく、AIが人間の価値関数に関する不確実性を保持したまま協調する構造を提案した。この不確実性の保持が、縁起論的な意味での「自性の否定」と構造的に響き合う。Russellは龍樹を読んでいないが、行き着いた場所は遠くない。
+          </p>
+          <p class="lead">
+            <strong>原理2: 境界なき自己組織化</strong>。AI系の境界を「モデルの重み」に固定しない。訓練データ、デプロイ環境、ユーザー集合、評価プロセス、さらにはその全体を支える電力・冷却インフラまで含む広義のシステムとして記述する。縁起の論理を工学に翻訳するとこうなる。Anthropicの"Constitutional AI"(Bai et al., arXiv:2212.08073, 2022)は、部分的にこの方向を指しているが、決定的な限界を抱えている。憲法の起草主体を暗黙に西洋近代の個人に置いているのだ。誰かが憲法の条文を書き、それをAIが学習する。主体-客体の非対称は保たれたままだ。境界なき自己組織化の設計は、憲法を書く主体そのものを、AIと人間と制度の相互作用の中に溶け込ませなければならない。
+          </p>
+          <p class="lead">
+            <strong>原理3: 場所としての規範</strong>。個別のAIシステムに「価値を注入」するのではなく、AI-人間-制度の相互作用が展開する場所そのものに規範を埋め込む。西田の場所論の工学的翻訳がここにある。Sheila Jasanoffが『States of Knowledge: The Co-Production of Science and the Social Order』(Routledge 2004)で提示した<strong>co-production</strong>——科学的知識と社会秩序が相互に生成しあうという論——の哲学的根拠は、実は西田の場所論と同型である。JasanoffはSTS(科学技術社会論)の伝統の内側でこれに到達したが、論理構造は西田のものと重なる。規範は個別主体の内側に注入されるのではなく、関係の場の中で同時に立ち上がる。
+          </p>
+          <p class="lead">
+            ここで当然の反論が出る。「それは責任の所在を曖昧にするだけではないか」。鋭い問いだ。だがこの問いに対する答えは逆である。<strong>責任の所在を曖昧にするのは、実は近代西洋の個人-主体モデルの方だ</strong>。なぜか。「制御する主体」を措定すると、制御に失敗した時の責任が単一の個人に過剰集中する。過剰集中の予感が、当事者の責任回避行動を生む。誰も決定せず、誰も責任を取らず、全員が「システムの失敗」と呼んで済ます。これは2008年の金融危機、Deepwater Horizon事故、Boeing 737 MAX問題で何度も見た構造だ。縁起的な分散責任モデルは、責任を溶解させるのではなく、<strong>関係に責任を埋め込む</strong>。設計者、運用者、利用者、規制者、評価者の全員が、関係の場の中で連続的な責任を持つ。これは責任を曖昧にする方向ではなく、責任を分散的に具体化する方向の話である。
+          </p>
+          <div class="grid-2">
+            <div class="card">
+              <p><strong>西洋近代の設計原理</strong></p>
+              <div class="bullets" style="margin-top: 16px">
+                <p class="point"><strong>主体-客体の非対称</strong> 設計者が外にいて、系が内にいる。目標は外から与えられ、系はそれに追従する。</p>
+                <p class="point"><strong>価値の注入モデル</strong> 個別主体の内側に正しい価値関数を書き込む。書き込みに成功すれば安全、失敗すれば危険。</p>
+                <p class="point"><strong>責任の個人集中</strong> 制御した主体が結果の責任を負う。失敗時の責任回避インセンティブが強い。</p>
+                <p class="point"><strong>完遂すればYudkowsky</strong> Requisite Varietyの定理を極限まで押すと、AI &gt; 人間の瞬間に破綻する。</p>
+              </div>
+            </div>
+            <div class="card">
+              <p><strong>縁起・場所の設計原理</strong></p>
+              <div class="bullets" style="margin-top: 16px">
+                <p class="point"><strong>相互規定の関係</strong> 主体も客体も、関係の中で一時的に成立する差分である。独立実体としては立てない。</p>
+                <p class="point"><strong>場所に規範を埋め込む</strong> AI-人間-制度の関係の場そのものに規範を組み込む。個別主体への注入ではない。</p>
+                <p class="point"><strong>分散的連続責任</strong> 責任は関係に埋め込まれ、全参加者に連続的に分散する。曖昧化ではなく具体化。</p>
+                <p class="point"><strong>制御不可能性と共存する</strong> 制御ではなく自己組織化を設計する。Ashbyのultrastabilityが数学的な接点を用意している。</p>
+              </div>
+            </div>
+          </div>
+          <div class="note">
+            これらの設計原理はまだ工学的に具体化されていない。しかしRussellのassistance games、JasanoffのCo-Production、Varelaのenactivismといった既存の仕事は、<strong>西洋の内側からも同じ方向を探る運動がすでに始まっている</strong>ことを示す。問題は、これらの断片がまだひとつの設計言語として統合されていないことだ。統合する作業が次の世代のアラインメント研究の射程になる。
+          </div>
+        </div>
+        <div class="footer reveal reveal-delay-3">
+          <span>Russell, Jasanoff, Varelaが西洋の内側から同じ方向を指している</span>
+          <span class="slide-count">4 / 5</span>
+        </div>
+      </section>
+
+      <!-- ═══════════ Slide 5 ═══════════ -->
+      <section class="slide" id="slide-5">
+        <div class="eyebrow reveal">The Question Beyond Alignment</div>
+        <h2 class="reveal reveal-delay-1">問いを一段上げる — 制御の彼岸に秩序はあるか</h2>
+        <div class="panel reveal reveal-delay-2">
+          <img class="hero img-wide" src="../images/alignment-as-western-problem/slide5.jpg" alt="Mountain range shrouded in fog with vast horizon">
+          <div class="hero-caption">Photo: Unsplash / Stephen Coetsee</div>
+          <p class="lead">
+            前スライドで提示した三つの設計原理は、まだ工学的に具体化されていない。哲学的スケッチの段階にある。それでもここに立ち止まって一点を確認する必要がある。本稿が主張しているのは、現代のアラインメント論争を解く新しい工学的処方箋を提示することではない。<strong>問いの階層を一段上げること</strong>だ。
+          </p>
+          <p class="lead">
+            含意を三点に絞る。第一。現代アラインメント論争は、西洋近代が2000年をかけて鍛え上げた認知的構造を普遍と取り違えている。Yudkowskyの不可能論もAndreessenの楽観論も、同じDescartes-Wienerの系譜に立っている。両者の激しい対立は、実は同じ土俵の内部での対立である。土俵の存在そのものは、両者とも問わない。
+          </p>
+          <p class="lead">
+            第二。相対化の先にあるのは「制御の放棄」ではない。それは楽観派の立場であり、悲観派と同じ土俵に立っている。本稿が指しているのは、<strong>制御以前の秩序形成という、別の設計問題</strong>である。道家の無為、龍樹の縁起、西田の場所論は、この別の問題の最初の語彙を提供する。これらを神秘主義に押し戻すのではなく、Ashby、Varela、Russell、Jasanoffのような現代の仕事と接続するとき、新しい工学の輪郭が見え始める。
+          </p>
+          <p class="lead">
+            第三。この別解はまだ具体化されていない。哲学的な輪郭しかない。だから本稿は「解答」を提示しない。代わりに問いの形を差し替える。既存のアラインメント研究が答えようとしている問い——「AIを制御できるか、その閾値はいつか」——は、本稿の視点からは<strong>解くべき問いではなく、解体すべき前提</strong>に見える。解体された後に残る問いはこうだ。
+          </p>
+          <div class="note">
+            <strong>新しい問い。</strong><br>
+            AIを制御できるか、ではない。AIと人間と制度を同時に包む場所を、どう設計するか。この場所において、制御という語はもう中心語ではない。中心語は、相互規定、共起、自己組織化、分散的連続責任になる。この語彙でAGIガバナンスを書き直したとき、何が残るか。
+          </div>
+          <p class="lead">
+            この問いは、既存のalignment研究の用語体系では完全には記述できない。新しい語彙が必要になる。その語彙を鍛える作業は、西洋哲学の内側にいる研究者にも、東アジア思想の内側にいる研究者にも、単独では不可能だ。両方の伝統を横断する研究プログラムが必要になる。Varelaが中観仏教と認知科学を接続したように、Jasanoffが科学論と制度論を接続したように、誰かがこの作業を続けなければならない。
+          </p>
+          <p class="lead">
+            最後に、締めの一文だけ残しておく。<strong>「制御する主体」を信じ続ける限り、AIは我々が信じた通りの姿で立ち上がる。問題は、我々が信じているものが、2000年のあいだ鍛えた西洋の幻影かもしれない、ということだ。</strong>Yudkowskyが正しいかもしれない。その時、彼が正しいのは、彼の前提の中だけである。前提の外では、問題の形がまだ見えていない。我々はまだ、問うべき問いの入り口にも立っていない。
+          </p>
+        </div>
+        <div class="footer reveal reveal-delay-3">
+          <span>解くべき問いではなく、解体すべき前提である</span>
+          <span class="slide-count">5 / 5</span>
+        </div>
+      </section>
+
+      <!-- ═══════════ Related Reading ═══════════ -->
+      <section class="slide" style="min-height:auto;padding:64px 48px 80px;grid-template-rows:auto auto 1fr;">
+        <div class="eyebrow reveal">Related Reading</div>
+        <h2 class="reveal reveal-delay-1" style="max-width:none;">次に読む</h2>
+        <div class="panel reveal reveal-delay-2">
+          <div class="grid-2">
+            <a href="16-requisite-variety-alignment-ceiling.html" class="card" style="color:inherit;display:block;">
+              <p style="font-family:'SF Mono','Fira Code',Menlo,Consolas,monospace;font-feature-settings:normal;font-size:11px;letter-spacing:0.083em;text-transform:uppercase;color:#757575;margin-bottom:12px;">No. 16 · Alignment</p>
+              <p><strong>必要多様性の法則が告げる、アラインメントの原理的上限</strong><br>本稿の直接の対話相手。同じAshbyの定理を西洋の内側から極限まで突き詰めた姉妹論。本稿はその前提そのものを解体する側から書かれている。両者を並べ読むと、問いの階層の差が立ち上がる。</p>
+            </a>
+            <a href="13-dissipative-controllability.html" class="card" style="color:inherit;display:block;">
+              <p style="font-family:'SF Mono','Fira Code',Menlo,Consolas,monospace;font-feature-settings:normal;font-size:11px;letter-spacing:0.083em;text-transform:uppercase;color:#757575;margin-bottom:12px;">No. 13 · Takeoff</p>
+              <p><strong>散逸のなかで秩序を編む — 進化・複雑性・AGIの熱力学</strong><br>本稿の科学側の姉妹論。制御以前の秩序を熱力学の語彙で書いた記事。本稿の哲学的輪郭に、物理的な骨格を与える。</p>
+            </a>
+          </div>
+          <p style="margin-top:32px;text-align:center;">
+            <a href="../index.html" style="color:inherit;border-bottom:1px solid #999;padding-bottom:2px;">All Articles — 記事一覧へ</a>
+          </p>
+        </div>
+      </section>
+    </main>
+
+    <footer class="credits">
+      <p>
+        Photos: All images from <a href="https://unsplash.com">Unsplash</a> (free license).
+        Slide 1: <a href="https://unsplash.com/photos/O7L3HbWb8es">Dark water ripples</a> /
+        Slide 2: <a href="https://unsplash.com/photos/58xHZY0yP2w">Vintage steam engine</a> /
+        Slide 3: <a href="https://unsplash.com/photos/BiLh-YznD0I">Misty mountains above water</a> /
+        Slide 4a: <a href="https://unsplash.com/photos/Vzm3aSLcnmg">Brutalist concrete</a> /
+        Slide 4b: <a href="https://unsplash.com/photos/ujzmNm9yqVA">Symmetrical concrete</a> /
+        Slide 5: <a href="https://unsplash.com/photos/rQVOlHFFLzs">Mountain range in fog</a> /
+        Thumb: <a href="https://unsplash.com/photos/YeZHDQJDEX8">Cracked surface</a>
+      </p>
+      <p style="margin-top:16px;">
+        Sources cited in this article: Yudkowsky, E. "AGI Ruin: A List of Lethalities" (2022) &amp; <em>If Anyone Builds It, Everyone Dies</em> (Little, Brown 2025) ·
+        Wiener, N. <em>Cybernetics</em> (MIT Press 1948) ·
+        Ashby, W. R. <em>An Introduction to Cybernetics</em> (Chapman &amp; Hall 1956) ·
+        老子『道徳経』第37章(蜂屋邦夫訳, 岩波文庫 2008) ·
+        龍樹『中論』(梶山雄一・上山春平訳『仏教の思想3 空の論理』角川ソフィア文庫 1997) ·
+        西田幾多郎「場所」『西田幾多郎全集 第4巻』(岩波書店, 初出1926『哲学研究』) ·
+        Varela, Thompson, Rosch <em>The Embodied Mind</em> (MIT Press 1991) ·
+        Russell, S. <em>Human Compatible</em> (Viking 2019) ·
+        Jasanoff, S. <em>States of Knowledge: The Co-Production of Science and the Social Order</em> (Routledge 2004) ·
+        Descartes, R. <em>Discours de la méthode</em> (1637) ·
+        Andreessen, M. "The Techno-Optimist Manifesto" (a16z.com, 2023) ·
+        Bai et al. "Constitutional AI: Harmlessness from AI Feedback" (arXiv:2212.08073, 2022)
+      </p>
+    </footer>
+
+    <script>
+      const buttons = Array.from(document.querySelectorAll('.nav button'));
+      const slides = Array.from(document.querySelectorAll('.slide'));
+      const progress = document.getElementById('progress');
+
+      function setActive(id) {
+        buttons.forEach(b => b.classList.toggle('active', b.dataset.target === id));
+      }
+
+      buttons.forEach(b => {
+        b.addEventListener('click', () => {
+          document.getElementById(b.dataset.target)?.scrollIntoView({ behavior: 'smooth' });
+        });
+      });
+
+      const navObserver = new IntersectionObserver(entries => {
+        entries.forEach(e => { if (e.isIntersecting) setActive(e.target.id); });
+      }, { threshold: 0.5 });
+
+      slides.forEach(s => navObserver.observe(s));
+
+      const revealObserver = new IntersectionObserver(entries => {
+        entries.forEach(e => {
+          if (e.isIntersecting) { e.target.classList.add('visible'); }
+        });
+      }, { threshold: 0.15 });
+
+      document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+      window.addEventListener('scroll', () => {
+        const h = document.documentElement;
+        const scrolled = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
+        progress.style.width = scrolled + '%';
+      });
+    </script>
+
+    <!-- Google Translate Widget -->
+    <script>
+    function googleTranslateElementInit() {
+      new google.translate.TranslateElement({
+        pageLanguage: 'ja',
+        includedLanguages: 'en,zh-CN,ko,fr,de,es',
+        layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+        autoDisplay: false
+      }, 'google_translate_element');
+    }
+    </script>
+    <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+  </body>
+</html>

@@ -1324,3 +1324,50 @@ figure.img .caption { margin-top: 10px; }
   font-size: 13px;
 }
 .isotype .row.is-highlight .val { color: var(--accent); }
+
+/* ═════════════════════════════════════════════════════
+   Site Header — 全記事共通ナビゲーション
+   ═════════════════════════════════════════════════════ */
+.site-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  height: 48px;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  font-family: var(--ff-body);
+  transition: transform 0.3s var(--ease, ease);
+}
+.site-header a { text-decoration: none; }
+.site-header .site-logo {
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #fff;
+  text-transform: uppercase;
+}
+.site-header .site-back {
+  font-size: 13px;
+  color: rgba(255,255,255,0.7);
+  transition: color 0.2s;
+}
+.site-header .site-back:hover { color: #fff; }
+.site-header .site-back::before {
+  content: "←";
+  margin-right: 6px;
+}
+/* index.html用: ヘッダーの下にコンテンツが隠れないように */
+body.has-site-header { padding-top: 48px; }
+/* Broadsheet/Investigation: body直下のpadding-topを調整 */
+.pattern-broadsheet.has-site-header,
+.pattern-investigation.has-site-header { padding-top: 48px; }
+/* Monolith: .slideのtop位置は変えず、progressバーだけずらす */
+.has-site-header .progress { top: 48px; }
+.has-site-header .nav { top: calc(50% + 24px); }

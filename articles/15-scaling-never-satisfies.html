@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>スケーリングはなぜ止まらないのか — AGIへの3つの加速路 — AGI HUB</title>
+    <link rel="stylesheet" href="../design-system/palette.css">
+    <style>
+      :root {
+        --black: #000;
+        --body-text: #1a1a1a;
+        --meta: #757575;
+        --light-gray: #999;
+        --border: #e5e5e5;
+        --bg: #fff;
+        --ease: cubic-bezier(0.22, 1, 0.36, 1);
+      }
+
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+      html { scroll-behavior: smooth; }
+
+      body {
+        font-family: HelveticaNeue, "Helvetica Neue", Helvetica, Arial,
+          游ゴシック体, YuGothic, "游ゴシック Medium", "Yu Gothic Medium",
+          游ゴシック, "Yu Gothic", "ヒラギノ角ゴ ProN W3", "Hiragino Kaku Gothic ProN",
+          "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", "MS ゴシック", "MS Gothic",
+          sans-serif;
+        font-feature-settings: "palt";
+        font-size: 16px;
+        line-height: 1.75;
+        color: var(--body-text);
+        background: var(--bg);
+        -webkit-font-smoothing: antialiased;
+        overflow-x: hidden;
+        word-wrap: break-word;
+      }
+
+      .progress {
+        position: fixed; top: 0; left: 0;
+        height: 2px; background: var(--black);
+        width: 0%; z-index: 100;
+        transition: width 0.3s var(--ease);
+      }
+
+      .nav {
+        position: fixed; right: 24px; top: 50%;
+        transform: translateY(-50%);
+        display: grid; gap: 16px; z-index: 50;
+      }
+
+      .nav button {
+        width: 8px; height: 8px;
+        border-radius: 999px;
+        border: 1.5px solid var(--meta);
+        background: transparent; cursor: pointer;
+        transition: all 0.3s var(--ease);
+      }
+
+      .nav button.active {
+        background: var(--black);
+        border-color: var(--black);
+        transform: scale(1.4);
+      }
+
+      main { scroll-snap-type: y mandatory; }
+
+      .slide {
+        position: relative;
+        min-height: 100vh;
+        max-width: 1120px;
+        margin: 0 auto;
+        padding: 80px 48px 64px;
+        display: grid;
+        grid-template-rows: auto auto 1fr auto;
+        gap: 32px;
+        scroll-snap-align: start;
+      }
+
+      .slide + .slide { border-top: 1px solid var(--border); }
+
+      .hero {
+        width: 100%;
+        aspect-ratio: 16 / 7;
+        object-fit: cover;
+        display: block;
+        filter: grayscale(0.6) contrast(1.1);
+        transition: filter 0.6s var(--ease);
+      }
+
+      .hero:hover { filter: grayscale(0) contrast(1); }
+
+      .hero.img-fullbleed {
+        width: 100vw;
+        margin-left: calc(50% - 50vw);
+        margin-right: calc(50% - 50vw);
+        max-width: none;
+        aspect-ratio: 21 / 9;
+      }
+      .hero.img-wide {
+        width: min(1280px, calc(100vw - 48px));
+        position: relative;
+        left: 50%;
+        transform: translateX(-50%);
+        max-width: none;
+      }
+      .hero.img-content {
+        max-width: 680px;
+        margin-left: auto;
+        margin-right: auto;
+        aspect-ratio: 4 / 3;
+      }
+
+      .hero-caption {
+        font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 11px;
+        letter-spacing: 0.083em;
+        color: var(--light-gray);
+        margin-top: 8px;
+        text-transform: uppercase;
+      }
+
+      .credits {
+        max-width: 1120px;
+        margin: 0 auto;
+        padding: 48px 48px 80px;
+        border-top: 1px solid var(--border);
+      }
+
+      .credits p {
+        font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 11px;
+        letter-spacing: 0.047em;
+        line-height: 2;
+        color: var(--light-gray);
+      }
+
+      .credits a {
+        color: var(--meta);
+        text-decoration: none;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .credits a:hover {
+        color: var(--black);
+        border-bottom-color: var(--black);
+      }
+
+      .reveal {
+        opacity: 0;
+        transform: translateY(24px);
+        transition: opacity 0.6s var(--ease), transform 0.6s var(--ease);
+      }
+      .reveal.visible { opacity: 1; transform: translateY(0); }
+      .reveal-delay-1 { transition-delay: 0.1s; }
+      .reveal-delay-2 { transition-delay: 0.2s; }
+      .reveal-delay-3 { transition-delay: 0.35s; }
+
+      .eyebrow {
+        font-family: "SF Mono", "Fira Code", "Fira Mono", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 11px;
+        font-weight: 400;
+        letter-spacing: 0.083em;
+        text-transform: uppercase;
+        color: var(--meta);
+      }
+
+      h1, h2 {
+        color: var(--black);
+        font-weight: 700;
+        line-height: 1.625;
+        letter-spacing: normal;
+        max-width: 22ch;
+      }
+
+      h1 { font-size: clamp(28px, 4vw, 32px); }
+      h2 { font-size: clamp(24px, 3.5vw, 32px); }
+
+      .lead {
+        max-width: 780px;
+        font-size: 16px;
+        line-height: 1.75;
+        color: var(--body-text);
+      }
+
+      .lead + .lead { margin-top: 8px; }
+
+      .panel { display: grid; gap: 24px; align-content: start; }
+      .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
+      .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+
+      .card {
+        padding: 24px 0;
+        border-top: 2px solid var(--black);
+      }
+
+      .card strong { color: var(--black); }
+
+      .card p {
+        font-size: 16px;
+        line-height: 1.75;
+        color: var(--body-text);
+      }
+
+      .tag {
+        display: inline-block;
+        font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 11px;
+        letter-spacing: 0.083em;
+        color: var(--meta);
+        margin-bottom: 12px;
+      }
+
+      .bullets { display: grid; gap: 16px; }
+
+      .point {
+        padding-left: 16px;
+        border-left: 2px solid var(--black);
+        font-size: 16px;
+        line-height: 1.75;
+        color: var(--body-text);
+      }
+
+      .point strong { color: var(--black); }
+
+      .compare {
+        width: 100%;
+        border-collapse: collapse;
+        border-top: 2px solid var(--black);
+        border-bottom: 2px solid var(--black);
+      }
+
+      .compare th,
+      .compare td {
+        padding: 18px 16px;
+        text-align: left;
+        font-size: 15px;
+        line-height: 1.65;
+        color: var(--body-text);
+        border-bottom: 1px solid var(--border);
+        vertical-align: top;
+      }
+
+      .compare th {
+        font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 11px;
+        letter-spacing: 0.083em;
+        text-transform: uppercase;
+        color: var(--meta);
+        font-weight: 400;
+        border-bottom: 1px solid var(--black);
+      }
+
+      .compare td strong { color: var(--black); }
+      .compare tr:last-child td { border-bottom: none; }
+
+      .note {
+        font-size: 16px;
+        line-height: 1.75;
+        color: var(--body-text);
+        padding: 24px 0;
+        border-top: 1px solid var(--border);
+        border-bottom: 1px solid var(--border);
+      }
+
+      .note strong { color: var(--black); }
+
+      .footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: end;
+        gap: 16px;
+        font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 11px;
+        letter-spacing: 0.083em;
+        color: var(--light-gray);
+        text-transform: uppercase;
+      }
+
+      .slide-count {
+        font-weight: 700;
+        color: var(--black);
+      }
+
+      .source-note {
+        font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 12px;
+        line-height: 1.75;
+        color: var(--light-gray);
+        margin-top: 12px;
+        padding: 12px 0;
+        border-top: 1px solid var(--border);
+      }
+
+      .source-note a {
+        color: var(--meta);
+        text-decoration: none;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .source-note a:hover {
+        color: var(--black);
+        border-bottom-color: var(--black);
+      }
+
+      /* ── Infographic big number ── */
+      .infographic-bignum {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1px;
+        background: var(--border);
+        margin: 32px 0;
+      }
+
+      .infographic-bignum .cell {
+        background: var(--bg);
+        padding: 32px 24px;
+        text-align: center;
+      }
+
+      .infographic-bignum .num {
+        font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: clamp(36px, 5vw, 56px);
+        font-weight: 700;
+        color: var(--black);
+        line-height: 1.1;
+        letter-spacing: -0.02em;
+      }
+
+      .infographic-bignum .unit {
+        font-size: 0.4em;
+        font-weight: 400;
+        color: var(--meta);
+        letter-spacing: 0.05em;
+      }
+
+      .infographic-bignum .label {
+        font-size: 13px;
+        line-height: 1.5;
+        color: var(--meta);
+        margin-top: 12px;
+      }
+
+      @media (max-width: 768px) {
+        .slide { padding: 64px 24px 48px; }
+        .grid-2, .grid-3 { grid-template-columns: 1fr; }
+        .nav { right: 12px; }
+        .compare { font-size: 13px; }
+        .compare th, .compare td { padding: 14px 10px; }
+        .hero { aspect-ratio: 16 / 9; }
+        .hero.img-fullbleed, .hero.img-wide {
+          aspect-ratio: 16 / 9;
+          width: 100%;
+          margin: 0;
+          left: 0;
+          transform: none;
+          position: static;
+        }
+        .hero.img-content { max-width: 100%; aspect-ratio: 16 / 9; }
+        .credits { padding: 32px 24px 64px; }
+        .infographic-bignum { grid-template-columns: 1fr; }
+      }
+
+      @media print {
+        .slide { min-height: auto; page-break-after: always; padding: 24px 0; }
+        .nav, .progress { display: none; }
+        .reveal { opacity: 1; transform: none; }
+      }
+    </style>
+  </head>
+  <body class="pattern-monolith has-site-header" data-category="technical">
+    <header class="site-header">
+      <div class="site-header-inner">
+        <a href="../index.html" class="site-logo"><span class="site-logo-mark"></span>AGI HUB</a>
+        <nav class="site-nav-right">
+          <a href="../index.html" class="site-nav-hide-mobile">Archive</a>
+          <a href="../displacement-map.html" class="site-nav-hide-mobile">Data</a>
+          <div id="google_translate_element"></div>
+        </nav>
+      </div>
+    </header>
+    <div class="progress" id="progress"></div>
+
+    <aside class="nav" aria-label="Slide navigation">
+      <button data-target="slide-1" class="active" aria-label="Slide 1"></button>
+      <button data-target="slide-2" aria-label="Slide 2"></button>
+      <button data-target="slide-3" aria-label="Slide 3"></button>
+      <button data-target="slide-4" aria-label="Slide 4"></button>
+      <button data-target="slide-5" aria-label="Slide 5"></button>
+      <button data-target="slide-6" aria-label="Slide 6"></button>
+      <button data-target="slide-7" aria-label="Slide 7"></button>
+    </aside>
+
+    <main>
+      <!-- ═══════════ Slide 1 ═══════════ -->
+      <section class="slide" id="slide-1">
+        <div class="eyebrow reveal">AGI HUB &nbsp;&middot;&nbsp; No. 15 &nbsp;&middot;&nbsp; Technical Path &nbsp;&middot;&nbsp; Scaling</div>
+        <h1 class="reveal reveal-delay-1">スケーリングはなぜ止まらないのか</h1>
+        <div class="panel reveal reveal-delay-2">
+          <div>
+            <img class="hero img-fullbleed" src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=1600&q=80" alt="Server room with rows of blinking lights stretching into the distance">
+            <div class="hero-caption">Photo: Unsplash</div>
+          </div>
+          <p class="lead"><span class="dropcap">2</span>020年1月、OpenAIの研究者Jared Kaplanらが1本の論文を発表した。タイトルは "Scaling Laws for Neural Language Models"。内容は衝撃的にシンプルだった。ニューラルネットワークの損失関数は、パラメータ数Nのべき乗に比例して減少する。L(N) &prop; N<sup>-0.076</sup>。データ量にも計算量にも同様のべき乗関係が成り立つ。</p>
+          <p class="lead">驚くべきは、何が効かなかったかだ。ネットワークの幅と深さの比率、学習率のスケジュール、トークナイザーの設計。アーキテクチャの細部はほとんど結果に影響しなかった。<strong>スケールだけが効く。</strong>これがニューラルスケーリング則の核心であり、GPT-3とGPT-4の開発を根底から動機づけた発見だった。</p>
+          <p class="lead">この発見はAI研究の方法論を一変させた。良いアルゴリズムを探す、という職人芸の時代から、正しい曲線に乗る、という工業的思考への転換。パラメータを10倍にすれば予測可能な量だけ賢くなる。100倍にすればさらに。では、どこまで行けるのか。</p>
+          <div class="grid-3">
+            <div class="card">
+              <span class="tag">発見</span>
+              <p><strong>べき乗則</strong><br>L(N) &prop; N<sup>-0.076</sup>。パラメータ数、データ量、計算量のすべてに滑らかなべき乗関係が成立する。Kaplan et al. 2020。</p>
+            </div>
+            <div class="card">
+              <span class="tag">含意</span>
+              <p><strong>アーキテクチャは二の次</strong><br>幅、深さ、活性化関数。これらの選択は損失にほとんど影響しない。投じた計算量がほぼ全てを決める。</p>
+            </div>
+            <div class="card">
+              <span class="tag">帰結</span>
+              <p><strong>工業的パラダイム</strong><br>「研究者が賢いアルゴリズムを発明する」から「計算資源を正しくスケールする」へ。AI開発が資本集約型の産業に変貌した。</p>
+            </div>
+          </div>
+        </div>
+        <div class="footer reveal reveal-delay-3">
+          <span>Kaplanのべき乗則がAI開発の方法論を書き換えた</span>
+          <span class="slide-count">1 / 7</span>
+        </div>
+      </section>
+
+      <!-- ═══════════ Slide 2 ═══════════ -->
+      <section class="slide" id="slide-2">
+        <div class="eyebrow reveal">Emergent Abilities</div>
+        <h2 class="reveal reveal-delay-1">スケーリングの勝利 — 創発する能力</h2>
+        <div class="panel reveal reveal-delay-2">
+          <p class="lead">GPT-2は15億パラメータだった。文章の続きを書くことはできたが、まともな算数はできなかった。GPT-3は1750億パラメータに跳ね上がり、突然、翻訳もコード生成もこなし始めた。GPT-4は公式発表はないが、推定1.8兆パラメータのMixture of Experts。数学の推論、視覚的理解、複雑な指示への追従。2年前のモデルには不可能だったことが、スケールアップだけで実現した。</p>
+          <p class="lead">Wei et al.（2022）はこの現象を「創発的能力（Emergent Abilities）」と名付けた。小さいモデルではランダムに近い性能を示すタスクが、パラメータ数がある閾値を超えると突然解けるようになる。算術、多段推論、コード生成。能力が滑らかに向上するのではなく、不連続的に出現する。スケーリング則が予測するのは損失関数の滑らかな改善だが、その裏で能力の相転移が起きている。</p>
+
+          <table class="compare">
+            <thead>
+              <tr>
+                <th>モデル</th>
+                <th>年</th>
+                <th>パラメータ</th>
+                <th>創発した能力</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>GPT-2</strong></td>
+                <td>2019</td>
+                <td>1.5B</td>
+                <td>文章生成。算術は不正確</td>
+              </tr>
+              <tr>
+                <td><strong>GPT-3</strong></td>
+                <td>2020</td>
+                <td>175B</td>
+                <td>Few-shot学習、翻訳、簡易コード生成</td>
+              </tr>
+              <tr>
+                <td><strong>Chinchilla</strong></td>
+                <td>2022</td>
+                <td>70B</td>
+                <td>Gopher（280B）を上回る性能。データとパラメータの最適配分</td>
+              </tr>
+              <tr>
+                <td><strong>GPT-4</strong></td>
+                <td>2023</td>
+                <td>推定1.8T MoE</td>
+                <td>視覚理解、複雑な推論、司法試験上位10%</td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="source-note">
+            Wei et al. (2022) "Emergent Abilities of Large Language Models"; Hoffmann et al. (2022) "Training Compute-Optimal Large Language Models" (Chinchilla); OpenAI (2023) GPT-4 Technical Report.
+          </div>
+
+          <p class="lead">2022年、DeepMindのHoffmann et al.がChinchillaを発表し、Kaplanのスケーリング則を修正した。Kaplanの処方箋は「パラメータを最大にし、データは少なめでよい」。Chinchillaの答えは逆だった。データ量とパラメータ数は等しいペースでスケールすべきだ。70Bパラメータのモデルが、4倍のパラメータを持つGopher（280B）を上回った。学習効率が劇的に改善し、同じ計算予算でより高い性能に到達できることが証明された。</p>
+          <p class="lead">スケーリングは万能か。この時点では、そう見えた。</p>
+        </div>
+        <div class="footer reveal reveal-delay-3">
+          <span>スケールが能力の相転移を引き起こす。Chinchillaが最適配分を書き換えた</span>
+          <span class="slide-count">2 / 7</span>
+        </div>
+      </section>
+
+      <!-- ═══════════ Slide 3 ═══════════ -->
+      <section class="slide" id="slide-3">
+        <div class="eyebrow reveal">The Wall</div>
+        <h2 class="reveal reveal-delay-1">壁 — スケーリングは限界に達したのか</h2>
+        <div class="panel reveal reveal-delay-2">
+          <p class="lead">2024年、空気が変わった。「スケーリングは死んだ」という言説が業界を駆け巡った。GPT-4からGPT-4.5への性能向上は期待を大きく下回り、Gemini UltraやClaude 3 Opusも「桁違いに賢い」という評価は得られなかった。何が起きているのか。</p>
+
+          <div class="bullets">
+            <div class="point"><strong>データの壁。</strong>人間が生成した高品質テキストは有限だ。Epoch AIの推計では、インターネット上の高品質テキストデータは2028年頃に学習用途として実質的に枯渇する。書籍、学術論文、コードリポジトリ。人類が数千年かけて蓄積した知識には上限がある。</div>
+            <div class="point"><strong>電力の壁。</strong>GPT-4の学習コストは推定1億ドル超。次世代モデルはさらに桁が上がる。Microsoft、Google、Amazonは原子力発電所への投資を発表し始めた。1つのAIモデルに原発1基分の電力を投じる時代が視野に入っている。</div>
+            <div class="point"><strong>チップの壁。</strong>TSMCの先端プロセス（3nm、2nm）の生産能力は物理的に限られている。NVIDIA H100、B100の供給は慢性的に逼迫し、待ち行列は数四半期に及ぶ。半導体製造設備の新設には3-5年かかる。</div>
+            <div class="point"><strong>収穫逓減。</strong>ベンチマーク上位では、計算量を10倍にしても性能向上は数パーセント。べき乗則の指数が-0.076であることの意味を思い出してほしい。パラメータを10倍にしても損失は約15%しか減らない。低い果実は既に摘まれている。</div>
+          </div>
+
+          <div class="infographic-bignum">
+            <div class="cell">
+              <div class="num">2028<span class="unit">年頃</span></div>
+              <div class="label">高品質テキストデータの<br>実質的枯渇時期</div>
+            </div>
+            <div class="cell">
+              <div class="num">$100M<span class="unit">+</span></div>
+              <div class="label">GPT-4の<br>推定学習コスト</div>
+            </div>
+            <div class="cell">
+              <div class="num">3-5<span class="unit">年</span></div>
+              <div class="label">半導体工場の<br>新設所要期間</div>
+            </div>
+          </div>
+          <div class="source-note">
+            Epoch AI (2024) "Will we run out of data?"; 各社の電力投資は2024-2025年の公開報道に基づく; TSMC CapEx計画は2024年Annual Reportより。
+          </div>
+
+          <p class="lead">だが「スケーリングは死んだ」と宣言するのは早計だった。止まったのは、スケーリングの特定の軸だった。べき乗則が指し示す直線を延長する、という単純な戦略が壁にぶつかったのは事実だ。しかし直線が止まったとき、3本の迂回路が見えた。</p>
+        </div>
+        <div class="footer reveal reveal-delay-3">
+          <span>データ、電力、チップ。3つの壁がスケーリングの直線延長を阻む</span>
+          <span class="slide-count">3 / 7</span>
+        </div>
+      </section>
+
+      <!-- ═══════════ Slide 4 ═══════════ -->
+      <section class="slide" id="slide-4">
+        <div class="eyebrow reveal">Accelerator 1: Test-Time Compute</div>
+        <h2 class="reveal reveal-delay-1">第1の加速路 — テスト時計算</h2>
+        <div class="panel reveal reveal-delay-2">
+          <p class="lead">2024年9月、OpenAIがo1を発表した。このモデルは従来のLLMとは根本的に異なる設計思想を持っていた。回答を即座に出すのではなく、「考える時間」を費やす。内部でChain of Thoughtを展開し、推論を検証し、間違いに気づいたら修正する。出力までの時間は長くなったが、精度は劇的に向上した。</p>
+          <p class="lead">これはスケーリングの新しい軸の発見だった。従来のスケーリング則は学習時の計算量を増やすことに焦点を当てていた。o1は、推論時にも計算量を投じることで性能が向上することを示した。Inference-time compute scaling。学習のべき乗則が飽和しても、推論時計算のべき乗則はまだ始まったばかりだ。</p>
+
+          <div class="grid-2">
+            <div class="card">
+              <span class="tag">学習時スケーリング</span>
+              <p><strong>事前に知識を詰め込む</strong><br>パラメータ数とデータ量を増やし、重みに知識を焼き付ける。Kaplanのべき乗則が支配する領域。壁に近づいている。</p>
+            </div>
+            <div class="card">
+              <span class="tag">推論時スケーリング</span>
+              <p><strong>その場で考える時間を増やす</strong><br>回答前に推論チェーンを展開、検証、修正する。計算量に応じて精度が向上する新しいべき乗関係。まだ初期段階。</p>
+            </div>
+          </div>
+
+          <p class="lead">成果は明快だった。o3は2025年にIMO（国際数学オリンピック）で銀メダル相当のスコアを叩き出した。ARC-AGIベンチマークでは、o3が人間レベルの汎化性能に迫った。いずれも従来のLLMでは到達不能だったスコアだ。</p>
+          <p class="lead">この路線はOpenAIだけのものではない。中国のDeepSeekがR1を発表し、同様のアプローチでo1に匹敵する推論性能を達成した。GoogleもGemini 2.5 Proで推論時計算を本格導入した。スケーリング競争は二正面に拡大した。計算量を増やす場所が「学習」だけだった時代は終わり、「推論」という第2の戦場が開いた。</p>
+
+          <div class="note">
+            <strong>本質。</strong>テスト時計算スケーリングは、データの壁を迂回する。学習データが有限でも、推論時に「考える」ための計算量は事実上無限に投じることができる。電力とチップの制約は残るが、推論コストは学習コストより分散しやすい。エッジデバイスや効率的な推論カーネルの進化が、この軸のスケーリングを加速する。
+          </div>
+        </div>
+        <div class="footer reveal reveal-delay-3">
+          <span>考える時間を増やす。推論時計算という新しいスケーリング軸の発見</span>
+          <span class="slide-count">4 / 7</span>
+        </div>
+      </section>
+
+      <!-- ═══════════ Slide 5 ═══════════ -->
+      <section class="slide" id="slide-5">
+        <div class="eyebrow reveal">Accelerator 2: Synthetic Data</div>
+        <h2 class="reveal reveal-delay-1">第2の加速路 — 合成データとセルフプレイ</h2>
+        <div class="panel reveal reveal-delay-2">
+          <p class="lead">データの壁は本当に壁なのか。人間が生成したテキストが有限であることは確かだ。だが、人間のデータだけがAIの訓練に使えるという前提こそ、疑うべきだった。</p>
+          <p class="lead">先例がある。AlphaGoは人間の棋譜から学習を始めたが、AlphaZeroは違った。ルールだけを与え、自己対戦で学習した。人間の棋譜を一切使わず、40日で人類最強のプレイヤーを超えた。人間のデータは出発点にはなるが、天井にはならない。この教訓がLLMの世界にも適用され始めている。</p>
+
+          <div class="bullets">
+            <div class="point"><strong>STaR（Self-Taught Reasoner）。</strong>AIが自分で推論チェーンを生成し、正解したものだけをフィルタリングして学習データに加える。Zelikman et al. 2022。人間がラベル付けしていない推論過程を、AI自身が生成し、選別し、学習する。データの壁を内側から突き破る手法だ。</div>
+            <div class="point"><strong>Constitutional AI。</strong>Anthropicが開発した手法。AIがAIの出力を評価するフィードバックループ。人間のフィードバック（RLHF）はスケールしにくい。評価者の数と時間に制約があるからだ。Constitutional AIでは、原則に基づいてAI自身が出力を批評し、改善する。人間の評価者というボトルネックを除去した。</div>
+            <div class="point"><strong>合成データの罠 — model collapse。</strong>ナイーブにAI生成データでAIを訓練すると、品質が劣化する。Shumailov et al. 2024が示したmodel collapseだ。コピーのコピーは劣化する。だが、AlphaZeroは劣化しなかった。鍵は検証可能性にある。囲碁には勝敗という明確な検証基準がある。数学にも正解がある。検証可能な領域では、合成データは劣化しない。</div>
+          </div>
+
+          <p class="lead">合成データのフロンティアは急速に広がっている。Meta Llama 3の学習には合成データが大量に使われた。Googleは合成データで訓練した数学特化モデルで、GSM8Kベンチマークを塗り替えた。Microsoftは合成教科書でPhi-2を訓練し、70億パラメータで130億パラメータのモデルに匹敵する性能を出した。</p>
+          <p class="lead">人間のデータの天井は、AIの訓練の天井ではない。</p>
+        </div>
+        <div class="footer reveal reveal-delay-3">
+          <span>AIがAIを訓練する。人間のデータの壁は、天井ではなく出発点だった</span>
+          <span class="slide-count">5 / 7</span>
+        </div>
+      </section>
+
+      <!-- ═══════════ Slide 6 ═══════════ -->
+      <section class="slide" id="slide-6">
+        <div class="eyebrow reveal">Accelerator 3: Agents &amp; Tools</div>
+        <h2 class="reveal reveal-delay-1">第3の加速路 — エージェントとツール使用</h2>
+        <div class="panel reveal reveal-delay-2">
+          <p class="lead">LLMの限界は「知っているが、動けない」ことだった。どれだけ賢くても、テキストを出力することしかできない。外部のAPIを叩けない。ファイルを読めない。コードを実行できない。2024年から2025年にかけて、この制約が崩壊した。</p>
+          <p class="lead">Claude Code、Devin、OpenAI Codex。AIがコードを書くだけでなく、実行し、エラーを修正し、テストを通し、PRを作成する。人間の開発者と同じワークフローを自律的に遂行するエージェントが出現した。</p>
+
+          <table class="compare">
+            <thead>
+              <tr>
+                <th>ベンチマーク / プロダクト</th>
+                <th>内容</th>
+                <th>進捗</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>SWE-bench</strong></td>
+                <td>実際のGitHubイシューを解決するベンチマーク</td>
+                <td>2024年初頭 3% &rarr; 2025年 50%超</td>
+              </tr>
+              <tr>
+                <td><strong>Claude Code</strong></td>
+                <td>Anthropicの自律コーディングエージェント</td>
+                <td>ターミナルで直接動作、マルチファイル編集</td>
+              </tr>
+              <tr>
+                <td><strong>Devin</strong></td>
+                <td>Cognitionの「AI software engineer」</td>
+                <td>タスク定義からデプロイまでを自律実行</td>
+              </tr>
+              <tr>
+                <td><strong>Voyager</strong></td>
+                <td>NVIDIAのMinecraftエージェント</td>
+                <td>自律的にスキルを獲得、コード生成で行動拡張</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <p class="lead">エージェントはLLMの「推論の壁」も迂回する。わからなければ調べる。試す。失敗したら修正する。人間と同じ試行錯誤のループを回すことで、単発の推論では解けない問題を段階的に解決する。NVIDIAのVoyagerはMinecraftの世界で、自分でコードを書いてスキルを獲得し、新しい行動パターンをライブラリに蓄積する。LLMの知識が静的なスナップショットだとすれば、エージェントは動的な探索プロセスだ。</p>
+          <p class="lead">エージェントの性能向上は、2つの掛け算で起きている。LLM自体の地力向上と、ツール設計の改善。推論能力が1.5倍になり、ツールの呼び出し精度も1.5倍になれば、エージェント全体の能力は2.25倍になる。SWE-benchのスコアが1年半で3%から50%超に跳ね上がったのは、この掛け算の結果だ。</p>
+
+          <div class="note">
+            <strong>注意点。</strong>SWE-benchは標準化されたベンチマークだが、実世界のソフトウェア開発の全てを代表するわけではない。曖昧な要件定義、ステークホルダーとの調整、システム全体のアーキテクチャ設計。これらはまだ人間の領域にある。ただし、この領域の境界線は毎月後退している。
+          </div>
+        </div>
+        <div class="footer reveal reveal-delay-3">
+          <span>考えるだけでなく、動く。LLMの地力とツール設計の掛け算がスコアを押し上げる</span>
+          <span class="slide-count">6 / 7</span>
+        </div>
+      </section>
+
+      <!-- ═══════════ Slide 7 ═══════════ -->
+      <section class="slide" id="slide-7">
+        <div class="eyebrow reveal">Convergence</div>
+        <h2 class="reveal reveal-delay-1">終着点 — 3つの経路はどこで合流するか</h2>
+        <div class="panel reveal reveal-delay-2">
+          <p class="lead">3つの加速路は独立して進んでいるように見えるが、実際には相互に補強し合っている。</p>
+          <p class="lead">テスト時計算で生成された推論チェーンは、合成データとして次世代モデルの学習に使える。合成データで訓練されたモデルは、推論能力が向上し、より質の高い推論チェーンを生成する。エージェントは推論能力の高いモデルを搭載することで、より複雑なタスクを遂行できる。エージェントが遂行したタスクの履歴は、さらなる学習データになる。</p>
+
+          <div class="grid-3">
+            <div class="card">
+              <span class="tag">Loop 1</span>
+              <p><strong>推論 &rarr; データ</strong><br>テスト時計算で生成した推論チェーンが合成データになる。推論能力の向上がデータの壁を内側から突破する。</p>
+            </div>
+            <div class="card">
+              <span class="tag">Loop 2</span>
+              <p><strong>データ &rarr; エージェント</strong><br>合成データで訓練されたモデルがエージェントの地力を向上させる。エージェントの行動履歴が新たな学習データを生む。</p>
+            </div>
+            <div class="card">
+              <span class="tag">Loop 3</span>
+              <p><strong>エージェント &rarr; 推論</strong><br>エージェントは外部ツールで推論の限界を迂回する。ツール使用の成功パターンがモデルの推論能力自体を改善する。</p>
+            </div>
+          </div>
+
+          <p class="lead">予測市場はこの合流をどう見ているか。Metaculusの中央予測値は、AGI到達を2028-2030年に置いている。Sam Altmanは2024年9月に「超知能は数千日先」と書いた。Dario Amodeiは「2026年末までにAGIの可能性」と述べた。予測のばらつきは大きいが、方向は収束している。年ではなく、数千日の単位で語られるようになった。</p>
+
+          <table class="compare">
+            <thead>
+              <tr>
+                <th>ソース</th>
+                <th>AGI予測</th>
+                <th>時期</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Metaculus</strong></td>
+                <td>予測市場の中央値</td>
+                <td>2028-2030年</td>
+              </tr>
+              <tr>
+                <td><strong>Altman</strong></td>
+                <td>「超知能は数千日先」</td>
+                <td>2024年9月のブログ投稿</td>
+              </tr>
+              <tr>
+                <td><strong>Amodei</strong></td>
+                <td>「2026年末までに可能性」</td>
+                <td>2025年1月インタビュー</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <p class="lead">スケーリングは「死んだ」のではない。進化した。パラメータを増やすという直線が壁にぶつかったとき、3本の迂回路が開いた。テスト時計算、合成データ、エージェント。そしてこの3本は互いを加速する複合ループを形成し始めている。</p>
+          <div class="note">
+            <strong>壁に見えたものが、分岐点だった。</strong>直線を延長する時代が終わり、多次元にスケールする時代が始まった。スケーリングの本質は「大きくする」ことではなく「正しい方向に計算を投じる」ことだった。データが尽き、電力が足りず、チップが不足しても、計算を投じる場所と方法はまだ増え続けている。3つの経路が合流する先に何があるのか。その問いの答えは、おそらく人間が出すものではなくなる。
+          </div>
+        </div>
+        <div class="footer reveal reveal-delay-3">
+          <span>3本の迂回路は合流し、複合スケーリングを形成する</span>
+          <span class="slide-count">7 / 7</span>
+        </div>
+      </section>
+    </main>
+
+    <footer class="credits">
+      <p>
+        Photo: <a href="https://unsplash.com">Unsplash</a> (free license).
+        References: Kaplan et al. (2020) "Scaling Laws for Neural Language Models"; Wei et al. (2022) "Emergent Abilities of Large Language Models"; Hoffmann et al. (2022) "Training Compute-Optimal Large Language Models"; Epoch AI (2024) "Will we run out of data?"; Zelikman et al. (2022) "STaR: Self-Taught Reasoner"; Shumailov et al. (2024) "The Curse of Recursion"; OpenAI o1/o3 System Cards; DeepSeek-R1 Technical Report; Anthropic Constitutional AI; NVIDIA Voyager (2023); SWE-bench Leaderboard; Metaculus AGI forecasts.
+      </p>
+    </footer>
+
+    <script>
+      const buttons = Array.from(document.querySelectorAll('.nav button'));
+      const slides = Array.from(document.querySelectorAll('.slide'));
+      const progress = document.getElementById('progress');
+
+      function setActive(id) {
+        buttons.forEach(b => b.classList.toggle('active', b.dataset.target === id));
+      }
+
+      buttons.forEach(b => {
+        b.addEventListener('click', () => {
+          document.getElementById(b.dataset.target)?.scrollIntoView({ behavior: 'smooth' });
+        });
+      });
+
+      const navObserver = new IntersectionObserver(entries => {
+        entries.forEach(e => { if (e.isIntersecting) setActive(e.target.id); });
+      }, { threshold: 0.5 });
+
+      slides.forEach(s => navObserver.observe(s));
+
+      const revealObserver = new IntersectionObserver(entries => {
+        entries.forEach(e => {
+          if (e.isIntersecting) {
+            e.target.classList.add('visible');
+          }
+        });
+      }, { threshold: 0.15, rootMargin: '0px 0px -60px 0px' });
+
+      document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+      window.addEventListener('scroll', () => {
+        const scrollTop = window.scrollY;
+        const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+        const pct = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+        progress.style.width = pct + '%';
+      }, { passive: true });
+
+      window.addEventListener('keydown', e => {
+        const idx = buttons.findIndex(b => b.classList.contains('active'));
+        if (e.key === 'ArrowDown' || e.key === 'PageDown') {
+          e.preventDefault();
+          slides[Math.min(idx + 1, slides.length - 1)]?.scrollIntoView({ behavior: 'smooth' });
+        }
+        if (e.key === 'ArrowUp' || e.key === 'PageUp') {
+          e.preventDefault();
+          slides[Math.max(idx - 1, 0)]?.scrollIntoView({ behavior: 'smooth' });
+        }
+      });
+    </script>
+
+    <!-- Google Translate Widget -->
+    <script>
+    function googleTranslateElementInit() {
+      new google.translate.TranslateElement({
+        pageLanguage: 'ja',
+        includedLanguages: 'en,zh-CN,ko,fr,de,es',
+        layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+        autoDisplay: false
+      }, 'google_translate_element');
+    }
+    </script>
+    <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+  </body>
+</html>

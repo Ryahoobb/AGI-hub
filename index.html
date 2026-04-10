@@ -396,7 +396,153 @@
       }
 
       .featured.is-hidden,
-      .card.is-hidden { display: none !important; }
+      .card.is-hidden,
+      .pick.is-hidden { display: none !important; }
+
+      /* ══════════════════════════════════════
+         Editor's Picks (2-col featured)
+         ══════════════════════════════════════ */
+      .picks-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 48px;
+      }
+
+      .pick {
+        display: block;
+        color: inherit;
+      }
+
+      .pick .thumb {
+        width: 100%;
+        aspect-ratio: 16 / 10;
+        object-fit: cover;
+        display: block;
+        filter: grayscale(0.6) contrast(1.1);
+        transition: filter 0.6s var(--ease);
+        margin-bottom: 20px;
+      }
+
+      .pick:hover .thumb { filter: grayscale(0) contrast(1); }
+
+      .pick .meta {
+        font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 11px;
+        letter-spacing: 0.083em;
+        text-transform: uppercase;
+        color: var(--meta);
+        margin-bottom: 12px;
+      }
+
+      .pick .meta .cat { color: var(--black); font-weight: 700; }
+      .pick .meta .sep { margin: 0 10px; color: var(--border); }
+
+      .pick h3 {
+        color: var(--black);
+        font-size: clamp(22px, 2.5vw, 28px);
+        font-weight: 700;
+        line-height: 1.3;
+        margin-bottom: 14px;
+        max-width: 22ch;
+        transition: opacity 0.3s var(--ease);
+      }
+
+      .pick:hover h3 { opacity: 0.6; }
+
+      .pick .excerpt {
+        font-size: 15px;
+        line-height: 1.7;
+        color: var(--body-text);
+      }
+
+      /* ══════════════════════════════════════
+         Data Ticker (dark band)
+         ══════════════════════════════════════ */
+      .data-ticker {
+        background: var(--black);
+        color: var(--bg);
+        padding: 64px 48px;
+      }
+
+      .data-ticker-inner {
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      .data-ticker-eyebrow {
+        font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 11px;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        color: rgba(255,255,255,0.4);
+        margin-bottom: 20px;
+      }
+
+      .data-ticker-headline {
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: clamp(36px, 5vw, 56px);
+        font-weight: 700;
+        line-height: 1.1;
+        letter-spacing: -0.5px;
+        margin-bottom: 12px;
+      }
+
+      .data-ticker-headline .accent { color: #b23a2f; }
+
+      .data-ticker-sub {
+        font-size: 17px;
+        line-height: 1.6;
+        color: rgba(255,255,255,0.65);
+        max-width: 640px;
+        margin-bottom: 40px;
+      }
+
+      .data-kpi-row {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1px;
+        background: rgba(255,255,255,0.1);
+        margin-bottom: 32px;
+      }
+
+      .data-kpi {
+        padding: 24px 28px;
+        background: var(--black);
+      }
+
+      .data-kpi-value {
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 36px;
+        font-weight: 700;
+        line-height: 1;
+        margin-bottom: 6px;
+      }
+
+      .data-kpi-label {
+        font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+        font-size: 10px;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: rgba(255,255,255,0.4);
+      }
+
+      .data-ticker-cta {
+        font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 12px;
+        letter-spacing: 0.083em;
+        text-transform: uppercase;
+        font-weight: 700;
+        color: var(--bg);
+        display: inline-block;
+        padding-bottom: 3px;
+        border-bottom: 2px solid var(--bg);
+        transition: padding-right 0.3s var(--ease);
+      }
+
+      .data-ticker-cta:hover { padding-right: 12px; }
 
       /* ══════════════════════════════════════
          Footer
@@ -430,6 +576,9 @@
         .section { padding: 48px 24px; }
         .featured { grid-template-columns: 1fr; gap: 24px; margin-bottom: 48px; padding-bottom: 48px; }
         .article-grid { grid-template-columns: 1fr; gap: 32px; }
+        .picks-grid { grid-template-columns: 1fr; gap: 32px; }
+        .data-kpi-row { grid-template-columns: repeat(3, 1fr); }
+        .data-ticker { padding: 48px 24px; }
         footer { padding: 32px 24px 48px; flex-direction: column; align-items: flex-start; }
       }
 
@@ -445,8 +594,9 @@
       <div class="masthead-inner">
         <a href="/" class="logo"><span class="logo-mark"></span>AGI HUB</a>
         <nav class="nav-links">
+          <a href="#picks">Picks</a>
           <a href="#latest">Latest</a>
-          <a href="displacement-map.html">Data</a>
+          <a href="#data">Data</a>
           <a href="#about">About</a>
           <div id="google_translate_element"></div>
         </nav>
@@ -463,6 +613,68 @@
       <p>
         ここにある記事は完成品ではない。考えの途中経過を、後から読み返せる形で留めておくための断章である。
       </p>
+    </section>
+
+    <!-- ── Editor's Picks ── -->
+    <section class="section" id="picks">
+      <div class="section-title">
+        <h2>Editor's Picks</h2>
+        <span class="count">Start Here</span>
+      </div>
+
+      <div class="picks-grid">
+        <a href="articles/01-ai-alignment.html" class="pick" data-category="alignment">
+          <img class="thumb" src="images/thumb-ai-alignment.jpg" alt="AI Alignment article thumbnail">
+          <div class="meta">
+            <span style="font-weight:700;">No. 01</span>
+            <span class="sep">/</span>
+            <span class="cat">Alignment</span>
+          </div>
+          <h3>Yudkowskyを越えて — AIアラインメントの本来の射程</h3>
+          <p class="excerpt">
+            「If anyone builds it, everyone dies」と言い切ったEliezer Yudkowskyの論証を分解し、3つの論理的飛躍を検証する。防御・整合・共創の3層モデルで、破滅論の外側に広がるアラインメントの本来の射程を辿る。
+          </p>
+        </a>
+
+        <a href="articles/02-agi-evolution.html" class="pick" data-category="takeoff">
+          <img class="thumb" src="images/thumb-agi-evolution.jpg" alt="AGI Evolution article thumbnail">
+          <div class="meta">
+            <span style="font-weight:700;">No. 02</span>
+            <span class="sep">/</span>
+            <span class="cat">Takeoff</span>
+          </div>
+          <h3>AGIは技術の延長ではなく、進化の担体更新である</h3>
+          <p class="excerpt">
+            138億年の宇宙史を一本の線として眺めたとき、AGIは「便利な道具」でも「人類の脅威」でもなく、知能という現象が生物学的基盤を離れる転位点として現れる。担体のバトンリレーという視点で読み直す。
+          </p>
+        </a>
+      </div>
+    </section>
+
+    <!-- ── Data Ticker ── -->
+    <section class="data-ticker" id="data">
+      <div class="data-ticker-inner">
+        <div class="data-ticker-eyebrow">Live Tracker — AI Job Displacement</div>
+        <div class="data-ticker-headline"><span class="accent">1,200,000+</span> 人の雇用が動いた。</div>
+        <p class="data-ticker-sub">
+          AIは人間の仕事を代替している。それも急速に。企業が公式に発表した人員削減ニュースを追う。
+        </p>
+        <div class="data-kpi-row">
+          <div class="data-kpi">
+            <div class="data-kpi-value">170</div>
+            <div class="data-kpi-label">確認済みイベント</div>
+          </div>
+          <div class="data-kpi">
+            <div class="data-kpi-value">20</div>
+            <div class="data-kpi-label">対象国</div>
+          </div>
+          <div class="data-kpi">
+            <div class="data-kpi-value">11</div>
+            <div class="data-kpi-label">業種</div>
+          </div>
+        </div>
+        <a href="displacement-map.html" class="data-ticker-cta">フルダッシュボードを見る →</a>
+      </div>
     </section>
 
     <!-- ── Latest Section ── -->
@@ -549,36 +761,6 @@
           <h3>産業爆発の隠れた前提 — ロボット自己複製が未来を二つに割る</h3>
           <p class="excerpt">
             AIがAIを改良するループの先に語られる「産業爆発」は、ロボットがロボットを作る自己複製という一つの前提に賭けている。倍増時間、物理ボトルネック、カルダシェフ・スケールへの接近までを辿る。
-          </p>
-        </a>
-
-        <a href="articles/01-ai-alignment.html" class="card" data-category="alignment">
-          <img class="thumb" src="images/thumb-ai-alignment.jpg" alt="AI Alignment article thumbnail">
-          <div class="meta">
-            <span>No. 01</span>
-            <span class="sep">/</span>
-            <span class="cat">Alignment</span>
-            <span class="sep">/</span>
-            <span>2026.04.09</span>
-          </div>
-          <h3>Yudkowskyを越えて — AIアラインメントの本来の射程</h3>
-          <p class="excerpt">
-            「If anyone builds it, everyone dies」と言い切ったEliezer Yudkowskyの論証を分解し、3つの論理的飛躍を検証する。防御・整合・共創の3層モデルで、破滅論の外側に広がるアラインメントの本来の射程を辿る。
-          </p>
-        </a>
-
-        <a href="articles/02-agi-evolution.html" class="card" data-category="takeoff">
-          <img class="thumb" src="images/thumb-agi-evolution.jpg" alt="AGI Evolution article thumbnail">
-          <div class="meta">
-            <span>No. 02</span>
-            <span class="sep">/</span>
-            <span class="cat">Takeoff</span>
-            <span class="sep">/</span>
-            <span>2026.04.09</span>
-          </div>
-          <h3>AGIは技術の延長ではなく、進化の担体更新である</h3>
-          <p class="excerpt">
-            138億年の宇宙史を一本の線として眺めたとき、AGIは「便利な道具」でも「人類の脅威」でもなく、知能という現象が生物学的基盤を離れる転位点として現れる。担体のバトンリレーという視点で読み直す。
           </p>
         </a>
 

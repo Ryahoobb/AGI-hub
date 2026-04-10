@@ -90,6 +90,7 @@
 
       .nav-links {
         display: flex;
+        align-items: center;
         gap: 28px;
         font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
         font-feature-settings: normal;
@@ -98,6 +99,34 @@
         letter-spacing: 0.083em;
         text-transform: uppercase;
       }
+      /* Google Translate widget in masthead */
+      .nav-links #google_translate_element select {
+        appearance: none;
+        -webkit-appearance: none;
+        background: rgba(255,255,255,0.12);
+        border: 1px solid rgba(255,255,255,0.25);
+        border-radius: 4px;
+        color: rgba(255,255,255,0.85);
+        font-family: inherit;
+        font-size: 11px;
+        letter-spacing: 0.05em;
+        padding: 4px 22px 4px 8px;
+        cursor: pointer;
+        outline: none;
+        text-transform: none;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='rgba(255,255,255,0.7)'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 6px center;
+      }
+      .nav-links #google_translate_element select:hover {
+        background-color: rgba(255,255,255,0.2);
+        border-color: rgba(255,255,255,0.4);
+      }
+      .nav-links #google_translate_element select option {
+        background: #222; color: #fff;
+      }
+      .goog-te-banner-frame { display: none !important; }
+      body { top: 0 !important; }
 
       .nav-links a { color: var(--bg); transition: opacity 0.3s var(--ease); }
       .nav-links a:hover { opacity: 0.6; }
@@ -418,6 +447,7 @@
         <nav class="nav-links">
           <a href="#latest">Latest</a>
           <a href="#about">About</a>
+          <div id="google_translate_element"></div>
         </nav>
       </div>
     </header>
@@ -661,5 +691,17 @@
       <span>An Independent Archive</span>
     </footer>
 
+    <!-- Google Translate Widget -->
+    <script>
+    function googleTranslateElementInit() {
+      new google.translate.TranslateElement({
+        pageLanguage: 'ja',
+        includedLanguages: 'en,zh-CN,ko,fr,de,es',
+        layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+        autoDisplay: false
+      }, 'google_translate_element');
+    }
+    </script>
+    <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
   </body>
 </html>

@@ -406,7 +406,10 @@
   <body class="pattern-broadsheet accent-deepblue has-site-header" data-category="lineage">
     <header class="site-header">
       <a href="../index.html" class="site-logo">AGI HUB</a>
-      <a href="../index.html" class="site-back">アーカイブに戻る</a>
+      <div class="site-nav-right">
+        <div id="google_translate_element"></div>
+        <a href="../index.html" class="site-back">アーカイブに戻る</a>
+      </div>
     </header>
     <div class="progress" id="progress"></div>
 
@@ -792,5 +795,18 @@
         }
       });
     </script>
+  
+    <!-- Google Translate Widget -->
+    <script>
+    function googleTranslateElementInit() {
+      new google.translate.TranslateElement({
+        pageLanguage: 'ja',
+        includedLanguages: 'en,zh-CN,ko,fr,de,es',
+        layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+        autoDisplay: false
+      }, 'google_translate_element');
+    }
+    </script>
+    <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
   </body>
 </html>

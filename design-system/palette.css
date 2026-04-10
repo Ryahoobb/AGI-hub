@@ -1363,6 +1363,47 @@ figure.img .caption { margin-top: 10px; }
   content: "←";
   margin-right: 6px;
 }
+.site-header .site-nav-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+/* Google Translate widget のデフォルトUIを上書き */
+#google_translate_element {
+  line-height: 1;
+}
+#google_translate_element select {
+  appearance: none;
+  -webkit-appearance: none;
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.25);
+  border-radius: 4px;
+  color: rgba(255,255,255,0.85);
+  font-family: var(--ff-body);
+  font-size: 12px;
+  padding: 4px 24px 4px 8px;
+  cursor: pointer;
+  outline: none;
+  transition: background 0.2s, border-color 0.2s;
+  /* カスタム矢印 */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='rgba(255,255,255,0.7)'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+}
+#google_translate_element select:hover {
+  background-color: rgba(255,255,255,0.2);
+  border-color: rgba(255,255,255,0.4);
+}
+#google_translate_element select option {
+  background: #222;
+  color: #fff;
+}
+/* Google Translate が挿入するバナーを非表示 */
+.goog-te-banner-frame { display: none !important; }
+body { top: 0 !important; }
+/* 翻訳済みテキストのハイライトを消す */
+.goog-te-menu-value span { color: rgba(255,255,255,0.85) !important; }
+font[style] { background: none !important; box-shadow: none !important; }
 /* index.html用: ヘッダーの下にコンテンツが隠れないように */
 body.has-site-header { padding-top: 48px; }
 /* Broadsheet/Investigation: body直下のpadding-topを調整 */

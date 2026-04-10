@@ -194,51 +194,59 @@
   <a href="index.html" class="site-logo">AGI HUB</a>
   <div class="site-nav-right">
     <div id="google_translate_element"></div>
-    <a href="index.html" class="site-back">Archive</a>
+    <a href="index.html" class="site-back">アーカイブに戻る</a>
   </div>
 </header>
 
 <div class="dashboard">
 
   <!-- ── Title ── -->
-  <h1 class="dash-title">AI Job Displacement Tracker</h1>
+  <h1 class="dash-title">AI雇用代替トラッカー</h1>
   <p class="dash-subtitle">AIによる世界の雇用代替をリアルタイムで追跡する</p>
-  <div class="dash-date">Latest data: 2026-04-02</div>
+  <div class="dash-date">最終更新: 2026-04-02</div>
+
+  <!-- ── Insight ── -->
+  <div style="margin-bottom:40px; padding:20px 24px; border-left:3px solid #b23a2f; background:#fafafa; font-size:15px; line-height:1.8; color:#1a1a1a;">
+    2024年12月から2026年4月までの16ヶ月間で、AIを理由とする雇用削減は少なくとも<strong style="color:#b23a2f">119万人</strong>に達した。影響の68%は米国に集中しているが、日本（17.1万人）、インド（6.5万人）、中国（6.4万人）にも波及している。業種別ではテック企業が全体の54%を占める一方、金融（16%）や製造業（7%）にも拡大しつつある。2025年10月にAmazonが65万人規模の削減を発表して以降、月ごとの影響人数は高止まりしている。
+  </div>
 
   <!-- ── KPI ── -->
   <div class="kpi-row">
     <div class="kpi-card">
       <div class="kpi-value accent">1.2M</div>
-      <div class="kpi-label">Jobs Affected</div>
+      <div class="kpi-label">影響人数</div>
     </div>
     <div class="kpi-card">
       <div class="kpi-value">167</div>
-      <div class="kpi-label">News Stories</div>
+      <div class="kpi-label">ニュース件数</div>
     </div>
     <div class="kpi-card">
       <div class="kpi-value">18</div>
-      <div class="kpi-label">Countries</div>
+      <div class="kpi-label">対象国</div>
     </div>
     <div class="kpi-card">
       <div class="kpi-value">11</div>
-      <div class="kpi-label">Industries</div>
+      <div class="kpi-label">業種</div>
     </div>
   </div>
 
   <!-- ── World Map ── -->
-  <div class="section-label">Geographic Distribution</div>
+  <div class="section-label">地域分布</div>
+  <p style="font-size:13px; color:#757575; margin:-12px 0 16px;">バブルの大きさは影響人数に比例。ホバーで詳細を表示。</p>
   <div id="map"></div>
 
   <!-- ── 2-column: Country bars + Industry donut ── -->
   <div class="two-col">
     <div>
-      <div class="section-label">Top Countries by Impact</div>
+      <div class="section-label">国別影響人数</div>
+      <p style="font-size:13px; color:#757575; margin:-12px 0 16px;">米国が81万人で圧倒的。日本は17万人で2位。</p>
       <div class="panel">
         <canvas id="countryBarsChart"></canvas>
       </div>
     </div>
     <div>
-      <div class="section-label">Industry Breakdown</div>
+      <div class="section-label">業種別内訳</div>
+      <p style="font-size:13px; color:#757575; margin:-12px 0 16px;">テック企業が過半数だが、金融・専門職にも拡大中。</p>
       <div class="panel">
         <div class="donut-wrap">
           <canvas id="donutChart"></canvas>
@@ -249,15 +257,16 @@
   </div>
 
   <!-- ── Monthly trend ── -->
-  <div class="section-label">Monthly Trend</div>
+  <div class="section-label">月次推移</div>
+  <p style="font-size:13px; color:#757575; margin:-12px 0 16px;">2025年10月のAmazon大量削減を境に影響規模が拡大。件数は月10-15件で推移。</p>
   <div class="panel">
     <canvas id="trendChart"></canvas>
   </div>
 
   <!-- ── Footer ── -->
   <div class="dash-footer">
-    Data collected from Google News, Bing News, Reddit, and direct RSS feeds. Classified by GPT-4o-mini.<br>
-    Source: ai-job-displacement-map pipeline
+    データソース: Google News、Bing News、Reddit、直接RSSフィードから自動収集。GPT-4o-miniで分類。<br>
+    収集パイプライン: ai-job-displacement-map
   </div>
 
 </div>
@@ -273,7 +282,7 @@ function googleTranslateElementInit() {
   }, 'google_translate_element');
 }
 </script>
-<script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+<script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
 <script>
 // ── Data ────────────────────────────────────────────────────
@@ -323,9 +332,9 @@ MAP_DATA.forEach(d => {
   circle.bindPopup(`
     <div class="popup-title">${d.country}</div>
     <div class="popup-stat">
-      Jobs affected: <strong>${jobsLabel}</strong><br>
-      News stories: ${d.count}<br>
-      Top industry: ${d.top_industry}
+      影響人数: <strong>${jobsLabel}</strong><br>
+      ニュース件数: ${d.count}件<br>
+      主要業種: ${d.top_industry}
     </div>
   `, { closeButton: false });
 
@@ -339,7 +348,7 @@ new Chart(document.getElementById('countryBarsChart'), {
   data: {
     labels: COUNTRY_BARS.map(d => d.country),
     datasets: [{
-      label: 'Jobs affected',
+      label: '影響人数',
       data: COUNTRY_BARS.map(d => d.jobs),
       backgroundColor: COUNTRY_BARS.map((d, i) => i === 0 ? C_RED : C_BLACK),
       borderWidth: 0,
@@ -353,7 +362,7 @@ new Chart(document.getElementById('countryBarsChart'), {
       legend: { display: false },
       tooltip: {
         callbacks: {
-          label: ctx => ' ' + fmtK(ctx.raw) + ' jobs',
+          label: ctx => ' ' + fmtK(ctx.raw) + '人',
         },
       },
     },
@@ -412,7 +421,7 @@ new Chart(donutCtx, {
       ctx.fillText(total, cx, cy - 6);
       ctx.font = '10px "SF Mono", monospace';
       ctx.fillStyle = C_GRAY;
-      ctx.fillText('STORIES', cx, cy + 12);
+      ctx.fillText('件', cx, cy + 12);
       ctx.restore();
     },
   }],
@@ -437,7 +446,7 @@ if (TREND.length >= 2) {
       datasets: [
         {
           type: 'bar',
-          label: 'News count',
+          label: 'ニュース件数',
           data: TREND.map(d => d.count),
           backgroundColor: 'rgba(26,26,26,0.15)',
           borderColor: 'transparent',
@@ -447,7 +456,7 @@ if (TREND.length >= 2) {
         },
         {
           type: 'line',
-          label: 'Jobs affected',
+          label: '影響人数',
           data: TREND.map(d => d.jobs),
           borderColor: C_RED,
           backgroundColor: 'rgba(178,58,47,0.06)',
@@ -487,14 +496,14 @@ if (TREND.length >= 2) {
           grid: { color: C_BORDER },
           border: { display: false },
           ticks: { callback: v => fmtK(v), color: C_RED },
-          title: { display: true, text: 'Jobs', color: C_RED, font: { size: 10 } },
+          title: { display: true, text: '影響人数', color: C_RED, font: { size: 10 } },
         },
         y2: {
           position: 'right',
           grid: { display: false },
           border: { display: false },
           ticks: { color: C_META },
-          title: { display: true, text: 'Count', color: C_META, font: { size: 10 } },
+          title: { display: true, text: '件数', color: C_META, font: { size: 10 } },
         },
       },
     },

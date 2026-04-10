@@ -464,6 +464,47 @@
               </tr>
             </tbody>
           </table>
+          <figure class="chart chart-wide">
+            <div class="chart-title">4論者のテイクオフ速度推定は対数軸で見ると500倍のレンジ</div>
+            <div class="chart-subtitle">本文記載の代表値を「超知能到達までの期間」に正規化して比較（対数スケール）</div>
+            <svg class="chart-svg" viewBox="0 0 640 260" role="img" aria-label="4論者のテイクオフ速度比較">
+              <title>4論者のテイクオフ速度比較</title>
+              <!-- log scale: x = 160 + 90 * log10(days)  →  7日=236, 365=391, 1095=438, 3650=491 -->
+              <!-- grid lines at 7, 30, 365, 3650 -->
+              <line class="grid-line" x1="236" y1="30" x2="236" y2="220" stroke-dasharray="2 3"/>
+              <line class="grid-line" x1="301" y1="30" x2="301" y2="220" stroke-dasharray="2 3"/>
+              <line class="grid-line" x1="391" y1="30" x2="391" y2="220" stroke-dasharray="2 3"/>
+              <line class="grid-line" x1="491" y1="30" x2="491" y2="220" stroke-dasharray="2 3"/>
+              <text class="data-label" x="236" y="240" text-anchor="middle">1週</text>
+              <text class="data-label" x="301" y="240" text-anchor="middle">1ヶ月</text>
+              <text class="data-label" x="391" y="240" text-anchor="middle">1年</text>
+              <text class="data-label" x="491" y="240" text-anchor="middle">10年</text>
+
+              <!-- Yudkowsky: 数日〜数週間 (3-21日) → 207-268 -->
+              <text class="data-label" x="155" y="55" text-anchor="end">Yudkowsky</text>
+              <rect class="data-accent" x="207" y="44" width="61" height="20"/>
+              <text class="data-label-accent" x="275" y="59">数日〜数週</text>
+
+              <!-- Kokotajlo: 1年以内 (180-365日) → 363-391 -->
+              <text class="data-label" x="155" y="105" text-anchor="end">Kokotajlo</text>
+              <rect class="data-primary" x="363" y="94" width="28" height="20"/>
+              <text class="data-label" x="398" y="109">1年以内</text>
+
+              <!-- Davidson: 数年 (1-5年, 365-1825日) → 391-454 -->
+              <text class="data-label" x="155" y="155" text-anchor="end">Davidson</text>
+              <rect class="data-secondary" x="391" y="144" width="63" height="20"/>
+              <text class="data-label" x="461" y="159">数年</text>
+
+              <!-- Epoch AI: 10年 (3650日) → 491  (centered around) -->
+              <text class="data-label" x="155" y="205" text-anchor="end">Epoch AI</text>
+              <rect class="data-tertiary" x="463" y="194" width="56" height="20"/>
+              <text class="data-label" x="526" y="209">約10年</text>
+            </svg>
+            <figcaption class="chart-footer">
+              <p class="chart-caption">最速（Yudkowsky: 数日）と最遅（Epoch AI: 10年）で約500倍の隔たり。同じ事実を見ていながら、予測は3桁ずれる。</p>
+              <p class="chart-source">AGI HUB composite. 本文記載の各論者推定値から作図</p>
+            </figcaption>
+          </figure>
           <p class="lead">
             この表が示しているのは、4人が<strong>対立しているのではなく、同じ山の違う斜面にいる</strong>ということだ。全員がAGI以後の加速的変化を予測している。違うのは、その加速が数日でピークに達するのか、10年かけて並走しながら進むのかという速度論の部分だけである。そしてこの違いは、次のスライドで見るように、ある一つの経済学的な論点に集約される。
           </p>

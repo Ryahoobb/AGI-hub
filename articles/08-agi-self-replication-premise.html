@@ -494,6 +494,51 @@
               <p><strong>倍増時間 数日</strong><br>技術爆発による設計改善が加わり、バクテリア並みの自己複製速度が射程に入る。</p>
             </div>
           </div>
+          <figure class="chart chart-wide">
+            <div class="chart-title">倍増時間そのものが短縮していく — 固定指数関数ではない</div>
+            <div class="chart-subtitle">Forethought試算。経験曲線と設計改善が同時に効き、倍増時間が1年から数日へ崩れる</div>
+            <svg class="chart-svg" viewBox="0 0 640 280" role="img" aria-label="倍増時間の短縮カーブ">
+              <title>倍増時間の短縮カーブ</title>
+              <!-- Y axis (log): 365d(top)=60, 90d=110, 30d=150, 7d=200, 1d=240 -->
+              <line class="axis-line" x1="80" y1="40" x2="80" y2="240"/>
+              <line class="axis-line" x1="80" y1="240" x2="600" y2="240"/>
+              <line class="grid-line" x1="80" y1="60" x2="600" y2="60"/>
+              <line class="grid-line" x1="80" y1="110" x2="600" y2="110"/>
+              <line class="grid-line" x1="80" y1="150" x2="600" y2="150"/>
+              <line class="grid-line" x1="80" y1="200" x2="600" y2="200"/>
+              <text class="data-label" x="72" y="64" text-anchor="end">1年</text>
+              <text class="data-label" x="72" y="114" text-anchor="end">3ヶ月</text>
+              <text class="data-label" x="72" y="154" text-anchor="end">1ヶ月</text>
+              <text class="data-label" x="72" y="204" text-anchor="end">1週間</text>
+              <text class="data-label" x="72" y="244" text-anchor="end">1日</text>
+
+              <!-- X axis labels -->
+              <text class="data-label" x="140" y="260" text-anchor="middle">Year 1</text>
+              <text class="data-label" x="310" y="260" text-anchor="middle">Year 3-5</text>
+              <text class="data-label" x="500" y="260" text-anchor="middle">Year 5-10</text>
+
+              <!-- Curve: log scale drops from (140,60) → (310,130) → (500,215) -->
+              <path class="line-path" d="M 140 60 Q 230 110, 310 130 T 500 215" fill="none" stroke-width="2.5"/>
+
+              <!-- Data points -->
+              <circle class="data-primary" cx="140" cy="60" r="5"/>
+              <circle class="data-primary" cx="310" cy="130" r="5"/>
+              <circle class="data-accent" cx="500" cy="215" r="6"/>
+
+              <!-- Annotations -->
+              <text class="data-label" x="150" y="52">約1年</text>
+              <text class="data-label" x="320" y="122">数ヶ月</text>
+              <text class="data-label-accent" x="510" y="207">数日</text>
+
+              <!-- Reference: bacteria line -->
+              <line class="annotation-line" x1="80" y1="248" x2="600" y2="248" stroke-dasharray="3 3"/>
+              <text class="annotation" x="595" y="275" text-anchor="end">参考: バクテリアの倍増時間は数時間</text>
+            </svg>
+            <figcaption class="chart-footer">
+              <p class="chart-caption">縦軸は対数スケール。経験曲線のコスト低下率を80%と置くとShulmanの計算では数式上5年で倍増時間が発散する。</p>
+              <p class="chart-source">Forethought Research / Shulman 80,000 Hours</p>
+            </figcaption>
+          </figure>
           <div class="note">
             <strong>物理的な上限は高い</strong>。バクテリアは数時間、ショウジョウバエは数日、ラットは数週間で倍増する。これらは脳を持ち複雑な行動を取る自己複製システムだ。十分に進歩したロボットが同程度の速度で複製することは物理法則が禁じていない。水星に置いた太陽光パネルのエネルギーペイバックタイムは1日を切る。
           </div>

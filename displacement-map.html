@@ -194,59 +194,51 @@
   <a href="index.html" class="site-logo">AGI HUB</a>
   <div class="site-nav-right">
     <div id="google_translate_element"></div>
-    <a href="index.html" class="site-back">アーカイブに戻る</a>
+    <a href="index.html" class="site-back">Archive</a>
   </div>
 </header>
 
 <div class="dashboard">
 
   <!-- ── Title ── -->
-  <h1 class="dash-title">AI雇用代替トラッカー</h1>
+  <h1 class="dash-title">AI Job Displacement Tracker</h1>
   <p class="dash-subtitle">AIによる世界の雇用代替をリアルタイムで追跡する</p>
-  <div class="dash-date">最終更新: 2026-04-02</div>
-
-  <!-- ── Insight ── -->
-  <div style="margin-bottom:40px; padding:20px 24px; border-left:3px solid #b23a2f; background:#fafafa; font-size:15px; line-height:1.8; color:#1a1a1a;">
-    2024年12月から2026年4月までの16ヶ月間で、AIを理由とする雇用削減は少なくとも<strong style="color:#b23a2f">119万人</strong>に達した。影響の68%は米国に集中しているが、日本（17.1万人）、インド（6.5万人）、中国（6.4万人）にも波及している。業種別ではテック企業が全体の54%を占める一方、金融（16%）や製造業（7%）にも拡大しつつある。2025年10月にAmazonが65万人規模の削減を発表して以降、月ごとの影響人数は高止まりしている。
-  </div>
+  <div class="dash-date">Latest data: 2026-04-02</div>
 
   <!-- ── KPI ── -->
   <div class="kpi-row">
     <div class="kpi-card">
       <div class="kpi-value accent">1.2M</div>
-      <div class="kpi-label">影響人数</div>
+      <div class="kpi-label">Jobs Affected</div>
     </div>
     <div class="kpi-card">
-      <div class="kpi-value">167</div>
-      <div class="kpi-label">ニュース件数</div>
+      <div class="kpi-value">170</div>
+      <div class="kpi-label">News Stories</div>
     </div>
     <div class="kpi-card">
-      <div class="kpi-value">18</div>
-      <div class="kpi-label">対象国</div>
+      <div class="kpi-value">20</div>
+      <div class="kpi-label">Countries</div>
     </div>
     <div class="kpi-card">
       <div class="kpi-value">11</div>
-      <div class="kpi-label">業種</div>
+      <div class="kpi-label">Industries</div>
     </div>
   </div>
 
   <!-- ── World Map ── -->
-  <div class="section-label">地域分布</div>
-  <p style="font-size:13px; color:#757575; margin:-12px 0 16px;">バブルの大きさは影響人数に比例。ホバーで詳細を表示。</p>
+  <div class="section-label">Geographic Distribution</div>
   <div id="map"></div>
 
   <!-- ── 2-column: Country bars + Industry donut ── -->
   <div class="two-col">
     <div>
-      <div class="section-label">国別影響人数</div>
-      <p style="font-size:13px; color:#757575; margin:-12px 0 16px;">米国が81万人で圧倒的。日本は17万人で2位。</p>
+      <div class="section-label">Top Countries by Impact</div>
       <div class="panel">
         <canvas id="countryBarsChart"></canvas>
       </div>
     </div>
     <div>
-      <div class="section-label">業種別内訳</div>
-      <p style="font-size:13px; color:#757575; margin:-12px 0 16px;">テック企業が過半数だが、金融・専門職にも拡大中。</p>
+      <div class="section-label">Industry Breakdown</div>
       <div class="panel">
         <div class="donut-wrap">
           <canvas id="donutChart"></canvas>
@@ -257,16 +249,15 @@
   </div>
 
   <!-- ── Monthly trend ── -->
-  <div class="section-label">月次推移</div>
-  <p style="font-size:13px; color:#757575; margin:-12px 0 16px;">2025年10月のAmazon大量削減を境に影響規模が拡大。件数は月10-15件で推移。</p>
+  <div class="section-label">Monthly Trend</div>
   <div class="panel">
     <canvas id="trendChart"></canvas>
   </div>
 
   <!-- ── Footer ── -->
   <div class="dash-footer">
-    データソース: Google News、Bing News、Reddit、直接RSSフィードから自動収集。GPT-4o-miniで分類。<br>
-    収集パイプライン: ai-job-displacement-map
+    Data collected from Google News, Bing News, Reddit, and direct RSS feeds. Classified by GPT-4o-mini.<br>
+    Source: ai-job-displacement-map pipeline
   </div>
 
 </div>
@@ -282,14 +273,14 @@ function googleTranslateElementInit() {
   }, 'google_translate_element');
 }
 </script>
-<script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+<script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
 <script>
 // ── Data ────────────────────────────────────────────────────
-const MAP_DATA      = [{"country": "United States", "lat": 39.8, "lng": -98.5, "jobs": 811487, "count": 93, "top_industry": "Tech"}, {"country": "Spain", "lat": 40.5, "lng": -3.7, "jobs": 0, "count": 3, "top_industry": "Tech"}, {"country": "United Kingdom", "lat": 54.0, "lng": -2.0, "jobs": 44200, "count": 11, "top_industry": "Finance"}, {"country": "Singapore", "lat": 1.35, "lng": 103.8, "jobs": 17000, "count": 3, "top_industry": "Finance"}, {"country": "Australia", "lat": -25.3, "lng": 133.8, "jobs": 5889, "count": 14, "top_industry": "Finance"}, {"country": "India", "lat": 20.6, "lng": 78.9, "jobs": 65261, "count": 9, "top_industry": "Tech"}, {"country": "South Africa", "lat": -30.6, "lng": 22.9, "jobs": 0, "count": 3, "top_industry": "Tech"}, {"country": "China", "lat": 35.9, "lng": 104.2, "jobs": 64000, "count": 9, "top_industry": "Manufacturing"}, {"country": "Japan", "lat": 36.2, "lng": 138.3, "jobs": 171000, "count": 5, "top_industry": "Finance"}, {"country": "South Korea", "lat": 35.9, "lng": 127.8, "jobs": 0, "count": 1, "top_industry": "Manufacturing"}, {"country": "Brazil", "lat": -14.2, "lng": -51.9, "jobs": 0, "count": 1, "top_industry": "Retail"}, {"country": "Germany", "lat": 51.2, "lng": 10.4, "jobs": 3800, "count": 6, "top_industry": "Finance"}, {"country": "Canada", "lat": 56.1, "lng": -106.3, "jobs": 0, "count": 2, "top_industry": "Tech"}, {"country": "Ireland", "lat": 53.1, "lng": -7.7, "jobs": 11000, "count": 2, "top_industry": "Professional Services"}, {"country": "Netherlands", "lat": 52.1, "lng": 5.3, "jobs": 450, "count": 1, "top_industry": "Transport"}, {"country": "Chile", "lat": -35.7, "lng": -71.5, "jobs": 0, "count": 1, "top_industry": "Media"}, {"country": "France", "lat": 46.6, "lng": 2.2, "jobs": 800, "count": 2, "top_industry": "Media"}];
-const COUNTRY_BARS  = [{"country": "United States", "jobs": 811487, "count": 93}, {"country": "Japan", "jobs": 171000, "count": 5}, {"country": "India", "jobs": 65261, "count": 9}, {"country": "China", "jobs": 64000, "count": 9}, {"country": "United Kingdom", "jobs": 44200, "count": 11}, {"country": "Singapore", "jobs": 17000, "count": 3}, {"country": "Ireland", "jobs": 11000, "count": 2}, {"country": "Australia", "jobs": 5889, "count": 14}, {"country": "Germany", "jobs": 3800, "count": 6}, {"country": "Spain", "jobs": 1500, "count": 3}];
-const CATEGORIES    = [{"label": "Tech", "count": 91, "color": "#1a1a1a"}, {"label": "Finance", "count": 27, "color": "#b23a2f"}, {"label": "Professional Services", "count": 13, "color": "#4a4a4a"}, {"label": "Manufacturing", "count": 12, "color": "#6b6b6b"}, {"label": "Retail", "count": 7, "color": "#8c8c8c"}, {"label": "Media", "count": 4, "color": "#a8a8a8"}, {"label": "Transport", "count": 4, "color": "#c4c4c4"}, {"label": "Other", "count": 3, "color": "#d9d9d9"}, {"label": "Education", "count": 3, "color": "#3d3d3d"}, {"label": "Healthcare", "count": 2, "color": "#585858"}, {"label": "Government", "count": 1, "color": "#e0e0e0"}];
-const TREND         = [{"month": "2024-12", "count": 2, "jobs": 0}, {"month": "2025-01", "count": 2, "jobs": 0}, {"month": "2025-02", "count": 8, "jobs": 20750}, {"month": "2025-03", "count": 9, "jobs": 18000}, {"month": "2025-04", "count": 8, "jobs": 600}, {"month": "2025-05", "count": 11, "jobs": 16000}, {"month": "2025-06", "count": 8, "jobs": 0}, {"month": "2025-07", "count": 15, "jobs": 31806}, {"month": "2025-08", "count": 10, "jobs": 200}, {"month": "2025-09", "count": 14, "jobs": 16322}, {"month": "2025-10", "count": 9, "jobs": 651234}, {"month": "2025-11", "count": 14, "jobs": 190800}, {"month": "2025-12", "count": 9, "jobs": 100}, {"month": "2026-01", "count": 12, "jobs": 36275}, {"month": "2026-02", "count": 12, "jobs": 10000}, {"month": "2026-03", "count": 14, "jobs": 86600}, {"month": "2026-04", "count": 2, "jobs": 30000}];
+const MAP_DATA      = [{"country": "United States", "lat": 39.8, "lng": -98.5, "jobs": 811487, "count": 93, "top_industry": "Tech"}, {"country": "Spain", "lat": 40.5, "lng": -3.7, "jobs": 0, "count": 3, "top_industry": "Tech"}, {"country": "United Kingdom", "lat": 54.0, "lng": -2.0, "jobs": 44200, "count": 11, "top_industry": "Finance"}, {"country": "Singapore", "lat": 1.35, "lng": 103.8, "jobs": 17000, "count": 3, "top_industry": "Finance"}, {"country": "Australia", "lat": -25.3, "lng": 133.8, "jobs": 7889, "count": 15, "top_industry": "Finance"}, {"country": "India", "lat": 20.6, "lng": 78.9, "jobs": 65261, "count": 9, "top_industry": "Tech"}, {"country": "South Africa", "lat": -30.6, "lng": 22.9, "jobs": 0, "count": 3, "top_industry": "Tech"}, {"country": "China", "lat": 35.9, "lng": 104.2, "jobs": 64000, "count": 9, "top_industry": "Manufacturing"}, {"country": "Japan", "lat": 36.2, "lng": 138.3, "jobs": 171000, "count": 5, "top_industry": "Finance"}, {"country": "South Korea", "lat": 35.9, "lng": 127.8, "jobs": 0, "count": 1, "top_industry": "Manufacturing"}, {"country": "Brazil", "lat": -14.2, "lng": -51.9, "jobs": 0, "count": 1, "top_industry": "Retail"}, {"country": "Germany", "lat": 51.2, "lng": 10.4, "jobs": 3800, "count": 6, "top_industry": "Finance"}, {"country": "Canada", "lat": 56.1, "lng": -106.3, "jobs": 0, "count": 2, "top_industry": "Tech"}, {"country": "Ireland", "lat": 53.1, "lng": -7.7, "jobs": 11000, "count": 2, "top_industry": "Professional Services"}, {"country": "Netherlands", "lat": 52.1, "lng": 5.3, "jobs": 450, "count": 1, "top_industry": "Transport"}, {"country": "Chile", "lat": -35.7, "lng": -71.5, "jobs": 0, "count": 1, "top_industry": "Media"}, {"country": "France", "lat": 46.6, "lng": 2.2, "jobs": 800, "count": 2, "top_industry": "Media"}, {"country": "Switzerland", "lat": 46.8, "lng": 8.2, "jobs": 16000, "count": 1, "top_industry": "Manufacturing"}, {"country": "Argentina", "lat": -38.4, "lng": -63.6, "jobs": 0, "count": 1, "top_industry": "Tech"}];
+const COUNTRY_BARS  = [{"country": "United States", "jobs": 811487, "count": 93}, {"country": "Japan", "jobs": 171000, "count": 5}, {"country": "India", "jobs": 65261, "count": 9}, {"country": "China", "jobs": 64000, "count": 9}, {"country": "United Kingdom", "jobs": 44200, "count": 11}, {"country": "Singapore", "jobs": 17000, "count": 3}, {"country": "Switzerland", "jobs": 16000, "count": 1}, {"country": "Ireland", "jobs": 11000, "count": 2}, {"country": "Australia", "jobs": 7889, "count": 15}, {"country": "Germany", "jobs": 3800, "count": 6}];
+const CATEGORIES    = [{"label": "Tech", "count": 93, "color": "#1a1a1a"}, {"label": "Finance", "count": 27, "color": "#b23a2f"}, {"label": "Professional Services", "count": 13, "color": "#4a4a4a"}, {"label": "Manufacturing", "count": 13, "color": "#6b6b6b"}, {"label": "Retail", "count": 7, "color": "#8c8c8c"}, {"label": "Media", "count": 4, "color": "#a8a8a8"}, {"label": "Transport", "count": 4, "color": "#c4c4c4"}, {"label": "Other", "count": 3, "color": "#d9d9d9"}, {"label": "Education", "count": 3, "color": "#3d3d3d"}, {"label": "Healthcare", "count": 2, "color": "#585858"}, {"label": "Government", "count": 1, "color": "#e0e0e0"}];
+const TREND         = [{"month": "2024-12", "count": 2, "jobs": 0}, {"month": "2025-01", "count": 2, "jobs": 0}, {"month": "2025-02", "count": 8, "jobs": 20750}, {"month": "2025-03", "count": 9, "jobs": 18000}, {"month": "2025-04", "count": 8, "jobs": 600}, {"month": "2025-05", "count": 11, "jobs": 16000}, {"month": "2025-06", "count": 8, "jobs": 0}, {"month": "2025-07", "count": 15, "jobs": 31806}, {"month": "2025-08", "count": 10, "jobs": 200}, {"month": "2025-09", "count": 14, "jobs": 16322}, {"month": "2025-10", "count": 10, "jobs": 667234}, {"month": "2025-11", "count": 14, "jobs": 190800}, {"month": "2025-12", "count": 9, "jobs": 100}, {"month": "2026-01", "count": 13, "jobs": 36275}, {"month": "2026-02", "count": 13, "jobs": 12000}, {"month": "2026-03", "count": 14, "jobs": 86600}, {"month": "2026-04", "count": 2, "jobs": 30000}];
 
 // ── Colors ──────────────────────────────────────────────────
 const C_BLACK   = "#1a1a1a";
@@ -332,9 +323,9 @@ MAP_DATA.forEach(d => {
   circle.bindPopup(`
     <div class="popup-title">${d.country}</div>
     <div class="popup-stat">
-      影響人数: <strong>${jobsLabel}</strong><br>
-      ニュース件数: ${d.count}件<br>
-      主要業種: ${d.top_industry}
+      Jobs affected: <strong>${jobsLabel}</strong><br>
+      News stories: ${d.count}<br>
+      Top industry: ${d.top_industry}
     </div>
   `, { closeButton: false });
 
@@ -348,7 +339,7 @@ new Chart(document.getElementById('countryBarsChart'), {
   data: {
     labels: COUNTRY_BARS.map(d => d.country),
     datasets: [{
-      label: '影響人数',
+      label: 'Jobs affected',
       data: COUNTRY_BARS.map(d => d.jobs),
       backgroundColor: COUNTRY_BARS.map((d, i) => i === 0 ? C_RED : C_BLACK),
       borderWidth: 0,
@@ -362,7 +353,7 @@ new Chart(document.getElementById('countryBarsChart'), {
       legend: { display: false },
       tooltip: {
         callbacks: {
-          label: ctx => ' ' + fmtK(ctx.raw) + '人',
+          label: ctx => ' ' + fmtK(ctx.raw) + ' jobs',
         },
       },
     },
@@ -421,7 +412,7 @@ new Chart(donutCtx, {
       ctx.fillText(total, cx, cy - 6);
       ctx.font = '10px "SF Mono", monospace';
       ctx.fillStyle = C_GRAY;
-      ctx.fillText('件', cx, cy + 12);
+      ctx.fillText('STORIES', cx, cy + 12);
       ctx.restore();
     },
   }],
@@ -446,7 +437,7 @@ if (TREND.length >= 2) {
       datasets: [
         {
           type: 'bar',
-          label: 'ニュース件数',
+          label: 'News count',
           data: TREND.map(d => d.count),
           backgroundColor: 'rgba(26,26,26,0.15)',
           borderColor: 'transparent',
@@ -456,7 +447,7 @@ if (TREND.length >= 2) {
         },
         {
           type: 'line',
-          label: '影響人数',
+          label: 'Jobs affected',
           data: TREND.map(d => d.jobs),
           borderColor: C_RED,
           backgroundColor: 'rgba(178,58,47,0.06)',
@@ -496,14 +487,14 @@ if (TREND.length >= 2) {
           grid: { color: C_BORDER },
           border: { display: false },
           ticks: { callback: v => fmtK(v), color: C_RED },
-          title: { display: true, text: '影響人数', color: C_RED, font: { size: 10 } },
+          title: { display: true, text: 'Jobs', color: C_RED, font: { size: 10 } },
         },
         y2: {
           position: 'right',
           grid: { display: false },
           border: { display: false },
           ticks: { color: C_META },
-          title: { display: true, text: '件数', color: C_META, font: { size: 10 } },
+          title: { display: true, text: 'Count', color: C_META, font: { size: 10 } },
         },
       },
     },

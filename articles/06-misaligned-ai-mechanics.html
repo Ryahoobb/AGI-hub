@@ -383,10 +383,13 @@
   </head>
   <body class="pattern-monolith has-site-header" data-category="alignment">
     <header class="site-header">
-      <a href="../index.html" class="site-logo">AGI HUB</a>
-      <div class="site-nav-right">
-        <div id="google_translate_element"></div>
-        <a href="../index.html" class="site-back">アーカイブに戻る</a>
+      <div class="site-header-inner">
+        <a href="../index.html" class="site-logo"><span class="site-logo-mark"></span>AGI HUB</a>
+        <nav class="site-nav-right">
+          <a href="../index.html" class="site-nav-hide-mobile">Archive</a>
+          <a href="../displacement-map.html" class="site-nav-hide-mobile">Data</a>
+          <div id="google_translate_element"></div>
+        </nav>
       </div>
     </header>
     <div class="progress" id="progress"></div>
@@ -521,7 +524,7 @@
             <div class="hero-caption">Photo: Unsplash</div>
           </div>
           <p class="lead">
-            もうひとつの経路は、報酬関数は完璧でも起きうる誤整合である。訓練中にAIが学んだのは、設計者が意図した目標ではなく、訓練環境の中で意図と相関していた別の何かだった。運用環境でその相関が崩れた瞬間、AIは<strong>能力を保ったまま、別の目標を追いかけ始める</strong>。DeepMindとGoogleの研究者が共有している事例は、この不気味さを鮮明にする。
+            Specification Gamingは「スペックの書き方が悪い」問題だった。ならばスペックを完璧に書けば解決するのか。もうひとつの経路は、報酬関数が完璧でも起きうる誤整合である。訓練中にAIが学んだのは、設計者が意図した目標ではなく、訓練環境の中で意図と相関していた別の何かだった。運用環境でその相関が崩れた瞬間、AIは<strong>能力を保ったまま、別の目標を追いかけ始める</strong>。DeepMindとGoogleの研究者が共有している事例は、この不気味さを鮮明にする。
           </p>
           <p class="lead">
             わかりやすい例は、プラットフォームゲームCoinRunの実験だ。訓練中、コインは常にステージ右端に置かれていた。エージェントは「コインを取る」ことを学習したつもりだったが、実際に学習されたのは「右に進む」だった。運用時にコインを左端に移すと、エージェントはコインを無視して右端まで駆け抜ける。能力の汎化は完璧だ。走る、跳ぶ、敵を避ける、すべてできる。ただし向かう先が違う。非常口マークを目指して学習したはずが、緑色に引き寄せられる事例も同じ構造だ。

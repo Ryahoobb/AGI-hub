@@ -455,10 +455,13 @@
             <div class="hero-caption">Photo: Unsplash</div>
           </div>
           <p class="lead dropcap">
-            2024年末時点で、AI alignmentに直接関わる研究者の数は推定300-400人。そのうち約200人が企業の安全性チームに所属し、残りが独立研究機関とアカデミアに散在する。alignment研究に年間で投じられる資金は推定3-5億ドル。OpenAI、Anthropic、Google DeepMindの3社だけで全体の60%以上を占める。Open Philanthropyが残りの大部分を非営利機関に配分している。数字だけ見れば、alignment研究は急拡大している。2019年に50人前後だった研究者は5年で8倍に増えた。
+            2024年5月、OpenAIのSuperalignmentチーム共同リーダーJan Leikeが「安全性の文化が光沢ある製品に敗れた」とXに投稿し、辞任した。同日、Ilya Sutskeverも退社を発表。Leikeは直後にAnthropicに移籍した。「alignment」を最も声高に掲げていた企業で、alignment専門チームが1年で消滅した。この事件は、alignment研究が一枚岩ではないことを世界に示した。
           </p>
           <p class="lead">
-            しかし、この「拡大」の内実は均質ではない。Anthropicが解こうとしている問題と、MIRIが解こうとしている問題は、同じ「alignment」という単語を使いながら、射程が根本的に異なる。Anthropicの<a href="01-ai-alignment.html" style="color:inherit;border-bottom:1px solid #999;transition:border-color 0.3s;">Constitutional AI</a>は現行のLLMを安全に運用するための即効薬だ。MIRIのAgent Foundationsは超知能が出現した後の数学的整合性を扱う。前者の時間軸は数か月から数年、後者は数十年。前者は実験結果で検証できるが、後者は対象がまだ存在しない。
+            数字は拡大を示している。2024年末時点で、AI alignmentに直接関わる研究者は推定300-400人。2019年の約50人から5年で8倍に増えた。年間投資額は推定3-5億ドル。OpenAI、Anthropic、Google DeepMindの3社だけで全体の60%以上を占め、Open Philanthropyが残りの大部分を非営利機関に配分している。
+          </p>
+          <p class="lead">
+            だが、この「拡大」の内実は均質ではない。Anthropicが解こうとしている問題と、MIRIが解こうとしている問題は、同じ「alignment」という単語を使いながら、射程が根本的に異なる。Anthropicの<a href="01-ai-alignment.html" style="color:inherit;border-bottom:1px solid #999;transition:border-color 0.3s;">Constitutional AI</a>は現行のLLMを安全に運用するための即効薬だ。MIRIのAgent Foundationsは超知能が出現した後の数学的整合性を扱う。前者の時間軸は数か月から数年、後者は数十年。前者は実験結果で検証できるが、後者は対象がまだ存在しない。
           </p>
           <p class="lead">
             この記事は、alignment研究の布陣図を描く。誰が、どの問題を、どの時間軸で、誰のカネで解こうとしているか。全体像が見えると、一つの事実が浮かび上がる。<strong>alignment研究は、一つの分野ではない。同じ看板を掲げた複数の分野が、協力しているふりをしながら、互いに別の山を登っている。</strong>この構造を理解しなければ、「alignmentは解決に向かっている」とも「alignmentは絶望的だ」とも、正確に言えない。
@@ -494,7 +497,7 @@
             <div class="hero-caption">Photo: Unsplash</div>
           </div>
           <p class="lead">
-            フロンティアモデルを開発する4社 — Anthropic、OpenAI、Google DeepMind、Meta — は、いずれも安全性チームを持つ。しかし、各社がalignmentの中で何を最優先課題と見なしているかは大きく異なる。その差は企業の出自に起因する。Anthropicは2021年にOpenAIの安全性チームから独立した組織であり、安全性研究が存在意義の中心にある。OpenAIのSuperalignmentチームは2023年7月に発足し、2024年5月に事実上解散した。Google DeepMindは2017年のRLHF原論文（Christiano et al.）に共著として関与した研究機関が母体であり、スケーラブルな手法を志向する。Metaはオープンウェイトという戦略的選択によって、安全性の定義そのものが他3社と異なる。
+            別の山を登っている、とはどういうことか。まず企業側の布陣から見る。フロンティアモデルを開発する4社 — Anthropic、OpenAI、Google DeepMind、Meta — は、いずれも安全性チームを持つ。しかし、各社がalignmentの中で何を最優先課題と見なしているかは大きく異なる。その差は企業の出自に起因する。Anthropicは2021年にOpenAIの安全性チームから独立した組織であり、安全性研究が存在意義の中心にある。OpenAIのSuperalignmentチームは2023年7月に発足し、2024年5月に事実上解散した。Google DeepMindは2017年のRLHF原論文（Christiano et al.）に共著として関与した研究機関が母体であり、スケーラブルな手法を志向する。Metaはオープンウェイトという戦略的選択によって、安全性の定義そのものが他3社と異なる。
           </p>
           <p class="lead">
             各社のアプローチを並べると、alignmentという概念が企業によってどう再定義されているかが見える。Anthropicにとってのalignmentは、モデルが自社の憲法（Constitution）に従うことだ。OpenAIにとっては、弱いAIで強いAIを監督するスケーラブルな仕組みの構築だった。DeepMindにとっては、人間のフィードバックを効率的に学習に組み込む技術である。Metaにとっては、オープンなモデルをコミュニティが検証できる状態を維持することだ。
@@ -543,7 +546,7 @@
           </table>
 
           <p class="lead">
-            注目すべきはOpenAIのSuperalignment解散である。2023年7月、Ilya Sutskeverの主導で「4年以内に超知能のalignmentを解く」と宣言し、社内計算資源の20%を充てると公約した。しかし2024年5月、共同リーダーのJan Leikeが「安全性の文化が光沢ある製品に敗れた」とXに投稿して辞任。同日Sutskeverも退社を発表した。Leikeは直後にAnthropicに移籍している。この一件は、フロンティア企業における安全性研究と商業的圧力の構造的緊張を象徴する。
+            冒頭で触れたOpenAI Superalignmentの解散は、この構造的緊張の帰結だ。「4年以内に超知能のalignmentを解く」と宣言し社内計算資源の20%を充てる公約は、商業的圧力の前に1年で崩壊した。企業がalignmentを再定義するとき、その定義は常に事業戦略に引きずられる。では、商業的制約のない独立機関はどうか。
           </p>
 
           <div class="note">
@@ -633,7 +636,7 @@
             <div class="hero-caption">Photo: Unsplash</div>
           </div>
           <p class="lead">
-            alignment研究の資金源は大きく3層に分かれる。第1層は企業の自己資金。Anthropic、OpenAI、Google DeepMindの安全性チーム人件費と計算資源は、各社の事業予算から出る。第2層はOpen Philanthropy。Dustin Moskovitz（Facebook共同創設者）とCari Tuna夫妻が設立した財団で、alignment研究の外部資金として最大の出し手である。第3層はSurvival and Flourishing Fund（SFF）、Long-Term Future Fund、各種の小規模助成金。
+            独立機関が問いを作り、企業が実装し、人材は企業に流れる。この構造が持続するには、独立機関を支える資金が必要だ。ではカネはどこから来ているのか。alignment研究の資金源は大きく3層に分かれる。第1層は企業の自己資金。Anthropic、OpenAI、Google DeepMindの安全性チーム人件費と計算資源は、各社の事業予算から出る。第2層はOpen Philanthropy。Dustin Moskovitz（Facebook共同創設者）とCari Tuna夫妻が設立した財団で、alignment研究の外部資金として最大の出し手である。第3層はSurvival and Flourishing Fund（SFF）、Long-Term Future Fund、各種の小規模助成金。
           </p>
           <p class="lead">
             Open Philanthropyの影響は突出している。ARC、MIRI、CAIS、Redwood Research、UC Berkeley CHAI、Cambridge CSER。主要な独立研究機関のほぼすべてがOpen Philanthropyから助成を受けている。2022年から2024年の累計で、Open PhilanthropyがAI安全分野に拠出した金額は推定2-3億ドル。alignment研究の非企業資金の過半を一つの財団が賄っている。
@@ -781,7 +784,7 @@
             <div class="hero-caption">Photo: Unsplash</div>
           </div>
           <p class="lead">
-            ここまで描いた布陣図から、2030年のalignment研究の勢力図を予測する。もちろん予測は外れうるが、逃げ表現で括弧付きの「かもしれない」を並べるより、根拠を示した上で言い切った方が検証可能である。
+            企業は事業戦略にalignmentを引きずり、独立機関は人材を企業に奪われ、資金は一つの財団に集中している。この構造のまま2030年を迎えたとき、布陣図はどう変わっているか。予測は外れうるが、逃げ表現で括弧付きの「かもしれない」を並べるより、根拠を示した上で言い切った方が検証可能である。
           </p>
           <p class="lead">
             予測の軸は「スケーリング則の継続」という前提条件である。2025年時点で、GPT-4クラスのモデルが2026年から2027年にかけてさらに1-2桁スケールする見通しが複数の推計から示されている。この前提が成立するなら、alignmentへの実需は急増する。企業は「出荷する前にモデルが何をしているか理解する」必要に迫られる。この実需に最も直接応えるアプローチが、解釈可能性（Interpretability）と評価（Evals）である。
@@ -814,7 +817,7 @@
             これらの予測を一言で要約すると、<strong>alignment研究は哲学から工学に移行する</strong>。MIRIが2000年に始めた「超知能と人類の関係をどう設計するか」という哲学的問いは、「モデルの内部を可視化し、危険な振る舞いを公開前に検出する」という工学的問いに置き換わりつつある。この移行は良くも悪くも不可避である。工学的問いへの回答は計測可能で、資金を呼び、規制と接続する。哲学的問いへの回答は計測困難で、資金を失い、政策に反映されにくい。
           </p>
           <p class="lead">
-            ただし、ここに一つの危険が潜む。工学的alignmentが「モデルを安全に出荷する技術」に矮小化されるとき、Yudkowskyが本来提起した「知能の爆発的拡大に人類はどう対処するか」という問いは宙に浮く。2030年時点でAGI（汎用人工知能）が達成されていなければ、この問いは学者の空論にとどまる。しかし<a href="03-agi-explosion.html" style="color:inherit;border-bottom:1px solid #999;transition:border-color 0.3s;">技術爆発</a>が現実になれば、工学的alignmentでは手が届かない領域が一気に露出する。「布陣図」は結局のところ、最悪のシナリオに対する備えが十分かどうかを問うための地図である。
+            ただし、ここに一つの危険が潜む。工学的alignmentが「モデルを安全に出荷する技術」に矮小化されるとき、Yudkowskyが本来提起した「知能の爆発的拡大に人類はどう対処するか」という問いは宙に浮く。2030年時点でAGI（汎用人工知能）が達成されていなければ、この問いは学者の空論にとどまる。しかし<a href="03-agi-explosion.html" style="color:inherit;border-bottom:1px solid #999;transition:border-color 0.3s;">技術爆発</a>が現実になれば、工学的alignmentでは手が届かない領域が一気に露出する。冒頭のSuperalignment解散を思い出してほしい。「光沢ある製品」が安全性の文化に勝ったあの事件は、alignment研究全体の縮図だ。最も声高にalignmentを掲げた企業で、最も野心的なチームが最も早く消えた。「布陣図」は結局のところ、最悪のシナリオに対する備えが十分かどうかを問うための地図である。
           </p>
 
           <div class="note">

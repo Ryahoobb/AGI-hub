@@ -581,6 +581,8 @@
         .featured { grid-template-columns: 1fr; gap: 24px; margin-bottom: 48px; padding-bottom: 48px; }
         .article-grid { grid-template-columns: 1fr; gap: 32px; }
         .picks-grid { grid-template-columns: 1fr; gap: 32px; }
+        #taxonomy > div > div:first-child + div { grid-template-columns: 1fr !important; }
+        #taxonomy > div { grid-template-columns: 1fr !important; }
         .data-kpi-row { grid-template-columns: repeat(3, 1fr); }
         .data-ticker { padding: 48px 24px; }
         footer { padding: 32px 24px 48px; flex-direction: column; align-items: flex-start; }
@@ -601,6 +603,7 @@
           <a href="#picks">Picks</a>
           <a href="#latest">Latest</a>
           <a href="#data">Data</a>
+          <a href="#taxonomy">Map</a>
           <a href="#about">About</a>
           <div id="google_translate_element"></div>
         </nav>
@@ -678,6 +681,41 @@
           </div>
         </div>
         <a href="displacement-map.html" class="data-ticker-cta">ダッシュボードを見る →</a>
+      </div>
+    </section>
+
+    <!-- ── Taxonomy Teaser ── -->
+    <section class="section" id="taxonomy" style="padding-bottom: 48px;">
+      <div class="section-title">
+        <h2>Discussion Map</h2>
+        <span class="count">11 Domains / 55 Topics</span>
+      </div>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center;">
+        <div>
+          <p style="font-size: 18px; line-height: 1.75; margin-bottom: 24px;">
+            AGIをめぐる議論は広い。知能の本質、技術的経路、アラインメント、リスク、ガバナンス、経済、倫理、地政学、ポストAGI。11のドメインに55のトピックを整理し、論点の全体像を一望する。
+          </p>
+          <div style="margin-bottom: 16px;">
+            <div style="height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; margin-bottom: 8px;">
+              <div style="height: 100%; width: 22%; background: var(--black); border-radius: 3px;"></div>
+            </div>
+            <span style="font-family: 'SF Mono', monospace; font-size: 11px; letter-spacing: 0.08em; color: var(--meta);">12 / 55 TOPICS COVERED (22%)</span>
+          </div>
+          <a href="taxonomy-network.html" style="font-family: 'SF Mono', monospace; font-size: 12px; letter-spacing: 0.083em; text-transform: uppercase; font-weight: 700; color: var(--black); display: inline-block; padding-bottom: 3px; border-bottom: 2px solid var(--black);">全体地図を見る →</a>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--border); border: 1px solid var(--border); font-family: 'SF Mono', monospace; font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase;">
+          <a href="taxonomy-network.html#domain-intelligence" style="background: #fff; padding: 14px 16px; color: inherit; text-decoration: none; transition: background 0.2s;"><span style="color: var(--meta);">01</span> 知能の本質 <span style="color: var(--meta); float: right;">→</span></a>
+          <a href="taxonomy-network.html#domain-technical" style="background: #fff; padding: 14px 16px; color: inherit; text-decoration: none; transition: background 0.2s;"><span style="color: var(--meta);">02</span> 技術的経路 <span style="color: var(--meta); float: right;">→</span></a>
+          <a href="taxonomy-network.html#domain-takeoff" style="background: #fff; padding: 14px 16px; color: inherit; text-decoration: none; transition: background 0.2s;"><span style="color: var(--meta);">03</span> テイクオフ <span style="color: var(--meta); float: right;">→</span></a>
+          <a href="taxonomy-network.html#domain-alignment" style="background: #fff; padding: 14px 16px; color: inherit; text-decoration: none; transition: background 0.2s;"><span style="color: var(--meta);">04</span> アラインメント <span style="color: var(--meta); float: right;">→</span></a>
+          <a href="taxonomy-network.html#domain-risk" style="background: #fff; padding: 14px 16px; color: inherit; text-decoration: none; transition: background 0.2s;"><span style="color: var(--meta);">05</span> リスク <span style="color: var(--meta); float: right;">→</span></a>
+          <a href="taxonomy-network.html#domain-governance" style="background: #fff; padding: 14px 16px; color: inherit; text-decoration: none; transition: background 0.2s;"><span style="color: var(--meta);">06</span> ガバナンス <span style="color: var(--meta); float: right;">→</span></a>
+          <a href="taxonomy-network.html#domain-economy" style="background: #fff; padding: 14px 16px; color: inherit; text-decoration: none; transition: background 0.2s;"><span style="color: var(--meta);">07</span> 経済と労働 <span style="color: var(--meta); float: right;">→</span></a>
+          <a href="taxonomy-network.html#domain-ethics" style="background: #fff; padding: 14px 16px; color: inherit; text-decoration: none; transition: background 0.2s;"><span style="color: var(--meta);">08</span> 倫理と哲学 <span style="color: var(--meta); float: right;">→</span></a>
+          <a href="taxonomy-network.html#domain-society" style="background: #fff; padding: 14px 16px; color: inherit; text-decoration: none; transition: background 0.2s;"><span style="color: var(--meta);">09</span> 社会と文化 <span style="color: var(--meta); float: right;">→</span></a>
+          <a href="taxonomy-network.html#domain-geopolitics" style="background: #fff; padding: 14px 16px; color: inherit; text-decoration: none; transition: background 0.2s;"><span style="color: var(--meta);">10</span> 地政学 <span style="color: var(--meta); float: right;">→</span></a>
+          <a href="taxonomy-network.html#domain-post-agi" style="background: #fff; padding: 14px 16px; grid-column: span 2; color: inherit; text-decoration: none; transition: background 0.2s;"><span style="color: var(--meta);">11</span> ポストAGI <span style="color: var(--meta); float: right;">→</span></a>
+        </div>
       </div>
     </section>
 

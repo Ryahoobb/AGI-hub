@@ -330,6 +330,46 @@
       }
 
       /* ══════════════════════════════════════
+         Category Filter
+         ══════════════════════════════════════ */
+      .category-filter {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 28px;
+        margin-bottom: 48px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid var(--border);
+        font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 11px;
+        letter-spacing: 0.083em;
+        text-transform: uppercase;
+      }
+
+      .category-filter button {
+        background: none;
+        border: none;
+        padding: 4px 0;
+        color: var(--meta);
+        font: inherit;
+        letter-spacing: inherit;
+        text-transform: inherit;
+        cursor: pointer;
+        border-bottom: 2px solid transparent;
+        transition: color 0.3s var(--ease), border-color 0.3s var(--ease);
+      }
+
+      .category-filter button:hover { color: var(--black); }
+      .category-filter button.active {
+        color: var(--black);
+        font-weight: 700;
+        border-bottom-color: var(--black);
+      }
+
+      .featured.is-hidden,
+      .card.is-hidden { display: none !important; }
+
+      /* ══════════════════════════════════════
          Footer
          ══════════════════════════════════════ */
       footer {
@@ -401,8 +441,18 @@
         <span class="count">09 Entries</span>
       </div>
 
+      <!-- Category Filter -->
+      <nav class="category-filter" id="category-filter">
+        <button data-filter="all" class="active">All</button>
+        <button data-filter="alignment">Alignment</button>
+        <button data-filter="takeoff">Takeoff</button>
+        <button data-filter="lineage">Lineage</button>
+        <button data-filter="governance">Governance</button>
+        <button data-filter="corporate">Corporate</button>
+      </nav>
+
       <!-- Featured (Most recent) — Broadsheet / accent-deepblue -->
-      <a href="articles/09-corporate-phase-transition.html" class="featured" style="border-top:2px solid #2f2b92;padding-top:32px;">
+      <a href="articles/09-corporate-phase-transition.html" class="featured" data-category="corporate" style="border-top:2px solid #2f2b92;padding-top:32px;">
         <div>
           <img class="thumb" src="images/thumb-corporate-phase-transition.jpg" alt="Corporate Phase Transition article thumbnail">
         </div>
@@ -410,7 +460,9 @@
           <div class="meta">
             <span style="color:#2f2b92;font-weight:700;">No. 09</span>
             <span class="sep">/</span>
-            <span class="cat" style="color:#2f2b92;">Long Read / Broadsheet</span>
+            <span class="cat" style="color:#2f2b92;">Corporate</span>
+            <span class="sep">/</span>
+            <span>Long Read</span>
             <span class="sep">/</span>
             <span>2026.04.09</span>
             <span class="sep">/</span>
@@ -426,12 +478,12 @@
 
       <!-- Article Grid -->
       <div class="article-grid">
-        <a href="articles/08-agi-self-replication-premise.html" class="card">
+        <a href="articles/08-agi-self-replication-premise.html" class="card" data-category="takeoff">
           <img class="thumb" src="images/thumb-agi-self-replication-premise.jpg" alt="Self-Replication Premise article thumbnail">
           <div class="meta">
             <span>No. 08</span>
             <span class="sep">/</span>
-            <span class="cat">Premise</span>
+            <span class="cat">Takeoff</span>
             <span class="sep">/</span>
             <span>2026.04.09</span>
           </div>
@@ -441,12 +493,12 @@
           </p>
         </a>
 
-        <a href="articles/01-ai-alignment.html" class="card">
+        <a href="articles/01-ai-alignment.html" class="card" data-category="alignment">
           <img class="thumb" src="images/thumb-ai-alignment.jpg" alt="AI Alignment article thumbnail">
           <div class="meta">
             <span>No. 01</span>
             <span class="sep">/</span>
-            <span class="cat">AI Alignment</span>
+            <span class="cat">Alignment</span>
             <span class="sep">/</span>
             <span>2026.04.09</span>
           </div>
@@ -456,12 +508,12 @@
           </p>
         </a>
 
-        <a href="articles/02-agi-evolution.html" class="card">
+        <a href="articles/02-agi-evolution.html" class="card" data-category="takeoff">
           <img class="thumb" src="images/thumb-agi-evolution.jpg" alt="AGI Evolution article thumbnail">
           <div class="meta">
             <span>No. 02</span>
             <span class="sep">/</span>
-            <span class="cat">Framing</span>
+            <span class="cat">Takeoff</span>
             <span class="sep">/</span>
             <span>2026.04.09</span>
           </div>
@@ -471,12 +523,12 @@
           </p>
         </a>
 
-        <a href="articles/03-agi-explosion.html" class="card">
+        <a href="articles/03-agi-explosion.html" class="card" data-category="takeoff">
           <img class="thumb" src="images/thumb-agi-explosion.jpg" alt="AGI Explosion article thumbnail">
           <div class="meta">
             <span>No. 03</span>
             <span class="sep">/</span>
-            <span class="cat">Forecast</span>
+            <span class="cat">Takeoff</span>
             <span class="sep">/</span>
             <span>2026.04.09</span>
           </div>
@@ -486,7 +538,7 @@
           </p>
         </a>
 
-        <a href="articles/05-ai-risk-lineage.html" class="card">
+        <a href="articles/05-ai-risk-lineage.html" class="card" data-category="lineage">
           <img class="thumb" src="images/thumb-ai-risk-lineage.jpg" alt="AI Risk Lineage article thumbnail">
           <div class="meta">
             <span>No. 05</span>
@@ -501,12 +553,12 @@
           </p>
         </a>
 
-        <a href="articles/04-takeoff-speed-debate.html" class="card">
+        <a href="articles/04-takeoff-speed-debate.html" class="card" data-category="takeoff">
           <img class="thumb" src="images/thumb-takeoff-speed-debate.jpg" alt="Takeoff Speed Debate article thumbnail">
           <div class="meta">
             <span>No. 04</span>
             <span class="sep">/</span>
-            <span class="cat">Analysis</span>
+            <span class="cat">Takeoff</span>
             <span class="sep">/</span>
             <span>2026.04.09</span>
           </div>
@@ -516,12 +568,12 @@
           </p>
         </a>
 
-        <a href="articles/06-misaligned-ai-mechanics.html" class="card">
+        <a href="articles/06-misaligned-ai-mechanics.html" class="card" data-category="alignment">
           <img class="thumb" src="images/thumb-misaligned-ai-mechanics.jpg" alt="Misaligned AI Mechanics article thumbnail">
           <div class="meta">
             <span>No. 06</span>
             <span class="sep">/</span>
-            <span class="cat">Mechanics</span>
+            <span class="cat">Alignment</span>
             <span class="sep">/</span>
             <span>2026.04.09</span>
           </div>
@@ -531,7 +583,7 @@
           </p>
         </a>
 
-        <a href="articles/07-ai-governance-response.html" class="card">
+        <a href="articles/07-ai-governance-response.html" class="card" data-category="governance">
           <img class="thumb" src="images/thumb-ai-governance-response.jpg" alt="AI Governance Response article thumbnail">
           <div class="meta">
             <span>No. 07</span>
@@ -563,6 +615,30 @@
         </p>
       </div>
     </section>
+
+    <!-- ── Category Filter Script ── -->
+    <script>
+      (function () {
+        var filterNav = document.getElementById('category-filter');
+        if (!filterNav) return;
+        var buttons = filterNav.querySelectorAll('button');
+        var items = document.querySelectorAll('[data-category]');
+        buttons.forEach(function (btn) {
+          btn.addEventListener('click', function () {
+            var filter = btn.getAttribute('data-filter');
+            buttons.forEach(function (b) { b.classList.remove('active'); });
+            btn.classList.add('active');
+            items.forEach(function (item) {
+              if (filter === 'all' || item.getAttribute('data-category') === filter) {
+                item.classList.remove('is-hidden');
+              } else {
+                item.classList.add('is-hidden');
+              }
+            });
+          });
+        });
+      })();
+    </script>
 
     <!-- ── Footer ── -->
     <footer>

@@ -791,6 +791,9 @@
             <span class="cat">Governance</span>
             <span class="sep">/</span>
             <span>2026.04.11</span>
+          
+            <span class="sep">/</span>
+            <span>5 Slides</span>
           </div>
           <h3>AGIピル — 認知の減災と先行共同体の構造</h3>
           <p class="excerpt">
@@ -806,6 +809,9 @@
             <span class="cat">Takeoff</span>
             <span class="sep">/</span>
             <span>2026.04.10</span>
+          
+            <span class="sep">/</span>
+            <span>5 Slides</span>
           </div>
           <h3>散逸のなかで秩序を編む — 進化・複雑性・AGIの熱力学</h3>
           <p class="excerpt">
@@ -821,6 +827,9 @@
             <span class="cat">Governance</span>
             <span class="sep">/</span>
             <span>2026.04.10</span>
+          
+            <span class="sep">/</span>
+            <span>5 Slides</span>
           </div>
           <h3>語る者の資格 — AGIナラティブのメタ構造</h3>
           <p class="excerpt">
@@ -836,6 +845,9 @@
             <span class="cat">Takeoff</span>
             <span class="sep">/</span>
             <span>2026.04.10</span>
+          
+            <span class="sep">/</span>
+            <span>7 Slides</span>
           </div>
           <h3>産業爆発はAGIを待たない — 部分自動化と人間拡張が閾値を越えるとき</h3>
           <p class="excerpt">
@@ -851,6 +863,9 @@
             <span class="cat">Lineage</span>
             <span class="sep">/</span>
             <span>2026.04.10</span>
+          
+            <span class="sep">/</span>
+            <span>5 Slides</span>
           </div>
           <h3>alignment研究の布陣図 — 全員が同じ問題を解いているわけではない</h3>
           <p class="excerpt">
@@ -866,6 +881,9 @@
             <span class="cat">Corporate</span>
             <span class="sep">/</span>
             <span>2026.04.09</span>
+          
+            <span class="sep">/</span>
+            <span>9 Slides</span>
           </div>
           <h3>企業が液体化する時代の戦略論 — AGIまでの7段階と、ストラテジストの消えない仕事</h3>
           <p class="excerpt">
@@ -881,6 +899,9 @@
             <span class="cat">Takeoff</span>
             <span class="sep">/</span>
             <span>2026.04.09</span>
+          
+            <span class="sep">/</span>
+            <span>5 Slides</span>
           </div>
           <h3>産業爆発の隠れた前提 — ロボット自己複製が未来を二つに割る</h3>
           <p class="excerpt">
@@ -896,6 +917,9 @@
             <span class="cat">Takeoff</span>
             <span class="sep">/</span>
             <span>2026.04.09</span>
+          
+            <span class="sep">/</span>
+            <span>5 Slides</span>
           </div>
           <h3>技術爆発と産業爆発 — シンギュラリティが科学的蓋然性に変わった日</h3>
           <p class="excerpt">
@@ -911,6 +935,9 @@
             <span class="cat">Lineage</span>
             <span class="sep">/</span>
             <span>2026.04.09</span>
+          
+            <span class="sep">/</span>
+            <span>5 Slides</span>
           </div>
           <h3>AI存亡リスク論の系譜 — Extropianメーリングリストから政府声明まで</h3>
           <p class="excerpt">
@@ -926,6 +953,9 @@
             <span class="cat">Takeoff</span>
             <span class="sep">/</span>
             <span>2026.04.09</span>
+          
+            <span class="sep">/</span>
+            <span>5 Slides</span>
           </div>
           <h3>テイクオフ速度論 — なぜ賢い人々は1,000倍もズレるのか</h3>
           <p class="excerpt">
@@ -941,6 +971,9 @@
             <span class="cat">Alignment</span>
             <span class="sep">/</span>
             <span>2026.04.09</span>
+          
+            <span class="sep">/</span>
+            <span>5 Slides</span>
           </div>
           <h3>Misaligned AIの構造 — なぜ有能なAIが人間の意図から外れるのか</h3>
           <p class="excerpt">
@@ -956,6 +989,9 @@
             <span class="cat">Governance</span>
             <span class="sep">/</span>
             <span>2026.04.09</span>
+          
+            <span class="sep">/</span>
+            <span>5 Slides</span>
           </div>
           <h3>止められない技術にどう向き合うか — AIガバナンスの設計図</h3>
           <p class="excerpt">
@@ -988,20 +1024,36 @@
         if (!filterNav) return;
         var buttons = filterNav.querySelectorAll('button');
         var items = document.querySelectorAll('[data-category]');
+        function applyFilter(filter) {
+          buttons.forEach(function (b) {
+            b.classList.toggle('active', b.getAttribute('data-filter') === filter);
+          });
+          items.forEach(function (item) {
+            if (filter === 'all' || item.getAttribute('data-category') === filter) {
+              item.classList.remove('is-hidden');
+            } else {
+              item.classList.add('is-hidden');
+            }
+          });
+        }
         buttons.forEach(function (btn) {
           btn.addEventListener('click', function () {
             var filter = btn.getAttribute('data-filter');
-            buttons.forEach(function (b) { b.classList.remove('active'); });
-            btn.classList.add('active');
-            items.forEach(function (item) {
-              if (filter === 'all' || item.getAttribute('data-category') === filter) {
-                item.classList.remove('is-hidden');
-              } else {
-                item.classList.add('is-hidden');
-              }
-            });
+            applyFilter(filter);
+            history.replaceState(null, '', '#filter=' + filter);
           });
         });
+        // Apply hash filter on load (e.g. #filter=takeoff)
+        function fromHash() {
+          var m = location.hash.match(/filter=([a-z-]+)/);
+          if (m) {
+            applyFilter(m[1]);
+            var latest = document.getElementById('latest');
+            if (latest) latest.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        }
+        fromHash();
+        window.addEventListener('hashchange', fromHash);
       })();
     </script>
 

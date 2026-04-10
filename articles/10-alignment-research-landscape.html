@@ -210,17 +210,6 @@
       h1 { font-size: clamp(30px, 4.4vw, 40px); }
       h2 { font-size: clamp(26px, 3.8vw, 34px); }
 
-      /* ── Broadsheet drop cap (first lead paragraph of slide 1) ── */
-      #slide-1 .lead:first-of-type::first-letter {
-        font-family: var(--ff-serif);
-        font-size: 4.5em;
-        line-height: 0.85;
-        float: left;
-        padding: 6px 10px 0 0;
-        font-weight: 700;
-        color: var(--accent);
-      }
-
       /* ── Lead / Body ── */
       .lead {
         max-width: 780px;
@@ -462,7 +451,7 @@
             <img class="hero img-fullbleed" src="../images/alignment-research-landscape/slide1.jpg" alt="Abstract dark landscape with layered peaks">
             <div class="hero-caption">Photo: Unsplash</div>
           </div>
-          <p class="lead">
+          <p class="lead dropcap">
             2024年末時点で、AI alignmentに直接関わる研究者の数は推定300-400人。そのうち約200人が企業の安全性チームに所属し、残りが独立研究機関とアカデミアに散在する。alignment研究に年間で投じられる資金は推定3-5億ドル。OpenAI、Anthropic、Google DeepMindの3社だけで全体の60%以上を占める。Open Philanthropyが残りの大部分を非営利機関に配分している。数字だけ見れば、alignment研究は急拡大している。2019年に50人前後だった研究者は5年で8倍に増えた。
           </p>
           <p class="lead">

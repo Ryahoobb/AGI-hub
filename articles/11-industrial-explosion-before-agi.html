@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>産業爆発はAGIを待たない — 部分自動化と人間拡張が閾値を越えるとき — AGI HUB</title>
+    <link rel="stylesheet" href="../design-system/palette.css">
+    <style>
+      :root {
+        --black: #000;
+        --body-text: #1a1a1a;
+        --meta: #757575;
+        --light-gray: #999;
+        --border: #e5e5e5;
+        --bg: #fff;
+        --ease: cubic-bezier(0.22, 1, 0.36, 1);
+      }
+
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+      html { scroll-behavior: smooth; }
+
+      body {
+        font-family: HelveticaNeue, "Helvetica Neue", Helvetica, Arial,
+          游ゴシック体, YuGothic, "游ゴシック Medium", "Yu Gothic Medium",
+          游ゴシック, "Yu Gothic", "ヒラギノ角ゴ ProN W3", "Hiragino Kaku Gothic ProN",
+          "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", "MS ゴシック", "MS Gothic",
+          sans-serif;
+        font-feature-settings: "palt";
+        font-size: 16px;
+        line-height: 1.75;
+        color: var(--body-text);
+        background: var(--bg);
+        -webkit-font-smoothing: antialiased;
+        overflow-x: hidden;
+        word-wrap: break-word;
+      }
+
+      .progress {
+        position: fixed; top: 0; left: 0;
+        height: 2px; background: var(--black);
+        width: 0%; z-index: 100;
+        transition: width 0.3s var(--ease);
+      }
+
+      .nav {
+        position: fixed; right: 24px; top: 50%;
+        transform: translateY(-50%);
+        display: grid; gap: 16px; z-index: 50;
+      }
+
+      .nav button {
+        width: 8px; height: 8px;
+        border-radius: 999px;
+        border: 1.5px solid var(--meta);
+        background: transparent; cursor: pointer;
+        transition: all 0.3s var(--ease);
+      }
+
+      .nav button.active {
+        background: var(--black);
+        border-color: var(--black);
+        transform: scale(1.4);
+      }
+
+      main { scroll-snap-type: y mandatory; }
+
+      .slide {
+        position: relative;
+        min-height: 100vh;
+        max-width: 1120px;
+        margin: 0 auto;
+        padding: 80px 48px 64px;
+        display: grid;
+        grid-template-rows: auto auto 1fr auto;
+        gap: 32px;
+        scroll-snap-align: start;
+      }
+
+      .slide + .slide { border-top: 1px solid var(--border); }
+
+      .hero {
+        width: 100%;
+        aspect-ratio: 16 / 7;
+        object-fit: cover;
+        display: block;
+        filter: grayscale(0.6) contrast(1.1);
+        transition: filter 0.6s var(--ease);
+      }
+
+      .hero:hover { filter: grayscale(0) contrast(1); }
+
+      /* ── Image Placement Variations ── */
+      .hero.img-fullbleed {
+        width: 100vw;
+        margin-left: calc(50% - 50vw);
+        margin-right: calc(50% - 50vw);
+        max-width: none;
+        aspect-ratio: 21 / 9;
+      }
+      .hero.img-wide {
+        width: min(1280px, calc(100vw - 48px));
+        position: relative;
+        left: 50%;
+        transform: translateX(-50%);
+        max-width: none;
+      }
+      .hero.img-content {
+        max-width: 680px;
+        margin-left: auto;
+        margin-right: auto;
+        aspect-ratio: 4 / 3;
+      }
+
+      .hero-caption {
+        font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 11px;
+        letter-spacing: 0.083em;
+        color: var(--light-gray);
+        margin-top: 8px;
+        text-transform: uppercase;
+      }
+
+      .credits {
+        max-width: 1120px;
+        margin: 0 auto;
+        padding: 48px 48px 80px;
+        border-top: 1px solid var(--border);
+      }
+
+      .credits p {
+        font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 11px;
+        letter-spacing: 0.047em;
+        line-height: 2;
+        color: var(--light-gray);
+      }
+
+      .credits a {
+        color: var(--meta);
+        text-decoration: none;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .credits a:hover {
+        color: var(--black);
+        border-bottom-color: var(--black);
+      }
+
+      .reveal {
+        opacity: 0;
+        transform: translateY(24px);
+        transition: opacity 0.6s var(--ease), transform 0.6s var(--ease);
+      }
+      .reveal.visible { opacity: 1; transform: translateY(0); }
+      .reveal-delay-1 { transition-delay: 0.1s; }
+      .reveal-delay-2 { transition-delay: 0.2s; }
+      .reveal-delay-3 { transition-delay: 0.35s; }
+
+      .eyebrow {
+        font-family: "SF Mono", "Fira Code", "Fira Mono", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 11px;
+        font-weight: 400;
+        letter-spacing: 0.083em;
+        text-transform: uppercase;
+        color: var(--meta);
+      }
+
+      h1, h2 {
+        color: var(--black);
+        font-weight: 700;
+        line-height: 1.625;
+        letter-spacing: normal;
+        max-width: 22ch;
+      }
+
+      h1 { font-size: clamp(28px, 4vw, 32px); }
+      h2 { font-size: clamp(24px, 3.5vw, 32px); }
+
+      .lead {
+        max-width: 780px;
+        font-size: 16px;
+        line-height: 1.75;
+        color: var(--body-text);
+      }
+
+      .lead + .lead { margin-top: 8px; }
+
+      .panel { display: grid; gap: 24px; align-content: start; }
+      .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
+      .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+
+      .card {
+        padding: 24px 0;
+        border-top: 2px solid var(--black);
+      }
+
+      .card strong { color: var(--black); }
+
+      .card p {
+        font-size: 16px;
+        line-height: 1.75;
+        color: var(--body-text);
+      }
+
+      .tag {
+        display: inline-block;
+        font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 11px;
+        letter-spacing: 0.083em;
+        color: var(--meta);
+        margin-bottom: 12px;
+      }
+
+      .bullets { display: grid; gap: 16px; }
+
+      .point {
+        padding-left: 16px;
+        border-left: 2px solid var(--black);
+        font-size: 16px;
+        line-height: 1.75;
+        color: var(--body-text);
+      }
+
+      .point strong { color: var(--black); }
+
+      .compare {
+        width: 100%;
+        border-collapse: collapse;
+        border-top: 2px solid var(--black);
+        border-bottom: 2px solid var(--black);
+      }
+
+      .compare th,
+      .compare td {
+        padding: 18px 16px;
+        text-align: left;
+        font-size: 15px;
+        line-height: 1.65;
+        color: var(--body-text);
+        border-bottom: 1px solid var(--border);
+        vertical-align: top;
+      }
+
+      .compare th {
+        font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 11px;
+        letter-spacing: 0.083em;
+        text-transform: uppercase;
+        color: var(--meta);
+        font-weight: 400;
+        border-bottom: 1px solid var(--black);
+      }
+
+      .compare td strong { color: var(--black); }
+      .compare tr:last-child td { border-bottom: none; }
+
+      .note {
+        font-size: 16px;
+        line-height: 1.75;
+        color: var(--body-text);
+        padding: 24px 0;
+        border-top: 1px solid var(--border);
+        border-bottom: 1px solid var(--border);
+      }
+
+      .note strong { color: var(--black); }
+
+      .footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: end;
+        gap: 16px;
+        font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 11px;
+        letter-spacing: 0.083em;
+        color: var(--light-gray);
+        text-transform: uppercase;
+      }
+
+      .slide-count {
+        font-weight: 700;
+        color: var(--black);
+      }
+
+      .source-note {
+        font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 12px;
+        line-height: 1.75;
+        color: var(--light-gray);
+        margin-top: 12px;
+        padding: 12px 0;
+        border-top: 1px solid var(--border);
+      }
+
+      .source-note a {
+        color: var(--meta);
+        text-decoration: none;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .source-note a:hover {
+        color: var(--black);
+        border-bottom-color: var(--black);
+      }
+
+      /* ── SVG Chart inline styles ── */
+      .svg-chart-container {
+        max-width: 780px;
+        margin: 32px 0;
+      }
+
+      .svg-chart-container svg text {
+        font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+        font-size: 11px;
+        fill: var(--meta);
+      }
+
+      /* ── Infographic big number ── */
+      .infographic-bignum {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1px;
+        background: var(--border);
+        margin: 32px 0;
+      }
+
+      .infographic-bignum .cell {
+        background: var(--bg);
+        padding: 32px 24px;
+        text-align: center;
+      }
+
+      .infographic-bignum .num {
+        font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: clamp(36px, 5vw, 56px);
+        font-weight: 700;
+        color: var(--black);
+        line-height: 1.1;
+        letter-spacing: -0.02em;
+      }
+
+      .infographic-bignum .unit {
+        font-size: 0.4em;
+        font-weight: 400;
+        color: var(--meta);
+        letter-spacing: 0.05em;
+      }
+
+      .infographic-bignum .label {
+        font-size: 13px;
+        line-height: 1.5;
+        color: var(--meta);
+        margin-top: 12px;
+      }
+
+      /* ── Structure diagram ── */
+      .structure-diagram {
+        max-width: 780px;
+        margin: 32px 0;
+      }
+
+      .structure-diagram svg text {
+        font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+      }
+
+      @media (max-width: 768px) {
+        .slide { padding: 64px 24px 48px; }
+        .grid-2, .grid-3 { grid-template-columns: 1fr; }
+        .nav { right: 12px; }
+        .compare { font-size: 13px; }
+        .compare th, .compare td { padding: 14px 10px; }
+        .hero { aspect-ratio: 16 / 9; }
+        .hero.img-fullbleed, .hero.img-wide {
+          aspect-ratio: 16 / 9;
+          width: 100%;
+          margin: 0;
+          left: 0;
+          transform: none;
+          position: static;
+        }
+        .hero.img-content { max-width: 100%; aspect-ratio: 16 / 9; }
+        .credits { padding: 32px 24px 64px; }
+        .infographic-bignum { grid-template-columns: 1fr; }
+      }
+
+      @media print {
+        .slide { min-height: auto; page-break-after: always; padding: 24px 0; }
+        .nav, .progress { display: none; }
+        .reveal { opacity: 1; transform: none; }
+      }
+    </style>
+  </head>
+  <body class="pattern-monolith has-site-header" data-category="takeoff">
+    <header class="site-header">
+      <a href="../index.html" class="site-logo">AGI HUB</a>
+      <div class="site-nav-right">
+        <div id="google_translate_element"></div>
+        <a href="../index.html" class="site-back">アーカイブに戻る</a>
+      </div>
+    </header>
+    <div class="progress" id="progress"></div>
+
+    <aside class="nav" aria-label="Slide navigation">
+      <button data-target="slide-1" class="active" aria-label="Slide 1"></button>
+      <button data-target="slide-2" aria-label="Slide 2"></button>
+      <button data-target="slide-3" aria-label="Slide 3"></button>
+      <button data-target="slide-4" aria-label="Slide 4"></button>
+      <button data-target="slide-5" aria-label="Slide 5"></button>
+      <button data-target="slide-6" aria-label="Slide 6"></button>
+      <button data-target="slide-7" aria-label="Slide 7"></button>
+    </aside>
+
+    <main>
+      <!-- ═══════════ Slide 1 ═══════════ -->
+      <section class="slide" id="slide-1">
+        <div class="eyebrow reveal">AGI HUB &nbsp;&middot;&nbsp; No. 11 &nbsp;&middot;&nbsp; Takeoff &nbsp;&middot;&nbsp; Before the Loop</div>
+        <h1 class="reveal reveal-delay-1">産業爆発はAGIを待たない</h1>
+        <div class="panel reveal reveal-delay-2">
+          <div>
+            <img class="hero img-fullbleed" src="../images/industrial-explosion-before-agi/slide1.jpg" alt="Abstract streaks of light against dark background">
+            <div class="hero-caption">Photo: Unsplash</div>
+          </div>
+          <p class="lead dropcap">
+            産業爆発はロボットの自己複製が成立した後に来る。大半の議論はこの順序を前提にしている。Forethought Foundationの産業爆発モデル、<a href="08-agi-self-replication-premise.html" style="color:inherit;border-bottom:1px solid #999;transition:border-color 0.3s;">No.08で論じた閉ループの工学的困難</a>、EpochAIのGATEモデル。いずれも物理的な生産手段の自己増殖を起点に置く。
+          </p>
+          <p class="lead">
+            bioshokはこの前提を疑う。Charles Jonesの経済成長モデルに基づけば、産業革命級の成長はタスクの100%自動化を必要としない。部分的な自動化でも、AIによる生産性の倍率が十分に高ければ閾値を超える。本記事が検証する命題はこうだ。<strong>Jonesモデルの閾値は、ロボット閉ループの成立を待たずに到達し得る。ホワイトカラーのAI完全代替と、ブルーカラーのAI支援拡張の組み合わせによって。</strong>
+          </p>
+          <p class="lead">
+            「タスク自動化率」を操作的に定義しておく。経済全体のタスクのうち、AIまたはAI支援により生産性が非連続的に向上したタスクの比率。2つの形態を含む。第一に<strong>完全代替</strong>。AIがタスクを人間なしで遂行する。コード生成、文書作成、データ分析。生産性倍率は50-100倍級。第二に<strong>人間拡張</strong>。AIが人間の作業をガイドし、精度と速度を向上させる。ARゴーグル、音声指示、Manufacturing Copilot。生産性倍率は1.5-2倍だが、これまで自動化の対象外だったタスクを自動化率の分母に加える効果を持つ。
+          </p>
+          <div class="grid-3">
+            <div class="card">
+              <span class="tag">01</span>
+              <p><strong>100%不要</strong><br>Jonesの半内生的成長モデルでは、タスク自動化率20-30%+高い生産性倍率で、高度成長級の追加成長率が理論上導かれる。全タスクの自動化を待つ必要がない。</p>
+            </div>
+            <div class="card">
+              <span class="tag">02</span>
+              <p><strong>2つの経路</strong><br>ホワイトカラー完全代替は高倍率で閾値を押し上げ、ブルーカラー人間拡張は自動化率の分母を広げる。異なるメカニズムが合流し、閾値到達の蓋然性を高める。</p>
+            </div>
+            <div class="card">
+              <span class="tag">03</span>
+              <p><strong>産業爆発ではなく高度成長</strong><br>人間+AIハイブリッドで到達し得るのは年率+3.5-4%の追加成長。Forethought定義の産業爆発（GWP年率30%+）とは桁が違う。区別は維持する。</p>
+            </div>
+          </div>
+        </div>
+        <div class="footer reveal reveal-delay-3">
+          <span>閉ループ成立前に、高度成長級の変化が始まる経路を検証する</span>
+          <span class="slide-count">1 / 7</span>
+        </div>
+      </section>
+
+      <!-- ═══════════ Slide 2 ═══════════ -->
+      <section class="slide" id="slide-2">
+        <div class="eyebrow reveal">The Jones Threshold</div>
+        <h2 class="reveal reveal-delay-1">Jonesモデル — なぜ100%自動化が不要なのか</h2>
+        <div class="panel reveal reveal-delay-2">
+          <div>
+            <img class="hero img-wide" src="../images/industrial-explosion-before-agi/slide2.jpg" alt="Abstract architecture against dark background">
+            <div class="hero-caption">Photo: Unsplash</div>
+          </div>
+          <p class="lead">
+            Charles Jonesの半内生的成長モデル（Jones 2023, "The A.I. Dilemma"）の核心を展開する。生産関数において、労働がAIに代替されるとき、資本蓄積のボトルネックが消え、成長率が非連続的に上昇する。重要なのは「代替」の閾値が100%ではないこと。Paul Romerの内生的成長論を受け継ぐJonesの準内生的モデルは主流経済学であり、仮定が正しければ結論は堅い。
+          </p>
+          <p class="lead">
+            問いは「仮定が正しいか」にある。特に「AI生産性倍率」の解釈が重要になる。Jonesモデルの50-100倍は、AIがタスクを<strong>完全代替</strong>した場合の生産性を指す。コード生成やデータ分析のような知的作業では、AIが人間の50-100倍の速度で同等品質のアウトプットを出すことは既に部分的に観察されている。SWE-benchでのコード生成ベンチマーク、Devin等のAIコーディングエージェントの実測データが、特定タスクでの人間の数十倍の処理速度を示す。一方、物理作業でのAR支援は倍率1.5-2倍程度。<strong>倍率の桁が異なる2種の自動化を、どう合算するかが論点になる。</strong>
+          </p>
+          <table class="compare">
+            <thead>
+              <tr>
+                <th>自動化率</th>
+                <th>AI生産性倍率</th>
+                <th>追加成長率</th>
+                <th>歴史的対応</th>
+                <th>出典</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>20%</strong></td>
+                <td>50倍</td>
+                <td>+4.0%/年</td>
+                <td>米国GDP成長の倍増</td>
+                <td>Jones (2023) に基づく試算</td>
+              </tr>
+              <tr>
+                <td><strong>30%</strong></td>
+                <td>100倍</td>
+                <td>+3.5%/年</td>
+                <td>戦後日本の高度成長期</td>
+                <td>Jones (2023) に基づく試算</td>
+              </tr>
+              <tr>
+                <td><strong>80%</strong></td>
+                <td>100倍</td>
+                <td>産業革命級</td>
+                <td>18-19世紀英国</td>
+                <td>Jones (2023) に基づく試算</td>
+              </tr>
+              <tr>
+                <td><strong>100%</strong></td>
+                <td>&#8212;</td>
+                <td>産業爆発</td>
+                <td>前例なし</td>
+                <td>Forethought (2025)</td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="source-note">
+            上記の数値はJones (2023) "The A.I. Dilemma" のモデルに基づく試算。Jonesの論文自体がこの表を提示しているのではなく、モデルのパラメータに値を代入して算出したもの。bioshokのGoogle Document <a href="https://docs.google.com/document/d/1fqxXmaT-_ryk3cqA_ykH2au8oM8faIE_JI14H4dyTE8" target="_blank" rel="noopener">「AGIがもたらす産業爆発とは何か」</a> がパラメータ設定と試算過程を詳述している。
+          </div>
+          <p class="lead">
+            Anthropic Economic Index（2026年1月）はホワイトカラー業務での生成AI利用率を報告しているが、Anthropicは自社製品の市場拡大に利害関係がある。この利害相反を踏まえたうえで、複数の独立した指標を突合する必要がある。
+          </p>
+        </div>
+        <div class="footer reveal reveal-delay-3">
+          <span>100%自動化は不要。部分的な自動化と高い倍率の積で閾値を越える</span>
+          <span class="slide-count">2 / 7</span>
+        </div>
+      </section>
+
+      <!-- ═══════════ Slide 3 ═══════════ -->
+      <section class="slide" id="slide-3">
+        <div class="eyebrow reveal">Two Partial Loops</div>
+        <h2 class="reveal reveal-delay-1">自己複製ループの数理 — そして2つの部分ループ</h2>
+        <div class="panel reveal reveal-delay-2">
+          <div>
+            <img class="hero img-content" src="../images/industrial-explosion-before-agi/slide3.jpg" alt="Abstract dark curved lines suggesting exponential growth">
+            <div class="hero-caption">Photo: Unsplash</div>
+          </div>
+          <p class="lead">
+            Forethought Foundationの産業爆発モデルを振り返る。ロボットが自身を製造する閉ループが成立すると指数関数的増殖が始まる。初期条件は汎用ロボット100万台。倍増時間は約1年（太陽光パネルやスマートフォンの過去実績と整合する）。10年目には約10億台。経験曲線効果が加わると、累積生産量の倍増ごとにコストが低下し、倍増時間が短縮し、超指数関数的な成長に移行する。
+          </p>
+          <!-- SVG Chart: Exponential vs Super-exponential -->
+          <figure class="chart chart-wide" style="margin:32px 0;">
+            <div class="chart-title">指数関数 vs 超指数関数（経験曲線加速）</div>
+            <div class="chart-subtitle">経験曲線効果が累積すると、単純な倍増から加速度的な成長に移行する</div>
+            <svg class="chart-svg" viewBox="0 0 640 280" role="img" aria-label="指数関数と超指数関数の成長曲線比較">
+              <title>指数関数 vs 超指数関数成長</title>
+              <!-- Grid -->
+              <line x1="80" y1="240" x2="600" y2="240" stroke="#e5e5e5" stroke-width="1"/>
+              <line x1="80" y1="180" x2="600" y2="180" stroke="#e5e5e5" stroke-width="0.5" stroke-dasharray="3 3"/>
+              <line x1="80" y1="120" x2="600" y2="120" stroke="#e5e5e5" stroke-width="0.5" stroke-dasharray="3 3"/>
+              <line x1="80" y1="60" x2="600" y2="60" stroke="#e5e5e5" stroke-width="0.5" stroke-dasharray="3 3"/>
+              <!-- Axis labels -->
+              <text x="80" y="260" text-anchor="middle" font-size="10" fill="#999">0</text>
+              <text x="184" y="260" text-anchor="middle" font-size="10" fill="#999">2年</text>
+              <text x="288" y="260" text-anchor="middle" font-size="10" fill="#999">4年</text>
+              <text x="392" y="260" text-anchor="middle" font-size="10" fill="#999">6年</text>
+              <text x="496" y="260" text-anchor="middle" font-size="10" fill="#999">8年</text>
+              <text x="600" y="260" text-anchor="middle" font-size="10" fill="#999">10年</text>
+              <text x="72" y="244" text-anchor="end" font-size="10" fill="#999">1M</text>
+              <text x="72" y="184" text-anchor="end" font-size="10" fill="#999">100M</text>
+              <text x="72" y="124" text-anchor="end" font-size="10" fill="#999">1B</text>
+              <text x="72" y="64" text-anchor="end" font-size="10" fill="#999">10B</text>
+              <!-- Exponential (simple doubling) -->
+              <path d="M80,240 C180,238 350,220 450,170 L550,100 L600,60" fill="none" stroke="#999" stroke-width="1.5" stroke-dasharray="6 4"/>
+              <text x="605" y="58" font-size="10" fill="#999">指数</text>
+              <!-- Super-exponential (experience curve) -->
+              <path d="M80,240 C160,238 280,235 380,210 L440,170 L490,100 L520,50 L540,30" fill="none" stroke="#000" stroke-width="2"/>
+              <text x="545" y="28" font-size="10" fill="#000" font-weight="700">超指数</text>
+              <!-- Annotation -->
+              <line x1="440" y1="170" x2="440" y2="200" stroke="#000" stroke-width="0.5"/>
+              <text x="445" y="215" font-size="9" fill="#757575">経験曲線効果で</text>
+              <text x="445" y="228" font-size="9" fill="#757575">倍増時間が短縮</text>
+            </svg>
+            <figcaption class="chart-footer">
+              <p class="chart-caption">単純な指数関数（倍増時間一定）では10年で約10億台。経験曲線加速を伴うと桁が1-2つ上がる。</p>
+              <p class="chart-source">Forethought Foundation (Davidson et al. 2025) の記述からAGI HUBが模式図化</p>
+            </figcaption>
+          </figure>
+          <p class="lead">
+            <a href="08-agi-self-replication-premise.html" style="color:inherit;border-bottom:1px solid #999;transition:border-color 0.3s;">No.08</a>はこの閉ループ成立の工学的困難を論じた。採掘、精錬、半導体製造の完全無人化は未達であり、閉ループ成立には時間がかかる。ここで問いが分岐する。<strong>閉ループが成立する前に、部分的なループで高度成長級の変化が始まる経路はあるか。</strong>
+          </p>
+          <!-- Structure Diagram: Two partial loops -->
+          <div class="structure-diagram">
+            <svg viewBox="0 0 700 260" role="img" aria-label="部分ループの2形態: ロボットの部分的自己製造と人間によるAI指揮" style="width:100%;height:auto;">
+              <title>部分ループの2形態</title>
+              <!-- Left branch: Robot partial self-manufacturing -->
+              <rect x="220" y="10" width="260" height="40" rx="4" fill="none" stroke="#000" stroke-width="2"/>
+              <text x="350" y="36" text-anchor="middle" font-size="13" fill="#000" font-weight="700">部分ループ</text>
+              <!-- Fork lines -->
+              <line x1="280" y1="50" x2="160" y2="90" stroke="#000" stroke-width="1.5"/>
+              <line x1="420" y1="50" x2="540" y2="90" stroke="#000" stroke-width="1.5"/>
+              <!-- (a) Robot branch -->
+              <rect x="40" y="90" width="240" height="44" rx="4" fill="#000" stroke="none"/>
+              <text x="160" y="117" text-anchor="middle" font-size="11" fill="#fff" font-weight="600">(a) ロボットの部分的自己製造</text>
+              <rect x="40" y="146" width="240" height="100" rx="4" fill="none" stroke="#e5e5e5" stroke-width="1"/>
+              <text x="55" y="170" font-size="11" fill="#757575">工程の一部が自動化</text>
+              <text x="55" y="190" font-size="11" fill="#757575">残りを人間が補う</text>
+              <text x="55" y="214" font-size="11" fill="#000" font-weight="600">→ 自動化率を物理領域で</text>
+              <text x="55" y="234" font-size="11" fill="#000" font-weight="600">&nbsp;&nbsp;引き上げる経路</text>
+              <!-- (b) Human+AI branch -->
+              <rect x="420" y="90" width="240" height="44" rx="4" fill="#000" stroke="none"/>
+              <text x="540" y="117" text-anchor="middle" font-size="11" fill="#fff" font-weight="600">(b) AIが頭脳、人間が手足</text>
+              <rect x="420" y="146" width="240" height="100" rx="4" fill="none" stroke="#e5e5e5" stroke-width="1"/>
+              <text x="435" y="170" font-size="11" fill="#757575">ロボットの代わりに</text>
+              <text x="435" y="190" font-size="11" fill="#757575">AIが人間に作業指示</text>
+              <text x="435" y="214" font-size="11" fill="#000" font-weight="600">→ 自動化率の分母を</text>
+              <text x="435" y="234" font-size="11" fill="#000" font-weight="600">&nbsp;&nbsp;ブルーカラーに拡張</text>
+            </svg>
+          </div>
+          <p class="lead">
+            (a)は閉ループの漸進的拡張。(b)は物理実行の主体を「ロボット」から「AIにガイドされた人間」に変える経路。自己複製ではないが、AIの知能が物理世界に作用する点は同じ。次のスライドでは(b)を掘り下げる。
+          </p>
+        </div>
+        <div class="footer reveal reveal-delay-3">
+          <span>閉ループ不成立でも、部分ループの2経路で閾値に接近する</span>
+          <span class="slide-count">3 / 7</span>
+        </div>
+      </section>
+
+      <!-- ═══════════ Slide 4 ═══════════ -->
+      <section class="slide" id="slide-4">
+        <div class="eyebrow reveal">The Cold Start</div>
+        <h2 class="reveal reveal-delay-1">AIが頭脳、人間が手足 — コールドスタートの萌芽</h2>
+        <div class="panel reveal reveal-delay-2">
+          <div>
+            <img class="hero" src="../images/industrial-explosion-before-agi/slide4.jpg" alt="Grey and black industrial machine">
+            <div class="hero-caption">Photo: Unsplash</div>
+          </div>
+          <p class="lead">
+            bioshokはXで明確に述べている。「AIが頭脳になり数十億人の人間が手足になる時代が来るかもしれない。産業爆発のコールドスタートにもなる」（@bioshok3）。Note記事「AGIは人間10億人をMCPサーバーとして使い、産業爆発のコールドスタートを成功させる」がこのシナリオを詳述する。
+          </p>
+          <p class="lead">
+            このシナリオを部分的に検証するデータが、AR/AI支援の産業導入事例にある。以下の比較表は技術導入に成功した企業として公表されたもので、<strong>成功バイアスがかかっている</strong>。導入に失敗した事例や効果が限定的だった事例は報告されにくい。数字を中央値として受け取るべきではない。
+          </p>
+          <table class="compare">
+            <thead>
+              <tr>
+                <th>企業</th>
+                <th>手法</th>
+                <th>生産性向上</th>
+                <th>対象作業</th>
+                <th>出典</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Boeing</strong></td>
+                <td>AR配線ハーネス組立</td>
+                <td>+25%、エラー率ゼロ</td>
+                <td>製造業</td>
+                <td>HBR 2017（2017年時点の初期事例）</td>
+              </tr>
+              <tr>
+                <td><strong>DHL</strong></td>
+                <td>スマートグラスでピッキング</td>
+                <td>+25%</td>
+                <td>物流</td>
+                <td>DHL プレスリリース 2015</td>
+              </tr>
+              <tr>
+                <td><strong>Volkswagen</strong></td>
+                <td>リモートAI修理支援</td>
+                <td>+93%</td>
+                <td>自動車整備</td>
+                <td>RealWear事例</td>
+              </tr>
+              <tr>
+                <td><strong>GE</strong></td>
+                <td>AR風力発電機配線</td>
+                <td>+34%</td>
+                <td>エネルギー</td>
+                <td>HBR 2017（初期事例）</td>
+              </tr>
+              <tr>
+                <td><strong>Toyota</strong></td>
+                <td>HoloLens 2で検査・訓練</td>
+                <td>文書化時間90%削減</td>
+                <td>製造業</td>
+                <td>Microsoft事例</td>
+              </tr>
+              <tr>
+                <td><strong>Sandvik</strong></td>
+                <td>Manufacturing Copilot</td>
+                <td>+20-50%</td>
+                <td>製造業</td>
+                <td>Azure事例 2024</td>
+              </tr>
+              <tr>
+                <td><strong>Cornell大学</strong></td>
+                <td>AI Copilot全般</td>
+                <td>+55%</td>
+                <td>製造業全般</td>
+                <td>学術研究 2024</td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="source-note">
+            Boeing/GEのHBR 2017データは8年前の初期事例。AR技術は当時と比べて大幅に進歩している。2023-2025年のSandvik/Cornell等のより新しい事例は、AIとの統合でさらに高い効果を示すが、初期事例との直接比較には世代差の注意が必要。
+          </div>
+          <p class="lead">
+            これらの倍率（1.25〜1.93倍）はJonesモデルのAI生産性倍率（50-100倍）とは<strong>2桁異なる</strong>。人間拡張の貢献は「倍率を上げる」ことではなく、<strong>自動化率の分母を広げる</strong>こと。これまで「自動化不可能」とされていたブルーカラータスクの10-20%がAI支援の対象に入る。
+          </p>
+          <p class="lead">
+            概算として整理する。ホワイトカラー領域でAIが完全代替するタスク群が経済全体の20-30%を占め、ここでの倍率は50-100倍級。ブルーカラー領域でAR/AI支援による人間の生産性が1.5-2倍になるタスク群が追加で10-20%。合算すると全経済のタスク自動化率が30-50%に到達する可能性がある。加重平均の倍率はホワイトカラー主導で30-60倍程度として概算される。
+          </p>
+          <div class="source-note">
+            この合算はセクター別GDP比率による加重平均ではなく概算。精密な推計には産業構造の詳細な分析が必要であり、ここでは閾値到達の蓋然性を論じるに留める。AR/AI支援デバイスの市場はCAGR 59%で成長中（Markets and Markets推計: 2025年$0.98B → 2030年$9.98B）。
+          </div>
+          <p class="lead">
+            不確実性は2つ。第一に、個別タスクの改善が産業全体に波及する経路は自明ではない。導入コスト、規制環境、サプライチェーンのボトルネックが波及速度を左右する。Amdahlの法則的制約として、自動化されないタスクが全体の律速段階になる。第二に、AR市場のCAGR 59%が2030年まで持続する保証はない。技術的ハイプサイクルの減速は歴史的に繰り返されている。
+          </p>
+        </div>
+        <div class="footer reveal reveal-delay-3">
+          <span>人間拡張の貢献は倍率ではなく、自動化率の分母拡大にある</span>
+          <span class="slide-count">4 / 7</span>
+        </div>
+      </section>
+
+      <!-- ═══════════ Slide 5 ═══════════ -->
+      <section class="slide" id="slide-5">
+        <div class="eyebrow reveal">The Scale</div>
+        <h2 class="reveal reveal-delay-1">GATEモデルの2040年 — 数字の検証</h2>
+        <div class="panel reveal reveal-delay-2">
+          <div>
+            <img class="hero img-wide" src="../images/industrial-explosion-before-agi/slide5.jpg" alt="Abstract black curves suggesting vast scale">
+            <div class="hero-caption">Photo: Unsplash</div>
+          </div>
+          <p class="lead">
+            EpochAI GATEモデル（AGI 2028年開発前提）のシミュレーション結果を検証する。2030年の実効労働力は人間換算200億人（現在の2.5倍）。2035年のGWPは現在の100倍。2040年のGWPは現在の1000万倍、有効労働力は100京人（10<sup>17</sup>）、エネルギー消費は現在の1000倍以上。
+          </p>
+          <!-- Infographic: GWP 10M times -->
+          <div class="infographic-bignum">
+            <div class="cell">
+              <div class="num">10<span class="unit">7</span></div>
+              <div class="label">2040年GWP倍率<br>現在の1000万倍</div>
+            </div>
+            <div class="cell">
+              <div class="num">3.15<span class="unit">秒</span></div>
+              <div class="label">現在の1年分のGDPを<br>生み出すのに要する時間</div>
+            </div>
+            <div class="cell">
+              <div class="num">10<span class="unit">17</span></div>
+              <div class="label">2040年有効労働力<br>100京人</div>
+            </div>
+          </div>
+          <p class="lead">
+            <strong>この数字を結論の根拠にしてはならない。</strong> GATEモデルには複数の前提が埋め込まれている。AGI 2028年達成はモデルのプリセットであり予測ではない。物理的制約（エネルギー供給、資源調達、熱管理）のモデル化が不十分。社会的制約（規制、地政学、労組抵抗）が含まれていない。生産の指数関数的成長がエネルギー供給の線形的成長と両立するかは未検証。
+          </p>
+          <p class="lead">
+            GATEモデルは「条件が揃った場合の理論的上限」を示すもので、「これが起きる」という予測ではない。この区別を混同すると議論が崩壊する。本記事が論じているのは、この上限に至る前の段階で、<a href="03-agi-explosion.html" style="color:inherit;border-bottom:1px solid #999;transition:border-color 0.3s;">No.03で扱った技術爆発と産業爆発</a>の前段階として、人間+AIハイブリッドによる高度成長が先行する可能性である。
+          </p>
+        </div>
+        <div class="footer reveal reveal-delay-3">
+          <span>GATEモデルの数字は理論的上限。結論の根拠にしてはならない</span>
+          <span class="slide-count">5 / 7</span>
+        </div>
+      </section>
+
+      <!-- ═══════════ Slide 6 ═══════════ -->
+      <section class="slide" id="slide-6">
+        <div class="eyebrow reveal">Counterarguments</div>
+        <h2 class="reveal reveal-delay-1">反論 — 今回が「違う」と言える根拠はあるか</h2>
+        <div class="panel reveal reveal-delay-2">
+          <div>
+            <img class="hero img-fullbleed" src="../images/industrial-explosion-before-agi/slide6.jpg" alt="Dark flowing fabric creating dramatic abstract effect">
+            <div class="hero-caption">Photo: Unsplash</div>
+          </div>
+          <p class="lead">
+            この記事の主張に対する最も強い反論を正面から扱う。
+          </p>
+          <div class="grid-2">
+            <div class="card">
+              <p><strong>反論1: 部分自動化は歴史上何度も起きた</strong></p>
+              <div class="bullets" style="margin-top: 16px">
+                <p class="point">電力の普及（1880年代〜）は工場の生産性を劇的に上げたが、経済全体への波及には40年を要した。ITの普及（1990年代〜）もSolowの生産性パラドックス（「コンピュータはどこにでもあるが、生産性統計には表れない」）を経て、効果が顕在化するまで10-15年かかった。「爆発的成長」は産業革命と第二次産業革命の2回しか起きていない。</p>
+                <p class="point"><strong>今回が違う可能性:</strong> AI/ARツールの導入コストが電力やITと比較して桁違いに低い。スマートフォン1台で作業支援が可能。2017年時点の初期事例でも事前訓練なしで+30%のHBR報告がある。普及速度が過去の汎用技術より速い可能性はあるが、高度成長級の変化が「何年以内に」起きるかの予測は、過去の事例が示す通り極めて困難。</p>
+              </div>
+            </div>
+            <div class="card">
+              <p><strong>反論2: 「産業爆発」と「高度成長」は質的に異なる</strong></p>
+              <div class="bullets" style="margin-top: 16px">
+                <p class="point">Forethought定義の産業爆発（GWP年率30%以上の成長）と、Jonesモデルの高度成長（年率+3.5-4%の追加成長）には桁の差がある。人間+AIハイブリッドで到達できるのは後者。前者にはロボット閉ループの少なくとも部分的な成立が必要になる。</p>
+                <p class="point"><strong>この反論は正当。</strong>本記事の主張は「産業爆発がロボットなしに起きる」ではなく、「高度成長級の変化がロボットなしに始まる」。この区別は維持する。</p>
+              </div>
+            </div>
+          </div>
+          <p class="lead">
+            <strong>反論3: CEO発言やAI企業の予測はポジショントーク。</strong> bioshok自身が留保カテゴリで指摘している通り、「CEO発言はfrontier labsの内部期待と戦略姿勢の強い証拠だが独立した科学的証明ではない」。Anthropic Economic Indexも利害関係のある当事者の報告。本記事ではこれらを「証拠」ではなく「参考指標」として扱う。
+          </p>
+          <p class="lead">
+            <strong>反論4: bioshokのJonesモデル解釈と人間拡張論の接続は自明ではない。</strong> bioshokの「AIが頭脳、人間が手足」構想は、Jonesモデルの労働代替とは異なるメカニズムかもしれない。Jonesモデルは「AIが労働を代替する」ことを前提にしており、「AIが人間を拡張する」こととは区別される。本記事ではこの2つを「タスク自動化率」の拡張定義で接続したが、この接続が経済学的に正当かどうかは、Jones自身やマクロ経済学者の検証を要する。
+          </p>
+        </div>
+        <div class="footer reveal reveal-delay-3">
+          <span>反論2は正当。産業爆発と高度成長の区別を崩さない</span>
+          <span class="slide-count">6 / 7</span>
+        </div>
+      </section>
+
+      <!-- ═══════════ Slide 7 ═══════════ -->
+      <section class="slide" id="slide-7">
+        <div class="eyebrow reveal">The Threshold</div>
+        <h2 class="reveal reveal-delay-1">ロボット閉ループなしでも、高度成長は始まる</h2>
+        <div class="panel reveal reveal-delay-2">
+          <div>
+            <img class="hero" src="../images/industrial-explosion-before-agi/slide7.jpg" alt="Metal structure with beams against sky">
+            <div class="hero-caption">Photo: Unsplash</div>
+          </div>
+          <p class="lead">
+            テーゼを精密に述べ直す。
+          </p>
+          <p class="lead">
+            <strong>第一に、Jonesモデルは100%自動化を要求しない。</strong> タスク自動化率30%+AI生産性倍率の加重平均30-60倍で、戦後日本の高度成長期に匹敵する追加成長率が概算として示される。この閾値はロボットの自己複製なしに到達し得る。
+          </p>
+          <p class="lead">
+            <strong>第二に、「タスク自動化率」の分母はAI支援による人間拡張で広がる。</strong> ホワイトカラー領域ではAIがタスクを完全代替し、倍率50-100倍を実現する。SWE-benchの<a href="04-takeoff-speed-debate.html" style="color:inherit;border-bottom:1px solid #999;transition:border-color 0.3s;">テイクオフ速度論</a>で論じた代替弾力性の議論とも整合する。ブルーカラー領域ではARゴーグル、音声ガイド、Manufacturing Copilotが個別タスクで+25〜93%の生産性向上を実証している（成功バイアスあり）。後者の貢献は倍率ではなく、自動化率の分母拡大にある。bioshokの「AIが頭脳、人間が手足」論は、この人間拡張を産業規模に拡張した構想。80億人の人間は既にいる。
+          </p>
+          <p class="lead">
+            <strong>第三に、人間拡張で到達できるのは「高度成長級」であって「産業爆発」ではない。</strong> Forethought定義の産業爆発（GWP年率30%+）の領域にはロボット閉ループの少なくとも部分的な成立が必要になる可能性がある。人間+AIハイブリッドは産業爆発の代替ではなく、産業爆発に至る<strong>前段階の加速装置</strong>。
+          </p>
+          <div class="note">
+            <strong>結論。</strong> ロボット閉ループは産業爆発の十分条件かもしれないが、必要条件ではない。閉ループが成立しなくても、AI+人間のハイブリッドで高度成長級の変化は起こり得る。「産業爆発」の議論をロボットの自己複製に限定することは、足元で進行中の変化を見落とすリスクがある。Jonesモデルの臨界点に到達する正確な時期を予測することは、タスク自動化率の測定方法すら未確立の現在、知的誠実性を欠く。確かなのは、臨界点が「AGI達成」より先に来る可能性が、Jonesモデルとbioshokの人間拡張論によって理論的に開かれたということ。AGIの後に全てが変わると構えていると、変化が始まったときに対応できない。
+          </div>
+        </div>
+        <div class="footer reveal reveal-delay-3">
+          <span>閉ループは十分条件かもしれないが、必要条件ではない</span>
+          <span class="slide-count">7 / 7</span>
+        </div>
+      </section>
+
+      <!-- ═══════════ Related Reading ═══════════ -->
+      <section class="slide" style="min-height:auto;padding:64px 48px 80px;grid-template-rows:auto auto 1fr;">
+        <div class="eyebrow reveal">Related Reading</div>
+        <h2 class="reveal reveal-delay-1" style="max-width:none;">他の記事も読む</h2>
+        <div class="panel reveal reveal-delay-2">
+          <div class="grid-2">
+            <a href="08-agi-self-replication-premise.html" class="card" style="color:inherit;display:block;">
+              <p style="font-family:'SF Mono','Fira Code',Menlo,Consolas,monospace;font-feature-settings:normal;font-size:11px;letter-spacing:0.083em;text-transform:uppercase;color:#757575;margin-bottom:12px;">Takeoff</p>
+              <p><strong>産業爆発の隠れた前提 — ロボット自己複製が未来を二つに割る</strong><br>本記事の「前段」。閉ループ成立の工学的困難を検証し、倍増時間と物理ボトルネックの制約を辿る。本記事はその困難を迂回する経路を提示した。</p>
+            </a>
+            <a href="03-agi-explosion.html" class="card" style="color:inherit;display:block;">
+              <p style="font-family:'SF Mono','Fira Code',Menlo,Consolas,monospace;font-feature-settings:normal;font-size:11px;letter-spacing:0.083em;text-transform:uppercase;color:#757575;margin-bottom:12px;">Takeoff</p>
+              <p><strong>技術爆発と産業爆発 — シンギュラリティが科学的蓋然性に変わった日</strong><br>技術爆発と産業爆発の二重ループの全体像。本記事はその産業爆発側に焦点を当て、閉ループなしの経路を追加した。</p>
+            </a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="credits">
+      <p>
+        Photos: All images from <a href="https://unsplash.com">Unsplash</a> (free license).
+        Slugs: BV9vbI8ZkZM, 4NtZ0yU50lY, kXJ_dcFh7bE, oB3X7LOnL6k, MaVm_A0xhKk, dTgIbuxsM2w, iDO2IbbR-2c.
+        Thumbnail: xP6ngsgxck0.
+        References: Jones (2023) "The A.I. Dilemma"; Forethought Foundation (Davidson et al. 2025); EpochAI GATE Model; bioshok (@bioshok3); HBR (2017); DHL Press Release (2015); RealWear; Microsoft; Azure; Cornell University.
+      </p>
+    </footer>
+
+    <script>
+      const buttons = Array.from(document.querySelectorAll('.nav button'));
+      const slides = Array.from(document.querySelectorAll('.slide'));
+      const progress = document.getElementById('progress');
+
+      function setActive(id) {
+        buttons.forEach(b => b.classList.toggle('active', b.dataset.target === id));
+      }
+
+      buttons.forEach(b => {
+        b.addEventListener('click', () => {
+          document.getElementById(b.dataset.target)?.scrollIntoView({ behavior: 'smooth' });
+        });
+      });
+
+      const navObserver = new IntersectionObserver(entries => {
+        entries.forEach(e => { if (e.isIntersecting) setActive(e.target.id); });
+      }, { threshold: 0.5 });
+
+      slides.forEach(s => navObserver.observe(s));
+
+      const revealObserver = new IntersectionObserver(entries => {
+        entries.forEach(e => {
+          if (e.isIntersecting) {
+            e.target.classList.add('visible');
+          }
+        });
+      }, { threshold: 0.15, rootMargin: '0px 0px -60px 0px' });
+
+      document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+      window.addEventListener('scroll', () => {
+        const scrollTop = window.scrollY;
+        const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+        const pct = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+        progress.style.width = pct + '%';
+      }, { passive: true });
+
+      window.addEventListener('keydown', e => {
+        const idx = buttons.findIndex(b => b.classList.contains('active'));
+        if (e.key === 'ArrowDown' || e.key === 'PageDown') {
+          e.preventDefault();
+          slides[Math.min(idx + 1, slides.length - 1)]?.scrollIntoView({ behavior: 'smooth' });
+        }
+        if (e.key === 'ArrowUp' || e.key === 'PageUp') {
+          e.preventDefault();
+          slides[Math.max(idx - 1, 0)]?.scrollIntoView({ behavior: 'smooth' });
+        }
+      });
+    </script>
+
+    <!-- Google Translate Widget -->
+    <script>
+    function googleTranslateElementInit() {
+      new google.translate.TranslateElement({
+        pageLanguage: 'ja',
+        includedLanguages: 'en,zh-CN,ko,fr,de,es',
+        layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+        autoDisplay: false
+      }, 'google_translate_element');
+    }
+    </script>
+    <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+  </body>
+</html>

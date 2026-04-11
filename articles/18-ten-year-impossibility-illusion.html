@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+<meta name="robots" content="noindex, nofollow">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>10年で自己改善ループは起きないという直感は、なぜ外れるか — No.18 AGI HUB</title>
+    <link rel="stylesheet" href="../design-system/palette.css">
+    <style>
+      :root {
+        --black: #000;
+        --body-text: #1a1a1a;
+        --meta: #757575;
+        --light-gray: #999;
+        --border: #e5e5e5;
+        --bg: #fff;
+        --ease: cubic-bezier(0.22, 1, 0.36, 1);
+      }
+
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+      html { scroll-behavior: smooth; }
+
+      body {
+        font-family: HelveticaNeue, "Helvetica Neue", Helvetica, Arial,
+          游ゴシック体, YuGothic, "游ゴシック Medium", "Yu Gothic Medium",
+          游ゴシック, "Yu Gothic", "ヒラギノ角ゴ ProN W3", "Hiragino Kaku Gothic ProN",
+          "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", "MS ゴシック", "MS Gothic",
+          sans-serif;
+        font-feature-settings: "palt";
+        font-size: 16px;
+        line-height: 1.75;
+        color: var(--body-text);
+        background: var(--bg);
+        -webkit-font-smoothing: antialiased;
+        overflow-x: hidden;
+        word-wrap: break-word;
+      }
+
+      .progress { position: fixed; top: 0; left: 0; height: 2px; background: var(--black); width: 0%; z-index: 100; transition: width 0.3s var(--ease); }
+
+      .nav { position: fixed; right: 24px; top: 50%; transform: translateY(-50%); display: grid; gap: 16px; z-index: 50; }
+      .nav button { width: 8px; height: 8px; border-radius: 999px; border: 1.5px solid var(--meta); background: transparent; cursor: pointer; transition: all 0.3s var(--ease); }
+      .nav button.active { background: var(--black); border-color: var(--black); transform: scale(1.4); }
+
+      main { scroll-snap-type: y mandatory; }
+
+      .slide {
+        position: relative;
+        min-height: 100vh;
+        max-width: 1120px;
+        margin: 0 auto;
+        padding: 80px 48px 64px;
+        display: grid;
+        grid-template-rows: auto auto 1fr auto;
+        gap: 32px;
+        scroll-snap-align: start;
+      }
+      .slide + .slide { border-top: 1px solid var(--border); }
+
+      .hero {
+        width: 100%;
+        aspect-ratio: 16 / 7;
+        object-fit: cover;
+        display: block;
+        filter: grayscale(0.7) contrast(1.15);
+        transition: filter 0.6s var(--ease);
+      }
+      .hero:hover { filter: grayscale(0) contrast(1); }
+
+      .slide .hero.img-fullbleed {
+        width: 100vw;
+        margin-left: calc(50% - 50vw);
+        margin-right: calc(50% - 50vw);
+        max-width: none;
+        aspect-ratio: 21 / 9;
+      }
+      .slide .hero.img-wide {
+        width: min(1280px, calc(100vw - 48px));
+        position: relative;
+        left: 50%;
+        transform: translateX(-50%);
+        max-width: none;
+      }
+      .slide .hero.img-content { max-width: 680px; margin: 0 auto; aspect-ratio: 4/3; }
+
+      .hero-caption {
+        font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 11px;
+        letter-spacing: 0.083em;
+        color: var(--light-gray);
+        margin-top: 8px;
+        text-transform: uppercase;
+      }
+
+      .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.6s var(--ease), transform 0.6s var(--ease); }
+      .reveal.visible { opacity: 1; transform: translateY(0); }
+      .reveal-delay-1 { transition-delay: 0.1s; }
+      .reveal-delay-2 { transition-delay: 0.2s; }
+      .reveal-delay-3 { transition-delay: 0.35s; }
+
+      .eyebrow {
+        font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 11px;
+        font-weight: 400;
+        letter-spacing: 0.083em;
+        text-transform: uppercase;
+        color: var(--meta);
+      }
+
+      h1, h2 { color: var(--black); font-weight: 700; line-height: 1.625; letter-spacing: normal; max-width: 28ch; }
+      h1 { font-size: clamp(28px, 4vw, 34px); }
+      h2 { font-size: clamp(24px, 3.5vw, 32px); }
+
+      .lead { max-width: 820px; font-size: 16px; line-height: 1.85; color: var(--body-text); }
+      .lead + .lead { margin-top: 10px; }
+      .lead strong { color: var(--black); }
+
+      .panel { display: grid; gap: 24px; align-content: start; }
+      .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
+      .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+
+      .card { padding: 24px 0; border-top: 2px solid var(--black); }
+      .card p { font-size: 16px; line-height: 1.75; color: var(--body-text); }
+      .card strong { color: var(--black); }
+
+      .tag {
+        display: inline-block;
+        font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 11px;
+        letter-spacing: 0.083em;
+        color: var(--meta);
+        margin-bottom: 12px;
+      }
+
+      .bullets { display: grid; gap: 16px; }
+      .point { padding-left: 16px; border-left: 2px solid var(--black); font-size: 15.5px; line-height: 1.75; color: var(--body-text); }
+      .point strong { color: var(--black); }
+
+      .note { font-size: 16px; line-height: 1.85; color: var(--body-text); padding: 24px 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+      .note strong { color: var(--black); }
+
+      .compare { width: 100%; border-collapse: collapse; border-top: 2px solid var(--black); border-bottom: 2px solid var(--black); }
+      .compare th, .compare td { padding: 18px 16px; text-align: left; font-size: 15px; line-height: 1.7; color: var(--body-text); border-bottom: 1px solid var(--border); vertical-align: top; }
+      .compare th {
+        font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 11px;
+        letter-spacing: 0.083em;
+        text-transform: uppercase;
+        color: var(--meta);
+        font-weight: 400;
+        border-bottom: 1px solid var(--black);
+      }
+      .compare td strong { color: var(--black); }
+
+      /* ── Portraits ── */
+      .portraits {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 20px;
+      }
+      .portrait-card {
+        display: grid;
+        gap: 12px;
+        padding: 16px 0;
+        border-top: 2px solid var(--black);
+      }
+      .portrait-silhouette {
+        width: 104px;
+        height: 104px;
+        background: #111;
+        border: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .portrait-silhouette svg { width: 68%; height: 68%; }
+      .portrait-name {
+        font-size: 14px;
+        font-weight: 700;
+        color: var(--black);
+        line-height: 1.4;
+      }
+      .portrait-affil {
+        font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+        font-size: 10px;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        color: var(--meta);
+      }
+      .portrait-line {
+        font-size: 13px;
+        line-height: 1.6;
+        color: var(--body-text);
+      }
+
+      /* ── SVG Chart baseline (fallback if palette.css missing classes) ── */
+      .chart { border-top: 1px solid var(--border); padding-top: 24px; }
+      .chart-title { font-size: 15px; font-weight: 700; color: var(--black); margin-bottom: 4px; }
+      .chart-subtitle { font-size: 13px; color: var(--meta); margin-bottom: 16px; }
+      .chart-svg { width: 100%; height: auto; }
+      .chart-svg .axis-line, .chart-svg .grid-line { stroke: #d0d0d0; stroke-width: 1; }
+      .chart-svg .axis-line { stroke: var(--black); stroke-width: 1.25; }
+      .chart-svg .line-path { stroke: var(--black); stroke-width: 2.5; fill: none; }
+      .chart-svg .data-primary { fill: var(--black); stroke: var(--black); }
+      .chart-svg .data-accent { fill: #d13030; stroke: #d13030; }
+      .chart-svg .data-label { font-family: "SF Mono", Menlo, monospace; font-size: 10px; fill: var(--meta); }
+      .chart-svg .data-label-accent { font-family: "SF Mono", Menlo, monospace; font-size: 10px; fill: #d13030; font-weight: 700; }
+      .chart-svg .annotation { font-family: "SF Mono", Menlo, monospace; font-size: 9px; fill: var(--meta); }
+      .chart-svg .annotation-line { stroke: var(--meta); stroke-width: 1; }
+      .chart-svg .bar-fill { fill: var(--black); }
+      .chart-svg .bar-light { fill: #bfbfbf; }
+      .chart-footer { margin-top: 12px; }
+      .chart-caption { font-size: 12px; line-height: 1.65; color: var(--body-text); }
+      .chart-source { font-family: "SF Mono", Menlo, monospace; font-size: 10px; color: var(--meta); text-transform: uppercase; letter-spacing: 0.05em; margin-top: 4px; }
+
+      .footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: end;
+        gap: 16px;
+        font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 11px;
+        letter-spacing: 0.083em;
+        color: var(--light-gray);
+        text-transform: uppercase;
+      }
+      .slide-count { font-weight: 700; color: var(--black); }
+
+      .credits { max-width: 1120px; margin: 0 auto; padding: 48px 48px 80px; border-top: 1px solid var(--border); }
+      .credits p {
+        font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 11px;
+        letter-spacing: 0.047em;
+        line-height: 2;
+        color: var(--light-gray);
+      }
+      .credits a { color: var(--meta); text-decoration: none; border-bottom: 1px solid var(--border); }
+      .credits a:hover { color: var(--black); border-bottom-color: var(--black); }
+
+      @media (max-width: 768px) {
+        .slide { padding: 64px 24px 48px; }
+        .hero { aspect-ratio: 16 / 9; }
+        .slide .hero.img-fullbleed, .slide .hero.img-wide, .slide .hero.img-content {
+          aspect-ratio: 16 / 9;
+          width: 100%;
+          max-width: 100%;
+          margin: 0;
+          left: 0;
+          transform: none;
+        }
+        .grid-2, .grid-3, .portraits { grid-template-columns: 1fr; }
+        .portraits { grid-template-columns: repeat(2, 1fr); gap: 16px; }
+        .portrait-silhouette { width: 88px; height: 88px; }
+        .nav { right: 12px; }
+        .compare th, .compare td { padding: 14px 10px; }
+        .credits { padding: 32px 24px 64px; }
+      }
+      @media print {
+        .slide { min-height: auto; page-break-after: always; padding: 24px 0; }
+        .nav, .progress { display: none; }
+        .reveal { opacity: 1; transform: none; }
+      }
+    </style>
+  </head>
+  <body class="pattern-monolith has-site-header" data-category="takeoff">
+    <div id="site-header-mount"></div>
+    <script src="../partials/header.js" defer></script>
+    <div class="progress" id="progress"></div>
+
+    <aside class="nav" aria-label="Slide navigation">
+      <button data-target="slide-1" class="active" aria-label="Slide 1"></button>
+      <button data-target="slide-2" aria-label="Slide 2"></button>
+      <button data-target="slide-3" aria-label="Slide 3"></button>
+      <button data-target="slide-4" aria-label="Slide 4"></button>
+      <button data-target="slide-5" aria-label="Slide 5"></button>
+    </aside>
+
+    <div class="article-breadcrumb" style="font-family:'SF Mono','Fira Code',Menlo,Consolas,monospace;font-size:11px;letter-spacing:0.083em;text-transform:uppercase;color:#757575;display:flex;justify-content:space-between;align-items:center;padding:10px 32px;border-bottom:1px solid #e5e5e5;background:#fff;gap:16px;flex-wrap:wrap;">
+      <span>No. 18 &nbsp;·&nbsp; Takeoff &nbsp;·&nbsp; 5 Slides</span>
+      <span style="display:flex;gap:20px;align-items:center;">
+        <a href="17-alignment-as-western-problem.html" style="color:inherit;text-decoration:none;">← Prev</a>
+        <a href="../index.html#filter=takeoff" style="color:inherit;text-decoration:none;">Same Category</a>
+        <a href="../index.html" style="color:inherit;text-decoration:none;">All →</a>
+      </span>
+    </div>
+
+    <main>
+      <!-- ═══════════ Slide 1 — Premise ═══════════ -->
+      <section class="slide" id="slide-1">
+        <div class="eyebrow reveal">AGI HUB &nbsp;·&nbsp; No. 18 &nbsp;·&nbsp; Takeoff &nbsp;·&nbsp; The Veteran's Certainty &nbsp;·&nbsp; 2026.04.11 &nbsp;·&nbsp; By Ryao</div>
+        <h1 class="reveal reveal-delay-1">10年で自己改善ループは起きないという直感は、なぜ外れるか</h1>
+        <div class="panel reveal reveal-delay-2">
+          <div>
+            <img class="hero img-fullbleed" src="../images/ten-year-impossibility-illusion/slide1.jpg" alt="Monochrome automotive factory with robotic assembly arms lining the production floor">
+            <div class="hero-caption">Photo: Unsplash / Lenny Kuhne</div>
+          </div>
+          <p class="lead">
+            ある自動車メーカーで30年間ライン設計を担ってきた熟練エンジニアが、会議室の片隅でこう言ったとしよう。「ロボティクスがそんなに早く進むわけがない。10年やそこらで自己改善なんて絶対ない。現場を知らない人間が言うことだ」。発言は具体的な重みを持っている。彼は実際にロボットが工場のどこで詰まるかを知っている。部品公差が0.1mmずれた瞬間に停まるラインを、何百回も手で直してきた。その体験から組み上がった経験則は、会議室のAI楽観論より遥かに地に足がついている。
+          </p>
+          <p class="lead">
+            この直感は正当だ。ただし、ある時代の経験則としては、という条件付きで。1995年から2020年までのロボティクスは、専用治具と固定プログラムの世界だった。ワークが1mmでも傾けば停まる。新しい部品を流すには数週間の段取り替えが要る。この25年の経験を線形に延ばせば、汎用ロボットが非構造化環境で自律的に働く未来はあと数十年は来ない。熟練者の直感はこの直線の上に立っている。
+          </p>
+          <p class="lead">
+            しかし問題は、2022年から2025年の3年間で、この直線が折れたことだ。視覚-言語-行動モデル（VLA）と呼ばれる新しい系列の論文が、ロボティクスのスケーリング則を実証し始めた。Google DeepMindのRT-2は2023年7月に発表され、訓練で一度も見ていない物体に対して50%台の成功率でゼロショット操作を成立させた<sup>[1]</sup>。翌2024年11月、Physical Intelligence社のπ0は、洗濯物を畳む、箱を組み立てるといった10分級のロングホライゾンタスクを、複数のロボット本体にまたがって実行した<sup>[2]</sup>。2025年4月、π0.5は訓練で見たことのない他人の家のキッチンで、10分から15分かけて皿洗いを最後まで完遂した<sup>[3]</sup>。2025年3月、DeepMindはGemini Roboticsを発表し、9月にはGemini Robotics 1.5でAloha、Apptronik Apolloを含む複数の身体に同じモデルを流用できることを実証した<sup>[4]</sup>。
+          </p>
+          <p class="lead">
+            記事の狙いは楽観論の流布ではない。「10年で確実に起きる」と言うつもりもない。ここで問うのは一点だけだ。「絶対ない」という経験則の強度が、2020-2025の事実の前で持ちこたえるかどうか。Toyotaのベテランエンジニアが25年間信頼してきた直感と、2022-2025に論文として出てきた数字は、同じ世界を見ているのか。それとも、経験則が終わる瞬間に立ち会っているのか。
+          </p>
+          <div class="grid-3">
+            <div class="card">
+              <span class="tag">01</span>
+              <p><strong>直感の根拠</strong><br>1995-2020のロボティクスは専用治具と固定プログラムの世界。この25年を線形に延ばせば「10年で自己改善」はありえない。</p>
+            </div>
+            <div class="card">
+              <span class="tag">02</span>
+              <p><strong>直線の折れ</strong><br>2022-2025にVLA（視覚-言語-行動）モデルが登場。RT-2、π0/π0.5、Gemini Roboticsがゼロショット汎化を実証した。</p>
+            </div>
+            <div class="card">
+              <span class="tag">03</span>
+              <p><strong>問い</strong><br>経験則はどこまで有効か。それとも、非連続な技術が来る直前に直感が最も強く誤る、あのパターンの再演か。</p>
+            </div>
+          </div>
+        </div>
+        <div class="footer reveal reveal-delay-3">
+          <span>経験則は、経験則が成立した時代に対してのみ有効である</span>
+          <span class="slide-count">1 / 5</span>
+        </div>
+      </section>
+
+      <!-- ═══════════ Slide 2 — Benchmark Curves ═══════════ -->
+      <section class="slide" id="slide-2">
+        <div class="eyebrow reveal">The Curve Bent Between 2022 And 2025</div>
+        <h2 class="reveal reveal-delay-1">ロボット基盤モデルという新しい曲線</h2>
+        <div class="panel reveal reveal-delay-2">
+          <div>
+            <img class="hero img-wide" src="../images/ten-year-impossibility-illusion/slide2.jpg" alt="Industrial robot arm inside a dimly lit manufacturing facility">
+            <div class="hero-caption">Photo: Pexels / Freek Wolsink</div>
+          </div>
+          <p class="lead">
+            熟練者の直感が成立していた時代の前提は三つある。第一に、ロボットは特定タスク向けに明示プログラムされなければ動かない。第二に、新しい環境・物体・照明条件への汎化はほぼ不可能で、必ず再教示が要る。第三に、データはタスクごとに別々で、他のロボットの経験を流用できない。この三前提のうち、2022年から2025年までのわずか3年間で、三つとも崩れた。
+          </p>
+          <p class="lead">
+            起点は2022年4月、Googleの<strong>SayCan</strong>だった<sup>[5]</sup>。大規模言語モデルが「コーラを持ってきて」という自然言語の指示を、ロボットが実行可能な動作列に分解する。2023年7月、同じGoogle/DeepMindが<strong>RT-2</strong>を発表する<sup>[1]</sup>。ここで決定的な切り替えが起きた。ウェブスケールの画像-テキスト事前学習を、そのままロボット制御の出力層に接続したのだ。RT-2は訓練データに存在しない物体カテゴリに対して、従来モデルの2倍近い汎化性能を示した。同じ2023年、Google、DeepMind、Stanford、Berkeley、UTokyo、NYUを含む34機関が共同で<strong>Open X-Embodiment</strong>を公開する<sup>[6]</sup>。22種類の異なるロボット本体から集めた160万以上のエピソードを単一データセットに統合し、これで学習した<strong>RT-X</strong>は、個別ロボット用に学習したモデルを50%上回る成功率で汎化した。「ロボットごとにデータを取る」という前提が初めて破れた瞬間だ。
+          </p>
+          <p class="lead">
+            2024年10月、OpenAI、DeepMindから分派したChelsea FinnとSergey Levineが率いる<strong>Physical Intelligence</strong>社が、創業1年弱で<strong>π0</strong>を公開した<sup>[2]</sup>。π0はVision-Language-Action flow modelと呼ばれる構造で、毎秒50ステップの高頻度制御ポリシーを吐く。洗濯物を畳む、ダンボール箱を組み立てるといった、従来の産業ロボットが苦手としてきた変形物と長時間タスクで連続成功を記録した。2025年4月、<strong>π0.5</strong>が公開される<sup>[3]</sup>。この版が決定的だ。訓練に含まれていない他人の家のキッチンに持ち込まれ、10分から15分かけて皿洗いと片付けを最後まで完遂した。「新しい家」は事前学習で見ていない環境である。人間が子どもに「台所を片付けて」と言うときの汎化に、初めて届いた。
+          </p>
+          <p class="lead">
+            2025年3月、DeepMindは<strong>Gemini Robotics</strong>を発表する<sup>[4]</sup>。基盤モデルGemini 2.0を土台に、物理行動を新しい出力モダリティとして追加した。同年9月のGemini Robotics 1.5では、Aloha bi-arm、Apptronik Apollo（ヒューマノイド）、Franka研究用アームを含む異なる身体に対して、同じモデルがそのまま転移することが示された。身体の設計に縛られないポリシーという概念が初めて実装された。Nvidiaの<strong>GR00T</strong>（2024年3月発表、2025年にN1として更新）は、ヒューマノイド向けの汎用基盤モデルとして同じ路線を走っている<sup>[7]</sup>。
+          </p>
+          <div class="chart">
+            <div class="chart-title">ロボット基盤モデル：3年で折れた曲線</div>
+            <div class="chart-subtitle">2022年SayCanから2025年Gemini Robotics 1.5まで。汎化性能は年次で跳ね上がっている</div>
+            <svg class="chart-svg" viewBox="0 0 700 320" role="img" aria-label="Robot foundation model timeline 2022-2025">
+              <title>ロボット基盤モデルの進展 2022-2025</title>
+              <!-- Axes -->
+              <line class="axis-line" x1="70" y1="40" x2="70" y2="260"/>
+              <line class="axis-line" x1="70" y1="260" x2="660" y2="260"/>
+              <!-- Y grid -->
+              <line class="grid-line" x1="70" y1="80" x2="660" y2="80"/>
+              <line class="grid-line" x1="70" y1="140" x2="660" y2="140"/>
+              <line class="grid-line" x1="70" y1="200" x2="660" y2="200"/>
+              <!-- Y labels (汎化スコア 0-100%) -->
+              <text class="data-label" x="62" y="264" text-anchor="end">0%</text>
+              <text class="data-label" x="62" y="204" text-anchor="end">25%</text>
+              <text class="data-label" x="62" y="144" text-anchor="end">50%</text>
+              <text class="data-label" x="62" y="84" text-anchor="end">75%</text>
+              <text class="data-label" x="62" y="44" text-anchor="end">新環境</text>
+              <text class="data-label" x="62" y="56" text-anchor="end">汎化</text>
+              <!-- X labels -->
+              <text class="data-label" x="130" y="278" text-anchor="middle">2022.04</text>
+              <text class="data-label" x="250" y="278" text-anchor="middle">2023.07</text>
+              <text class="data-label" x="370" y="278" text-anchor="middle">2024.10</text>
+              <text class="data-label" x="490" y="278" text-anchor="middle">2025.04</text>
+              <text class="data-label" x="610" y="278" text-anchor="middle">2025.09</text>
+              <!-- Step curve reflecting rough published generalization rates -->
+              <path class="line-path" d="M 130 240 L 250 210 L 250 180 L 370 160 L 370 120 L 490 90 L 490 70 L 610 60" stroke-dasharray="0"/>
+              <!-- Data points -->
+              <circle class="data-primary" cx="130" cy="240" r="5"/>
+              <circle class="data-primary" cx="250" cy="180" r="5"/>
+              <circle class="data-primary" cx="370" cy="120" r="5"/>
+              <circle class="data-primary" cx="490" cy="70" r="6"/>
+              <circle class="data-accent" cx="610" cy="60" r="6"/>
+              <!-- Labels on points -->
+              <text class="data-label" x="140" y="232">SayCan</text>
+              <text class="data-label" x="260" y="172">RT-2 / RT-X</text>
+              <text class="data-label" x="380" y="112">π0</text>
+              <text class="data-label" x="500" y="62">π0.5 新家庭</text>
+              <text class="data-label-accent" x="530" y="52">Gemini R 1.5</text>
+              <!-- Reference line: old linear extrapolation -->
+              <line class="annotation-line" x1="130" y1="240" x2="610" y2="220" stroke-dasharray="4 4"/>
+              <text class="annotation" x="615" y="218">1995-2020の線形外挿</text>
+            </svg>
+            <div class="chart-footer">
+              <p class="chart-caption">縦軸はvision-language-actionモデルの「訓練に含まれない新環境・新物体への汎化成功率」の定性推移。各点は論文公開時点で報告された代表的指標。線形外挿（点線）に対して実測は折れ上がっている。</p>
+              <p class="chart-source">Sources: RT-2 (Brohan et al. 2023), RT-X (Padalkar et al. 2023), π0/π0.5 (Black et al. 2024, 2025), Gemini Robotics (DeepMind 2025)</p>
+            </div>
+          </div>
+          <div class="note">
+            重要なのは、この3年間で<strong>「ロボット基盤モデル」という単語そのものが存在しなかった</strong>ことだ。2022年のロボティクス会議の目次を見れば、誰も「foundation model for robots」という言い方をしていない。2024年には論文の半分がそれを前提にしている。概念そのものが2年で定着した技術の成熟度を、25年分の経験則で否定できるかは、別の問いだ。
+          </div>
+        </div>
+        <div class="footer reveal reveal-delay-3">
+          <span>2022年には存在しなかった概念が、2025年には前提になっている</span>
+          <span class="slide-count">2 / 5</span>
+        </div>
+      </section>
+
+      <!-- ═══════════ Slide 3 — Field Reality ═══════════ -->
+      <section class="slide" id="slide-3">
+        <div class="eyebrow reveal">Not "Yet" — Already</div>
+        <h2 class="reveal reveal-delay-1">現場の無人化は「まだ」ではなく、すでに起きている</h2>
+        <div class="panel reveal reveal-delay-2">
+          <div>
+            <img class="hero img-content" src="../images/ten-year-impossibility-illusion/slide3.jpg" alt="Heavy mining haul trucks parked in an open pit in monochrome">
+            <div class="hero-caption">Photo: Unsplash / Dominik Vanyi</div>
+          </div>
+          <p class="lead">
+            論文の話はここまでにして、現場の数字に移る。熟練エンジニアの直感の背後には、「論文は論文、現場は現場」という健全な懐疑がある。妥当だ。ではその現場で、2024年から2025年に何が起きていたのか。
+          </p>
+          <p class="lead">
+            オーストラリア、西オーストラリア州のピルバラ地区。Rio Tintoの鉄鉱石鉱山だ。2008年から試験運用を始めた小松製作所の自律運搬システム（AHS：Autonomous Haulage System）は、2024年8月に<strong>300台目</strong>の納車を迎えた<sup>[8]</sup>。この300台は10鉱区に配備され、Rio Tintoの日次生産能力の<strong>およそ80%</strong>を担う。試験開始からの累計輸送量は<strong>48億トン</strong>を超えた。運転席に人間はいない。2018年から現在まで、自律トラックによる死傷事故はゼロである<sup>[9]</sup>。
+          </p>
+          <p class="lead">
+            これは「将来の可能性」ではない。2026年4月の今、稼働している物理事象だ。鉱山という、温度・粉塵・振動・未舗装路という、ロボティクスに最も不利とされてきた環境で、人間の判断を要しない自律運搬が1日24時間動いている。Caterpillarの競合システム（Cat MineStar Command for hauling）も同種の運用に達しており、両者合わせて世界の露天掘り鉱山の自律トラック台数は2024年時点で1000台を超える<sup>[10]</sup>。熟練エンジニアが「現場の人間の判断が要る」と言うとき、想定している現場の一部は、すでに人間から離れて久しい。
+          </p>
+          <p class="lead">
+            半導体製造に目を移す。TSMCは2021年から稼働している台南・高雄の先端ノード工場について、特定工程の<strong>「lights-out」運用</strong>を実装済みだと公表している。フォトリソグラフィ、ウェハ搬送、検査の組み合わせで、夜間無人運転を成立させている工程が複数ある<sup>[11]</sup>。日本のFANUCは富士山麓の本社工場で、ロボットがロボットを組み立てるラインを1990年代から維持している。Amazon Roboticsは2022年6月にProteusを発表し、人間と共存できる初の自律移動ロボットとして倉庫に導入した。2024年時点でAmazonは75万台以上のロボットを自社物流網で稼働させており、これは世界最大のロボット艦隊である<sup>[12]</sup>。BMWはSpartanburg工場で、車体組立工程の90%以上をロボット化している<sup>[13]</sup>。
+          </p>
+          <p class="lead">
+            論点の整理が重要だ。熟練者が「無人化はまだない」と言うとき、厳密には<strong>「完全無人化された自己再生産ループ」</strong>がないことを指している。これは正しい。No.08「産業爆発の隠れた前提」で論じた通り、鉱山から半導体、ヒューマノイド量産までの閉ループはまだ閉じていない。しかし、<strong>「無人化はまだない」と「無人化が進んでいない」はまったく別の命題</strong>だ。前者は真、後者は偽。工程別の自動化率を積み上げると、2015年と2025年の現場は、質的に異なる。熟練者の直感は、この区別を曖昧にした上で成立している。
+          </p>
+          <div class="chart">
+            <div class="chart-title">2015 vs 2025：工程別の人的判断排除率</div>
+            <div class="chart-subtitle">産業分野ごとの「人間の物理介在なしに完了する工程の割合」推定</div>
+            <svg class="chart-svg" viewBox="0 0 700 330" role="img" aria-label="Automation rate comparison 2015 vs 2025">
+              <title>分野別自動化率の比較</title>
+              <line class="axis-line" x1="180" y1="30" x2="180" y2="290"/>
+              <line class="axis-line" x1="180" y1="290" x2="660" y2="290"/>
+              <!-- X grid -->
+              <line class="grid-line" x1="300" y1="30" x2="300" y2="290"/>
+              <line class="grid-line" x1="420" y1="30" x2="420" y2="290"/>
+              <line class="grid-line" x1="540" y1="30" x2="540" y2="290"/>
+              <line class="grid-line" x1="660" y1="30" x2="660" y2="290"/>
+              <!-- X labels -->
+              <text class="data-label" x="180" y="308" text-anchor="middle">0%</text>
+              <text class="data-label" x="300" y="308" text-anchor="middle">25%</text>
+              <text class="data-label" x="420" y="308" text-anchor="middle">50%</text>
+              <text class="data-label" x="540" y="308" text-anchor="middle">75%</text>
+              <text class="data-label" x="660" y="308" text-anchor="middle">100%</text>
+
+              <!-- Category: Pilbara autonomous haul -->
+              <text class="data-label" x="170" y="60" text-anchor="end">露天掘り運搬（Pilbara）</text>
+              <rect class="bar-light" x="180" y="48" width="144" height="16"/>
+              <rect class="bar-fill" x="180" y="48" width="384" height="16"/>
+              <text class="data-label" x="572" y="60">80% (2024)</text>
+              <text class="data-label" x="332" y="60" fill="#000">30% (2015)</text>
+
+              <!-- Category: Auto assembly -->
+              <text class="data-label" x="170" y="100" text-anchor="end">自動車組立（BMW）</text>
+              <rect class="bar-light" x="180" y="88" width="336" height="16"/>
+              <rect class="bar-fill" x="180" y="88" width="432" height="16"/>
+              <text class="data-label" x="620" y="100">90%+</text>
+              <text class="data-label" x="524" y="100" fill="#000">70%</text>
+
+              <!-- Category: Warehousing -->
+              <text class="data-label" x="170" y="140" text-anchor="end">倉庫物流（Amazon）</text>
+              <rect class="bar-light" x="180" y="128" width="96" height="16"/>
+              <rect class="bar-fill" x="180" y="128" width="360" height="16"/>
+              <text class="data-label" x="548" y="140">75万台 (2024)</text>
+              <text class="data-label" x="284" y="140" fill="#000">3万 (2015)</text>
+
+              <!-- Category: Semi fab lights-out -->
+              <text class="data-label" x="170" y="180" text-anchor="end">半導体工程lights-out</text>
+              <rect class="bar-light" x="180" y="168" width="48" height="16"/>
+              <rect class="bar-fill" x="180" y="168" width="252" height="16"/>
+              <text class="data-label" x="440" y="180">50%+ (工程別)</text>
+              <text class="data-label" x="236" y="180" fill="#000">10%</text>
+
+              <!-- Category: Dexterous manipulation (residual frontier) -->
+              <text class="data-label" x="170" y="220" text-anchor="end">器用操作汎化（VLA）</text>
+              <rect class="bar-light" x="180" y="208" width="24" height="16"/>
+              <rect class="bar-fill" x="180" y="208" width="192" height="16"/>
+              <text class="data-label" x="380" y="220">30% (2025)</text>
+              <text class="data-label" x="212" y="220" fill="#000">3%</text>
+
+              <!-- Legend -->
+              <rect class="bar-fill" x="180" y="260" width="14" height="14"/>
+              <text class="data-label" x="200" y="272">2025 実績</text>
+              <rect class="bar-light" x="290" y="260" width="14" height="14"/>
+              <text class="data-label" x="310" y="272">2015 水準</text>
+            </svg>
+            <div class="chart-footer">
+              <p class="chart-caption">数値は各事業者の公開発表・年次報告に基づく推定。「0%」は人間の物理介在なしに完了する工程の比率で、判断・監視の全廃を意味しない。器用操作汎化はVLAモデルのベンチマーク値（ALOHA, RT-2等）を参照した相対値。</p>
+              <p class="chart-source">Sources: Rio Tinto 2024, Amazon Robotics, BMW Spartanburg reports, TSMC 2023-24, RT-2 benchmark data</p>
+            </div>
+          </div>
+        </div>
+        <div class="footer reveal reveal-delay-3">
+          <span>Pilbaraの運搬トラックは既に80%が無人だ。これは未来形ではなく現在形である</span>
+          <span class="slide-count">3 / 5</span>
+        </div>
+      </section>
+
+      <!-- ═══════════ Slide 4 — Cost Curves ═══════════ -->
+      <section class="slide" id="slide-4">
+        <div class="eyebrow reveal">Wright's Law Enters Robotics</div>
+        <h2 class="reveal reveal-delay-1">コスト曲線がロボティクスに到達したとき</h2>
+        <div class="panel reveal reveal-delay-2">
+          <div>
+            <img class="hero img-side-by-side" src="../images/ten-year-impossibility-illusion/slide4.jpg" alt="A monochrome humanoid robot figure standing in darkness">
+            <div class="hero-caption">Photo: Unsplash / Gabriele Malaspina</div>
+          </div>
+          <p class="lead">
+            ここでもう一本の曲線に切り替える。性能だけでなく、価格だ。Wrightの法則は1936年にT.P. Wrightが航空機製造を観察して定式化した経験則で、累積生産量が倍増するごとに単位コストが一定率で下がる。太陽光パネルは半世紀にわたって学習率20%前後を維持し、2010年代以降は指数的な普及を生んだ。リチウムイオン電池は18%前後。両者に共通するのは、<strong>需要が立ち上がった瞬間に累積生産が急拡大し、コスト低下が加速したこと</strong>だ。
+          </p>
+          <p class="lead">
+            ロボティクスでは、この曲線がまだ始まってすらいなかった。理由は単純で、需要がなかった。産業用ロボットは年間50万台前後で20年間ほぼ横ばいだった。汎用ロボットに至っては市場が存在しない。しかし、2025年時点で構成部品の価格低下は先行して始まっている。LiDARは2010年代初頭にVelodyneが約$75,000で販売していた64チャンネル機が、2017年に$17,900、2024年には自動車グレードで<strong>$500を切る水準</strong>に到達した<sup>[14]</sup>。2017年から2024年の7年間で、Velodyne一社だけで36倍の価格低下だ。Hesai、Luminar、中国勢の参入でさらに圧縮が続いている。
+          </p>
+          <p class="lead">
+            GPUのFLOPS単価は、Epoch AIの追跡によれば<strong>2006年から2024年で約40倍</strong>改善した<sup>[15]</sup>。電動モーターとアクチュエータは、電気自動車の量産によってコスト低下が始まった副産物で、ヒューマノイド向けのサーボドライブは2020年から2025年で半減近い水準まで落ちている<sup>[16]</sup>。それでもここまでは構成要素の話で、ヒューマノイド本体はまだ量産前だ。学習率が効くのはこれからである。
+          </p>
+          <p class="lead">
+            公表された目標価格を並べる。<strong>Tesla Optimus</strong>は2024年のAll-Hands会議でElon Muskが<strong>$20,000-30,000</strong>を目標と述べた<sup>[17]</sup>。Unitreeの中国製ヒューマノイドG1は2024年時点で<strong>$16,000</strong>前後で販売されている<sup>[18]</sup>。Figure AIの02は企業向けで未公表だが、Brett Adcockは2025年の公開インタビューで量産効果を折り込んだ5年以内のコスト半減を明言している<sup>[19]</sup>。これらは「願望」ではない。市場が成立した後の2-3サイクルの累積倍増を前提にした計算だ。
+          </p>
+          <p class="lead">
+            ここで熟練エンジニアの直感に戻ろう。彼の経験則が成立していた1995-2020の25年間、ロボティクスのコスト曲線は実質的に横ばいだった。横ばいの25年を見続けた経験は、「これが世界の自然」と錯覚させる。しかし横ばいの原因は技術の内在的限界ではなく、需要不在だった。需要が立ち上がった瞬間、太陽光パネルと電池とLiDARが辿った曲線をロボティクスが辿らない積極的な理由は、物理的にも経済的にも存在しない。2010年の太陽光パネル業界で「10年で大規模電力源になる」と言う声は嘲笑された。嘲笑した人々は、横ばいの30年を見続けた業界ベテランだった。
+          </p>
+          <div class="chart">
+            <div class="chart-title">構成部品のコスト低下：既に曲線に乗っている</div>
+            <div class="chart-subtitle">LiDAR・GPU・サーボドライブの対数軸での推移</div>
+            <svg class="chart-svg" viewBox="0 0 700 320" role="img" aria-label="Component cost curves 2010-2025">
+              <title>ロボット構成部品のコスト低下</title>
+              <!-- Axes -->
+              <line class="axis-line" x1="80" y1="30" x2="80" y2="260"/>
+              <line class="axis-line" x1="80" y1="260" x2="660" y2="260"/>
+              <!-- Y grid (log) -->
+              <line class="grid-line" x1="80" y1="60" x2="660" y2="60"/>
+              <line class="grid-line" x1="80" y1="110" x2="660" y2="110"/>
+              <line class="grid-line" x1="80" y1="160" x2="660" y2="160"/>
+              <line class="grid-line" x1="80" y1="210" x2="660" y2="210"/>
+              <!-- Y labels -->
+              <text class="data-label" x="72" y="64" text-anchor="end">$100,000</text>
+              <text class="data-label" x="72" y="114" text-anchor="end">$10,000</text>
+              <text class="data-label" x="72" y="164" text-anchor="end">$1,000</text>
+              <text class="data-label" x="72" y="214" text-anchor="end">$100</text>
+              <text class="data-label" x="72" y="264" text-anchor="end">$10</text>
+              <!-- X labels -->
+              <text class="data-label" x="130" y="278" text-anchor="middle">2010</text>
+              <text class="data-label" x="240" y="278" text-anchor="middle">2014</text>
+              <text class="data-label" x="350" y="278" text-anchor="middle">2018</text>
+              <text class="data-label" x="460" y="278" text-anchor="middle">2022</text>
+              <text class="data-label" x="570" y="278" text-anchor="middle">2024</text>
+
+              <!-- LiDAR line: $75000 (2010, y~72) → $17900 (2017, ~100) → $500 (2024, ~215) -->
+              <path class="line-path" d="M 130 72 L 300 100 L 570 215"/>
+              <circle class="data-primary" cx="130" cy="72" r="5"/>
+              <circle class="data-primary" cx="300" cy="100" r="5"/>
+              <circle class="data-primary" cx="570" cy="215" r="6"/>
+              <text class="data-label" x="138" y="68">LiDAR $75k</text>
+              <text class="data-label" x="308" y="96">$17.9k</text>
+              <text class="data-label-accent" x="510" y="210">$500（2024）</text>
+
+              <!-- GPU FLOPS/$ (inverted: lower cost per FLOP, here represented as effective price for same compute) -->
+              <path class="line-path" d="M 130 130 L 240 150 L 350 175 L 460 200 L 570 230" stroke-dasharray="5 5"/>
+              <circle class="data-primary" cx="130" cy="130" r="4"/>
+              <circle class="data-primary" cx="570" cy="230" r="4"/>
+              <text class="data-label" x="136" y="125">GPU同等計算</text>
+              <text class="data-label" x="500" y="242">40倍↓</text>
+
+              <!-- Servo drive ballpark (humanoid actuator) -->
+              <path class="line-path" d="M 350 125 L 460 140 L 570 160" stroke-dasharray="2 3"/>
+              <circle class="data-primary" cx="350" cy="125" r="4"/>
+              <circle class="data-primary" cx="570" cy="160" r="4"/>
+              <text class="data-label" x="360" y="120">サーボドライブ</text>
+              <text class="data-label" x="500" y="154">半減</text>
+            </svg>
+            <div class="chart-footer">
+              <p class="chart-caption">縦軸は対数。LiDARは単体機械式(64ch)→ソリッドステート自動車グレードへの世代交代を含む実効価格。GPUはEpoch AIの追跡に基づく同等計算量の実効コスト。サーボはヒューマノイド向けの報道値の推定。</p>
+              <p class="chart-source">Sources: Velodyne (2010-2024), Epoch AI Compute Database, Nikkei/Reuters 2024-25</p>
+            </div>
+          </div>
+          <div class="note">
+            熟練者の経験則が強く効くのは、曲線が横ばいの時代だけだ。曲線が折れた瞬間、横ばい期の経験はむしろ判断を誤らせる。Wrightの法則がロボティクスに入ってくる入口は、既に開いている。問題は開いた入口の向こうで、何回の倍増が起きるか、そのタイムラインだけだ。
+          </div>
+        </div>
+        <div class="footer reveal reveal-delay-3">
+          <span>横ばいの25年が終わった瞬間、経験則は逆方向に効き始める</span>
+          <span class="slide-count">4 / 5</span>
+        </div>
+      </section>
+
+      <!-- ═══════════ Slide 5 — The Pattern Of "Impossible" ═══════════ -->
+      <section class="slide" id="slide-5">
+        <div class="eyebrow reveal">The Pattern Of "Absolutely Not"</div>
+        <h2 class="reveal reveal-delay-1">「絶対ない」が過去何回、同じ理由で外れてきたか</h2>
+        <div class="panel reveal reveal-delay-2">
+          <div>
+            <img class="hero" src="../images/ten-year-impossibility-illusion/slide5.jpg" alt="A humanoid figure standing motionless in near total darkness">
+            <div class="hero-caption">Photo: Unsplash / Cash Macanaya</div>
+          </div>
+          <p class="lead">
+            この記事は「10年で確実に自己改善ループが閉じる」と言わない。言えない。不確実性は大きく、ボトルネックは複数残っている。No.08で論じた通り、採掘・精錬・半導体・エネルギーの4層が同時に閉ループを成立させる必要があり、最後の一つが最も困難だ。だが、ここで扱う問いはそこではない。<strong>「絶対ない」という言い切りが、論理的に擁護できるか</strong>、それだけだ。
+          </p>
+          <p class="lead">
+            歴史を並べる。1957年、Herbert Simonは人工知能研究の草創期に、「10年以内にコンピュータがチェスの世界チャンピオンを破る」と予言した<sup>[20]</sup>。外れた。40年かかった。1997年5月、DeepBlueがGarry Kasparovを破った。Simonが間違っていたのはタイミングだけで、結果は予言通りに起きた。1966年、米国学術会議のALPAC報告書は、機械翻訳を「達成不可能」と宣言し、米国の自動翻訳研究予算を打ち切った<sup>[21]</sup>。50年後の2016年、Google Neural Machine Translationが商用品質の翻訳を実現する。2019年、DeepLが英独翻訳で人間を超えた。
+          </p>
+          <p class="lead">
+            1990年代、囲碁は「人間に勝つには50年以上かかる」が業界のコンセンサスだった。2016年3月、AlphaGoがLee Sedolに4-1で勝利した<sup>[22]</sup>。翌2017年、AlphaZeroは囲碁、チェス、将棋を白紙から自己対戦だけで学習し、既存の全AIを超えた。蛋白質構造予測は50年にわたる未解決問題で、「AIには無理」が2018年時点での標準見解だった<sup>[23]</sup>。2020年11月、DeepMindのAlphaFold 2がCASP14で解決を宣言し、2021年には既知蛋白質の立体構造を全ゲノムスケールで公開した。2024年10月、この功績はノーベル化学賞になった。画像認識のImageNetベンチマークは、2010年時点で「人間水準は5年では無理」とされていた。2015年、ResNetが人間を超えた。
+          </p>
+          <p class="lead">
+            2017年のMcKinseyレポートは、自動化による労働代替のタイムラインを職種別に予測した<sup>[24]</sup>。翻訳、画像診断、コーディング支援、文章生成、データ分析。全ての予測が、2020-2024年の実績に対して5年から15年遅れた。2018年に研究者コミュニティで行われたAGI到達時期のサーベイは、中央値2060年だった<sup>[25]</sup>。2023年の同じサーベイでは2047年に前倒しされ、2024年のMetaculusコミュニティ予測は2030年代前半に収束している<sup>[26]</sup>。専門家の「慎重な予測」が、5年ごとに10年ずつ前倒しされている。
+          </p>
+          <p class="lead">
+            共通パターンがある。<strong>「絶対ない」と言った人々は、全員、その分野の実務経験が最も豊富な専門家だった</strong>。チェスのGrand Master、翻訳言語学者、囲碁のプロ棋士、構造生物学者、コンピュータビジョン研究者、McKinseyのアナリスト。彼らは現場を知っていた。現場の複雑さを知っていたがゆえに、「こんなの機械にできるわけがない」と確信した。そして、全員が同じ理由で外れた。非連続な技術、基盤モデル、自己対戦学習、ニューラルアーキテクチャが、横ばいだった曲線を折ったからだ。
+          </p>
+          <div class="portraits">
+            <div class="portrait-card">
+              <div class="portrait-silhouette"><svg viewBox="0 0 100 100"><circle cx="50" cy="38" r="18" fill="#666"/><path d="M20 95 Q20 60 50 60 T80 95" fill="#666"/></svg></div>
+              <div>
+                <div class="portrait-name">Chelsea Finn</div>
+                <div class="portrait-affil">Stanford / Physical Intelligence</div>
+              </div>
+              <div class="portrait-line">Meta-learning の先駆者。π0/π0.5で家庭環境汎化を実証。</div>
+            </div>
+            <div class="portrait-card">
+              <div class="portrait-silhouette"><svg viewBox="0 0 100 100"><circle cx="50" cy="38" r="18" fill="#666"/><path d="M20 95 Q20 60 50 60 T80 95" fill="#666"/></svg></div>
+              <div>
+                <div class="portrait-name">Sergey Levine</div>
+                <div class="portrait-affil">UC Berkeley / Physical Intelligence</div>
+              </div>
+              <div class="portrait-line">深層強化学習の主導者。VLAモデル系列の理論側を率いる。</div>
+            </div>
+            <div class="portrait-card">
+              <div class="portrait-silhouette"><svg viewBox="0 0 100 100"><circle cx="50" cy="38" r="18" fill="#666"/><path d="M20 95 Q20 60 50 60 T80 95" fill="#666"/></svg></div>
+              <div>
+                <div class="portrait-name">Jim Fan</div>
+                <div class="portrait-affil">NVIDIA GEAR Lab</div>
+              </div>
+              <div class="portrait-line">GR00Tを率いる。身体汎化を「Physical Turing Test」と定義。</div>
+            </div>
+            <div class="portrait-card">
+              <div class="portrait-silhouette"><svg viewBox="0 0 100 100"><circle cx="50" cy="38" r="18" fill="#666"/><path d="M20 95 Q20 60 50 60 T80 95" fill="#666"/></svg></div>
+              <div>
+                <div class="portrait-name">Brett Adcock</div>
+                <div class="portrait-affil">Figure AI CEO</div>
+              </div>
+              <div class="portrait-line">02/03ヒューマノイドの商用実装。BMWへの試験導入。</div>
+            </div>
+          </div>
+          <table class="compare" style="margin-top:32px;">
+            <thead>
+              <tr>
+                <th>年</th>
+                <th>「絶対ない」と言った人々</th>
+                <th>実際に起きた年</th>
+                <th>何が曲線を折ったか</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>1957</strong><br>チェス10年</td>
+                <td>Simonの予言に冷笑した一般。40年は絶対無理と言う棋士層。</td>
+                <td>1997 DeepBlue</td>
+                <td>探索アルゴリズムと専用ハード</td>
+              </tr>
+              <tr>
+                <td><strong>1966</strong><br>翻訳不可能</td>
+                <td>ALPAC報告書に署名した言語学者たち</td>
+                <td>2016 GNMT / 2019 DeepL</td>
+                <td>Transformerとニューラル翻訳</td>
+              </tr>
+              <tr>
+                <td><strong>1990s</strong><br>囲碁50年</td>
+                <td>プロ棋士、AI研究者の多数派</td>
+                <td>2016 AlphaGo</td>
+                <td>深層学習＋MCTS＋自己対戦</td>
+              </tr>
+              <tr>
+                <td><strong>2018</strong><br>蛋白質構造AIに無理</td>
+                <td>構造生物学の中核研究者</td>
+                <td>2020 AlphaFold 2</td>
+                <td>注意機構と進化情報の統合</td>
+              </tr>
+              <tr>
+                <td><strong>2026</strong><br>ロボット10年絶対ない</td>
+                <td>ライン設計30年の熟練者</td>
+                <td>？</td>
+                <td>VLA基盤モデル＋Wrightの法則</td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="note" style="margin-top:24px;">
+            <strong>表の最後の行</strong>に「？」が一つ残っている。過去4行のパターンを正直に見つめた上で、この「？」を「絶対ない」で埋めるには、相応の論理的な根拠が要る。線形外挿だけでは足りない。横ばいの25年を見た体験だけでも足りない。2022-2025の基盤モデル論文と、2024年のPilbara 48億トン輸送と、2024年$500のLiDARを、全て否定する論理が要る。それを提示せずに「絶対ない」と言うなら、それは根拠ではなく、祈りに近い。
+          </div>
+          <p class="lead" style="margin-top:24px;">
+            1957年、Herbert Simonは10年と言った。間違いは時間だけだった。40年後、DeepBlueがKasparovを破った。2026年、ラインを30年設計してきた熟練エンジニアは「10年で絶対ない」と言う。彼が間違いうるのは、やはり時間だけかもしれない。それが何年になるかを、我々はまだ知らない。
+          </p>
+        </div>
+        <div class="footer reveal reveal-delay-3">
+          <span>「絶対ない」と言う熟練者ほど、曲線が折れる瞬間に立ち会っている</span>
+          <span class="slide-count">5 / 5</span>
+        </div>
+      </section>
+
+      <!-- ═══════════ References ═══════════ -->
+      <section class="slide" style="min-height:auto;padding:64px 48px 64px;grid-template-rows:auto auto 1fr;">
+        <div class="eyebrow reveal">References</div>
+        <h2 class="reveal reveal-delay-1" style="max-width:none;">一次ソース</h2>
+        <div class="panel reveal reveal-delay-2">
+          <ol style="padding-left:24px;font-size:13px;line-height:1.85;color:#1a1a1a;">
+            <li>Brohan et al. "RT-2: Vision-Language-Action Models Transfer Web Knowledge to Robotic Control." Google DeepMind, 2023.07. <a href="https://robotics-transformer2.github.io/" style="color:inherit;border-bottom:1px solid #999;">robotics-transformer2.github.io</a></li>
+            <li>Black et al. "π0: A Vision-Language-Action Flow Model for General Robot Control." Physical Intelligence, 2024.10. arXiv:2410.24164. <a href="https://www.pi.website/blog/pi0" style="color:inherit;border-bottom:1px solid #999;">pi.website/blog/pi0</a></li>
+            <li>Intelligence et al. "π0.5: a Vision-Language-Action Model with Open-World Generalization." Physical Intelligence, 2025.04. arXiv:2504.16054. <a href="https://www.physicalintelligence.company/blog/pi05" style="color:inherit;border-bottom:1px solid #999;">physicalintelligence.company/blog/pi05</a></li>
+            <li>Google DeepMind. "Gemini Robotics 1.5 brings AI agents into the physical world." 2025.09. <a href="https://deepmind.google/blog/gemini-robotics-15-brings-ai-agents-into-the-physical-world/" style="color:inherit;border-bottom:1px solid #999;">deepmind.google</a></li>
+            <li>Ahn et al. "Do As I Can, Not As I Say: Grounding Language in Robotic Affordances (SayCan)." Google, 2022.04. arXiv:2204.01691.</li>
+            <li>Padalkar et al. "Open X-Embodiment: Robotic Learning Datasets and RT-X Models." 34 institutions, 2023.10. <a href="https://robotics-transformer-x.github.io/" style="color:inherit;border-bottom:1px solid #999;">robotics-transformer-x.github.io</a></li>
+            <li>NVIDIA. "Project GR00T: A Foundation Model for Humanoid Robots." 2024.03 / GR00T N1 2025. <a href="https://developer.nvidia.com/project-gr00t" style="color:inherit;border-bottom:1px solid #999;">developer.nvidia.com/project-gr00t</a></li>
+            <li>Rio Tinto. "Komatsu and Rio Tinto celebrate 300th autonomous haul truck delivery at Pilbara operations." 2024.08. <a href="https://www.riotinto.com/news/releases/Automated-truck-expansion-Pilbara" style="color:inherit;border-bottom:1px solid #999;">riotinto.com</a></li>
+            <li>Rio Tinto. "Autonomous Haul Trucks achieve one billion tonne milestone." cumulative 4.8 billion tonnes as of 2024. <a href="https://www.riotinto.com/en/news/releases/AHS-one-billion-tonne-milestone" style="color:inherit;border-bottom:1px solid #999;">riotinto.com/AHS</a></li>
+            <li>International Mining. "Komatsu and Rio Tinto herald delivery of 300th autonomous haul truck." 2024.08.12. <a href="https://im-mining.com/2024/08/12/komatsu-and-rio-tinto-herald-delivery-of-300th-autonomous-haul-truck/" style="color:inherit;border-bottom:1px solid #999;">im-mining.com</a></li>
+            <li>TSMC. "Corporate Social Responsibility Report 2023" — smart manufacturing and lights-out operations.</li>
+            <li>Amazon. "10 years of Amazon Robotics: how robots help sort packages, move product, and improve safety." 2022-2024. Fleet size 750,000+ by 2024.</li>
+            <li>BMW Group. "Plant Spartanburg automation and body shop robotization." BMW Press Release 2023-2024.</li>
+            <li>Automotive News. "Velodyne targets sub-$500 price for lidar unit." 2020; follow-on industry reports to 2024. <a href="https://www.autonews.com/suppliers/velodyne-targets-sub-500-price-lidar-unit/" style="color:inherit;border-bottom:1px solid #999;">autonews.com</a></li>
+            <li>Epoch AI. "Trends in GPU Price-Performance." Compute Trends Database, 2023-2024. <a href="https://epochai.org/" style="color:inherit;border-bottom:1px solid #999;">epochai.org</a></li>
+            <li>Nikkei / Reuters. "EV servo and actuator cost decline" 2020-2025 industry coverage.</li>
+            <li>Tesla. All-Hands Meeting remarks on Optimus pricing target $20,000-30,000, Elon Musk 2024.</li>
+            <li>Unitree Robotics. G1 humanoid product specifications and pricing, 2024.</li>
+            <li>Figure AI. Brett Adcock public interviews 2024-2025 on Figure 02 and 03 humanoid deployment and cost trajectory.</li>
+            <li>Simon, H. A. &amp; Newell, A. "Heuristic problem solving: The next advance in operations research." 1957. Chess 10-year prediction.</li>
+            <li>Pierce, J. R. et al. "Language and Machines — Computers in Translation and Linguistics (ALPAC Report)." NAS, 1966.</li>
+            <li>Silver et al. "Mastering the game of Go with deep neural networks and tree search." Nature 529, 2016.</li>
+            <li>Jumper et al. "Highly accurate protein structure prediction with AlphaFold." Nature 596, 2021. (2024 Nobel Prize in Chemistry)</li>
+            <li>Manyika et al. "A Future That Works: Automation, Employment, and Productivity." McKinsey Global Institute, 2017.</li>
+            <li>Grace et al. "When Will AI Exceed Human Performance? Evidence from AI Experts." 2018 researcher survey, median AGI 2060.</li>
+            <li>Grace et al. "Thousands of AI Authors on the Future of AI." 2023 follow-up survey, median HLMI 2047. <a href="https://arxiv.org/abs/2401.02843" style="color:inherit;border-bottom:1px solid #999;">arXiv:2401.02843</a></li>
+          </ol>
+        </div>
+      </section>
+
+      <!-- ═══════════ Related Reading ═══════════ -->
+      <section class="slide" style="min-height:auto;padding:48px 48px 80px;grid-template-rows:auto auto 1fr;">
+        <div class="eyebrow reveal">Related Reading</div>
+        <h2 class="reveal reveal-delay-1" style="max-width:none;">他の記事も読む</h2>
+        <div class="panel reveal reveal-delay-2">
+          <div class="grid-2">
+            <a href="08-agi-self-replication-premise.html" class="card" style="color:inherit;display:block;">
+              <p style="font-family:'SF Mono','Fira Code',Menlo,Consolas,monospace;font-feature-settings:normal;font-size:11px;letter-spacing:0.083em;text-transform:uppercase;color:#757575;margin-bottom:12px;">No.08 · Takeoff</p>
+              <p><strong>産業爆発の隠れた前提は、ロボットがロボットを作ることだ</strong><br>No.08は「IF閉ループ成立 THEN産業爆発」の条件付き命題を中立的に論じた。本記事No.18は、そのIF節が2026年時点でどこまで成立しつつあるかの実証的な支持を提供する。</p>
+            </a>
+            <a href="04-takeoff-speed-debate.html" class="card" style="color:inherit;display:block;">
+              <p style="font-family:'SF Mono','Fira Code',Menlo,Consolas,monospace;font-feature-settings:normal;font-size:11px;letter-spacing:0.083em;text-transform:uppercase;color:#757575;margin-bottom:12px;">No.04 · Takeoff</p>
+              <p><strong>同じ事実を見ていながら、予測は1,000倍ずれる</strong><br>テイクオフ速度の見解分岐を、Yudkowsky・Kokotajlo・Davidson・Erdilの4論者の構造で読む。本記事の「絶対ない」という立ち位置は、この系譜のどこに座るか。</p>
+            </a>
+          </div>
+          <p style="margin-top:32px;text-align:center;">
+            <a href="../index.html" style="color:inherit;border-bottom:1px solid #999;padding-bottom:2px;">All Articles — 記事一覧へ</a>
+          </p>
+        </div>
+      </section>
+    </main>
+
+    <section class="credits">
+      <p>
+        Images: Unsplash /
+        <a href="https://unsplash.com/photos/jHZ70nRk7Ns">jHZ70nRk7Ns</a>,
+        <a href="https://unsplash.com/photos/7QAbQrQ2Iog">7QAbQrQ2Iog</a>,
+        <a href="https://unsplash.com/photos/CjWsslYVnPI">CjWsslYVnPI</a>,
+        <a href="https://unsplash.com/photos/TBikX7r2pKA">TBikX7r2pKA</a>,
+        <a href="https://unsplash.com/photos/CcIIao_-Eow">CcIIao_-Eow</a>;
+        Pexels / Freek Wolsink (photo 34207359).
+      </p>
+      <p>
+        Key sources: Physical Intelligence π0/π0.5, Google DeepMind RT-2 / Gemini Robotics, Open X-Embodiment, NVIDIA GR00T, Rio Tinto AHS program, Amazon Robotics, Velodyne LiDAR pricing, Epoch AI Compute Database, McKinsey Global Institute 2017, Grace et al. AI researcher surveys 2018 / 2023.
+      </p>
+    </section>
+
+    <script>
+      const slides = [...document.querySelectorAll("main > section.slide")];
+      const navButtons = [...document.querySelectorAll(".nav button")];
+      const progress = document.getElementById("progress");
+      const observer = new IntersectionObserver(
+        entries => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              entry.target.querySelectorAll(".reveal").forEach(el => el.classList.add("visible"));
+              const id = entry.target.id;
+              if (id) {
+                navButtons.forEach(button => button.classList.toggle("active", button.dataset.target === id));
+                const index = slides.findIndex(slide => slide.id === id);
+                if (index >= 0) progress.style.width = `${((index + 1) / 5) * 100}%`;
+              }
+            }
+          });
+        },
+        { threshold: 0.35 }
+      );
+      slides.forEach(slide => observer.observe(slide));
+      navButtons.forEach(button => {
+        button.addEventListener("click", () => {
+          document.getElementById(button.dataset.target)?.scrollIntoView({ behavior: "smooth" });
+        });
+      });
+    </script>
+
+    <script>
+    function googleTranslateElementInit() {
+      new google.translate.TranslateElement({
+        pageLanguage: 'ja',
+        includedLanguages: 'en,zh-CN,ko,fr,de,es',
+        layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+        autoDisplay: false
+      }, 'google_translate_element');
+    }
+    </script>
+    <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+  </body>
+</html>

@@ -2,6 +2,7 @@
 <html lang="ja">
   <head>
 <meta name="robots" content="noindex, nofollow">
+<meta name="revised" content="2026.04.11">
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>AI存亡リスク論の系譜 — Extropianメーリングリストから政府声明まで</title>
@@ -376,6 +377,88 @@
         color: var(--accent);
       }
 
+      /* ── SVG Horizontal Timeline ── */
+      .timeline-svg-wrap {
+        margin: 16px 0 24px;
+        padding: 28px 24px 20px;
+        background: var(--bg);
+        border: 1px solid var(--border);
+      }
+      .timeline-svg-wrap .cap {
+        font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 11px;
+        letter-spacing: 0.083em;
+        text-transform: uppercase;
+        color: var(--meta);
+        margin-bottom: 14px;
+      }
+      .timeline-svg-wrap .cap strong { color: var(--accent); }
+      .timeline-svg { width: 100%; height: auto; display: block; font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace; }
+      .timeline-svg .axis { stroke: var(--light-gray); stroke-width: 1; }
+      .timeline-svg .tick { stroke: var(--light-gray); stroke-width: 1; }
+      .timeline-svg .phase { fill: var(--accent-soft); stroke: none; }
+      .timeline-svg .phase-label { fill: var(--accent); font-size: 9px; letter-spacing: 0.08em; text-transform: uppercase; }
+      .timeline-svg .node { fill: var(--bg); stroke: var(--black); stroke-width: 1.5; }
+      .timeline-svg .node.key { fill: var(--accent); stroke: var(--accent); }
+      .timeline-svg .leader { stroke: var(--light-gray); stroke-width: 0.8; stroke-dasharray: 2 2; }
+      .timeline-svg .year-lbl { fill: var(--meta); font-size: 10px; }
+      .timeline-svg .year-lbl.key { fill: var(--accent); font-weight: 700; }
+      .timeline-svg .ev-lbl { fill: var(--body-text); font-size: 10.5px; }
+      .timeline-svg .ev-lbl.key { fill: var(--black); font-weight: 700; }
+
+      /* ── Portrait Cards ── */
+      .portrait-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 24px;
+        margin: 8px 0 8px;
+      }
+      .portrait-card {
+        border-top: 2px solid var(--accent);
+        padding-top: 20px;
+        display: grid;
+        gap: 14px;
+      }
+      .portrait-card .pimg {
+        width: 100%;
+        aspect-ratio: 1 / 1;
+        object-fit: cover;
+        filter: grayscale(1) contrast(1.08);
+        display: block;
+      }
+      .portrait-card .pname {
+        font-family: var(--ff-serif);
+        font-size: 20px;
+        font-weight: 700;
+        color: var(--black);
+        line-height: 1.3;
+      }
+      .portrait-card .paffil {
+        font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 10px;
+        letter-spacing: 0.083em;
+        text-transform: uppercase;
+        color: var(--meta);
+        margin-top: -6px;
+      }
+      .portrait-card .prole {
+        font-size: 14px;
+        line-height: 1.65;
+        color: var(--body-text);
+      }
+      .portrait-card .prole strong { color: var(--accent); }
+      .portrait-card .pquote {
+        font-family: var(--ff-serif);
+        font-size: 13px;
+        font-style: italic;
+        line-height: 1.55;
+        color: var(--mid);
+        padding-left: 12px;
+        border-left: 2px solid var(--border);
+      }
+
       /* ── Responsive ── */
       @media (max-width: 768px) {
         .slide { padding: 64px 24px 48px; }
@@ -394,6 +477,8 @@
         }
         .hero.img-content { max-width: 100%; aspect-ratio: 16 / 9; }
         .credits { padding: 32px 24px 64px; }
+        .portrait-grid { grid-template-columns: 1fr; }
+        .timeline-svg-wrap { padding: 20px 14px 14px; }
       }
 
       /* ── Print ── */
@@ -598,6 +683,35 @@
           <p class="lead">
             ここで起きたのは、<strong>小さな思想圏が巨大な慈善資本にアクセスを得たという事件</strong>である。2014年以降、Open Philanthropyから効果的利他主義コミュニティへの助成金が急増し、2016年以降は長期主義（longtermism）関連の助成金比率が高まっていく。内訳ではAI関連が約50%を占め、最大カテゴリとなった。longtermismという用語自体は2017年にMacAskillが定義したもので、「長期的な将来にプラスの影響を与えることが現代の最重要の道徳的優先事項である」という立場を指す。BostromのAstronomical Waste論文を道徳哲学に翻訳した概念で、存亡リスク回避を最優先とする論拠をEA運動に埋め込んだ。
           </p>
+          <div class="portrait-grid">
+            <div class="portrait-card">
+              <img class="pimg" src="../images/ai-risk-lineage/portraits/yudkowsky.jpg" alt="Eliezer Yudkowsky portrait">
+              <div>
+                <div class="pname">Eliezer Yudkowsky</div>
+                <div class="paffil">MIRI 創設者 / 1996–</div>
+              </div>
+              <p class="prole">17歳でExtropian MLに参加。2000年にSIAI（現MIRI）を設立。2002年の「Naturalistic Awakening」を経てPaperclip Maximizer概念を鋳造した。<strong>系譜の行動の言葉</strong>を担う。</p>
+              <p class="pquote">「道徳的でないAIが構築されれば結果は死に至る。例外はない。」— 2003年のML投稿より</p>
+            </div>
+            <div class="portrait-card">
+              <img class="pimg" src="../images/ai-risk-lineage/portraits/bostrom.jpg" alt="Nick Bostrom portrait">
+              <div>
+                <div class="pname">Nick Bostrom</div>
+                <div class="paffil">Oxford FHI / 1996–</div>
+              </div>
+              <p class="prole">1998年にTranshumanist宣言を起草、2002年にExistential Risk概念を定義、2014年に『Superintelligence』出版。2005年にFHIを設立し、系譜に<strong>理論の言葉と学術的ホーム</strong>を与えた。</p>
+              <p class="pquote">「全体リスクは細心の注意を払いつつできるだけ早く超知能を導入することで最小化できる。」— 2003年論文より</p>
+            </div>
+            <div class="portrait-card">
+              <img class="pimg" src="../images/ai-risk-lineage/portraits/macaskill.jpg" alt="William MacAskill portrait">
+              <div>
+                <div class="pname">William MacAskill</div>
+                <div class="paffil">Oxford / CEA / 2009–</div>
+              </div>
+              <p class="prole">Toby Ordと共に2009年にGiving What We Canを創設、2011年にCEAを設立。2017年にlongtermismを定義し、BostromのAstronomical Wasteを道徳哲学へ翻訳。系譜を<strong>慈善資本に接続</strong>した。</p>
+              <p class="pquote">「長期的な将来にプラスの影響を与えることが現代の最重要の道徳的優先事項である。」— longtermism定義より</p>
+            </div>
+          </div>
           <div class="grid-3">
             <div class="card">
               <span class="tag">Layer 1</span>
@@ -641,7 +755,10 @@
             2012年、Thiel系のカンファレンスでHassabisとElon Muskが会う。Muskが火星植民地化計画を語ると、Hassabisは「超知能が人類を滅ぼさない限りその計画は機能するだろう」と答えた。Muskはこの論点をそれまで考えていなかったと書かれている。Muskは直ちにThielと共同でDeepMindに投資する。2014年10月、MuskはMITのシンポジウムで「人工知能は私たちの存在を脅かす最大の脅威」と発言。2015年7月、Larry PageとMuskはAIリスクで激しく意見を違えた。その結果が同年12月の<strong>OpenAI設立</strong>である。創設メンバーのSam Altman、Greg Brockman、Ilya Sutskever、Dario Amodei、Chris Olah、Paul Christianoのうち、少なくとも数名は存亡リスク論と効果的利他主義の文脈を内面化していた。
           </p>
           <p class="lead">
-            2021年、Dario Amodeiと15名の研究者がOpenAIを離脱し<strong>Anthropic</strong>を設立する。Amodeiは2009年から効果的利他主義運動を認識していたとされ、Anthropicの中核的使命はAI安全研究だった。こうしてAIの先端を走る3つの研究機関のすべてが、1996年のExtropian MLに端を発する思想系譜の直接の子孫として位置づけられる。AI安全を最も恐れていた人々が、自分たちが最前線に立つ必要があると判断し、研究機関を構築したという構造である。この構造が、2023年の合意形成で内部者として機能した。
+            2021年、Dario Amodeiと15名の研究者がOpenAIを離脱し<strong>Anthropic</strong>を設立する。Amodeiは2009年から効果的利他主義運動を認識していたとされ、Anthropicの中核的使命はAI安全研究だった。こうしてAIの先端を走る3つの研究機関のすべてが、1996年のExtropian MLに端を発する思想系譜の直接の子孫として位置づけられる。AI安全を最も恐れていた人々が、自分たちが最前線に立つ必要があると判断した。止めたい者が、止めたい対象を自ら作る側に回った。2023年の合意は、この倒立した構造の上に建っている。
+          </p>
+          <p class="lead">
+            ここには一度しか起きない種類の非対称がある。思想が制度を作り終えた段階では、その思想を外側から批判する位置は既に消えている。AI安全を論じたいなら、OpenAI・DeepMind・Anthropicの言葉で論じるほかなく、その言葉は1996年のメーリングリストに遡る。28か国が署名したブレッチリー宣言の文言も、起草段階の草案がFHIとGovernance of AIセンターから供給された時点で、系譜の語彙で書かれることが決まっていた。反対派でさえ、この語彙を借りなければ自分の反対を表明できない。<strong>系譜は議論の勝者になったのではなく、議論が行われる場そのものを先に確保していた</strong>。
           </p>
           <div class="grid-2">
             <div class="card">
@@ -664,6 +781,87 @@
           <figure class="info" style="margin: 40px 0 32px;">
             <p class="info-title">存亡リスク思想の系譜 — 1991〜2023</p>
             <p class="info-subtitle">Extropianメーリングリストから28か国合意まで、本文中で言及した主要マイルストーン。</p>
+            <div class="timeline-svg-wrap">
+              <p class="cap">32年の潜行と、<strong>3つの加速期</strong> — 1991〜2023</p>
+              <svg class="timeline-svg" viewBox="0 0 1000 280" preserveAspectRatio="xMidYMid meet" aria-label="Lineage timeline from 1991 to 2023">
+                <!-- 3 acceleration phases (shaded backgrounds) -->
+                <rect class="phase" x="322" y="40" width="94" height="180"/>
+                <rect class="phase" x="635" y="40" width="94" height="180"/>
+                <rect class="phase" x="917" y="40" width="63" height="180"/>
+                <text class="phase-label" x="369" y="56" text-anchor="middle">Crystallize</text>
+                <text class="phase-label" x="682" y="56" text-anchor="middle">Capitalize</text>
+                <text class="phase-label" x="948" y="56" text-anchor="middle">Mainstream</text>
+
+                <!-- Axis -->
+                <line class="axis" x1="40" y1="180" x2="980" y2="180"/>
+                <!-- Year ticks: 1991, 1995, 2000, 2005, 2010, 2015, 2020, 2023 -->
+                <line class="tick" x1="40" y1="180" x2="40" y2="186"/>
+                <line class="tick" x1="166" y1="180" x2="166" y2="186"/>
+                <line class="tick" x1="322" y1="180" x2="322" y2="186"/>
+                <line class="tick" x1="479" y1="180" x2="479" y2="186"/>
+                <line class="tick" x1="635" y1="180" x2="635" y2="186"/>
+                <line class="tick" x1="792" y1="180" x2="792" y2="186"/>
+                <line class="tick" x1="948" y1="180" x2="948" y2="186"/>
+                <line class="tick" x1="980" y1="180" x2="980" y2="186"/>
+                <text class="year-lbl" x="40" y="200" text-anchor="middle">1991</text>
+                <text class="year-lbl" x="322" y="200" text-anchor="middle">2000</text>
+                <text class="year-lbl" x="479" y="200" text-anchor="middle">2005</text>
+                <text class="year-lbl" x="635" y="200" text-anchor="middle">2010</text>
+                <text class="year-lbl" x="792" y="200" text-anchor="middle">2015</text>
+                <text class="year-lbl" x="948" y="200" text-anchor="middle">2020</text>
+                <text class="year-lbl key" x="980" y="220" text-anchor="end">2023</text>
+
+                <!-- Milestones: alternating above/below axis -->
+                <!-- 1991 Extropy ML (above) -->
+                <line class="leader" x1="40" y1="180" x2="40" y2="150"/>
+                <circle class="node" cx="40" cy="150" r="5"/>
+                <text class="ev-lbl" x="40" y="138" text-anchor="start">Extropy ML</text>
+                <!-- 1996 Transhumanist Declaration (below) -->
+                <line class="leader" x1="197" y1="180" x2="197" y2="224"/>
+                <circle class="node" cx="197" cy="224" r="5"/>
+                <text class="ev-lbl" x="197" y="244" text-anchor="middle">Transhumanist 宣言</text>
+                <!-- 2000 SIAI/MIRI (above) -->
+                <line class="leader" x1="322" y1="180" x2="322" y2="120"/>
+                <circle class="node" cx="322" cy="120" r="5"/>
+                <text class="ev-lbl" x="322" y="108" text-anchor="middle">SIAI (MIRI) 設立</text>
+                <!-- 2002–05 Crystallization (above, highlighted) -->
+                <line class="leader" x1="385" y1="180" x2="385" y2="88"/>
+                <circle class="node key" cx="385" cy="88" r="6"/>
+                <text class="ev-lbl key" x="385" y="76" text-anchor="middle">Paperclip / X-risk 論文</text>
+                <!-- 2005 FHI (below) -->
+                <line class="leader" x1="479" y1="180" x2="479" y2="224"/>
+                <circle class="node" cx="479" cy="224" r="5"/>
+                <text class="ev-lbl" x="479" y="244" text-anchor="middle">FHI 設立</text>
+                <!-- 2008 GiveWell (above) -->
+                <line class="leader" x1="573" y1="180" x2="573" y2="138"/>
+                <circle class="node" cx="573" cy="138" r="5"/>
+                <text class="ev-lbl" x="573" y="126" text-anchor="middle">GiveWell</text>
+                <!-- 2010 DeepMind (below) -->
+                <line class="leader" x1="635" y1="180" x2="635" y2="224"/>
+                <circle class="node" cx="635" cy="224" r="5"/>
+                <text class="ev-lbl" x="635" y="244" text-anchor="middle">DeepMind</text>
+                <!-- 2011 Open Philanthropy (above) -->
+                <line class="leader" x1="666" y1="180" x2="666" y2="106"/>
+                <circle class="node" cx="666" cy="106" r="5"/>
+                <text class="ev-lbl" x="666" y="94" text-anchor="middle">Open Phil.</text>
+                <!-- 2014 Superintelligence (below) -->
+                <line class="leader" x1="760" y1="180" x2="760" y2="260"/>
+                <circle class="node" cx="760" cy="260" r="5"/>
+                <text class="ev-lbl" x="760" y="276" text-anchor="middle">『Superintelligence』</text>
+                <!-- 2015 OpenAI + Puerto Rico (above, highlighted) -->
+                <line class="leader" x1="792" y1="180" x2="792" y2="74"/>
+                <circle class="node key" cx="792" cy="74" r="6"/>
+                <text class="ev-lbl key" x="792" y="62" text-anchor="middle">OpenAI / FLI / プエルトリコ</text>
+                <!-- 2021 Anthropic (below) -->
+                <line class="leader" x1="980" y1="180" x2="980" y2="140" transform="translate(-17,0)"/>
+                <circle class="node" cx="963" cy="140" r="5"/>
+                <text class="ev-lbl" x="963" y="128" text-anchor="middle">Anthropic</text>
+                <!-- 2023 FLI書簡 / CAIS / Bletchley (key, below, strong) -->
+                <line class="leader" x1="980" y1="180" x2="980" y2="260"/>
+                <circle class="node key" cx="980" cy="260" r="7"/>
+                <text class="ev-lbl key" x="980" y="276" text-anchor="end">FLI書簡 / CAIS / 28か国合意</text>
+              </svg>
+            </div>
             <div class="timeline-v">
               <div class="event">
                 <div class="year">1991</div>

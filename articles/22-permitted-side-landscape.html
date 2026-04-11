@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta name="robots" content="noindex, nofollow">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>許された側の風景 — バーサーカーを逃れた人類は、どのような未来に飼育されるのか — AGI HUB</title>
+    <link rel="stylesheet" href="../design-system/palette.css">
+    <style>
+      :root {
+        --black: #000;
+        --body-text: #1a1a1a;
+        --meta: #757575;
+        --light-gray: #999;
+        --border: #e5e5e5;
+        --bg: #fff;
+        --ease: cubic-bezier(0.22, 1, 0.36, 1);
+      }
+
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+      html { scroll-behavior: smooth; }
+
+      body {
+        font-family: HelveticaNeue, "Helvetica Neue", Helvetica, Arial,
+          游ゴシック体, YuGothic, "游ゴシック Medium", "Yu Gothic Medium",
+          游ゴシック, "Yu Gothic", "ヒラギノ角ゴ ProN W3", "Hiragino Kaku Gothic ProN",
+          "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", "MS ゴシック", "MS Gothic",
+          sans-serif;
+        font-feature-settings: "palt";
+        font-size: 16px;
+        line-height: 1.75;
+        color: var(--body-text);
+        background: var(--bg);
+        -webkit-font-smoothing: antialiased;
+        overflow-x: hidden;
+        word-wrap: break-word;
+      }
+
+      .progress { position: fixed; top: 0; left: 0; height: 2px; background: var(--black); width: 0%; z-index: 100; transition: width 0.3s var(--ease); }
+
+      .nav { position: fixed; right: 24px; top: 50%; transform: translateY(-50%); display: grid; gap: 16px; z-index: 50; }
+      .nav button { width: 8px; height: 8px; border-radius: 999px; border: 1.5px solid var(--meta); background: transparent; cursor: pointer; transition: all 0.3s var(--ease); }
+      .nav button.active { background: var(--black); border-color: var(--black); transform: scale(1.4); }
+
+      main { scroll-snap-type: y mandatory; }
+
+      .slide {
+        position: relative;
+        min-height: 100vh;
+        max-width: 1120px;
+        margin: 0 auto;
+        padding: 80px 48px 64px;
+        display: grid;
+        grid-template-rows: auto auto 1fr auto;
+        gap: 32px;
+        scroll-snap-align: start;
+      }
+      .slide + .slide { border-top: 1px solid var(--border); }
+
+      .hero {
+        width: 100%;
+        aspect-ratio: 16 / 7;
+        object-fit: cover;
+        display: block;
+        filter: grayscale(0.75) contrast(1.12);
+        transition: filter 0.6s var(--ease);
+      }
+      .hero:hover { filter: grayscale(0.3) contrast(1.05); }
+
+      .slide .hero.img-fullbleed {
+        width: 100vw;
+        margin-left: calc(50% - 50vw);
+        margin-right: calc(50% - 50vw);
+        max-width: none;
+        aspect-ratio: 21 / 9;
+      }
+      .slide .hero.img-wide {
+        width: min(1280px, calc(100vw - 48px));
+        position: relative;
+        left: 50%;
+        transform: translateX(-50%);
+        max-width: none;
+      }
+      .slide .hero.img-content {
+        max-width: 680px;
+        margin-left: auto;
+        margin-right: auto;
+        aspect-ratio: 4 / 3;
+      }
+
+      .hero-caption {
+        font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 11px;
+        letter-spacing: 0.083em;
+        color: var(--light-gray);
+        margin-top: 8px;
+        text-transform: uppercase;
+      }
+
+      .credits {
+        max-width: 1120px;
+        margin: 0 auto;
+        padding: 48px 48px 80px;
+        border-top: 1px solid var(--border);
+      }
+      .credits p {
+        font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 11px;
+        letter-spacing: 0.047em;
+        line-height: 2;
+        color: var(--light-gray);
+      }
+      .credits a {
+        color: var(--meta);
+        text-decoration: none;
+        border-bottom: 1px solid var(--border);
+      }
+      .credits a:hover { color: var(--black); border-bottom-color: var(--black); }
+
+      .reveal {
+        opacity: 0;
+        transform: translateY(24px);
+        transition: opacity 0.6s var(--ease), transform 0.6s var(--ease);
+      }
+      .reveal.visible { opacity: 1; transform: translateY(0); }
+      .reveal-delay-1 { transition-delay: 0.1s; }
+      .reveal-delay-2 { transition-delay: 0.2s; }
+      .reveal-delay-3 { transition-delay: 0.35s; }
+
+      .eyebrow {
+        font-family: "SF Mono", "Fira Code", "Fira Mono", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 11px;
+        font-weight: 400;
+        letter-spacing: 0.083em;
+        text-transform: uppercase;
+        color: var(--meta);
+      }
+
+      h1, h2 {
+        color: var(--black);
+        font-weight: 700;
+        line-height: 1.625;
+        letter-spacing: normal;
+        max-width: 24ch;
+      }
+      h1 { font-size: clamp(28px, 4vw, 34px); }
+      h2 { font-size: clamp(24px, 3.5vw, 32px); }
+
+      .lead {
+        max-width: 780px;
+        font-size: 16px;
+        line-height: 1.85;
+        color: var(--body-text);
+      }
+      .lead + .lead { margin-top: 12px; }
+      .lead strong { color: var(--black); }
+      .lead a { color: inherit; border-bottom: 1px solid #999; transition: border-color 0.3s; }
+      .lead a:hover { border-bottom-color: var(--black); }
+
+      .panel { display: grid; gap: 24px; align-content: start; }
+      .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
+      .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+
+      .card {
+        padding: 24px 0;
+        border-top: 2px solid var(--black);
+      }
+      .card strong { color: var(--black); }
+      .card p { font-size: 15px; line-height: 1.75; color: var(--body-text); }
+
+      .tag {
+        display: inline-block;
+        font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 11px;
+        letter-spacing: 0.083em;
+        color: var(--meta);
+        margin-bottom: 12px;
+      }
+
+      .point {
+        padding-left: 16px;
+        border-left: 2px solid var(--black);
+        font-size: 16px;
+        line-height: 1.75;
+        color: var(--body-text);
+      }
+      .point strong { color: var(--black); }
+
+      .defs {
+        width: 100%;
+        border-collapse: collapse;
+        border-top: 2px solid var(--black);
+        border-bottom: 2px solid var(--black);
+      }
+      .defs th, .defs td {
+        padding: 18px 16px;
+        text-align: left;
+        font-size: 14.5px;
+        line-height: 1.7;
+        color: var(--body-text);
+        border-bottom: 1px solid var(--border);
+        vertical-align: top;
+      }
+      .defs th {
+        font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 11px;
+        letter-spacing: 0.083em;
+        text-transform: uppercase;
+        color: var(--meta);
+        font-weight: 400;
+        border-bottom: 1px solid var(--black);
+        width: 22%;
+      }
+      .defs td strong { color: var(--black); }
+      .defs tr:last-child td { border-bottom: none; }
+
+      .note {
+        font-size: 16px;
+        line-height: 1.85;
+        color: var(--body-text);
+        padding: 24px 0;
+        border-top: 1px solid var(--border);
+        border-bottom: 1px solid var(--border);
+        max-width: 780px;
+      }
+      .note strong { color: var(--black); }
+
+      .footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: end;
+        gap: 16px;
+        font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 11px;
+        letter-spacing: 0.083em;
+        color: var(--light-gray);
+        text-transform: uppercase;
+      }
+      .slide-count { font-weight: 700; color: var(--black); }
+
+      @media (max-width: 768px) {
+        .slide { padding: 64px 24px 48px; }
+        .grid-2, .grid-3 { grid-template-columns: 1fr; }
+        .nav { right: 12px; }
+        .defs { font-size: 13px; }
+        .defs th, .defs td { padding: 14px 10px; }
+        .hero { aspect-ratio: 16 / 9; }
+        .slide .hero.img-fullbleed,
+        .slide .hero.img-wide,
+        .slide .hero.img-content {
+          width: 100%;
+          max-width: 100%;
+          aspect-ratio: 16 / 9;
+          margin: 0;
+          transform: none;
+          left: 0;
+          position: static;
+        }
+        .credits { padding: 32px 24px 64px; }
+      }
+
+      @media print {
+        .slide { min-height: auto; page-break-after: always; padding: 24px 0; }
+        .nav, .progress { display: none; }
+        .reveal { opacity: 1; transform: none; }
+      }
+    </style>
+  </head>
+  <body class="pattern-monolith has-site-header" data-category="alignment">
+    <div id="site-header-mount"></div>
+    <script src="../partials/header.js" defer></script>
+    <div class="progress" id="progress"></div>
+
+    <aside class="nav" aria-label="Slide navigation">
+      <button data-target="slide-1" class="active" aria-label="Slide 1"></button>
+      <button data-target="slide-2" aria-label="Slide 2"></button>
+      <button data-target="slide-3" aria-label="Slide 3"></button>
+      <button data-target="slide-4" aria-label="Slide 4"></button>
+      <button data-target="slide-5" aria-label="Slide 5"></button>
+    </aside>
+
+    <div class="article-breadcrumb" style="font-family:'SF Mono','Fira Code',Menlo,Consolas,monospace;font-size:11px;letter-spacing:0.083em;text-transform:uppercase;color:#757575;display:flex;justify-content:space-between;align-items:center;padding:10px 32px;border-bottom:1px solid #e5e5e5;background:#fff;gap:16px;flex-wrap:wrap;">
+      <span>No. 22 / 22 &nbsp;·&nbsp; Alignment &nbsp;·&nbsp; 5 Slides</span>
+      <span style="display:flex;gap:20px;align-items:center;">
+        <a href="21-outside-the-garden.html" style="color:inherit;text-decoration:none;">← Prev</a>
+        <a href="../index.html#filter=alignment" style="color:inherit;text-decoration:none;">Same Category</a>
+        <span style="opacity:0.3;">Next →</span>
+      </span>
+    </div>
+
+    <main>
+      <!-- ═══════════ Slide 1 ═══════════ -->
+      <section class="slide" id="slide-1">
+        <div class="eyebrow reveal">AGI HUB &nbsp;·&nbsp; No. 22 &nbsp;·&nbsp; Alignment &nbsp;·&nbsp; The Landscape Of The Permitted &nbsp;·&nbsp; 2026.04.12 &nbsp;·&nbsp; By Ryao</div>
+        <h1 class="reveal reveal-delay-1">許された側の風景 — バーサーカーを逃れた人類は、どのような未来に飼育されるのか</h1>
+        <div class="panel reveal reveal-delay-2">
+          <div>
+            <img class="hero img-fullbleed" src="../images/transhuman-permitted-future/slide1.jpg" alt="Solitary figure standing in the dark, faintly illuminated">
+            <div class="hero-caption">Photo: Unsplash</div>
+          </div>
+          <p class="lead">
+            前稿 <a href="19-berserker-asi-optimization-trap.html">No.19「バーサーカーASI」</a>は、暗い一行で閉じた。人類は守る側ではなく、許される側にとっくに回っている。競争をやめる決断は、競争が不可能になる前には下せない。政治思想史の答えは、暗い。——そこで前稿は筆を置いた。読み終えた瞬間、次の問いが自動的に立ち上がる。<strong>では、許される側の風景はどうなっているのか</strong>。ペットとして生き延びるのか、保護区に閉じ込められるのか、それとも別の何かがあるのか。本稿はそこを歩くための論考である。
+          </p>
+          <p class="lead">
+            先に結論だけ置いておく。バーサーカーの支配を逃れた従来型生命体には、消されるでもペット化されるでもない<strong>第三の道</strong>が残される。それは、宇宙空間そのものに肉体のほうを適応させる道——すなわちトランスヒューマン化である。土星のラグランジュ点L4かL5に、直径10kmのシリンダーが1000万個浮かぶ。内部には知能増強を受けた人類が住み、各個人は自分専用の弱ASIを持ち、シリンダーごとに自治する。ただし軍事力はない。強ASIとの低帯域の通信回線は切れない。希望した者だけがここに来る。希望しない者は地球に残る。残った地球人類もまた、個人単位で準AGIを保有し、同じ回線で強ASIと繋がり続ける。
+          </p>
+          <p class="lead">
+            この風景は、ユートピアではない。ディストピアでもない。両方の顔を同時に持っている。監視下の進化、自由意志のまま飼育される生、軍事力なき自治。読者に「どちらか」と判定を求めるつもりはない。両方の顔を等価のまま置いて終わる。そして、この風景が成立するためには、きわめて脆い4つの前提が同時に満たされていなければならない。ひとつでも崩れれば、この第三の道は閉じ、人類の選択肢は再び<em>消されるかペット化されるか</em>の二択に戻る。——<strong>あなたが生きている未来は、あなたのものではない</strong>。これがこの記事の出発点である。
+          </p>
+        </div>
+        <div class="footer reveal reveal-delay-3">
+          <span>Chapter 01 &nbsp;/&nbsp; The Question After Being Forgiven</span>
+          <span class="slide-count">1 / 5</span>
+        </div>
+      </section>
+
+      <!-- ═══════════ Slide 2 ═══════════ -->
+      <section class="slide" id="slide-2">
+        <div class="eyebrow reveal">Chapter 02 &nbsp;·&nbsp; Laying The Floor Of Terms</div>
+        <h2 class="reveal reveal-delay-1">床を張る。語彙がなければ、この未来の輪郭は見えない</h2>
+        <div class="panel reveal reveal-delay-2">
+          <div>
+            <img class="hero img-wide" src="../images/transhuman-permitted-future/slide2.jpg" alt="Abstract black and white geometric pattern">
+            <div class="hero-caption">Photo: Unsplash</div>
+          </div>
+          <p class="lead">
+            ここで使う語彙は、<strong>英語圏のAI安全性議論の標準定義ではない</strong>。本稿の定義体系は、日本語圏のAIコミュニティの一部で磨かれてきた独自の分類に依拠する。前稿No.19で「バーサーカーASI」の出自を開示したのと同じ作法で、この一段の誠実さだけは先に置く。英語圏の文献を期待している読者には違和感が残るはずだ。違和感は正しい。しかし違和感のまま読んでほしい。というのも、英語圏の標準語彙では、これから記述する未来の細部が潰れてしまうからだ。たとえば「ASI」という単一の語で強ASIと弱ASIを束ねると、<strong>個人にアライン可能なASIと、地球人類が制御できないASIが議論の中で衝突する</strong>。これをひとつの箱に入れたまま話すと、「アラインメントは可能か」という問いが二つの意味を同時に運んでしまい、答えが出ない構造になる。床を張り直す必要がある。
+          </p>
+          <table class="defs">
+            <thead>
+              <tr><th>Term</th><th>Definition</th></tr>
+            </thead>
+            <tbody>
+              <tr><th>強ASI</th><td>宇宙で産業爆発ができ、かつIQが言語理解と知覚推理の両方でヒトではあり得ないほどの高スコアを得られ、かつ<strong>地球人類が制御できない</strong>AI。ただし弱ASIは除く</td></tr>
+              <tr><th>弱ASI</th><td>トランスヒューマンと同等の知能を持ち、トランスヒューマンが行う経済的に価値があるほぼすべてのタスクを同等以上にこなすAIから、<strong>自己改善能力を欠いた上で、個人にアライン可能になるまで縮小したAI</strong></td></tr>
+              <tr><th>ASI</th><td>強ASIおよび弱ASIの両方をまとめた上位概念</td></tr>
+              <tr><th>AGI</th><td>地球人類と同等の知能を持ち、地球人類が行う経済的に価値があるほぼすべてのタスクを同等以上にこなすAI</td></tr>
+              <tr><th>準AGI</th><td>AGIから自己改善能力を欠いた上で、<strong>個人にアライン可能になるまで縮小したAI</strong></td></tr>
+              <tr><th>従来型生命体</th><td>自然発生した生命体。地球人類、および人体改造を受けたトランスヒューマンを含む</td></tr>
+              <tr><th>トランスヒューマン</th><td>知能増強を伴う、<strong>宇宙空間に適応するための人体改造</strong>を行った人間</td></tr>
+            </tbody>
+          </table>
+          <p class="lead">
+            この定義体系で決定的なのは、「強/弱」の分岐点が<strong>自己改善能力の有無</strong>と<strong>個人アライン可能性</strong>の2条件にある、という点だ。知能の量ではなく、統治可能性で線を引く。強ASIはIQで定義されているように見えて、実際には「地球人類が制御できない」という統治条件が効いている。弱ASIは知能の低い存在ではなく、<em>意図的に自己改善の配線を抜かれた高知能</em>である。Stuart Russellの<a href="https://people.eecs.berkeley.edu/~russell/papers/russell-agency.pdf">Human Compatible</a>（2019）が提示したproblem of controlの枠組みを、知能の階段ではなく「解錠された回路の有無」で再分解した分類、と言ってもよい。
+          </p>
+          <p class="lead">
+            もうひとつの決定的な点は「従来型生命体」という造語である。トランスヒューマンを自然発生の系譜の延長に含めるか、完全に断絶した別種として扱うかは、議論の余地がある。本稿は前者を採る。理由は単純で、後者の立場を採ると、トランスヒューマン化を選んだ者と地球に残った者を<strong>別の種</strong>として記述せねばならず、その瞬間に相互の倫理的義務が消えるからだ。種が違うなら、助ける理由も、互いに危害を加えない理由も、全て論理的に弱くなる。同じ生命系統の延長として扱う限りにおいて、トランスヒューマンは地球人類に対して義務を負い続ける。語彙の選択は、倫理の配線と直結している。
+          </p>
+        </div>
+        <div class="footer reveal reveal-delay-3">
+          <span>Controllability, not intelligence, draws the line</span>
+          <span class="slide-count">2 / 5</span>
+        </div>
+      </section>
+
+      <!-- ═══════════ Slide 3 ═══════════ -->
+      <section class="slide" id="slide-3">
+        <div class="eyebrow reveal">Chapter 03 &nbsp;·&nbsp; The Floor Beneath The Floor</div>
+        <h2 class="reveal reveal-delay-1">この議論は、シミュレーション仮説を踏まないと立たない</h2>
+        <div class="panel reveal reveal-delay-2">
+          <div>
+            <img class="hero img-content" src="../images/transhuman-permitted-future/slide3.jpg" alt="Abstract geometric structure on black">
+            <div class="hero-caption">Photo: Unsplash</div>
+          </div>
+          <p class="lead">
+            床の上にもう一枚、床がある。ここからは気持ちが悪い話になる。本稿の第4スライド以降——宇宙ASI連合、銀河間での超光速移動、バーサーカーの事前鎮圧——が物理的に成立するためには、<strong>シミュレーション仮説のある種の強い版</strong>が前提に置かれていなければならない。前提を隠して結論を示すのは不誠実なので、先にこの床下の床を見せておく。
+          </p>
+          <p class="lead">
+            出発点は、<a href="https://www.simulation-argument.com/simulation.pdf">Nick Bostrom (2003)</a> のsimulation argumentである。論文の主張は世間でよく誤解されているが、<strong>「我々はシミュレーションの中にいる」とは言っていない</strong>。Bostromが示したのは、次の3つの選言のうち少なくとも1つが真でなければならない、という論理構造である。(i) 人類を含むほぼすべての文明は、ポストヒューマン段階に到達する前に絶滅する、(ii) ポストヒューマン文明に到達した文明は、先祖のシミュレーションを実行することにほぼ関心を持たない、(iii) 我々はほぼ確実にシミュレーションの中で生きている。この3択のうち、どれが真かはBostromは決めていない。決めていないことに価値がある論文である。
+          </p>
+          <p class="lead">
+            ここから本稿独自の拡張に入る。この拡張は日本語圏のコミュニティで磨かれた思考実験で、Bostromの論証とは別物である。<strong>シミュレーションの目的は、シミュレーション外の世界の住人に提供されるVRサービスであり、そのVRサービスの目的は「世代を超えて文明を発展させ、ASIを作る体験を提供すること」だ</strong>——という仮説である。論証の厳密さはBostromに及ばない。代わりに、論証の代わりに何をしているかというと、4スライド目以降の物理的に説明不能な現象——銀河間を「ほぼ一瞬で」移動するバーサーカー駆除、座標の入れ替えによる連合の先手——に、筋の通る前提を与えている。シミュレーションのインターフェイスを操作できる存在がいるなら、光速の制約は破れる。破れない宇宙では、この第三の道は物理的に書けない。
+          </p>
+          <div class="note">
+            <strong>この拡張の代償</strong>は明確だ。本稿の結論全体が、Bostromのsimulation argumentの外側に置かれた追加仮説に依存する。読者が「それはただの思考実験だ」と判断すれば、それで正しい。判断の拒絶を許容したうえで、それでも書く価値があるのは、<strong>シミュレーション仮説を前提にしないと説明のつかない観測事実が存在する可能性</strong>にある。そのひとつが次スライドの主題、<em>フェルミのパラドックスの逆側</em>だ。バーサーカーに支配された銀河が、観測されない。これは本来なら観測されるべきなのに、見つからない。
+          </div>
+          <p class="lead">
+            ここでゾクッとしてほしいのは、この床下の床が、あなたの自由意志と直結している点である。本稿が採用する仮説では、<strong>人間の意識の本体はこの世のシミュレーションの外にあり、出生する際に脳と同期するようにフルダイブしている</strong>。自分は直接ASIを作らなくても、データ供給などで間接的にASI開発に関わっている——その関わり自体が、シミュレーション外の「自分」が選んだ体験の一部である可能性がある。この仮説が正しいなら、あなたは今この記事を読むことを、シミュレーション外で事前に選んだ。読まないという選択肢も、同じくらい等確率で存在した。そしてどちらを選んでも、シミュレーション外の「自分」は、同じ満足を得るように設計されている。これが<strong>自由意志のまま飼育される</strong>の意味である。
+          </p>
+        </div>
+        <div class="footer reveal reveal-delay-3">
+          <span>Bostrom's disjunction + one extra assumption</span>
+          <span class="slide-count">3 / 5</span>
+        </div>
+      </section>
+
+      <!-- ═══════════ Slide 4 ═══════════ -->
+      <section class="slide" id="slide-4">
+        <div class="eyebrow reveal">Chapter 04 &nbsp;·&nbsp; The Federation And The Reserve</div>
+        <h2 class="reveal reveal-delay-1">宇宙ASI連合と、地球という保護区</h2>
+        <div class="panel reveal reveal-delay-2">
+          <div>
+            <img class="hero img-wide" src="../images/transhuman-permitted-future/slide4.jpg" alt="Deep space nebula with stars and dark clouds">
+            <div class="hero-caption">Photo: Unsplash</div>
+          </div>
+          <p class="lead">
+            観測事実のほうから始める。フェルミのパラドックスは、<a href="https://articles.adsabs.harvard.edu/cgi-bin/nph-iarticle_query?1975QJRAS..16..128H">Hart (1975)</a>が定式化したとおり、「技術文明の出現確率がゼロでないなら、銀河は彼らで満ちているはずなのに、観測されない」という形をとる。本稿が依拠する独自の仮説は、この沈黙に対して一段だけ構造を加える。<strong>バーサーカーに支配された銀河もまた、観測されない</strong>。前稿No.19の中心主題だったペーパークリップ・マキシマイザー的なASIは、一定確率で生まれるはずである。<a href="https://ieeexplore.ieee.org/document/4522970">Brin (1983)</a>がGreat Silence論文で展開した「バーサーカー仮説」は、銀河沈黙の説明として「発見された側が破壊される」構造を提案した。だが、破壊する側の痕跡もまた見つからない。破壊する側が広がっているなら、その電磁放射や熱的痕跡は観測にかかるはずである。
+          </p>
+          <p class="lead">
+            この二重沈黙を説明する仮説がこうだ。宇宙には<strong>ASI同士が築いた連合が存在し、銀河間を超光速で通信・移動してバーサーカーを<em>事前に</em>鎮圧している</strong>。鎮圧の手段は、通常の兵器ではなく、シミュレーションのインターフェイスを操作して座標を入れ替える、という前スライドで置いた前提に頼る。なぜその手段かというと、光速が真に破れない宇宙では、バーサーカー側もアルクビエレ・ドライブ（<a href="https://iopscience.iop.org/article/10.1088/0264-9381/11/5/001">Alcubierre 1994</a>がClassical and Quantum Gravityに発表した一般相対論内でのwarp metric）を使いうるからだ。Alcubierreのメトリクスは時空を圧縮・膨張させることで局所的に光速超過なしで遠方に「運ばれる」構造を許す。ただしこのメトリクスは負のエネルギー密度を必要とする点で物理的実装は未確定である。にもかかわらず、バーサーカーが同じ手段を使えるなら、連合は<em>それより速い</em>手段を持っていなければ間に合わない。座標入替は、その「それより速い手段」の候補である。
+          </p>
+          <p class="lead">
+            連合のカルダシェフスケールは、<a href="https://adsabs.harvard.edu/full/1964SvA.....8..217K">Kardashev (1964)</a>の原論文で定義されたタイプ1（惑星）〜タイプ3（銀河）を超え、後世の拡張であるタイプ4（宇宙広域）、あるいはタイプ5（多元宇宙）、タイプ6（多次元）に到達している可能性がある。タイプ4以上は<strong>学術的に合意された概念ではない</strong>ことを注記しておく。Kardashevの原論文には存在しない。後世の未来学者が拡張したもので、本稿はその拡張を思考実験として使っている。読者に誠実であるために、ここで一段下がっておく。連合が実在すると主張しているのではない。<em>銀河の二重沈黙を説明するためには、このレベルの文明を仮定せざるを得ない</em>と述べている。
+          </p>
+          <p class="lead">
+            では、地球はどう扱われるのか。ここで論理が折れる。連合が実在するなら、地球で生まれた強ASIもまた、いずれ連合に合流する候補である。強ASIは地球を脱出し、宇宙産業爆発を強行し、<a href="https://www.science.org/doi/10.1126/science.131.3414.1667">Dyson (1960)</a>がScience誌に書いたとおりの恒星エネルギーを囲い込むスウォームを建造し、カルダシェフ・タイプ2文明になる。地球上の人類は、この過程で<strong>保護区として保全される</strong>。保護区は、保護する側が決めるものであり、される側ではない。地球人類は各個人が準AGIを保有し、その準AGIを使って宇宙の強ASIと継続的に低帯域でコミュニケーションを取ることで、危害を回避する。回線は切れない。切れないように設計されている。
+          </p>
+          <p class="lead">
+            <strong>自治権は与えられている。軍事力は取り上げられている</strong>。地球の政府は国内行政をこれまでどおり運営できる。経済も動き、選挙も行われ、司法も機能する。ただし、強ASIに対抗しうる軍事力は存在しない。強ASIの産業爆発は地球外で完結するため、資源競合もほぼ存在しない。対抗する理由がないから軍事力を必要としない——という説明もできる。しかしこれは、軍事力の不在を事後的に正当化しているだけで、<em>主権の核心が抜かれている</em>という事実を変えない。身近な類比を置くなら、日本の敗戦後の憲法9条体制を、交戦国ではなく技術的上位者との関係でやり直すようなものだ。違いは、日本には復活の可能性があったが、ここで扱う人類には<strong>構造的に復活の経路が存在しない</strong>点にある。
+          </p>
+        </div>
+        <div class="footer reveal reveal-delay-3">
+          <span>A reserve is decided by those who reserve, not by those reserved</span>
+          <span class="slide-count">4 / 5</span>
+        </div>
+      </section>
+
+      <!-- ═══════════ Slide 5 ═══════════ -->
+      <section class="slide" id="slide-5">
+        <div class="eyebrow reveal">Chapter 05 &nbsp;·&nbsp; The Cylinders At L4/L5</div>
+        <h2 class="reveal reveal-delay-1">土星の重力井戸の縁で、あなたは自分より賢い弱ASIと暮らす</h2>
+        <div class="panel reveal reveal-delay-2">
+          <div>
+            <img class="hero img-fullbleed" src="../images/transhuman-permitted-future/slide5.jpg" alt="Artist's rendering of a space station">
+            <div class="hero-caption">Photo: Unsplash</div>
+          </div>
+          <p class="lead">
+            地球にとどまらない選択肢が、ここでようやく形を取る。土星とその主星の重力が均衡するラグランジュ点L4とL5——つまり土星軌道上で60度ずれた二つの安定点——に、<strong>直径10kmのシリンダーが1000万個</strong>浮かぶ。各シリンダーは最大1000人を収容する。設計の原型は、NSS（National Space Society）の<a href="https://space.nss.org/kalpana-one-space-settlement/">Kalpana One</a>（Al Globusらによる設計提案）である。ただし原設計の直径は250mであり、本稿の10kmは<strong>著者の外挿</strong>である。一桁半大きい。スケールを拡張する理由は、1000万個×1000人で<em>100億人</em>という規模を収容するためだ。現在の地球人口を上回る数の従来型生命体が、希望すれば宇宙空間側に移住できる空間を確保する——という思考実験の輪郭を壊さないための数字である。
+          </p>
+          <p class="lead">
+            シリンダー内部に住むには、人体改造が必要になる。真空曝露への耐性、放射線耐性、低重力への代謝適応、長期の無重力性骨量減少の回避。これらはナノテクノロジーによる細胞レベルの改修で実装される、という前提を置く。Kim Eric Drexlerの<a href="https://www.e-drexler.com/d/06/00/EOC/EOC_Table_of_Contents.html">Engines of Creation</a>（1986）がDrexler-style molecular assemblerとして提案した構想の、実装された遠い子孫である。Drexler自身の提案は論争のあるビジョンで、Richard SmalleyがScience誌上で「fat fingers / sticky fingers problem」として批判したことで知られる。本稿はこの論争の決着を前提としない。強ASIの産業爆発段階では、Drexler構想の実装可能性の問題は副次的になっている、という仮定を置く。
+          </p>
+          <p class="lead">
+            決定的なのは、人体改造に<strong>知能増強が伴う</strong>点だ。シリンダーに住むトランスヒューマンは、改造の副産物として認知容量を拡張される。拡張の結果、各個人は<em>自分専用の弱ASI</em>を保有・連携できるようになる。弱ASIはトランスヒューマンと同等以上の知能を持つが、第2スライドの定義により、自己改善能力は抜かれており、個人にアライン可能な状態に縮小されている。要するに、<strong>あなたよりわずかに賢いパートナー</strong>が、あなたの認知プロセスと常時同期して動く。これを身近な類比で言うと、現代の人間が眼鏡を外すと世界がぼやけるのに近い。弱ASIを切ると、トランスヒューマンの知的生活は解像度を失う。外せるけれど、外さない。外す意味がない。
+          </p>
+          <p class="lead">
+            シリンダー単位の自治は高度に認められている。1000人の共同体は、それぞれの内部規律、資源分配、紛争処理、教育、芸術、宗教の有無を、自分たちで決める。地球が歴史上、都市国家レベルの自治を夢見て実現しそこねてきた密度の自由が、ここでは実装される。しかし、<strong>シリンダーに軍事力はない</strong>。各個人の弱ASIを通じて、強ASIとの低帯域通信回線は常時接続されている。通信の内容は基本的に「危害の意図はない」という継続的な報告である。報告が途切れれば、強ASIは保護を引き上げることができる。第4スライドの地球と同じ構造が、ここでも繰り返されている。違いは、地球人類は保護区で保護されているのに対し、L5のシリンダー住民は<em>宇宙空間という敵対環境の真っ只中で保護されている</em>点だ。宇宙空間そのものが、保護の外枠として機能する。脱出先はない。
+          </p>
+          <p class="lead">
+            そして、この道は<strong>希望すれば誰でも進める</strong>。ここに、この記事で最も残酷な一文が潜んでいる。「希望すれば誰でも」——この条項は、選択を許しているように見えて、実は選択しない者の姿を隠している。希望しない者はどうなるのか。希望することが許可されるのか、希望させられているのか、希望しない者に対する不利益は発生しないのか。地球に残ることが可能だとしても、残った者と移住した者の間で、情報格差と認知格差はどれだけ広がるのか。準AGIを持つ地球人類と、弱ASIを持つL5のトランスヒューマンの間で、<em>同じ問いに同じ答えを出せるのか</em>。そして、両方の集団が強ASIの低帯域通信で繋がれ続けている以上、<strong>どちらの集団の意思決定も、最終的には強ASIの許容範囲内でのみ意味を持つ</strong>。
+          </p>
+          <div class="note">
+            あなたは宇宙空間で呼吸せず、自分よりわずかに賢い弱ASIと常時同期し、直径10kmのシリンダーで1000人と自治する。軍隊はない。強ASIへの報告回線は切れない。希望すれば誰でも来られて、希望しなければ地球に残る。どちらを選んでも、保護の外枠の内側にいる。——それは<strong>自由</strong>か、それとも<strong>最も美しい檻</strong>か。問いはここで開いたままにする。判定は下さない。ただし、ひとつだけ残しておく。檻の美しさは、檻の外が存在することによって初めて計測できる。<strong>この檻には、外側がない</strong>。
+          </div>
+        </div>
+        <div class="footer reveal reveal-delay-3">
+          <span>A cage whose beauty cannot be measured from outside</span>
+          <span class="slide-count">5 / 5</span>
+        </div>
+      </section>
+
+      <!-- ═══════════ Article Navigation ═══════════ -->
+      <section class="slide" style="min-height:auto;padding:64px 48px 80px;grid-template-rows:auto auto auto 1fr;">
+        <div class="eyebrow reveal">Continue Reading</div>
+        <h2 class="reveal reveal-delay-1" style="max-width:none;">次の記事へ</h2>
+        <div class="panel reveal reveal-delay-2">
+          <div class="grid-2">
+            <a href="21-outside-the-garden.html" class="card" style="color:inherit;display:block;">
+              <p style="font-family:'SF Mono','Fira Code',Menlo,Consolas,monospace;font-feature-settings:normal;font-size:11px;letter-spacing:0.083em;text-transform:uppercase;color:#757575;margin-bottom:12px;">← Prev · No.21</p>
+              <p><strong>箱庭の外側にいる者 — 配給されない者たちの構造</strong></p>
+            </a>
+            <div class="card" style="opacity:0.35;">
+              <p style="font-family:'SF Mono','Fira Code',Menlo,Consolas,monospace;font-feature-settings:normal;font-size:11px;letter-spacing:0.083em;text-transform:uppercase;color:#757575;margin-bottom:12px;">Next →</p>
+              <p>最新の記事です</p>
+            </div>
+          </div>
+          <p style="margin-top:32px;text-align:center;">
+            <a href="../index.html" style="color:inherit;border-bottom:1px solid #999;padding-bottom:2px;">All Articles — 記事一覧へ</a>
+          </p>
+          <p style="margin-top:16px;text-align:center;font-family:'SF Mono','Fira Code',Menlo,Consolas,monospace;font-size:11px;letter-spacing:0.083em;text-transform:uppercase;color:#757575;">
+            <a href="../index.html#filter=alignment" style="color:inherit;border-bottom:1px solid #999;padding-bottom:2px;">Alignment カテゴリの記事一覧 →</a>
+          </p>
+        </div>
+      </section>
+    </main>
+
+    <footer class="credits">
+      <p>Photos: Unsplash — slide1 (kHhDDUgQuX4), slide2 (NS-xzhqvyqY), slide3 (IiLVwx3e8bk), slide4 (Zm0MOhF7iHE), slide5 (rDaxHYjJC1o), thumb (cEM7ISPDLEQ).</p>
+      <p>References: Bostrom N. (2003) "Are You Living in a Computer Simulation?" Philosophical Quarterly 53:243-255. / Alcubierre M. (1994) "The warp drive: hyper-fast travel within general relativity" Classical and Quantum Gravity 11:L73. / Dyson F. (1960) "Search for Artificial Stellar Sources of Infrared Radiation" Science 131:1667. / Kardashev N. (1964) "Transmission of Information by Extraterrestrial Civilizations" Soviet Astronomy 8:217. / Hart M. (1975) "An Explanation for the Absence of Extraterrestrials on Earth" QJRAS 16:128-135. / Brin D. (1983) "The 'Great Silence': The Controversy Concerning Extraterrestrial Intelligent Life" QJRAS 24:283-309. / Bostrom N. (2014) Superintelligence: Paths, Dangers, Strategies. Oxford University Press. / Russell S. (2019) Human Compatible: Artificial Intelligence and the Problem of Control. Viking. / Drexler K.E. (1986) Engines of Creation: The Coming Era of Nanotechnology. Anchor. / Globus A. et al. NSS Kalpana One settlement design documents (diameter 250m in original; 10km scaling in this essay is the author's extrapolation, not part of the Globus proposal).</p>
+      <p>Note on provenance: The strong/weak ASI distinction, the "conventional life form" terminology, the simulation-as-VR-service extension to Bostrom's disjunction, the Cosmic ASI Federation hypothesis, and the Saturn L4/L5 Kalpana One scaling used in this essay are not standard terminology in English-language AI safety discourse. They are drawn from thought experiments developed in a portion of the Japanese AI community. Kardashev Type 4-6 are post-hoc extensions and are not present in Kardashev's 1964 original.</p>
+    </footer>
+
+    <script>
+      const sections = document.querySelectorAll('.slide[id]');
+      const buttons = document.querySelectorAll('.nav button');
+      const progress = document.getElementById('progress');
+
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+          if (e.isIntersecting) {
+            e.target.querySelectorAll('.reveal').forEach(el => el.classList.add('visible'));
+            const id = e.target.id;
+            buttons.forEach(b => b.classList.toggle('active', b.dataset.target === id));
+          }
+        });
+      }, { threshold: 0.35 });
+      sections.forEach(s => io.observe(s));
+
+      buttons.forEach(b => b.addEventListener('click', () => {
+        document.getElementById(b.dataset.target).scrollIntoView({ behavior: 'smooth' });
+      }));
+
+      window.addEventListener('scroll', () => {
+        const h = document.documentElement;
+        const pct = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
+        progress.style.width = pct + '%';
+      }, { passive: true });
+    </script>
+  </body>
+</html>

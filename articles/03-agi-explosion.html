@@ -2,6 +2,7 @@
 <html lang="ja">
   <head>
 <meta name="robots" content="noindex, nofollow">
+    <meta name="revised" content="2026.04.11">
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>技術爆発と産業爆発 — シンギュラリティが科学的蓋然性に変わった日</title>
@@ -544,6 +545,93 @@
           <p class="lead">
             スケールの感覚を合わせておきたい。カルダシェフ・スケールは知的文明のレベルをエネルギー利用量で分類する指標で、地球に降り注ぐ太陽光エネルギーを全て使える文明をタイプ1、恒星が放つエネルギーの全てを使える文明をタイプ2とする。現在の人類はタイプ1にすら程遠い。だが産業爆発のフィードバックループが始まれば、数年から数十年でタイプ1を超え、タイプ2に向かって駆け上がる可能性がある。砂漠と海洋に敷き詰められた太陽光パネル、水星や小惑星帯で稼働する自己複製ロボット、太陽の周囲のダイソンスウォーム。ガンダムやスターウォーズの宇宙文明の風景は、物理法則上は否定できない。
           </p>
+          <figure class="chart chart-wide">
+            <div class="chart-title">カルダシェフ・スケール — エネルギー利用量で測る文明の階層</div>
+            <div class="chart-subtitle">縦軸は対数スケール（ワット）。10の累乗で階層が上がるため、タイプ間の距離は線形の直感を完全に裏切る。現在の人類はタイプ1にすら達していない</div>
+            <svg class="chart-svg" viewBox="0 0 720 360" role="img" aria-label="カルダシェフ・スケール各階層のエネルギー利用量を対数軸で示す図">
+              <!-- Plot area: x=120..680 (width 560), y=40..300 (height 260) -->
+              <!-- Y axis: log W, from 10^12 (bottom) to 10^37 (top). 25 decades over 260px → 10.4px/decade -->
+
+              <!-- Horizontal grid lines every 5 decades -->
+              <g stroke="#e5e5e5" stroke-width="1">
+                <line x1="120" y1="40"  x2="680" y2="40"/>
+                <line x1="120" y1="92"  x2="680" y2="92"/>
+                <line x1="120" y1="144" x2="680" y2="144"/>
+                <line x1="120" y1="196" x2="680" y2="196"/>
+                <line x1="120" y1="248" x2="680" y2="248"/>
+                <line x1="120" y1="300" x2="680" y2="300"/>
+              </g>
+
+              <!-- Y-axis labels (log W) -->
+              <g font-family="SF Mono, Menlo, monospace" font-size="10" fill="#757575" text-anchor="end">
+                <text x="114" y="44">10^37 W</text>
+                <text x="114" y="96">10^32 W</text>
+                <text x="114" y="148">10^27 W</text>
+                <text x="114" y="200">10^22 W</text>
+                <text x="114" y="252">10^17 W</text>
+                <text x="114" y="304">10^12 W</text>
+              </g>
+
+              <!-- Y axis line -->
+              <line x1="120" y1="40" x2="120" y2="300" stroke="#999" stroke-width="1"/>
+              <!-- X axis line -->
+              <line x1="120" y1="300" x2="680" y2="300" stroke="#999" stroke-width="1"/>
+
+              <!-- Data calculation:
+                   y = 300 - (log10(W) - 12) * 10.4
+                   Current humanity ~2e13 W: log=13.30 → y=300-13.52=286
+                   Type 1 ~1.74e17 W:        log=17.24 → y=300-54.50=246
+                   Type 2 ~3.86e26 W:        log=26.59 → y=300-151.8=148
+                   Type 3 ~4e36 W:           log=36.60 → y=300-255.8=44
+              -->
+
+              <!-- Tier bars (four vertical bars as a ladder) -->
+              <g>
+                <!-- Current humanity -->
+                <rect x="165" y="286" width="80" height="14" fill="#1a1a1a"/>
+                <!-- Type 1 -->
+                <rect x="290" y="246" width="80" height="14" fill="#1a1a1a"/>
+                <!-- Type 2 -->
+                <rect x="415" y="148" width="80" height="14" fill="#1a1a1a"/>
+                <!-- Type 3 -->
+                <rect x="540" y="44"  width="80" height="14" fill="#1a1a1a"/>
+              </g>
+
+              <!-- Gap indicators between tiers (dashed connectors) -->
+              <g stroke="#999" stroke-width="1" stroke-dasharray="3 4">
+                <line x1="205" y1="286" x2="330" y2="260"/>
+                <line x1="330" y1="246" x2="455" y2="162"/>
+                <line x1="455" y1="148" x2="580" y2="58"/>
+              </g>
+
+              <!-- Tier labels (name + energy figure above bar) -->
+              <g font-family="HelveticaNeue, sans-serif" font-size="12" fill="#111" text-anchor="middle" font-weight="700">
+                <text x="205" y="278">Type 0.7</text>
+                <text x="330" y="238">Type I</text>
+                <text x="455" y="140">Type II</text>
+                <text x="580" y="36">Type III</text>
+              </g>
+              <g font-family="SF Mono, Menlo, monospace" font-size="10" fill="#757575" text-anchor="middle">
+                <text x="205" y="320">現在の人類</text>
+                <text x="205" y="334">~2×10^13 W</text>
+                <text x="330" y="320">惑星文明</text>
+                <text x="330" y="334">~1.7×10^17 W</text>
+                <text x="455" y="320">恒星文明</text>
+                <text x="455" y="334">~3.9×10^26 W</text>
+                <text x="580" y="320">銀河文明</text>
+                <text x="580" y="334">~4×10^36 W</text>
+              </g>
+
+              <!-- Annotation: gap between Type 0.7 and Type I -->
+              <text x="267" y="270" font-family="HelveticaNeue, sans-serif" font-size="10" fill="#757575" font-style="italic" text-anchor="middle">×10,000</text>
+              <text x="392" y="200" font-family="HelveticaNeue, sans-serif" font-size="10" fill="#757575" font-style="italic" text-anchor="middle">×10^9</text>
+              <text x="517" y="100" font-family="HelveticaNeue, sans-serif" font-size="10" fill="#757575" font-style="italic" text-anchor="middle">×10^10</text>
+            </svg>
+            <figcaption class="chart-footer">
+              <p class="chart-caption">棒と棒の間の点線に注目してほしい。Type 0.7（現在の人類）からType Iまでの距離は「約1万倍」、Type IからType IIまでは「約10億倍」。同じ見た目の段差が、桁で数十倍違う。産業爆発が問題にしているのは、この一万倍〜十億倍の距離を、従来の歴史時間ではなく10年オーダーで踏破しうるかどうかという問いである。</p>
+              <p class="chart-source">Kardashev (1964) / Sagan (1973) の連続化公式に基づく概算。現在値はIEA World Energy Balance 2024より</p>
+            </figcaption>
+          </figure>
           <div class="grid-3">
             <div class="card">
               <span class="tag">Phase 01</span>
@@ -602,6 +690,106 @@
               <p><strong>宇宙への拡大</strong><br>水星・小惑星帯で自己複製ロボットが現地採掘を開始。ダイソンスウォームの初期建設。カルダシェフ・タイプ2への接近。</p>
             </div>
           </div>
+          <figure class="chart chart-wide">
+            <div class="chart-title">倍増時間の圧縮 — 歴史時間から産業爆発時間へ</div>
+            <div class="chart-subtitle">文明の経済規模が倍になるのに要した時間。縦軸は対数スケール（年）。対数軸上で点が急角度に落ちれば落ちるほど、加速そのものが加速していることを意味する</div>
+            <svg class="chart-svg" viewBox="0 0 720 360" role="img" aria-label="倍増時間が歴史時間から産業爆発時間へ圧縮される過程を対数軸で示す折れ線グラフ">
+              <!-- Plot area: x=90..680 (width 590), y=40..300 (height 260) -->
+              <!-- Y axis: log years. From 10000y (top) to 0.003y (~1 day, bottom).
+                   Range: log 4.0 down to log -2.5 → 6.5 decades over 260px → 40px/decade.
+                   y = 40 + (4.0 - log10(years)) * 40
+                   1000y  → log=3   → y=40+40=80
+                   200y   → 2.30    → y=40+68=108
+                   50y    → 1.70    → y=40+92=132
+                   20y    → 1.30    → y=40+108=148
+                   1y     → 0       → y=40+160=200
+                   0.25y (3mo) → -0.60 → y=40+184=224
+                   0.04y (2wk) → -1.40 → y=40+216=256
+                   0.003y (1日) → -2.52 → y=40+260.8=300 (near bottom)
+              -->
+
+              <!-- Horizontal grid lines -->
+              <g stroke="#e5e5e5" stroke-width="1">
+                <line x1="90" y1="40"  x2="680" y2="40"/>
+                <line x1="90" y1="80"  x2="680" y2="80"/>
+                <line x1="90" y1="120" x2="680" y2="120"/>
+                <line x1="90" y1="160" x2="680" y2="160"/>
+                <line x1="90" y1="200" x2="680" y2="200"/>
+                <line x1="90" y1="240" x2="680" y2="240"/>
+                <line x1="90" y1="280" x2="680" y2="280"/>
+              </g>
+
+              <!-- Y-axis labels -->
+              <g font-family="SF Mono, Menlo, monospace" font-size="10" fill="#757575" text-anchor="end">
+                <text x="84" y="44">10,000年</text>
+                <text x="84" y="84">1,000年</text>
+                <text x="84" y="124">100年</text>
+                <text x="84" y="164">10年</text>
+                <text x="84" y="204">1年</text>
+                <text x="84" y="244">1ヶ月</text>
+                <text x="84" y="284">1日</text>
+              </g>
+
+              <!-- Axes -->
+              <line x1="90" y1="40"  x2="90"  y2="300" stroke="#999" stroke-width="1"/>
+              <line x1="90" y1="300" x2="680" y2="300" stroke="#999" stroke-width="1"/>
+
+              <!-- Zone divider: where history ends and explosion begins -->
+              <line x1="430" y1="40" x2="430" y2="300" stroke="#999" stroke-width="1" stroke-dasharray="2 4"/>
+              <text x="432" y="52" font-family="HelveticaNeue, sans-serif" font-size="10" fill="#757575" font-style="italic">AGI以後</text>
+
+              <!-- Data points and positions:
+                   p1: 農耕期(~BC8000) 倍増~1000y → x=140, y=80
+                   p2: 産業革命(~1800) 倍増~50y  → x=250, y=132
+                   p3: 現代(~2000) 倍増~20y      → x=360, y=148
+                   p4: AGI初期(Year 1) 倍増1y    → x=470, y=200
+                   p5: 中期(Year 3-5) 倍増3ヶ月  → x=540, y=224
+                   p6: 後期(Year 5-8) 倍増2週    → x=600, y=256
+                   p7: 極値(Year 8-10) 倍増1日   → x=660, y=290
+              -->
+
+              <!-- Historic segment (solid) -->
+              <polyline fill="none" stroke="#111" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"
+                points="140,80 250,132 360,148 430,180" />
+
+              <!-- Projected segment (dashed) -->
+              <polyline fill="none" stroke="#111" stroke-width="2" stroke-dasharray="5 4" stroke-linejoin="round" stroke-linecap="round"
+                points="430,180 470,200 540,224 600,256 660,290" />
+
+              <!-- Data points -->
+              <g fill="#111">
+                <circle cx="140" cy="80"  r="4"/>
+                <circle cx="250" cy="132" r="4"/>
+                <circle cx="360" cy="148" r="4"/>
+              </g>
+              <!-- Projected (open) -->
+              <g fill="#fff" stroke="#111" stroke-width="2">
+                <circle cx="470" cy="200" r="4"/>
+                <circle cx="540" cy="224" r="4"/>
+                <circle cx="600" cy="256" r="4"/>
+                <circle cx="660" cy="290" r="5"/>
+              </g>
+
+              <!-- X-axis labels -->
+              <g font-family="HelveticaNeue, sans-serif" font-size="10" fill="#1a1a1a" text-anchor="middle">
+                <text x="140" y="320">農耕期</text><text x="140" y="334" fill="#757575">~1000年</text>
+                <text x="250" y="320">産業革命</text><text x="250" y="334" fill="#757575">~50年</text>
+                <text x="360" y="320">現代</text><text x="360" y="334" fill="#757575">~20年</text>
+                <text x="470" y="320" font-style="italic">Year 1</text><text x="470" y="334" fill="#757575" font-style="italic">~1年</text>
+                <text x="540" y="320" font-style="italic">Year 3-5</text><text x="540" y="334" fill="#757575" font-style="italic">~3ヶ月</text>
+                <text x="600" y="320" font-style="italic">Year 5-8</text><text x="600" y="334" fill="#757575" font-style="italic">~2週</text>
+                <text x="660" y="320" font-style="italic">Year 8-10</text><text x="660" y="334" fill="#757575" font-style="italic">~1日</text>
+              </g>
+
+              <!-- Annotation -->
+              <text x="250" y="64" font-family="HelveticaNeue, sans-serif" font-size="11" fill="#757575" font-style="italic" text-anchor="middle">歴史時間</text>
+              <text x="555" y="64" font-family="HelveticaNeue, sans-serif" font-size="11" fill="#111" font-weight="700" text-anchor="middle">産業爆発時間</text>
+            </svg>
+            <figcaption class="chart-footer">
+              <p class="chart-caption">左側の3点（農耕〜現代）は観測値、右側の4点（AGI以後）はForethoughtの経験曲線シナリオから導かれる予測である。注目すべきは破線の傾きが実線の延長と連続していること。農耕→現代までの1万年の傾きと、AGI以後の10年の傾きは、対数軸上で切れずに繋がっている。つまり産業爆発は歴史のトレンドからの逸脱ではなく、<strong>同じトレンドを加速して踏破した結果</strong>として現れる。</p>
+              <p class="chart-source">Forethought Research (Davidson 2023) / Roodman long-run GWP series (2020) / Epoch AI compute trends を本文主張に沿って再構成</p>
+            </figcaption>
+          </figure>
           <p class="lead">
             経験曲線のコスト低下率を80%とする計算では、倍増時間は生産規模の拡大とともにどんどん短くなり、数学的には約5年で発散する。Forethoughtの議論で重要なのは、この計算が<strong>どれか一つの仮定を落としても結論が大きく崩れない</strong>という点だ。倍増時間の上限を1日ではなく1週間に置いても、数年でタイプ2文明に到達するシナリオは成立する。加速効果は人間の直感よりもはるかに強力であり、ここに私たちは反直感的だが論理的には堅い帰結を突きつけられている。
           </p>

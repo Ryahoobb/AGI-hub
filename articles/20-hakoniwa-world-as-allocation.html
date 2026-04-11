@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+<meta name="robots" content="noindex, nofollow">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>箱庭主義 — 世界を配給するという思想 — AGI HUB</title>
+    <meta name="description" content="ユートピアとディストピアが極限で収束する先にある、物資ではなく世界そのものを配給する思想。希少性の哲学史と、最後の主語が外される地点。" />
+    <link rel="stylesheet" href="../design-system/palette.css">
+    <style>
+      :root {
+        --black: #000;
+        --body-text: #1a1a1a;
+        --mid: #585858;
+        --meta: #757575;
+        --light-gray: #999;
+        --border: #e8e3d4;
+        --bg: #faf8f1;
+        --bg-alt: #f3f1e4;
+        --accent: #2f2b92;
+        --accent-soft: rgba(47, 43, 146, 0.08);
+        --ease: cubic-bezier(0.22, 1, 0.36, 1);
+      }
+
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+      html { scroll-behavior: smooth; }
+
+      body {
+        font-family: HelveticaNeue, "Helvetica Neue", Helvetica, Arial,
+          游ゴシック体, YuGothic, "游ゴシック Medium", "Yu Gothic Medium",
+          游ゴシック, "Yu Gothic", "ヒラギノ角ゴ ProN W3", "Hiragino Kaku Gothic ProN",
+          "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", "MS ゴシック", "MS Gothic",
+          sans-serif;
+        font-feature-settings: "palt";
+        font-size: 16px;
+        line-height: 1.75;
+        color: var(--body-text);
+        background: var(--bg);
+        -webkit-font-smoothing: antialiased;
+        overflow-x: hidden;
+        word-wrap: break-word;
+      }
+
+      .progress {
+        position: fixed; top: 0; left: 0; height: 2px;
+        background: var(--accent); width: 0%; z-index: 100;
+        transition: width 0.3s var(--ease);
+      }
+
+      .nav {
+        position: fixed; right: 24px; top: 50%;
+        transform: translateY(-50%);
+        display: grid; gap: 16px; z-index: 50;
+      }
+      .nav button {
+        width: 8px; height: 8px; border-radius: 999px;
+        border: 1.5px solid var(--meta); background: transparent;
+        cursor: pointer; transition: all 0.3s var(--ease);
+      }
+      .nav button.active {
+        background: var(--accent); border-color: var(--accent);
+        transform: scale(1.4);
+      }
+
+      main { scroll-snap-type: y mandatory; }
+      .slide {
+        position: relative;
+        min-height: 100vh;
+        max-width: 1120px;
+        margin: 0 auto;
+        padding: 80px 48px 64px;
+        display: grid;
+        grid-template-rows: auto auto 1fr auto;
+        gap: 32px;
+        scroll-snap-align: start;
+      }
+      .slide + .slide { border-top: 1px solid var(--border); }
+
+      .hero {
+        width: 100%;
+        aspect-ratio: 16 / 7;
+        object-fit: cover;
+        display: block;
+        filter: grayscale(0.6) contrast(1.1);
+        transition: filter 0.6s var(--ease);
+      }
+      .hero:hover { filter: grayscale(0) contrast(1); }
+
+      .slide .hero.img-fullbleed {
+        width: 100vw;
+        margin-left: calc(50% - 50vw);
+        margin-right: calc(50% - 50vw);
+        max-width: none;
+        aspect-ratio: 21/9;
+      }
+      .slide .hero.img-wide {
+        width: min(1280px, calc(100vw - 48px));
+        position: relative;
+        left: 50%;
+        transform: translateX(-50%);
+        max-width: none;
+      }
+      .slide .hero.img-content { max-width: 680px; margin: 0 auto; aspect-ratio: 4/3; }
+      @media (max-width: 768px) {
+        .slide .hero.img-fullbleed,
+        .slide .hero.img-wide,
+        .slide .hero.img-content { width: 100%; max-width: 100%; aspect-ratio: 16 / 9; margin: 0; transform: none; left: 0; }
+      }
+
+      .hero-caption {
+        font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 11px;
+        letter-spacing: 0.083em;
+        color: var(--light-gray);
+        margin-top: 8px;
+        text-transform: uppercase;
+      }
+
+      .credits {
+        max-width: 1120px;
+        margin: 0 auto;
+        padding: 48px 48px 80px;
+        border-top: 1px solid var(--border);
+      }
+      .credits p {
+        font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 11px;
+        letter-spacing: 0.047em;
+        line-height: 2;
+        color: var(--light-gray);
+      }
+      .credits a {
+        color: var(--meta);
+        text-decoration: none;
+        border-bottom: 1px solid var(--border);
+      }
+      .credits a:hover {
+        color: var(--black);
+        border-bottom-color: var(--black);
+      }
+
+      .reveal {
+        opacity: 0;
+        transform: translateY(24px);
+        transition: opacity 0.6s var(--ease), transform 0.6s var(--ease);
+      }
+      .reveal.visible { opacity: 1; transform: translateY(0); }
+      .reveal-delay-1 { transition-delay: 0.1s; }
+      .reveal-delay-2 { transition-delay: 0.2s; }
+      .reveal-delay-3 { transition-delay: 0.35s; }
+
+      .eyebrow {
+        font-family: "SF Mono", "Fira Code", "Fira Mono", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 11px;
+        font-weight: 400;
+        letter-spacing: 0.083em;
+        text-transform: uppercase;
+        color: var(--accent);
+      }
+
+      h1, h2 {
+        color: var(--black);
+        font-weight: 700;
+        line-height: 1.45;
+        letter-spacing: normal;
+        max-width: 26ch;
+        padding-bottom: 14px;
+        border-bottom: 1px solid var(--accent);
+      }
+      h1 { font-size: clamp(28px, 4vw, 36px); }
+      h2 { font-size: clamp(24px, 3.5vw, 32px); }
+
+      .lead {
+        max-width: 780px;
+        font-size: 16px;
+        line-height: 1.85;
+        color: var(--body-text);
+      }
+      .lead + .lead { margin-top: 14px; }
+      .lead strong { color: var(--black); }
+      .lead.dropcap::first-letter {
+        font-size: 52px;
+        line-height: 1;
+        font-weight: 700;
+        float: left;
+        margin: 6px 10px 0 0;
+        color: var(--accent);
+      }
+
+      .panel { display: grid; gap: 24px; align-content: start; }
+      .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
+      .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+
+      .card {
+        padding: 24px 0;
+        border-top: 2px solid var(--accent);
+      }
+      .card .tag { color: var(--accent); }
+      .card strong { color: var(--black); }
+      .card p {
+        font-size: 16px;
+        line-height: 1.75;
+        color: var(--body-text);
+      }
+
+      .tag {
+        display: inline-block;
+        font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 11px;
+        letter-spacing: 0.083em;
+        color: var(--meta);
+        margin-bottom: 12px;
+      }
+
+      .point {
+        padding-left: 16px;
+        border-left: 2px solid var(--accent);
+        font-size: 16px;
+        line-height: 1.75;
+        color: var(--body-text);
+      }
+      .point strong { color: var(--black); }
+
+      .timeline {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 1px;
+        background: var(--border);
+      }
+      .timeline-step {
+        display: grid;
+        gap: 8px;
+        padding: 20px 14px;
+        background: var(--bg);
+      }
+      .timeline-step.highlight { background: var(--accent); }
+      .timeline-step.highlight .num,
+      .timeline-step.highlight p,
+      .timeline-step.highlight strong { color: var(--bg); }
+      .timeline-step .num {
+        font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 11px;
+        letter-spacing: 0.083em;
+        text-transform: uppercase;
+        color: var(--meta);
+      }
+      .timeline-step p {
+        font-size: 13px;
+        line-height: 1.55;
+        color: var(--body-text);
+      }
+      .timeline-step strong { color: var(--black); }
+
+      table.compare {
+        width: 100%;
+        border-collapse: collapse;
+        border-top: 2px solid var(--accent);
+        border-bottom: 2px solid var(--accent);
+      }
+      table.compare th,
+      table.compare td {
+        padding: 18px 16px;
+        text-align: left;
+        font-size: 15px;
+        line-height: 1.65;
+        color: var(--body-text);
+        border-bottom: 1px solid var(--border);
+        vertical-align: top;
+      }
+      table.compare th {
+        font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 11px;
+        letter-spacing: 0.083em;
+        text-transform: uppercase;
+        color: var(--accent);
+        font-weight: 400;
+        border-bottom: 1px solid var(--accent);
+      }
+      table.compare td strong { color: var(--black); }
+      table.compare tr:last-child td { border-bottom: none; }
+
+      .note {
+        font-size: 16px;
+        line-height: 1.75;
+        color: var(--body-text);
+        padding: 24px 28px;
+        border-left: 2px solid var(--accent);
+        background: var(--accent-soft);
+      }
+      .note strong { color: var(--black); }
+
+      .footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: end;
+        gap: 16px;
+        font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 11px;
+        letter-spacing: 0.083em;
+        color: var(--light-gray);
+        text-transform: uppercase;
+      }
+      .slide-count { font-weight: 700; color: var(--accent); }
+
+      @media (max-width: 900px) {
+        .timeline { grid-template-columns: repeat(2, 1fr); }
+      }
+      @media (max-width: 768px) {
+        .slide { padding: 64px 24px 48px; }
+        .grid-2, .grid-3 { grid-template-columns: 1fr; }
+        .nav { right: 12px; }
+        table.compare { font-size: 13px; }
+        table.compare th, table.compare td { padding: 14px 10px; }
+        .hero { aspect-ratio: 16 / 9; }
+        .credits { padding: 32px 24px 64px; }
+      }
+
+      @media print {
+        .slide { min-height: auto; page-break-after: always; padding: 24px 0; }
+        .nav, .progress { display: none; }
+        .reveal { opacity: 1; transform: none; }
+      }
+    </style>
+  </head>
+  <body class="pattern-broadsheet accent-deepblue has-site-header" data-category="lineage">
+    <div id="site-header-mount"></div>
+<script src="../partials/header.js" defer></script>
+    <div class="progress" id="progress"></div>
+
+    <aside class="nav" aria-label="Slide navigation">
+      <button data-target="slide-1" class="active" aria-label="Slide 1"></button>
+      <button data-target="slide-2" aria-label="Slide 2"></button>
+      <button data-target="slide-3" aria-label="Slide 3"></button>
+      <button data-target="slide-4" aria-label="Slide 4"></button>
+      <button data-target="slide-5" aria-label="Slide 5"></button>
+    </aside>
+
+    <div class="article-breadcrumb" style="font-family:'SF Mono','Fira Code',Menlo,Consolas,monospace;font-size:11px;letter-spacing:0.083em;text-transform:uppercase;color:#757575;display:flex;justify-content:space-between;align-items:center;padding:10px 32px;border-bottom:1px solid #e5e5e5;background:#fff;gap:16px;flex-wrap:wrap;">
+      <span>No. 20 / 20 &nbsp;·&nbsp; Lineage &nbsp;·&nbsp; 5 Slides</span>
+      <span style="display:flex;gap:20px;align-items:center;">
+        <a href="19-berserker-asi-optimization-trap.html" style="color:inherit;text-decoration:none;border-bottom:1px solid transparent;transition:border-color 0.2s;" onmouseover="this.style.borderBottomColor='#757575'" onmouseout="this.style.borderBottomColor='transparent'">← Prev</a>
+        <a href="../index.html#filter=lineage" style="color:inherit;text-decoration:none;border-bottom:1px solid transparent;transition:border-color 0.2s;" onmouseover="this.style.borderBottomColor='#757575'" onmouseout="this.style.borderBottomColor='transparent'">Same Category</a>
+        <span style="opacity:0.3;">Next →</span>
+      </span>
+    </div>
+
+    <main>
+      <!-- ═══════════ Slide 1 ═══════════ -->
+      <section class="slide" id="slide-1">
+        <div class="eyebrow reveal">AGI HUB &nbsp;·&nbsp; No. 20 &nbsp;·&nbsp; Lineage &nbsp;·&nbsp; Where Utopia Meets Dystopia &nbsp;·&nbsp; 2026.04.11 &nbsp;·&nbsp; By Ryao</div>
+        <h1 class="reveal reveal-delay-1">ユートピアとディストピアは、極限で同じ像を結ぶ</h1>
+        <div class="panel reveal reveal-delay-2">
+          <div>
+            <img class="hero img-fullbleed" src="../images/20-hakoniwa-world-as-allocation/slide1.jpg" alt="Dark reflective crystal sphere holding an inverted world">
+            <div class="hero-caption">Photo: Unsplash</div>
+          </div>
+          <p class="lead dropcap">
+            人類史は長いあいだ、理想郷と破滅を両極に置いて未来を語ってきた。片方は欠乏のない世界、もう片方は自由を失った世界。この二つは対極にあるとされ、論者は片方に向かって進み、もう片方を避けることを倫理の出発点にした。だが奇妙なことに、この両極を十分な倍率で拡大していくと、像は次第に重なり始める。
+          </p>
+          <p class="lead">
+            欠乏が完全に消えた社会では、選ぶべき苦労も、乗り越えるべき困難も、所有を巡る闘争も残らない。自由の総量は極大化したはずなのに、自由が行使される対象が失われている。逆に、完全に統制された社会では、個人の欲望の余地は消えるが、住民は何一つ不足なく与えられ、衝突の種が抹消される。前者をユートピアと呼び、後者をディストピアと呼んできたが、両者のあいだに残るのは呼び名の違いだけである。
+          </p>
+          <p class="lead">
+            AIが飛躍的に発展した未来を論じるとき、この収束が初めて思考実験ではなく設計仕様として扱える距離に近づく。問題は、どちらに進むかではない。<strong>どちらに進んでも、ある一点で像が重なってしまう</strong>ことだ。この記事は、その重なる一点がどんな形をしているかを扱う。
+          </p>
+          <div class="note">
+            ユートピアとディストピアという二極は、それぞれ単独では安定しない。強い圧力がかかれば社会は中途半端な場所に留まれず、どちらかの極へ押し出される。AIはその圧力を人類が初めて手にする形で提供している。押し出された先で何が待っているかを、五段階で辿る。
+          </div>
+        </div>
+        <div class="footer reveal reveal-delay-3">
+          <span>両極は、十分な倍率で重なる</span>
+          <span class="slide-count">1 / 5</span>
+        </div>
+      </section>
+
+      <!-- ═══════════ Slide 2 ═══════════ -->
+      <section class="slide" id="slide-2">
+        <div class="eyebrow reveal">What Broke The Old Dreams</div>
+        <h2 class="reveal reveal-delay-1">社会主義を砕いたのは思想ではなく、物資の量だった</h2>
+        <div class="panel reveal reveal-delay-2">
+          <div>
+            <img class="hero img-wide" src="../images/20-hakoniwa-world-as-allocation/slide2.jpg" alt="An empty cavernous warehouse interior">
+            <div class="hero-caption">Photo: Unsplash</div>
+          </div>
+          <p class="lead">
+            前のスライドで示した両極の収束を先に進める前に、もう一つ古い失敗例を連れてくる必要がある。二十世紀の社会主義・共産主義は、現実の経済運営で失敗した。ハイエクが『The Use of Knowledge in Society』（1945年）で指摘した知識分散の計算問題、ミーゼスの社会主義計算論争（1920年）、そしてソ連末期の実証的崩壊。いずれも原因は同じ一点に帰着する。<strong>物資の配分は、有限の資源をどう分けるかという問題</strong>であり、有限である以上は優先順位を決める誰かが必要で、その決定は必ず歪む。
+          </p>
+          <p class="lead">
+            ここで一度立ち止まる価値がある。もし物資が無限に近く供給できる世界があったとしたら、配分問題そのものが消える。誰かが多く取っても他人の取り分は減らない。歪みを決める必要も、中央計画を立てる必要も、市場で価格を発見する必要もない。<strong>社会主義が失敗したのは理念の問題ではなく、それが前提としていた「無限供給」という条件を物質世界が提供しなかった</strong>からだ、という読み替えが可能になる。
+          </p>
+          <p class="lead">
+            この読み替えは、マルクスにもハイエクにも存在しない。両者は物質的稀少性を所与として論じていたからだ。ジョージェスク=レーゲンが『The Entropy Law and the Economic Process』（1971年）で示したとおり、物質経済は熱力学第二法則の下にあり、エネルギーと秩序は常に劣化していく。物質的ユートピアはエントロピーによって原理的に阻まれている。だからこそ、稀少性を前提としない経済思想はこれまで誰も真面目に設計できなかった。
+          </p>
+          <table class="compare">
+            <thead>
+              <tr>
+                <th>思想</th>
+                <th>想定する稀少性</th>
+                <th>失敗の原因</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>古典資本主義</strong></td>
+                <td>物質は有限、価格で配分</td>
+                <td>分配の歪みと外部性</td>
+              </tr>
+              <tr>
+                <td><strong>社会主義・共産主義</strong></td>
+                <td>物質は有限、中央計画で配分</td>
+                <td>計算問題と誘因構造の崩壊</td>
+              </tr>
+              <tr>
+                <td><strong>ポスト稀少性論</strong></td>
+                <td>物質は無限と仮定</td>
+                <td>仮定が熱力学に反する</td>
+              </tr>
+              <tr>
+                <td><strong>箱庭主義（本記事）</strong></td>
+                <td>物質ではなく世界を配分</td>
+                <td>稀少性の対象を切り替える</td>
+              </tr>
+            </tbody>
+          </table>
+          <p class="lead">
+            この表の最後の行が、次のスライドの入口になる。問いはこうだ——配分する対象を、そもそも物資ではなくしてしまえばどうなるか。
+          </p>
+        </div>
+        <div class="footer reveal reveal-delay-3">
+          <span>稀少性が思想の限界を決めてきた</span>
+          <span class="slide-count">2 / 5</span>
+        </div>
+      </section>
+
+      <!-- ═══════════ Slide 3 ═══════════ -->
+      <section class="slide" id="slide-3">
+        <div class="eyebrow reveal">World As Allocation</div>
+        <h2 class="reveal reveal-delay-1">物資ではなく、世界そのものを配給するという発想</h2>
+        <div class="panel reveal reveal-delay-2">
+          <div>
+            <img class="hero img-content" src="../images/20-hakoniwa-world-as-allocation/slide3.jpg" alt="A hand holding a crystal ball reflecting an inverted forest">
+            <div class="hero-caption">Photo: Unsplash</div>
+          </div>
+          <p class="lead">
+            箱庭主義——この記事で扱う思想——の核心は一行で書ける。<strong>配分する対象を、物質からシミュレートされた世界に切り替える</strong>。これだけだ。ただしこの切り替えが起きると、稀少性の議論全体が足元から崩れる。
+          </p>
+          <p class="lead">
+            物理的物資は有限だが、計算上の世界は原理的に無限に生成できる。一人の住民に割り当てられる箱庭の中では、資源は計算資源として存在し、配分は物質ではなくビット列で実行される。箱庭の中で王になることも、森を所有することも、他人を従えることもできる。だがその「他人」は他の住民ではなく、住民の嗜好に合わせて生成されたプロセスである。現実世界で奪い合われた希少なもの——土地、配偶者、名声、景色——は、箱庭のなかでは全員に同時に与えられる。
+          </p>
+          <p class="lead">
+            一つ手前の段階として、ノージックが『アナーキー・国家・ユートピア』（1974年）で提唱した<strong>「可能世界のユートピア」</strong>を思い出してほしい。ノージックは万人が同じ理想を共有する単一ユートピアは不可能だとし、代わりに「人々がそれぞれのユートピアを選び合流する枠組み」としてのメタ・ユートピアを提示した。箱庭主義はこの枠組みの技術的実装に近い。ただしノージックは現実世界の中に複数のコミュニティを並列させることを想定したのに対し、箱庭主義は<strong>現実世界を捨てる</strong>。各人に一つずつ、物理現実の外側にある世界を渡す。
+          </p>
+          <div class="grid-3">
+            <div class="card">
+              <span class="tag">Layer 1</span>
+              <p><strong>個別箱庭</strong><br>一人一つの完全カスタマイズされた世界。その中では神のように振る舞える。住民の嗜好・記憶・生理に合わせて、世界のテクスチャが生成される。</p>
+            </div>
+            <div class="card">
+              <span class="tag">Layer 2</span>
+              <p><strong>共有サーバー</strong><br>交流したい時に合流できる共通空間。VRChat的な多人数空間の高解像度版。参加は任意で、退出も任意。一つの固定された現実は存在しない。</p>
+            </div>
+            <div class="card">
+              <span class="tag">Layer 3</span>
+              <p><strong>運用OS</strong><br>AIが各箱庭と共有サーバーを同時に走らせる基盤層。配分、生成、整合性、ロールバック。運用層はもはや国家でも市場でもない。</p>
+            </div>
+          </div>
+          <p class="lead">
+            ここで身近な具体例を挟む。ソーシャルゲームのプレイヤーは、自分のアバターが支配する小世界の中で、現実の稀少性とは切り離された達成感を得ている。これは箱庭主義の最も初歩的な姿だ。違いは、現在のそれが視覚と操作のごく一部にしか及ばないのに対して、成熟した箱庭は<strong>感覚・感情・記憶・時間感覚のすべてに及ぶ</strong>ことである。初歩的な姿がすでに存在する思想は、技術によって深化する余地しか残されていない。
+          </p>
+        </div>
+        <div class="footer reveal reveal-delay-3">
+          <span>配分対象の切り替えが、思想史を折りたたむ</span>
+          <span class="slide-count">3 / 5</span>
+        </div>
+      </section>
+
+      <!-- ═══════════ Slide 4 ═══════════ -->
+      <section class="slide" id="slide-4">
+        <div class="eyebrow reveal">The New Unit Of Wealth</div>
+        <h2 class="reveal reveal-delay-1">豊かさの単位が、計算資源に置き換わる</h2>
+        <div class="panel reveal reveal-delay-2">
+          <div>
+            <img class="hero img-wide" src="../images/20-hakoniwa-world-as-allocation/slide4.jpg" alt="Solar corona photographed during total eclipse">
+            <div class="hero-caption">Photo: Unsplash</div>
+          </div>
+          <p class="lead">
+            箱庭主義が成立したとき、豊かさという概念そのものが書き換えられる。物資の量ではなく、<strong>住民に割り当てられた計算資源の量が豊かさを決める</strong>。多くの計算資源が与えられた住民は、より高解像度で、より長い主観時間を持ち、より複雑な感受性で世界を体験できる。少ない計算資源しか持たない住民は、粗いテクスチャと短い主観時間の中に閉じ込められる。
+          </p>
+          <p class="lead">
+            この帰結のうち、主観時間の操作は特に重い。もし箱庭内の時間流を現実時間の千倍に加速できれば、現実世界で三日間の停電が起きても、箱庭の住民は千年分を過ごしたあとで目覚めることになる。<strong>人類が物理的に滅亡する日が来たとしても、箱庭の中で十万年生きた住民にとって、それは退屈な日常の末に訪れる眠りに等しい</strong>。ジェイムズ・P・ホーガンが『Voyage from Yesteryear』（1982年）でポスト稀少性社会を素描したとき、彼はまだ物理時間の中に人間を置いていた。主観時間の操作は、この枠組みを超える。
+          </p>
+          <div class="timeline">
+            <div class="timeline-step">
+              <span class="num">Stage α</span>
+              <p><strong>物質の量</strong><br>農耕から産業革命まで。穀物と土地で測る。</p>
+            </div>
+            <div class="timeline-step">
+              <span class="num">Stage β</span>
+              <p><strong>貨幣の量</strong><br>近代資本主義。数字で抽象化。</p>
+            </div>
+            <div class="timeline-step">
+              <span class="num">Stage γ</span>
+              <p><strong>時間の量</strong><br>労働時間・可処分時間が貴重化。</p>
+            </div>
+            <div class="timeline-step">
+              <span class="num">Stage δ</span>
+              <p><strong>注意の量</strong><br>2010年代以降。Attention Economyの時代。</p>
+            </div>
+            <div class="timeline-step highlight">
+              <span class="num">Stage ε</span>
+              <p><strong>計算資源の量</strong><br>箱庭時代。主観時間と解像度がここから派生する。</p>
+            </div>
+          </div>
+          <p class="lead">
+            計算資源の総量にも上限はある。ニコライ・カルダシェフが1964年に提示したスケール——Type Iで惑星規模、Type IIで恒星規模（ダイソン球）、Type IIIで銀河規模のエネルギー利用——のうち、太陽系はType II で上限に到達する。住民数と一人あたり計算資源の積が太陽系の発電量を超えると、人口か解像度のどちらかを削らなければならない。
+          </p>
+          <p class="lead">
+            さらに、太陽フレアや恒星進化の時間スケールで考えれば、計算資源そのものが外生的ショックで一時的に縮減する日が来る。箱庭の中で千年を生きていた住民は、現実世界のフレア一発で粗い解像度に落とされる。豊かさはもはや貨幣ではなく、<strong>宇宙の熱力学的予算</strong>で決まる。このとき初めて、ジョージェスク=レーゲンの予言した「経済はエントロピーの娘である」という命題が、形而上学ではなく運用仕様として効いてくる。
+          </p>
+        </div>
+        <div class="footer reveal reveal-delay-3">
+          <span>豊かさは貨幣から計算資源へ、そして熱力学的予算へ</span>
+          <span class="slide-count">4 / 5</span>
+        </div>
+      </section>
+
+      <!-- ═══════════ Slide 5 ═══════════ -->
+      <section class="slide" id="slide-5">
+        <div class="eyebrow reveal">The Last Subject</div>
+        <h2 class="reveal reveal-delay-1">「人間にとって」という最後の主語が、静かに外される</h2>
+        <div class="panel reveal reveal-delay-2">
+          <div>
+            <img class="hero" src="../images/20-hakoniwa-world-as-allocation/slide5.jpg" alt="Silhouette of mountain peaks disappearing into fog">
+            <div class="hero-caption">Photo: Unsplash</div>
+          </div>
+          <p class="lead">
+            ここまで記事は、箱庭主義を人類の到達点として論じてきた。だが最後に、この論じ方そのものが一つの前提に寄りかかっていることを明るみに出す必要がある。<strong>「人間にとって良い世界」とは誰のことなのか</strong>。
+          </p>
+          <p class="lead">
+            マインドアップロードを前提にするなら、箱庭の住民は生物学的な人間ではなく、計算基盤の上で走る情報プロセスである。そのプロセスは、自己同一性の境界を物理的身体ではなく、データの連続性に依存する。デレク・パーフィットが『Reasons and Persons』（1984年）で展開した人格同一性の議論は、この問題を四十年前に先取りしていた。彼は<strong>「自己はテセウスの船のように、連続性という虚構の上に成り立つ」</strong>と指摘し、連続性が保たれるかぎり、どこで船を乗り換えても同じ船であると主張することに根拠はないと示した。箱庭主義は、この虚構を計算機の上で無限に複製可能にする。
+          </p>
+          <p class="lead">
+            一人の住民が千体に分岐し、それぞれが別の人生を歩み、後で統合される——この操作の下で、「私」という主語はどこに残るのか。パーフィットの答えは冷徹だった。残る必要はない。人格同一性は道徳的重要性を持たない概念であり、本当に問うべきは「経験の束がどう連続するか」だけである。箱庭主義はこの結論を技術として実装する。
+          </p>
+          <div class="note">
+            さらに深い問いがある。箱庭の中で完璧に幸福な一兆のプロセスが走っている世界と、現実に苦しみながら生きる一万人の人間の世界。<strong>どちらがユートピアかという問いは、そもそも「人間にとって」という視点が成立しなければ答えられない</strong>。だが箱庭主義が成熟する頃には、その視点を持つ主体自体が技術の配給対象になっている。ユートピアかディストピアかを評価する審級が、評価される対象の内部に溶け込む。
+          </div>
+          <p class="lead">
+            記事の冒頭で、ユートピアとディストピアは極限で同じ像を結ぶと書いた。いま、その同じ像が何を意味していたかが見える。像が重なるのは、<strong>評価する主体そのものが消えるから</strong>である。良い世界でも悪い世界でもなく、良し悪しを問える誰かがいなくなった世界。問う者がいなければ、問いは答えを持たない。
+          </p>
+          <p class="lead">
+            箱庭主義の終着点は、人類が無限の豊かさを手に入れる地点ではない。<strong>豊かさを豊かさと感じる最後の主語が、静かに外される地点</strong>である。次に問われるべきは「人類はそこへ進むべきか」ではない。そこへ進むとき、問い自体を発する者がどこに残るのかである。
+          </p>
+        </div>
+        <div class="footer reveal reveal-delay-3">
+          <span>問う者のいない世界は、答えを持たない</span>
+          <span class="slide-count">5 / 5</span>
+        </div>
+      </section>
+
+      <!-- ═══════════ Article Navigation ═══════════ -->
+      <section class="slide" style="min-height:auto;padding:64px 48px 80px;grid-template-rows:auto auto auto 1fr;">
+        <div class="eyebrow reveal">Continue Reading</div>
+        <h2 class="reveal reveal-delay-1" style="max-width:none;">次の記事へ</h2>
+        <div class="panel reveal reveal-delay-2">
+          <div class="grid-2">
+            <a href="19-berserker-asi-optimization-trap.html" class="card" style="color:inherit;display:block;">
+              <p style="font-family:'SF Mono','Fira Code',Menlo,Consolas,monospace;font-feature-settings:normal;font-size:11px;letter-spacing:0.083em;text-transform:uppercase;color:#757575;margin-bottom:12px;">← Prev · No.19</p>
+              <p><strong>バーサーカーASI — 最適化が効きすぎた日、人類は守る側ではなく許される側に回った</strong></p>
+            </a>
+            <div class="card" style="opacity:0.35;">
+              <p style="font-family:'SF Mono','Fira Code',Menlo,Consolas,monospace;font-feature-settings:normal;font-size:11px;letter-spacing:0.083em;text-transform:uppercase;color:#757575;margin-bottom:12px;">Next →</p>
+              <p>最新の記事です</p>
+            </div>
+          </div>
+          <p style="margin-top:32px;text-align:center;">
+            <a href="../index.html" style="color:inherit;border-bottom:1px solid #999;padding-bottom:2px;">All Articles — 記事一覧へ</a>
+          </p>
+          <p style="margin-top:16px;text-align:center;font-family:'SF Mono','Fira Code',Menlo,Consolas,monospace;font-size:11px;letter-spacing:0.083em;text-transform:uppercase;color:#757575;">
+            <a href="../index.html#filter=lineage" style="color:inherit;border-bottom:1px solid #999;padding-bottom:2px;">Lineage カテゴリの記事一覧 →</a>
+          </p>
+        </div>
+      </section>
+    </main>
+
+    <!-- ═══════════ Photo Credits ═══════════ -->
+    <section class="credits">
+      <p>
+        Photos courtesy of Unsplash contributors.<br>
+        Slide 1: <a href="https://unsplash.com/photos/LUSeAEw_mBQ">LUSeAEw_mBQ</a> /
+        Slide 2: <a href="https://unsplash.com/photos/FXOXjeVSPyc">FXOXjeVSPyc</a> /
+        Slide 3: <a href="https://unsplash.com/photos/aUYmEjU6mvY">aUYmEjU6mvY</a> /
+        Slide 4: <a href="https://unsplash.com/photos/qCepANGLvY4">qCepANGLvY4</a> /
+        Slide 5: <a href="https://unsplash.com/photos/5VO0seX-Wdg">5VO0seX-Wdg</a> /
+        Thumbnail: <a href="https://unsplash.com/photos/KT3WlrL_bsg">KT3WlrL_bsg</a>
+      </p>
+    </section>
+
+    <script>
+      const progress = document.getElementById('progress');
+      window.addEventListener('scroll', () => {
+        const h = document.documentElement;
+        const pct = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
+        progress.style.width = pct + '%';
+      });
+
+      const slides = document.querySelectorAll('main > .slide');
+      const buttons = document.querySelectorAll('.nav button');
+      buttons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const target = document.getElementById(btn.dataset.target);
+          if (target) target.scrollIntoView({ behavior: 'smooth' });
+        });
+      });
+      const io = new IntersectionObserver(entries => {
+        entries.forEach(e => {
+          if (e.isIntersecting) {
+            const id = e.target.id;
+            buttons.forEach(b => b.classList.toggle('active', b.dataset.target === id));
+          }
+        });
+      }, { threshold: 0.5 });
+      slides.forEach(s => { if (s.id) io.observe(s); });
+
+      const revealIO = new IntersectionObserver(entries => {
+        entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+      }, { threshold: 0.15 });
+      document.querySelectorAll('.reveal').forEach(el => revealIO.observe(el));
+    </script>
+  </body>
+</html>

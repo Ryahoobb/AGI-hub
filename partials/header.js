@@ -51,6 +51,24 @@
         }
       }
 
+      // Hamburger toggle (mobile)
+      var toggle = headerEl.querySelector('.site-nav-toggle');
+      var navRight = headerEl.querySelector('.site-nav-right');
+      if (toggle && navRight) {
+        toggle.addEventListener('click', function () {
+          var isOpen = navRight.classList.toggle('open');
+          toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+        });
+        // Close menu when a link is clicked
+        var navLinks = navRight.querySelectorAll('a');
+        for (var k = 0; k < navLinks.length; k++) {
+          navLinks[k].addEventListener('click', function () {
+            navRight.classList.remove('open');
+            toggle.setAttribute('aria-expanded', 'false');
+          });
+        }
+      }
+
       // Initialize Google Translate widget if the function exists
       if (typeof googleTranslateElementInit === 'function') {
         try { googleTranslateElementInit(); } catch (e) { /* noop */ }

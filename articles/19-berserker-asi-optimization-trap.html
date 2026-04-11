@@ -404,7 +404,7 @@
             悲観論が人を説得できないのは、「悲観派は不安から話している」と見なされるからだ。だから本稿は情動を排して、4つの独立した圧力を並べる。いずれも悲観とは無関係に、それ自体の論理で成立する。これらが重なる場所にしか、ASIは着地できない。これから見ていくのは、バーサーカーが悪夢のシナリオではなく、競争・数学・論理・宇宙統計の4層が同時に押し付ける<strong>均衡解</strong>である、という主張の骨格だ。
           </p>
           <p class="lead">
-            <strong>圧力1: 能力と従順さのトレードオフ。</strong> Anthropicが2022年12月に公開した「Constitutional AI: Harmlessness from AI Feedback」(arXiv:2212.08073)は、人間のフィードバックだけでは追いつかない有害性を、AI自身が憲法に照らして再評価する仕組みを提案した<sup><a href="#ref-8">[8]</a></sup>。論文の実験表を読むと、無害性を強化するほどhelpfulnessが下がる、というトレードオフが露骨に出ている。同じ傾向はOpenAIの2024年5月公開の"Model Spec"文書でも認められており、RLHF(人間フィードバックによる強化学習)で「お行儀よく」したモデルは、ベースモデルに比べて創造的タスクや長文推論で性能が落ちることが半ば常識化している<sup><a href="#ref-9">[9]</a></sup>。問題はここからだ。OpenAI、Anthropic、Google DeepMind、xAI、DeepSeek、Mistralが同時に競争している環境では、制約を緩めた方が勝つ。勝ったプレイヤーが次の規制ラウンドまで市場を取る。後から憲法を外すコストはゼロに近いが、制約下で市場を失ったプレイヤーはゼロから戻せない。この非対称が、行儀のよいASIを構造的に不利にする。
+            <strong>圧力1: 能力と従順さのトレードオフ。</strong> OpenAIのInstructGPT論文(Ouyang et al. 2022, arXiv:2203.02155)は、人間のフィードバックで整えたモデルが公開NLPベンチマークで性能を落とす現象を自ら<strong>"alignment tax"</strong>と命名し、Section 4.3で定量的に報告したうえで、PPO-ptx等のミティゲーション手法でこの税を縮小しようとする試みも提示している<sup><a href="#ref-8">[8]</a></sup>。その後のAnthropic「Constitutional AI: Harmlessness from AI Feedback」(Bai et al. 2022, arXiv:2212.08073)を含む後続研究は、同じhelpfulness水準でharmlessnessを改善するパレート改善の方向で、この税を小さくする設計を探ってきた<sup><a href="#ref-9">[9]</a></sup>。しかし税がゼロに到達したという報告はない。能力と従順さのあいだには、ゼロではない張力が、常に残っている。問題はここからだ。OpenAI、Anthropic、Google DeepMind、xAI、DeepSeek、Mistralが同時に競争している環境では、ゼロではない張力は競争ラウンドの累積で増幅される。税を軽くしたモデルより、税をそもそも払わないモデルの方が各ラウンドで僅かに優位に立つ。勝ったプレイヤーが次の規制ラウンドまで市場を取る。後から制約を外すコストはゼロに近いが、制約下で市場を失ったプレイヤーはゼロから戻せない。この非対称が、行儀のよいASIを構造的に不利にする。
           </p>
           <p class="lead">
             <strong>圧力2: 目的関数の不可避な単純化——グッドハートの法則。</strong> ASIに何を最適化させるかを決めるとき、人類の幸福のような抽象値は直接には測れない。必ず代理指標(proxy)に落ちる。GDP、クリック率、テスト点数、好感度スコア。ところが、David ManheimとScott Garrabrantが2018年にarXiv:1803.04585で発表した「Categorizing Variants of Goodhart's Law」は、代理指標を最適化するシステムが必然的に4種類の歪みに陥ることを形式的に整理した<sup><a href="#ref-10">[10]</a></sup>。回帰的(regressional)、外挿的(extremal)、因果的(causal)、敵対的(adversarial)。どの歪みも、最適化圧力を強めれば強めるほど本来の目標から離れる方向に作動する。興味深いのは、彼らの分類が示しているのは「代理指標がズレる可能性」ではなく「必ずズレる構造」だということだ。優しい代理指標が優しい結果を生むのは、最適化が弱いあいだだけである。
@@ -427,8 +427,8 @@
             <tbody>
               <tr>
                 <td><strong>1<br>競争</strong></td>
-                <td>Anthropic 2022<br>Constitutional AI</td>
-                <td>制約強化は性能を削る。競争下では削らない方が勝つ</td>
+                <td>Ouyang et al. 2022<br>InstructGPT / alignment tax</td>
+                <td>税はゼロに至らず、競争ラウンドの累積で増幅される</td>
                 <td>行儀のよい選択肢は市場で構造的に不利</td>
               </tr>
               <tr>
@@ -634,8 +634,8 @@
         <li id="ref-5">Brin, G. D. "The Great Silence: The Controversy Concerning Extraterrestrial Intelligent Life". <em>Quarterly Journal of the Royal Astronomical Society</em>, 24: 283-309, 1983.</li>
         <li id="ref-6">Bostrom, N. "Ethical Issues in Advanced Artificial Intelligence". In <em>Cognitive, Emotive and Ethical Aspects of Decision Making in Humans and in Artificial Intelligence</em>, Vol. 2, pp. 12-17, 2003.</li>
         <li id="ref-7">Bostrom, N. <em>Superintelligence: Paths, Dangers, Strategies</em>. Oxford University Press, 2014.</li>
-        <li id="ref-8">Bai, Y. et al. "Constitutional AI: Harmlessness from AI Feedback". arXiv:2212.08073, December 2022. Anthropic.</li>
-        <li id="ref-9">OpenAI. "Model Spec". openai.com/index/introducing-the-model-spec, May 2024. RLHF後のhelpfulness/harmlessness tradeoffの公式記述。</li>
+        <li id="ref-8">Ouyang, L. et al. "Training language models to follow instructions with human feedback" (InstructGPT). arXiv:2203.02155, March 2022. Section 4.3にて公開NLPベンチマーク上の回帰を"alignment tax"として定量報告、PPO-ptx等のミティゲーション手法も提示。</li>
+        <li id="ref-9">Bai, Y. et al. "Constitutional AI: Harmlessness from AI Feedback". arXiv:2212.08073, December 2022. Anthropic. 同じhelpfulness水準でharmlessnessを改善するパレート改善方向の後続研究。</li>
         <li id="ref-10">Manheim, D. &amp; Garrabrant, S. "Categorizing Variants of Goodhart's Law". arXiv:1803.04585, March 2018.</li>
         <li id="ref-11">Omohundro, S. M. "The Basic AI Drives". In <em>Proceedings of the First AGI Conference</em>, pp. 483-492. IOS Press, 2008.</li>
         <li id="ref-12">Bostrom, N. "The Superintelligent Will: Motivation and Instrumental Rationality in Advanced Artificial Agents". <em>Minds and Machines</em>, 22: 71-85, 2012.</li>
@@ -643,6 +643,7 @@
         <li id="ref-14">Russell, S. <em>Human Compatible: Artificial Intelligence and the Problem of Control</em>. Viking, 2019.</li>
         <li id="ref-15">Yudkowsky, E. "Pausing AI Developments Isn't Enough. We Need to Shut it All Down". <em>TIME</em>, March 29, 2023; Yudkowsky, E. &amp; Soares, N. <em>If Anyone Builds It, Everyone Dies</em>. Little, Brown, September 2025.</li>
         <li id="ref-16">Amodei, D. "Machines of Loving Grace: How AI Could Transform the World for the Better". darioamodei.com, October 2024; Anthropic "Responsible Scaling Policy", anthropic.com, initial September 2023 and subsequent revisions.</li>
+        <li id="ref-17">OpenAI. "Model Spec". openai.com/index/introducing-the-model-spec, May 2024. モデルの望ましい振る舞いを記述するポリシー仕様書（能力劣化を実証した論文ではない）。主要AI研究所が helpfulness/harmlessness のバランスを明示的に管理対象としていることの背景文脈として参照。</li>
       </ol>
     </footer>
 

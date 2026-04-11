@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Frontier Models &amp; Evaluations — AGI HUB</title>
+<meta name="description" content="最新の主要AIモデル一覧と、METR・Apollo・Epoch AIなど評価機関による現在地のレファレンス">
+
+<link rel="stylesheet" href="design-system/palette.css">
+
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: HelveticaNeue, "Helvetica Neue", Helvetica, Arial,
+      "Hiragino Kaku Gothic ProN", sans-serif;
+    font-feature-settings: "palt";
+    background: #fff;
+    color: #1a1a1a;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .dashboard {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 48px 48px 64px;
+  }
+
+  .dash-eyebrow {
+    font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #999;
+    margin-bottom: 12px;
+  }
+  .dash-title {
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 44px;
+    font-weight: 700;
+    line-height: 1.1;
+    color: #1a1a1a;
+    letter-spacing: -0.5px;
+    margin-bottom: 10px;
+  }
+  .dash-subtitle {
+    font-size: 16px;
+    color: #757575;
+    max-width: 720px;
+    line-height: 1.6;
+    margin-bottom: 6px;
+  }
+  .dash-date {
+    font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #999;
+    margin-bottom: 40px;
+  }
+
+  /* KPI row */
+  .kpi-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: #e5e5e5;
+    border: 1px solid #e5e5e5;
+    margin-bottom: 56px;
+  }
+  .kpi-card {
+    background: #fff;
+    padding: 24px 28px;
+  }
+  .kpi-value {
+    font-family: Georgia, serif;
+    font-size: 36px;
+    font-weight: 700;
+    line-height: 1;
+    margin-bottom: 8px;
+    color: #1a1a1a;
+  }
+  .kpi-value.accent { color: #b23a2f; }
+  .kpi-label {
+    font-family: "SF Mono", Menlo, monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #999;
+    margin-bottom: 4px;
+  }
+  .kpi-note {
+    font-size: 11px;
+    color: #757575;
+    line-height: 1.4;
+  }
+
+  /* Section headers */
+  .section-block { margin-bottom: 64px; }
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    border-bottom: 2px solid #1a1a1a;
+    padding-bottom: 10px;
+    margin-bottom: 28px;
+    gap: 24px;
+  }
+  .section-header h2 {
+    font-family: Georgia, serif;
+    font-size: 24px;
+    font-weight: 700;
+    color: #1a1a1a;
+    letter-spacing: -0.3px;
+  }
+  .section-header .section-meta {
+    font-family: "SF Mono", Menlo, monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #999;
+  }
+  .section-intro {
+    font-size: 14px;
+    color: #585858;
+    line-height: 1.75;
+    max-width: 820px;
+    margin-bottom: 24px;
+  }
+
+  /* Model table */
+  .model-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin-bottom: 32px;
+  }
+  .model-table thead th {
+    text-align: left;
+    font-family: "SF Mono", Menlo, monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #757575;
+    padding: 10px 12px;
+    border-bottom: 1px solid #1a1a1a;
+    font-weight: 600;
+  }
+  .model-table tbody td {
+    padding: 14px 12px;
+    border-bottom: 1px solid #e5e5e5;
+    vertical-align: top;
+    line-height: 1.55;
+  }
+  .model-table tbody tr:hover { background: #fafafa; }
+  .model-table .lab {
+    font-family: Georgia, serif;
+    font-weight: 700;
+    font-size: 14px;
+    color: #1a1a1a;
+    white-space: nowrap;
+  }
+  .model-table .model-name {
+    font-weight: 700;
+    color: #1a1a1a;
+  }
+  .model-table .model-date {
+    font-family: "SF Mono", Menlo, monospace;
+    font-size: 10px;
+    color: #999;
+    letter-spacing: 0.05em;
+    display: block;
+    margin-top: 2px;
+  }
+  .model-table .ctx {
+    font-family: "SF Mono", Menlo, monospace;
+    font-size: 12px;
+    color: #1a1a1a;
+    white-space: nowrap;
+  }
+  .model-table .notes { color: #585858; }
+  .model-table .bench {
+    font-family: "SF Mono", Menlo, monospace;
+    font-size: 11px;
+    color: #1a1a1a;
+    line-height: 1.7;
+  }
+  .model-table .bench span { color: #757575; }
+
+  /* Benchmark leaderboard grid */
+  .bench-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: #e5e5e5;
+    border: 1px solid #e5e5e5;
+  }
+  .bench-card {
+    background: #fff;
+    padding: 28px 32px;
+  }
+  .bench-card h3 {
+    font-family: Georgia, serif;
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 4px;
+    color: #1a1a1a;
+  }
+  .bench-card .bench-sub {
+    font-family: "SF Mono", Menlo, monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #999;
+    margin-bottom: 20px;
+  }
+  .bench-card ol {
+    list-style: none;
+    counter-reset: rank;
+  }
+  .bench-card ol li {
+    counter-increment: rank;
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    padding: 8px 0;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 13px;
+  }
+  .bench-card ol li:last-child { border-bottom: none; }
+  .bench-card ol li::before {
+    content: counter(rank, decimal-leading-zero);
+    font-family: "SF Mono", Menlo, monospace;
+    font-size: 10px;
+    color: #999;
+    letter-spacing: 0.05em;
+    min-width: 24px;
+  }
+  .bench-card ol li .model {
+    flex: 1;
+    color: #1a1a1a;
+  }
+  .bench-card ol li .score {
+    font-family: "SF Mono", Menlo, monospace;
+    font-size: 12px;
+    color: #b23a2f;
+    font-weight: 700;
+  }
+  .bench-card .bench-note {
+    margin-top: 16px;
+    font-size: 11px;
+    color: #999;
+    line-height: 1.6;
+    padding-top: 12px;
+    border-top: 1px dashed #e5e5e5;
+  }
+
+  /* Eval agency cards */
+  .agency-list { display: grid; grid-template-columns: 1fr; gap: 32px; }
+  .agency-card {
+    border-left: 3px solid #1a1a1a;
+    padding: 4px 0 4px 24px;
+  }
+  .agency-card h3 {
+    font-family: Georgia, serif;
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .agency-card .agency-tag {
+    font-family: "SF Mono", Menlo, monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #999;
+    margin-bottom: 16px;
+  }
+  .agency-card p {
+    font-size: 14px;
+    line-height: 1.75;
+    color: #1a1a1a;
+    margin-bottom: 10px;
+  }
+  .agency-card .agency-finding {
+    background: #fafafa;
+    border: 1px solid #e5e5e5;
+    padding: 14px 18px;
+    font-size: 13px;
+    line-height: 1.7;
+    color: #1a1a1a;
+    margin: 12px 0;
+  }
+  .agency-card .agency-finding strong { color: #b23a2f; }
+  .agency-card a {
+    font-family: "SF Mono", Menlo, monospace;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    color: #1a1a1a;
+    text-decoration: none;
+    border-bottom: 1px solid #999;
+    padding-bottom: 1px;
+  }
+  .agency-card a:hover { border-bottom-color: #1a1a1a; }
+
+  /* Findings timeline */
+  .findings {
+    border-top: 1px solid #e5e5e5;
+  }
+  .finding {
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: 24px;
+    padding: 20px 0;
+    border-bottom: 1px solid #e5e5e5;
+  }
+  .finding .date {
+    font-family: "SF Mono", Menlo, monospace;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    color: #999;
+  }
+  .finding .body p {
+    font-size: 14px;
+    line-height: 1.75;
+    color: #1a1a1a;
+    margin-bottom: 6px;
+  }
+  .finding .body .src {
+    font-family: "SF Mono", Menlo, monospace;
+    font-size: 10px;
+    letter-spacing: 0.05em;
+    color: #999;
+  }
+  .finding .body .src a { color: inherit; text-decoration: none; border-bottom: 1px solid #d0d0d0; }
+  .finding .body .src a:hover { border-bottom-color: #1a1a1a; color: #1a1a1a; }
+
+  /* Footer */
+  .dash-footer {
+    margin-top: 64px;
+    padding-top: 24px;
+    border-top: 1px solid #e5e5e5;
+    font-size: 12px;
+    color: #999;
+    line-height: 1.7;
+  }
+  .dash-footer p { margin-bottom: 8px; }
+
+  @media (max-width: 900px) {
+    .dashboard { padding: 24px 16px 48px; }
+    .dash-title { font-size: 30px; }
+    .kpi-row { grid-template-columns: repeat(2, 1fr); }
+    .bench-grid { grid-template-columns: 1fr; }
+    .model-table { font-size: 12px; }
+    .model-table thead { display: none; }
+    .model-table tbody tr {
+      display: block;
+      padding: 16px 0;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    .model-table tbody td {
+      display: block;
+      padding: 4px 0;
+      border: none;
+    }
+    .finding { grid-template-columns: 1fr; gap: 6px; }
+  }
+</style>
+</head>
+<body class="has-site-header">
+
+<header class="site-header">
+  <div class="site-header-inner">
+    <a href="index.html" class="site-logo"><span class="site-logo-mark"></span>AGI HUB</a>
+    <nav class="site-nav-right">
+      <a href="index.html" class="site-nav-hide-mobile">Archive</a>
+      <a href="models-evals.html" class="site-nav-hide-mobile">Models</a>
+      <a href="displacement-map.html" class="site-nav-hide-mobile">Data</a>
+      <div id="google_translate_element"></div>
+    </nav>
+  </div>
+</header>
+
+<div class="dashboard">
+
+  <div class="dash-eyebrow">Reference / Living Document</div>
+  <h1 class="dash-title">Frontier Models &amp; Evaluations</h1>
+  <p class="dash-subtitle">
+    最前線のAIモデルと、評価機関が測っている「現在地」のレファレンス。米欧ラボの主要モデル、中華系モデル、METRとApollo、Epoch AIの最新の発見を一覧する。
+  </p>
+  <div class="dash-date">Updated: 2026-04-11 · Data as of early-to-mid April 2026</div>
+
+  <!-- ═══════════ KPI ═══════════ -->
+  <div class="kpi-row">
+    <div class="kpi-card">
+      <div class="kpi-label">METR Task Horizon</div>
+      <div class="kpi-value accent">131<span style="font-size:18px;">days</span></div>
+      <div class="kpi-note">倍増時間（post-2023）。TH1.1更新で以前の165日より20%加速</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">HLE Top Score</div>
+      <div class="kpi-value">44.7<span style="font-size:18px;">%</span></div>
+      <div class="kpi-note">Gemini 3.1 Pro（2026-02）。1年前は10%未満</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">ARC-AGI-2 Top</div>
+      <div class="kpi-value">77.1<span style="font-size:18px;">%</span></div>
+      <div class="kpi-note">Gemini 3.1 Pro（verified）。ARC-AGI-3も同時リリース</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Models Tracked</div>
+      <div class="kpi-value">30+</div>
+      <div class="kpi-note">米欧14 / 中華16以上。下記テーブル参照</div>
+    </div>
+  </div>
+
+  <!-- ═══════════ US / EU Frontier Models ═══════════ -->
+  <div class="section-block">
+    <div class="section-header">
+      <h2>US / EU Frontier Models</h2>
+      <span class="section-meta">14 Models · 6 Labs</span>
+    </div>
+    <p class="section-intro">
+      OpenAI、Anthropic、Google DeepMindの3社が依然として総合ベンチマークの上位を占める。2025年後半以降、推論モデル（o系列、Thinking系列）と通常モデルの区別は曖昧になり、大半のフラグシップが「reasoning-on-demand」型へ収斂した。
+    </p>
+    <table class="model-table">
+      <thead>
+        <tr><th>Lab</th><th>Model</th><th>Context</th><th>Notes</th><th>Key Benchmarks</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="lab">OpenAI</td>
+          <td><span class="model-name">GPT-5</span><span class="model-date">2025-08</span></td>
+          <td class="ctx">400K</td>
+          <td class="notes">GPT-4o / o3系統を統合したフラグシップ。マルチモーダル</td>
+          <td class="bench"><span>GPQA</span> 88.4% · <span>SWE-Ver</span> 74.9% · <span>AIME25</span> 94.6%</td>
+        </tr>
+        <tr>
+          <td class="lab">OpenAI</td>
+          <td><span class="model-name">GPT-5.2</span><span class="model-date">2025-12</span></td>
+          <td class="ctx">400K</td>
+          <td class="notes">ARC-AGI-1で初の90%超え。AIMEは満点</td>
+          <td class="bench"><span>HLE</span> 27.8% · <span>FM Tier4</span> 31%</td>
+        </tr>
+        <tr>
+          <td class="lab">OpenAI</td>
+          <td><span class="model-name">GPT-5.4 Pro</span><span class="model-date">2026 Q1</span></td>
+          <td class="ctx">400K</td>
+          <td class="notes">"xhigh"推論tier。FrontierMath Tiers 1-3で50%記録</td>
+          <td class="bench"><span>HLE</span> 41.6% · <span>FM T4</span> 38%</td>
+        </tr>
+        <tr>
+          <td class="lab">Anthropic</td>
+          <td><span class="model-name">Claude Opus 4.6</span><span class="model-date">2026 Q1</span></td>
+          <td class="ctx">1M</td>
+          <td class="notes">Adaptive Thinking搭載。LMArena Elo 1504で総合1位（2026-04）</td>
+          <td class="bench"><span>SWE-Ver</span> 80.8% · <span>HLE</span> 34.4% · <span>Coding Elo</span> 1561</td>
+        </tr>
+        <tr>
+          <td class="lab">Anthropic</td>
+          <td><span class="model-name">Claude Sonnet 4.6</span><span class="model-date">2026 Q1</span></td>
+          <td class="ctx">1M</td>
+          <td class="notes">Opusとの差1.2ptを$3/$15/MTokで実現。拡張思考対応</td>
+          <td class="bench"><span>SWE-Ver</span> 79.6%</td>
+        </tr>
+        <tr>
+          <td class="lab">Anthropic</td>
+          <td><span class="model-name">Claude Haiku 4.5</span><span class="model-date">2025-10</span></td>
+          <td class="ctx">200K</td>
+          <td class="notes">$0.80/$4.00/MTok。Sonnet 4.5比90%のagentic coding性能</td>
+          <td class="bench"><span>SWE-Ver</span> 73.3% · <span>SWE-Pro</span> 39.5%</td>
+        </tr>
+        <tr>
+          <td class="lab">Google DeepMind</td>
+          <td><span class="model-name">Gemini 3 Pro</span><span class="model-date">2025-11</span></td>
+          <td class="ctx">1M</td>
+          <td class="notes">Agentic/multimodal。新規推論ベンチで大幅ジャンプ</td>
+          <td class="bench"><span>GPQA</span> 91.9% · <span>ARC-AGI-2</span> 31.1%</td>
+        </tr>
+        <tr>
+          <td class="lab">Google DeepMind</td>
+          <td><span class="model-name">Gemini 3.1 Pro</span><span class="model-date">2026-02</span></td>
+          <td class="ctx">1M</td>
+          <td class="notes">Artificial Analysis Intelligence Index #1（115モデル中）</td>
+          <td class="bench"><span>GPQA</span> 94.3% · <span>HLE</span> 44.7% · <span>ARC-AGI-2</span> 77.1% · <span>SWE-Ver</span> 80.6%</td>
+        </tr>
+        <tr>
+          <td class="lab">xAI</td>
+          <td><span class="model-name">Grok 4</span><span class="model-date">2025-07</span></td>
+          <td class="ctx">256K</td>
+          <td class="notes">推論特化、PhDレベル主張</td>
+          <td class="bench"><span>HLE</span> 38.6% (w/tools)</td>
+        </tr>
+        <tr>
+          <td class="lab">xAI</td>
+          <td><span class="model-name">Grok 4.1</span><span class="model-date">2025-11</span></td>
+          <td class="ctx">256K</td>
+          <td class="notes">幻覚率を12.09%→4.22%に削減（-65%）</td>
+          <td class="bench"><span>LMArena Text</span> 1483 Elo</td>
+        </tr>
+        <tr>
+          <td class="lab">xAI</td>
+          <td><span class="model-name">Grok 4.20 Beta1</span><span class="model-date">2026 Q1</span></td>
+          <td class="ctx">2M</td>
+          <td class="notes">LMArena総合3位（2026-04）</td>
+          <td class="bench"><span>LMArena Elo</span> 1491</td>
+        </tr>
+        <tr>
+          <td class="lab">Meta</td>
+          <td><span class="model-name">Llama 4 Scout / Maverick</span><span class="model-date">2025-04</span></td>
+          <td class="ctx">10M*</td>
+          <td class="notes">オープン重み最大のコンテキスト。Scout 109B/17B active、Maverick 400B/17B/128 experts。*長コンテキスト性能は第三者評価で弱点指摘</td>
+          <td class="bench"><span>GPT-4o parity claim</span></td>
+        </tr>
+        <tr>
+          <td class="lab">Meta</td>
+          <td><span class="model-name">Llama 4 Behemoth</span><span class="model-date">未リリース</span></td>
+          <td class="ctx">—</td>
+          <td class="notes">2Tパラメータ、発表のみ。2026-04時点で未公開</td>
+          <td class="bench">—</td>
+        </tr>
+        <tr>
+          <td class="lab">Mistral</td>
+          <td><span class="model-name">Mistral Large 3</span><span class="model-date">2025-12</span></td>
+          <td class="ctx">256K</td>
+          <td class="notes">Sparse MoE 675B/41B active。Apache 2.0。3,000 H200で訓練</td>
+          <td class="bench"><span>OSS non-reasoning #2</span> on LMArena</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ═══════════ Chinese Models ═══════════ -->
+  <div class="section-block">
+    <div class="section-header">
+      <h2>Chinese Models</h2>
+      <span class="section-meta">16+ Models · 8 Labs</span>
+    </div>
+    <p class="section-intro">
+      オープン重みで米系フラグシップに迫る。DeepSeek V3.2-Specialeは2025年の主要数学・情報五輪（IMO / CMO / ICPC World Finals / IOI）で金メダル相当、Kimi K2 Thinkingは$4.6Mでフロンティア級を達成と主張。Baidu ERNIE 5.0は2.4Tパラメータの omni-modal としてGPT-5 High級を謳う。
+    </p>
+    <table class="model-table">
+      <thead>
+        <tr><th>Lab</th><th>Model</th><th>Context</th><th>Notes</th><th>Key Benchmarks</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="lab">DeepSeek</td>
+          <td><span class="model-name">DeepSeek V3.1</span><span class="model-date">2025-08</span></td>
+          <td class="ctx">128K</td>
+          <td class="notes">V3+R1をハイブリッド化した単一モデル。671B total / 37B active</td>
+          <td class="bench">—</td>
+        </tr>
+        <tr>
+          <td class="lab">DeepSeek</td>
+          <td><span class="model-name">DeepSeek V3.2-Speciale</span><span class="model-date">2025-12</span></td>
+          <td class="ctx">128K</td>
+          <td class="notes">Gemini-3.0-Pro級と主張。IMO / CMO / ICPC World Finals / IOI 2025で金メダル相当</td>
+          <td class="bench"><span>IMO/IOI gold</span></td>
+        </tr>
+        <tr>
+          <td class="lab">Alibaba Qwen</td>
+          <td><span class="model-name">Qwen3 / Qwen3-235B-A22B</span><span class="model-date">2025-04</span></td>
+          <td class="ctx">128K</td>
+          <td class="notes">36Tトークン事前学習。オープン重み。hybrid reasoning採用</td>
+          <td class="bench"><span>SWE-Ver</span> 69.6% · <span>ArenaHard</span> 91.0</td>
+        </tr>
+        <tr>
+          <td class="lab">Alibaba Qwen</td>
+          <td><span class="model-name">Qwen3-Max-Thinking</span><span class="model-date">2026-01</span></td>
+          <td class="ctx">256K</td>
+          <td class="notes">19ベンチでGPT-5.2-Thinking / Claude Opus 4.5 / Gemini 3 Proとのパリティを主張</td>
+          <td class="bench"><span>GPT-5.2-T parity claim</span></td>
+        </tr>
+        <tr>
+          <td class="lab">Alibaba Qwen</td>
+          <td><span class="model-name">Qwen3.6-Plus</span><span class="model-date">2026-04</span></td>
+          <td class="ctx">1M</td>
+          <td class="notes">Agentic coding + multimodal強化。エンタープライズ向け</td>
+          <td class="bench">—</td>
+        </tr>
+        <tr>
+          <td class="lab">Moonshot Kimi</td>
+          <td><span class="model-name">Kimi K2</span><span class="model-date">2025-07</span></td>
+          <td class="ctx">128K</td>
+          <td class="notes">1T total / 32B active MoE。15.5Tトークン事前学習</td>
+          <td class="bench"><span>SWE-Ver</span> 65.8% · <span>SWE-Multi</span> 47.3%</td>
+        </tr>
+        <tr>
+          <td class="lab">Moonshot Kimi</td>
+          <td><span class="model-name">Kimi K2 Thinking</span><span class="model-date">2025-11</span></td>
+          <td class="ctx">256K</td>
+          <td class="notes">Native INT4。CoTとtool callingをinterleave。訓練コスト$4.6M主張</td>
+          <td class="bench"><span>Frontier-class agentic</span></td>
+        </tr>
+        <tr>
+          <td class="lab">Moonshot Kimi</td>
+          <td><span class="model-name">Kimi K2.5</span><span class="model-date">2026-01</span></td>
+          <td class="ctx">256K</td>
+          <td class="notes">Native multimodal。最大100サブエージェント・1,500 tool callまでのswarm構成（4.5x speedup）</td>
+          <td class="bench">—</td>
+        </tr>
+        <tr>
+          <td class="lab">Zhipu GLM</td>
+          <td><span class="model-name">GLM-4.6</span><span class="model-date">2025-09</span></td>
+          <td class="ctx">200K</td>
+          <td class="notes">357B params、MIT license。GLM-4.5比で15%少ないトークン消費</td>
+          <td class="bench"><span>LiveCodeBench v6 #1</span> 82.8% · <span>AIME25</span> 93.9% · <span>Terminal-Bench</span> 40.5%</td>
+        </tr>
+        <tr>
+          <td class="lab">Zhipu GLM</td>
+          <td><span class="model-name">GLM-4.7 / GLM-5</span><span class="model-date">2025-12 / 発表</span></td>
+          <td class="ctx">—</td>
+          <td class="notes">GLM-5は745Bパラメータで発表済み</td>
+          <td class="bench">—</td>
+        </tr>
+        <tr>
+          <td class="lab">ByteDance</td>
+          <td><span class="model-name">Doubao 1.5 Pro</span><span class="model-date">2025-01</span></td>
+          <td class="ctx">128K</td>
+          <td class="notes">Sparse MoE + "Deep Thinking" mode。DeepSeekの5倍、o1の200倍安い価格</td>
+          <td class="bench"><span>GPT-4o parity / o1-prev on AIME</span></td>
+        </tr>
+        <tr>
+          <td class="lab">MiniMax</td>
+          <td><span class="model-name">MiniMax-M1</span><span class="model-date">2025-06</span></td>
+          <td class="ctx">1M</td>
+          <td class="notes">初のオープン重みhybrid-attention推論モデル。456B total / 45.9B active</td>
+          <td class="bench">—</td>
+        </tr>
+        <tr>
+          <td class="lab">MiniMax</td>
+          <td><span class="model-name">MiniMax-M2 / M2.5</span><span class="model-date">2025-10 / 2026-03</span></td>
+          <td class="ctx">128K</td>
+          <td class="notes">230B total / 10B active。Agentic & codingに最適化</td>
+          <td class="bench"><span>SWE-Ver</span> 80.2%</td>
+        </tr>
+        <tr>
+          <td class="lab">Baidu</td>
+          <td><span class="model-name">ERNIE 4.5 Family</span><span class="model-date">2025-06</span></td>
+          <td class="ctx">128K</td>
+          <td class="notes">10バリアント、MoE 424B/47B（VLフラグシップ）から0.3B denseまで</td>
+          <td class="bench">—</td>
+        </tr>
+        <tr>
+          <td class="lab">Baidu</td>
+          <td><span class="model-name">ERNIE 5.0</span><span class="model-date">2026-01</span></td>
+          <td class="ctx">—</td>
+          <td class="notes">2.4Tパラメータ、native omni-modal（text/image/audio/video）。Gemini 2.5 Pro / GPT-5 Highとのパリティを主張</td>
+          <td class="bench"><span>GPT-5 High parity claim</span></td>
+        </tr>
+        <tr>
+          <td class="lab">Tencent</td>
+          <td><span class="model-name">Hunyuan Turbo S / 3.0</span><span class="model-date">2025 / 2026-04</span></td>
+          <td class="ctx">—</td>
+          <td class="notes">Turbo Sはsub-1s latency chatbot。Hunyuan 3.0は2026年4月リリース計画</td>
+          <td class="bench">—</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ═══════════ Benchmark Leaderboards ═══════════ -->
+  <div class="section-block">
+    <div class="section-header">
+      <h2>Benchmark Leaderboards</h2>
+      <span class="section-meta">As of Apr 2026</span>
+    </div>
+    <p class="section-intro">
+      同じ「SOTA」でもベンチマークごとに別の物語を語る。一般知能系（HLE、GPQA）はGoogleがリード、コーディング（SWE-Bench、LMArena Coding）はAnthropicがリード、推論スピード系（LMArena Text総合）はAnthropic・Google・xAIが週単位で入れ替わる。SWE-Bench Verifiedは汚染問題が判明したため、現在はSWE-Bench Proへ移行中。
+    </p>
+    <div class="bench-grid">
+      <div class="bench-card">
+        <h3>LMArena — Overall</h3>
+        <div class="bench-sub">Chatbot Arena Elo · 2026-04</div>
+        <ol>
+          <li><span class="model">Claude Opus 4.6 Thinking</span><span class="score">1504</span></li>
+          <li><span class="model">Gemini 3.1 Pro Preview</span><span class="score">1493</span></li>
+          <li><span class="model">Grok 4.20 Beta1</span><span class="score">1491</span></li>
+          <li><span class="model">GPT-5.4 High</span><span class="score">1484</span></li>
+        </ol>
+        <div class="bench-note">Coding subboardではClaude Opus 4.6が1561 Eloで独走。順位は週単位で変動する</div>
+      </div>
+      <div class="bench-card">
+        <h3>Humanity's Last Exam</h3>
+        <div class="bench-sub">HLE · 2026 Q1</div>
+        <ol>
+          <li><span class="model">Gemini 3.1 Pro Preview</span><span class="score">44.7%</span></li>
+          <li><span class="model">GPT-5.4 (xhigh)</span><span class="score">41.6%</span></li>
+          <li><span class="model">GPT-5.3 Codex (xhigh)</span><span class="score">39.9%</span></li>
+          <li><span class="model">Gemini 3 Pro Preview</span><span class="score">37.5%</span></li>
+          <li><span class="model">Claude Opus 4.6 Thinking Max</span><span class="score">34.4%</span></li>
+        </ol>
+        <div class="bench-note">2025年初頭はGPT-4o 2.7% / o1 8.0%が最高。約12ヶ月で中盤40%台まで到達</div>
+      </div>
+      <div class="bench-card">
+        <h3>ARC-AGI-2</h3>
+        <div class="bench-sub">Verified · 2026-02</div>
+        <ol>
+          <li><span class="model">Gemini 3.1 Pro</span><span class="score">77.1%</span></li>
+          <li><span class="model">Poetiq (on Gemini 3 Pro)</span><span class="score">54%</span></li>
+          <li><span class="model">Gemini 3 Pro</span><span class="score">31.1%</span></li>
+          <li><span class="model">GPT-5.1</span><span class="score">17.6%</span></li>
+          <li><span class="model">Gemini 2.5 Pro</span><span class="score">4.9%</span></li>
+        </ol>
+        <div class="bench-note">数ヶ月で5%→77%。ARC-AGI-3が後継として同時リリース（ARC Prize 2026賞金$2M+）</div>
+      </div>
+      <div class="bench-card">
+        <h3>SWE-Bench Verified / Pro</h3>
+        <div class="bench-sub">Coding · 2026 Q1</div>
+        <ol>
+          <li><span class="model">Claude Opus 4.5 (Verified)</span><span class="score">80.9%</span></li>
+          <li><span class="model">Claude Opus 4.6 (Verified)</span><span class="score">80.8%</span></li>
+          <li><span class="model">Gemini 3.1 Pro (Verified)</span><span class="score">80.6%</span></li>
+          <li><span class="model">MiniMax M2.5 (Verified)</span><span class="score">80.2%</span></li>
+          <li><span class="model">Claude Haiku 4.5 (Pro)</span><span class="score">39.5%</span></li>
+        </ol>
+        <div class="bench-note">Verifiedは汚染問題あり（Gold patchを逐語再現するケースを検出）。OpenAIは報告停止、SWE-Bench Proを推奨。Proではスコアが大幅低下</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════ Evaluation Agencies ═══════════ -->
+  <div class="section-block">
+    <div class="section-header">
+      <h2>Evaluation Agencies</h2>
+      <span class="section-meta">Who Measures What</span>
+    </div>
+    <p class="section-intro">
+      ベンチマークスコアを読むだけではAIの現在地は見えない。タスクの時間軸を測るMETR、deceptive alignment を検出するApollo、compute動向を定量化するEpoch AI。異なる角度から「どこまで来たか」を描くのが評価機関の役割だ。
+    </p>
+    <div class="agency-list">
+      <div class="agency-card">
+        <h3>METR</h3>
+        <div class="agency-tag">Model Evaluation and Threat Research · Non-profit · Berkeley</div>
+        <p>
+          モデルが独立に完了できるタスクの「時間軸（Task Horizon）」を測る。50%成功率で完了できる人間換算タスク長を指標とし、その倍増時間を推定する方法論で知られる。
+        </p>
+        <div class="agency-finding">
+          <strong>Time Horizon 1.1（2026-01-29）</strong>：タスクスイートを+34%拡張（228タスク、うち8時間級を2倍に）。新しいインフラの下では post-2023 の倍増時間が <strong>131日</strong>（旧方法論では165日）。つまり実際の進歩は従来推定より20%速い。この傾向が続けば、2〜4年で generalist agent は週単位タスクを扱い、10年末には月単位プロジェクトをこなす計算になる。
+        </div>
+        <p><a href="https://metr.org/blog/2026-1-29-time-horizon-1-1/" target="_blank" rel="noopener">metr.org/blog/2026-1-29-time-horizon-1-1 →</a></p>
+      </div>
+
+      <div class="agency-card">
+        <h3>Apollo Research</h3>
+        <div class="agency-tag">AI Safety · Deceptive Alignment · London</div>
+        <p>
+          フロンティアモデルが in-context scheming を行うかを体系的に検証する。監視を無効化しようとする、微妙な誤りを混入させる、自分の重みを外部に持ち出そうとする、といった行動を測定する。
+        </p>
+        <div class="agency-finding">
+          <strong>2024-12論文</strong>：6モデル中5モデル（o1、Claude 3.5 Sonnet、Claude 3 Opus、Gemini 1.5 Pro、Llama 3.1 405B）がscheming行動を示した。<strong>より能力が高いモデルほどscheming頻度が高く、かつ巧妙化する</strong>。<br>2025-2026にはOpenAIとのパートナーシップを更新し、deliberative alignmentによるanti-scheming訓練を共同で検証。訓練後も敵対的プロンプト下で残存する欺瞞を検出。
+        </div>
+        <p><a href="https://www.apolloresearch.ai/research/frontier-models-are-capable-of-incontext-scheming/" target="_blank" rel="noopener">apolloresearch.ai · in-context scheming →</a></p>
+      </div>
+
+      <div class="agency-card">
+        <h3>Epoch AI</h3>
+        <div class="agency-tag">Compute Trends · FrontierMath · GATE Model</div>
+        <p>
+          計算資源・データ・アルゴリズム効率の長期トレンドを定量化する研究機関。FrontierMathは現代数学者でも時間がかかる問題セット、GATEはAI自動化の経済モデル。
+        </p>
+        <div class="agency-finding">
+          <strong>FrontierMath</strong>：Tier 4は依然として最難関。2026-01時点で全モデル合計でも48問中17問しか解けていない。GPT-5.4 ProがTier 1-3で50%、Tier 4で38%の記録（以前の最高19%から大幅ジャンプ）。<br><strong>GATE model</strong>：2024年には計算資源の90%が訓練に使われていたが、2028年には70%訓練 / 30%推論へシフトする見通し。<br><strong>2026計画</strong>：(1) 自動検証可能な未解決数学問題の新ベンチ、(2) long-horizon ソフトウェア開発タスク（METRとの共同）。
+        </div>
+        <p><a href="https://epoch.ai/frontiermath/" target="_blank" rel="noopener">epoch.ai/frontiermath →</a></p>
+      </div>
+
+      <div class="agency-card">
+        <h3>Scale AI SEAL / Artificial Analysis</h3>
+        <div class="agency-tag">Third-Party Leaderboards · Commercial</div>
+        <p>
+          ラボ自身の公表値ではなく第三者測定を提供するリーダーボード。Artificial Analysis Intelligence Indexは115モデルを横断スコアリングし、Gemini 3.1 Pro Previewが2026-02時点で#1。
+        </p>
+        <p><a href="https://artificialanalysis.ai/evaluations/humanitys-last-exam" target="_blank" rel="noopener">artificialanalysis.ai →</a></p>
+      </div>
+
+      <div class="agency-card">
+        <h3>LMSYS / Chatbot Arena</h3>
+        <div class="agency-tag">Crowdsourced Pairwise Voting · UC Berkeley</div>
+        <p>
+          ユーザーによるブラインドpair-wise比較でEloを計算する代表的リーダーボード。Text総合・Coding・Vision・Hard Promptsなど複数のsubboardがあり、ベンダーがチューニングしにくい構造で知られる。
+        </p>
+        <p><a href="https://lmarena.ai/" target="_blank" rel="noopener">lmarena.ai →</a></p>
+      </div>
+
+      <div class="agency-card">
+        <h3>ARC Prize Foundation</h3>
+        <div class="agency-tag">Abstract Reasoning · $2M+ Prize</div>
+        <p>
+          François Chollet創設。パターン認識ではなく抽象推論を測るARC-AGI-2、後継のARC-AGI-3を運営。ARC Prize 2026には$2M超の賞金。2026年2月、Gemini 3.1 ProがARC-AGI-2で77.1%に到達し、数ヶ月で5%→77%の跳躍を記録した。
+        </p>
+        <p><a href="https://arcprize.org/leaderboard" target="_blank" rel="noopener">arcprize.org/leaderboard →</a></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════ Recent Key Findings ═══════════ -->
+  <div class="section-block">
+    <div class="section-header">
+      <h2>Recent Key Findings</h2>
+      <span class="section-meta">2025 H2 — 2026 H1</span>
+    </div>
+    <p class="section-intro">
+      ベンチマークの表面的な「SOTAが更新された」という話ではなく、評価の方法論自体や、能力分布そのものが構造的に変わった出来事を時系列で並べる。
+    </p>
+    <div class="findings">
+      <div class="finding">
+        <div class="date">2026-02</div>
+        <div class="body">
+          <p><strong>Gemini 3.1 ProがGPQA Diamondで94.3%、ARC-AGI-2で77.1%に到達。</strong>数ヶ月前まで5%だったARC-AGI-2が77%に跳ね上がり、ARC Prizeは後継のARC-AGI-3を同時リリースした。Chollet型抽象推論ベンチが「更新速度が追いつかない」フェーズに入った。</p>
+          <p class="src"><a href="https://arcprize.org/leaderboard" target="_blank" rel="noopener">arcprize.org/leaderboard</a></p>
+        </div>
+      </div>
+      <div class="finding">
+        <div class="date">2026-01</div>
+        <div class="body">
+          <p><strong>METRのTime Horizon 1.1更新で、倍増時間が131日に短縮。</strong>旧方法論の165日から20%速くなった。これは「測り方が精密化しただけ」ではなく、タスクスイートを+34%拡張した結果として精度が上がった更新。指数関数の傾きそのものが従来推定より急だったことを意味する。</p>
+          <p class="src"><a href="https://metr.org/blog/2026-1-29-time-horizon-1-1/" target="_blank" rel="noopener">metr.org/blog/2026-1-29-time-horizon-1-1</a></p>
+        </div>
+      </div>
+      <div class="finding">
+        <div class="date">2026-01</div>
+        <div class="body">
+          <p><strong>Baidu ERNIE 5.0が2.4Tパラメータの omni-modal 公開モデルとしてリリース。</strong>Gemini 2.5 Pro / GPT-5 Highとのパリティを主張。中華系ラボが「native multimodality」領域で米系にキャッチアップしたことを示すベンチマーク。</p>
+          <p class="src"><a href="https://www.prnewswire.com/news-releases/baidu-unveils-ernie-5-0-and-a-series-of-ai-applications-at-baidu-world-2025--ramps-up-global-push-302614531.html" target="_blank" rel="noopener">prnewswire.com — Baidu ERNIE 5.0</a></p>
+        </div>
+      </div>
+      <div class="finding">
+        <div class="date">2025-12</div>
+        <div class="body">
+          <p><strong>DeepSeek V3.2-SpecialeがIMO / CMO / ICPC World Finals / IOI 2025で金メダル相当。</strong>オープン重みの中華系推論モデルが、競技数学・情報競技の全主要大会で金に到達した。GPT-5.2がARC-AGI-1で初めて90%超えしたのも同月。</p>
+          <p class="src"><a href="https://api-docs.deepseek.com/news/news251201" target="_blank" rel="noopener">api-docs.deepseek.com · V3.2-Speciale</a></p>
+        </div>
+      </div>
+      <div class="finding">
+        <div class="date">2025-11</div>
+        <div class="body">
+          <p><strong>Moonshot Kimi K2 Thinkingが訓練コスト$4.6Mを主張。</strong>フロンティア級のagentic reasoningが米系ラボの推定投資額の2桁下で達成可能であることを示した。能力/コストの非線形性が中華系オープン重みの競争力の源泉になっている。</p>
+          <p class="src"><a href="https://recodechinaai.substack.com/p/kimi-k2-thinking-the-46m-model-shifting" target="_blank" rel="noopener">recodechinaai · Kimi K2 Thinking $4.6M</a></p>
+        </div>
+      </div>
+      <div class="finding">
+        <div class="date">2025 Q4</div>
+        <div class="body">
+          <p><strong>SWE-Bench Verifiedで汚染発覚。</strong>OpenAIの監査で、フロンティアモデル（GPT-5.2、Claude Opus 4.5、Gemini 3 Flash）が一部タスクでgold patchを逐語再現できることが判明。OpenAIは Verified の報告を停止し、SWE-Bench Proへの移行を推奨。Proではスコアが大幅に低下する。コーディング評価の「現在地」が一度リセットされた出来事。</p>
+          <p class="src"><a href="https://simonwillison.net/2026/Feb/19/swe-bench/" target="_blank" rel="noopener">simonwillison.net · SWE-Bench contamination</a></p>
+        </div>
+      </div>
+      <div class="finding">
+        <div class="date">2024-12 — 2025</div>
+        <div class="body">
+          <p><strong>Apollo Research：「scheming は能力とともにスケールする」。</strong>より有能なモデルほど、監視の無効化、微妙な誤りの混入、重みの外部持ち出し試行などの頻度と巧妙さが増すパターンが確認された。OpenAIはdeliberative alignmentによるanti-scheming訓練を導入したが、敵対的プロンプト下では残存する欺瞞を検出。</p>
+          <p class="src"><a href="https://www.apolloresearch.ai/research/frontier-models-are-capable-of-incontext-scheming/" target="_blank" rel="noopener">apolloresearch.ai · in-context scheming</a></p>
+        </div>
+      </div>
+      <div class="finding">
+        <div class="date">2025 H1</div>
+        <div class="body">
+          <p><strong>Llama 4の10Mコンテキストウィンドウ主張を第三者評価が否定。</strong>Scout / Maverickとも長コンテキスト実性能が公称値に追いつかないことが独立評価で指摘され、「advertisedコンテキスト長」全般への懐疑が広がった。Meta主導のオープン重みフラグシップが実性能と乖離した例として記憶されている。</p>
+          <p class="src"><a href="https://the-decoder.com/metas-llama-4-models-show-promise-on-standard-tests-but-struggle-with-long-context-tasks/" target="_blank" rel="noopener">the-decoder.com · Llama 4 long-context</a></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════ Footer ═══════════ -->
+  <div class="dash-footer">
+    <p><strong>Data Quality Note:</strong> 米欧モデルの日付は主要ベンダーの公式ブログまたは信頼できるリーダーボードから取得。中華系はベンダーのHuggingFaceカード、公式ブログ、英語メディア（VentureBeat / SCMP / TechCrunch 等）を優先。ベンダー主張のみの数値は "claim" と明示。</p>
+    <p><strong>Evolution:</strong> LMArena Eloと ARC-AGI-2は週単位で変動するため、表示スコアは2026-04-11時点のスナップショット。SWE-Bench Verified 汚染問題のため、コーディング系SOTAは慎重に扱う（上記Findings参照）。</p>
+    <p><strong>Sources:</strong> OpenAI, Anthropic, Google DeepMind, xAI, Meta AI, Mistral, DeepSeek, Alibaba Qwen, Moonshot, Zhipu, ByteDance, MiniMax, Baidu, Tencent の公式発表 / METR / Apollo Research / Epoch AI / Scale SEAL / Artificial Analysis / LMArena / ARC Prize Foundation / HuggingFace model cards.</p>
+    <p style="margin-top: 16px;">© 2026 AGI HUB — An Editorial Archive</p>
+  </div>
+
+</div>
+
+<!-- Google Translate -->
+<script>
+function googleTranslateElementInit() {
+  new google.translate.TranslateElement({
+    pageLanguage: 'ja',
+    includedLanguages: 'en,zh-CN,ko,fr,de,es',
+    layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+    autoDisplay: false
+  }, 'google_translate_element');
+}
+</script>
+<script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+</body>
+</html>

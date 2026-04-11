@@ -371,8 +371,8 @@
               <text class="data-label" x="62" y="204" text-anchor="end">25%</text>
               <text class="data-label" x="62" y="144" text-anchor="end">50%</text>
               <text class="data-label" x="62" y="84" text-anchor="end">75%</text>
-              <text class="data-label" x="62" y="44" text-anchor="end">新環境</text>
-              <text class="data-label" x="62" y="56" text-anchor="end">汎化</text>
+              <text class="data-label" x="62" y="44" text-anchor="end">100%</text>
+              <text class="annotation" x="70" y="24" text-anchor="start">新環境・新物体への汎化成功率</text>
               <!-- X labels -->
               <text class="data-label" x="130" y="278" text-anchor="middle">2022.04</text>
               <text class="data-label" x="250" y="278" text-anchor="middle">2023.07</text>
@@ -425,13 +425,13 @@
             論文の話はここまでにして、現場の数字に移る。熟練エンジニアの直感の背後には、「論文は論文、現場は現場」という健全な懐疑がある。妥当だ。ではその現場で、2024年から2025年に何が起きていたのか。
           </p>
           <p class="lead">
-            オーストラリア、西オーストラリア州のピルバラ地区。Rio Tintoの鉄鉱石鉱山だ。2008年から試験運用を始めた小松製作所の自律運搬システム（AHS：Autonomous Haulage System）は、2024年8月に<strong>300台目</strong>の納車を迎えた<sup>[8]</sup>。この300台は10鉱区に配備され、Rio Tintoの日次生産能力の<strong>およそ80%</strong>を担う。試験開始からの累計輸送量は<strong>48億トン</strong>を超えた。運転席に人間はいない。2018年から現在まで、自律トラックによる死傷事故はゼロである<sup>[9]</sup>。
+            オーストラリア、西オーストラリア州のピルバラ地区。Rio Tintoの鉄鉱石鉱山だ。2008年から試験運用を始めた小松製作所の自律運搬システム（AHS：Autonomous Haulage System）は、2024年8月に<strong>300台目</strong>の納車を迎えた<sup>[8]</sup>。この300台は10鉱区に配備され、Rio Tintoの日次生産能力の<strong>およそ80%</strong>を担う。Rio Tinto自身が公表する累計輸送量は、2018年の<strong>10億トン達成</strong>を経て、2024年時点で<strong>約48億トン</strong>に達している<sup>[9]</sup>。運転席に人間はいない。Rio Tintoは自律運搬導入以降の安全指標の改善を公表しており、運搬業務の死傷リスクは大幅に低下したと報告している。
           </p>
           <p class="lead">
             これは「将来の可能性」ではない。2026年4月の今、稼働している物理事象だ。鉱山という、温度・粉塵・振動・未舗装路という、ロボティクスに最も不利とされてきた環境で、人間の判断を要しない自律運搬が1日24時間動いている。Caterpillarの競合システム（Cat MineStar Command for hauling）も同種の運用に達しており、両者合わせて世界の露天掘り鉱山の自律トラック台数は2024年時点で1000台を超える<sup>[10]</sup>。熟練エンジニアが「現場の人間の判断が要る」と言うとき、想定している現場の一部は、すでに人間から離れて久しい。
           </p>
           <p class="lead">
-            半導体製造に目を移す。TSMCは2021年から稼働している台南・高雄の先端ノード工場について、特定工程の<strong>「lights-out」運用</strong>を実装済みだと公表している。フォトリソグラフィ、ウェハ搬送、検査の組み合わせで、夜間無人運転を成立させている工程が複数ある<sup>[11]</sup>。日本のFANUCは富士山麓の本社工場で、ロボットがロボットを組み立てるラインを1990年代から維持している。Amazon Roboticsは2022年6月にProteusを発表し、人間と共存できる初の自律移動ロボットとして倉庫に導入した。2024年時点でAmazonは75万台以上のロボットを自社物流網で稼働させており、これは世界最大のロボット艦隊である<sup>[12]</sup>。BMWはSpartanburg工場で、車体組立工程の90%以上をロボット化している<sup>[13]</sup>。
+            半導体製造に目を移す。TSMCは先端ノードのGigafabについて、**スマート製造と夜間省人運用**（同社CSRレポートで"smart manufacturing" "AI-powered fab"と表現）を継続的に拡張しており、フォトリソグラフィ・ウェハ搬送・検査の組み合わせで、人的介入を極小化した工程が複数存在する<sup>[11]</sup>。日本のFANUCは富士山麓の本社工場で、ロボットがロボットを組み立てるラインを1990年代から維持している。Amazon Roboticsは2022年6月にProteusを発表し、人間と共存できる初の自律移動ロボットとして倉庫に導入した。2024年時点でAmazonは75万台以上のロボットを自社物流網で稼働させており、これは世界最大のロボット艦隊である<sup>[12]</sup>。BMWはSpartanburg工場で、車体組立工程の大半をロボット化しており、業界平均（自動車組立のロボット密度）を上回る水準で運用している<sup>[13]</sup>。
           </p>
           <p class="lead">
             論点の整理が重要だ。熟練者が「無人化はまだない」と言うとき、厳密には<strong>「閉ループとしての完全無人化された自己再生産」</strong>がないことを指している。これは正しい。No.08「産業爆発の隠れた前提」で論じた通り、鉱山から半導体、ヒューマノイド量産までの閉ループはまだ閉じていない。だが熟練者の結論――だから「10年で自己改善は絶対ない」――には、もう一つの命題がそっと挟まっている。「<strong>個別工程の無人化もほとんど進んでいない</strong>」という含意だ。この二つはまったく別の命題だ。前者（閉ループの不成立）は真、後者（個別工程の自動化停滞）は偽。工程別の自動化率を積み上げると、2015年と2025年の現場は、質的に異なる。熟練者の直感は、この二つをすり替えた上で成立している。
@@ -455,40 +455,40 @@
               <text class="data-label" x="540" y="308" text-anchor="middle">75%</text>
               <text class="data-label" x="660" y="308" text-anchor="middle">100%</text>
 
-              <!-- Category: Pilbara autonomous haul -->
-              <text class="data-label" x="170" y="60" text-anchor="end">露天掘り運搬（Pilbara）</text>
-              <rect class="bar-light" x="180" y="48" width="144" height="16"/>
-              <rect class="bar-fill" x="180" y="48" width="384" height="16"/>
-              <text class="data-label" x="572" y="60">80% (2024)</text>
-              <text class="data-label" x="332" y="60" fill="#000">30% (2015)</text>
+              <!-- Category: Pilbara autonomous haul (grouped bars: 2015 on top row, 2025 on bottom row) -->
+              <text class="data-label" x="170" y="56" text-anchor="end">露天掘り運搬（Pilbara）</text>
+              <rect class="bar-light" x="180" y="44" width="144" height="8"/>
+              <text class="data-label" x="330" y="52" fill="#555">30% (2015)</text>
+              <rect class="bar-fill" x="180" y="56" width="384" height="8"/>
+              <text class="data-label" x="570" y="64">80% (2024)</text>
 
               <!-- Category: Auto assembly -->
-              <text class="data-label" x="170" y="100" text-anchor="end">自動車組立（BMW）</text>
-              <rect class="bar-light" x="180" y="88" width="336" height="16"/>
-              <rect class="bar-fill" x="180" y="88" width="432" height="16"/>
-              <text class="data-label" x="620" y="100">90%+</text>
-              <text class="data-label" x="524" y="100" fill="#000">70%</text>
+              <text class="data-label" x="170" y="96" text-anchor="end">自動車組立（BMW）</text>
+              <rect class="bar-light" x="180" y="84" width="336" height="8"/>
+              <text class="data-label" x="522" y="92" fill="#555">70% (2015)</text>
+              <rect class="bar-fill" x="180" y="96" width="432" height="8"/>
+              <text class="data-label" x="618" y="104">90%+ (2024)</text>
 
               <!-- Category: Warehousing -->
-              <text class="data-label" x="170" y="140" text-anchor="end">倉庫物流（Amazon）</text>
-              <rect class="bar-light" x="180" y="128" width="96" height="16"/>
-              <rect class="bar-fill" x="180" y="128" width="360" height="16"/>
-              <text class="data-label" x="548" y="140">75万台 (2024)</text>
-              <text class="data-label" x="284" y="140" fill="#000">3万 (2015)</text>
+              <text class="data-label" x="170" y="136" text-anchor="end">倉庫物流（Amazon）</text>
+              <rect class="bar-light" x="180" y="124" width="96" height="8"/>
+              <text class="data-label" x="282" y="132" fill="#555">3万台 (2015)</text>
+              <rect class="bar-fill" x="180" y="136" width="360" height="8"/>
+              <text class="data-label" x="546" y="144">75万台 (2024)</text>
 
               <!-- Category: Semi fab lights-out -->
-              <text class="data-label" x="170" y="180" text-anchor="end">半導体工程lights-out</text>
-              <rect class="bar-light" x="180" y="168" width="48" height="16"/>
-              <rect class="bar-fill" x="180" y="168" width="252" height="16"/>
-              <text class="data-label" x="440" y="180">50%+ (工程別)</text>
-              <text class="data-label" x="236" y="180" fill="#000">10%</text>
+              <text class="data-label" x="170" y="176" text-anchor="end">半導体スマート製造</text>
+              <rect class="bar-light" x="180" y="164" width="48" height="8"/>
+              <text class="data-label" x="234" y="172" fill="#555">10% (2015)</text>
+              <rect class="bar-fill" x="180" y="176" width="252" height="8"/>
+              <text class="data-label" x="438" y="184">50%+ 工程別 (2024)</text>
 
               <!-- Category: Dexterous manipulation (residual frontier) -->
-              <text class="data-label" x="170" y="220" text-anchor="end">器用操作汎化（VLA）</text>
-              <rect class="bar-light" x="180" y="208" width="24" height="16"/>
-              <rect class="bar-fill" x="180" y="208" width="192" height="16"/>
-              <text class="data-label" x="380" y="220">30% (2025)</text>
-              <text class="data-label" x="212" y="220" fill="#000">3%</text>
+              <text class="data-label" x="170" y="216" text-anchor="end">器用操作汎化（VLA）</text>
+              <rect class="bar-light" x="180" y="204" width="24" height="8"/>
+              <text class="data-label" x="210" y="212" fill="#555">3% (2015)</text>
+              <rect class="bar-fill" x="180" y="216" width="192" height="8"/>
+              <text class="data-label" x="378" y="224">30% (2025)</text>
 
               <!-- Legend -->
               <rect class="bar-fill" x="180" y="260" width="14" height="14"/>
@@ -514,17 +514,17 @@
         <h2 class="reveal reveal-delay-1">コスト曲線がロボティクスに到達したとき</h2>
         <div class="panel reveal reveal-delay-2">
           <div>
-            <img class="hero img-side-by-side" src="../images/ten-year-impossibility-illusion/slide4.jpg" alt="A monochrome humanoid robot figure standing in darkness">
+            <img class="hero img-wide" src="../images/ten-year-impossibility-illusion/slide4.jpg" alt="A monochrome humanoid robot figure standing in darkness">
             <div class="hero-caption">Photo: Unsplash / Gabriele Malaspina</div>
           </div>
           <p class="lead">
             ここでもう一本の曲線に切り替える。性能だけでなく、価格だ。Wrightの法則は1936年にT.P. Wrightが航空機製造を観察して定式化した経験則で、累積生産量が倍増するごとに単位コストが一定率で下がる。太陽光パネルは半世紀にわたって学習率20%前後を維持し、2010年代以降は指数的な普及を生んだ。リチウムイオン電池は18%前後。両者に共通するのは、<strong>需要が立ち上がった瞬間に累積生産が急拡大し、コスト低下が加速したこと</strong>だ。
           </p>
           <p class="lead">
-            ロボティクスでは、この曲線がまだ始まってすらいなかった。理由は単純で、需要がなかった。産業用ロボットは年間50万台前後で20年間ほぼ横ばいだった。汎用ロボットに至っては市場が存在しない。しかし、2025年時点で構成部品の価格低下は先行して始まっている。LiDARは2010年代初頭にVelodyneが約$75,000で販売していた64チャンネル機が、2017年に$17,900、2024年には自動車グレードで<strong>$500を切る水準</strong>に到達した<sup>[14]</sup>。2017年から2024年の7年間で、Velodyne一社だけで36倍の価格低下だ。Hesai、Luminar、中国勢の参入でさらに圧縮が続いている。
+            ロボティクスでは、この曲線がまだ本格的には始まっていなかった。理由は単純で、**汎用ロボットの需要が存在しなかった**からだ。IFR（国際ロボット連盟）の統計によれば、産業用ロボットの年間出荷は2010年代半ばまで年20-30万台、2021年以降は年50万台超に拡大したが、これらは専用治具に組み込まれた固定タスク用のアームが中心だ。人型や汎用操作の市場は、2024年時点でも事実上未成立である。しかし、2025年時点で構成部品の価格低下は先行して始まっている。LiDARは2010年代初頭にVelodyneが約$75,000で販売していた64チャンネル機が、2017年に$17,900、2020年にはVelodyneが自動車グレードLiDARの$500以下を目標として公表し<sup>[14]</sup>、2024年時点で複数メーカーがその水準で量産している。2017年から2024年の7年間で、Velodyne一社だけで約36倍の価格低下だ。Hesai、Luminar、中国勢の参入でさらに圧縮が続いている。
           </p>
           <p class="lead">
-            GPUのFLOPS単価は、Epoch AIの追跡によれば<strong>2006年から2024年で約40倍</strong>改善した<sup>[15]</sup>。電動モーターとアクチュエータは、電気自動車の量産によってコスト低下が始まった副産物で、ヒューマノイド向けのサーボドライブは2020年から2025年で半減近い水準まで落ちている<sup>[16]</sup>。それでもここまでは構成要素の話で、ヒューマノイド本体はまだ量産前だ。学習率が効くのはこれからである。
+            GPUの学習あたりコスト効率は、Epoch AIの追跡によれば<strong>年率約30-40%のペースで継続的に改善</strong>している<sup>[15]</sup>。2010年代後半以降だけで一桁以上の効率向上が積み上がっており、AIモデル学習の経済性は数年ごとに塗り替えられている。電動モーターとアクチュエータは、電気自動車の量産によってコスト低下が始まった副産物で、ヒューマノイド向けのサーボドライブは2020年から2025年で半減近い水準まで落ちている<sup>[16]</sup>。それでもここまでは構成要素の話で、ヒューマノイド本体はまだ量産前だ。学習率が効くのはこれからである。
           </p>
           <p class="lead">
             公表された目標価格を並べる。<strong>Tesla Optimus</strong>は2024年のAll-Hands会議でElon Muskが<strong>$20,000-30,000</strong>を目標と述べた<sup>[17]</sup>。Unitreeの中国製ヒューマノイドG1は2024年時点で<strong>$16,000</strong>前後で販売されている<sup>[18]</sup>。Figure AIの02は企業向けで未公表だが、Brett Adcockは2025年の公開インタビューで量産効果を折り込んだ5年以内のコスト半減を明言している<sup>[19]</sup>。これらは「願望」ではない。市場が成立した後の2-3サイクルの累積倍増を前提にした計算だ。
@@ -606,10 +606,10 @@
             <div class="hero-caption">Photo: Unsplash / Cash Macanaya</div>
           </div>
           <p class="lead">
-            この記事は「10年で確実に自己改善ループが閉じる」と言わない。言えない。不確実性は大きく、ボトルネックは複数残っている。No.08で論じた通り、採掘・精錬・半導体・エネルギーの4層が同時に閉ループを成立させる必要があり、最後の一つが最も困難だ。だが、ここで扱う問いはそこではない。<strong>「絶対ない」という言い切りが、論理的に擁護できるか</strong>、それだけだ。
+            この記事は「10年で確実に自己改善ループが閉じる」と言わない。言えない。不確実性は大きく、ボトルネックは複数残っている。No.08で論じた通り、採掘・精錬・半導体・エネルギーの4層が同時に閉ループを成立させる必要があり、最後の一つが最も困難だ。熟練者の抵抗の一つは「物理層の制約は情報処理と質的に異なる」という正しい指摘だろう。実際そうだ。物理は慣性・摩擦・部品公差の世界で、情報処理のスケール則がそのまま横滑りしない。本記事の論点は、**情報処理側のフロンティアがどこまで物理層の設計サイクルを短縮するか**である。設計・シミュレーション・制御・学習が情報処理側に移管されるほど、物理層の試行回数が安くなる。だが、ここで扱う問いはそこではない。<strong>「絶対ない」という言い切りが、論理的に擁護できるか</strong>、それだけだ。
           </p>
           <p class="lead">
-            歴史を並べる。1957年、Herbert Simonは人工知能研究の草創期に、「10年以内にコンピュータがチェスの世界チャンピオンを破る」と予言した<sup>[20]</sup>。外れた。40年かかった。1997年5月、DeepBlueがGarry Kasparovを破った。Simonが間違っていたのはタイミングだけで、結果は予言通りに起きた。1966年、米国学術会議のALPAC報告書は、機械翻訳を「達成不可能」と宣言し、米国の自動翻訳研究予算を打ち切った<sup>[21]</sup>。50年後の2016年、Google Neural Machine Translationが商用品質の翻訳を実現する。2019年、DeepLが英独翻訳で人間を超えた。
+            歴史を並べる。1957年、Herbert Simonは人工知能研究の草創期に、「10年以内にコンピュータがチェスの世界チャンピオンを破る」と予言した<sup>[20]</sup>。外れた。40年かかった。1997年5月、DeepBlueがGarry Kasparovを破った。Simonが間違っていたのはタイミングだけで、結果は予言通りに起きた。1966年、米国学術会議のALPAC報告書は、機械翻訳の実用化は困難でありコストが人間翻訳を上回ると結論し、米国の自動翻訳研究予算の打ち切りを招いた<sup>[21]</sup>。50年後の2016年、Google Neural Machine Translationが商用品質の翻訳を実現する。2019年、DeepLが英独翻訳で人間を超えた。
           </p>
           <p class="lead">
             1990年代、囲碁は「人間に勝つには50年以上かかる」が業界のコンセンサスだった。2016年3月、AlphaGoがLee Sedolに4-1で勝利した<sup>[22]</sup>。翌2017年、AlphaZeroは囲碁、チェス、将棋を白紙から自己対戦だけで学習し、既存の全AIを超えた。蛋白質構造予測は50年にわたる未解決問題で、「AIには無理」が2018年時点での標準見解だった<sup>[23]</sup>。2020年11月、DeepMindのAlphaFold 2がCASP14で解決を宣言し、2021年には既知蛋白質の立体構造を全ゲノムスケールで公開した。2024年10月、この功績はノーベル化学賞になった。画像認識のImageNetベンチマークは、2010年時点で「人間水準は5年では無理」とされていた。2015年、ResNetが人間を超えた。
@@ -741,6 +741,7 @@
             <li>Manyika et al. "A Future That Works: Automation, Employment, and Productivity." McKinsey Global Institute, 2017.</li>
             <li>Grace et al. "When Will AI Exceed Human Performance? Evidence from AI Experts." 2018 researcher survey, median AGI 2060.</li>
             <li>Grace et al. "Thousands of AI Authors on the Future of AI." 2023 follow-up survey, median HLMI 2047. <a href="https://arxiv.org/abs/2401.02843" style="color:inherit;border-bottom:1px solid #999;">arXiv:2401.02843</a></li>
+            <li>Metaculus Community. "When will the first general AI system be devised, tested, and publicly announced?" community prediction timeline, 2024 snapshot. <a href="https://www.metaculus.com/questions/5121/" style="color:inherit;border-bottom:1px solid #999;">metaculus.com/questions/5121</a></li>
           </ol>
         </div>
       </section>

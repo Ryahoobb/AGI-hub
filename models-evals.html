@@ -656,6 +656,173 @@
   }
   .agency-card .chart-canvas-wrap { height: 220px; }
 
+  /* Chaos map (AGI thinkers position map) */
+  .chaos-map {
+    position: relative;
+    width: 100%;
+    height: 640px;
+    border: 1px solid #1a1a1a;
+    background: #fafafa;
+    margin: 40px 0 56px;
+    padding: 48px 64px 56px 80px;
+    box-sizing: border-box;
+  }
+  .chaos-plot {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background-image:
+      linear-gradient(to right, #e5e5e5 1px, transparent 1px),
+      linear-gradient(to bottom, #e5e5e5 1px, transparent 1px);
+    background-size: 25% 25%;
+    background-position: 0 0;
+    border-left: 1.5px solid #1a1a1a;
+    border-bottom: 1.5px solid #1a1a1a;
+  }
+  .chaos-axis-x-label {
+    position: absolute;
+    bottom: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: "SF Mono", Menlo, monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #1a1a1a;
+    font-weight: 700;
+  }
+  .chaos-axis-y-label {
+    position: absolute;
+    top: 50%;
+    left: 16px;
+    transform: translateY(-50%) rotate(-90deg);
+    transform-origin: center;
+    font-family: "SF Mono", Menlo, monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #1a1a1a;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+  .chaos-axis-x-ticks {
+    position: absolute;
+    left: 80px;
+    right: 64px;
+    bottom: 36px;
+    display: flex;
+    justify-content: space-between;
+    font-family: "SF Mono", Menlo, monospace;
+    font-size: 10px;
+    color: #585858;
+    pointer-events: none;
+  }
+  .chaos-axis-y-ticks {
+    position: absolute;
+    top: 48px;
+    bottom: 56px;
+    left: 44px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    font-family: "SF Mono", Menlo, monospace;
+    font-size: 10px;
+    color: #585858;
+    align-items: flex-end;
+    pointer-events: none;
+  }
+  .chaos-quadrant-label {
+    position: absolute;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 13px;
+    font-style: italic;
+    color: #b23a2f;
+    opacity: 0.55;
+    pointer-events: none;
+    text-align: center;
+    line-height: 1.3;
+    z-index: 1;
+  }
+  .chaos-quadrant-label.tl { top: 8px; left: 10%; }
+  .chaos-quadrant-label.tr { top: 8px; right: 5%; }
+  .chaos-quadrant-label.bl { bottom: 8px; left: 10%; }
+  .chaos-quadrant-label.br { bottom: 8px; right: 5%; }
+  .chaos-person {
+    position: absolute;
+    width: 60px;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    cursor: default;
+    z-index: 2;
+    transition: z-index 0s;
+  }
+  .chaos-person:hover { z-index: 100; }
+  .chaos-photo {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 2px solid #1a1a1a;
+    background: #fff;
+    margin: 0 auto 4px;
+    filter: grayscale(1) contrast(1);
+    transition: transform 0.2s, filter 0.2s, box-shadow 0.2s;
+  }
+  .chaos-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 25%;
+  }
+  .chaos-photo.placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: Georgia, serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: #1a1a1a;
+  }
+  .chaos-person:hover .chaos-photo {
+    transform: scale(1.6);
+    filter: grayscale(0);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+    border-color: #b23a2f;
+  }
+  .chaos-name {
+    font-family: "SF Mono", Menlo, monospace;
+    font-size: 9px;
+    color: #1a1a1a;
+    font-weight: 600;
+    line-height: 1.2;
+    white-space: nowrap;
+    background: rgba(250, 250, 250, 0.85);
+    padding: 1px 3px;
+  }
+  .chaos-person:hover .chaos-name {
+    background: #1a1a1a;
+    color: #fff;
+  }
+  .chaos-tooltip {
+    display: none;
+    position: absolute;
+    left: 50%;
+    top: 100%;
+    transform: translate(-50%, 8px);
+    background: #1a1a1a;
+    color: #fff;
+    padding: 8px 12px;
+    font-family: "SF Mono", Menlo, monospace;
+    font-size: 10px;
+    line-height: 1.5;
+    min-width: 140px;
+    text-align: left;
+    white-space: normal;
+    z-index: 101;
+  }
+  .chaos-tooltip strong { color: #b23a2f; }
+  .chaos-person:hover .chaos-tooltip { display: block; }
+
   /* Footer */
   .dash-footer {
     margin-top: 64px;
@@ -1397,6 +1564,158 @@
         <div class="bench-note">Verifiedは汚染問題あり（Gold patchを逐語再現するケースを検出）。OpenAIは報告停止、SWE-Bench Proを推奨。Proではスコアが大幅低下</div>
       </div>
     </div>
+  </div>
+
+  <!-- ═══════════ AGI Thinkers Chaos Map ═══════════ -->
+  <div class="section-block">
+    <div class="section-header">
+      <h2>AGI Thinkers — Position Map</h2>
+      <span class="section-meta">24 Researchers · Timeline × p(doom)</span>
+    </div>
+    <p class="section-intro">
+      主要なAGI論者・研究者・実業家を2軸で配置する。横軸はAGI到来予測の時間軸（近い←→遠い）、縦軸は p(doom)（絶滅リスク認識）。ポジションは公開発言・論文・インタビューからの相対的推定で、絶対値ではない。カーソルを合わせると所属と代表的主張が出る。
+    </p>
+    <div class="chaos-map">
+      <div class="chaos-axis-x-label">Timeline: AGI Arrival Estimate →</div>
+      <div class="chaos-axis-y-label">↑ p(doom) / Extinction Risk</div>
+      <div class="chaos-axis-y-ticks">
+        <span>99%</span><span>50%</span><span>20%</span><span>5%</span><span>1%</span>
+      </div>
+      <div class="chaos-axis-x-ticks">
+        <span>2028</span><span>2030</span><span>2035</span><span>2040</span><span>2050+</span>
+      </div>
+      <div class="chaos-plot">
+        <div class="chaos-quadrant-label tl">Doomers<br><span style="font-size:10px;">near × high-risk</span></div>
+        <div class="chaos-quadrant-label tr">Slow Doom<br><span style="font-size:10px;">far × high-risk</span></div>
+        <div class="chaos-quadrant-label bl">Accelerationists<br><span style="font-size:10px;">near × low-risk</span></div>
+        <div class="chaos-quadrant-label br">Skeptics<br><span style="font-size:10px;">far × low-risk</span></div>
+
+        <!-- People: top = (100 - Y)%, left = X% -->
+        <div class="chaos-person" style="left:15%;top:2%;">
+          <div class="chaos-photo"><img src="images/thinkers/yudkowsky.jpg" alt="Yudkowsky"></div>
+          <div class="chaos-name">Yudkowsky</div>
+          <div class="chaos-tooltip"><strong>Eliezer Yudkowsky</strong><br>MIRI co-founder<br>"If Anyone Builds It, Everyone Dies"<br>p(doom) ~99%</div>
+        </div>
+        <div class="chaos-person" style="left:20%;top:10%;">
+          <div class="chaos-photo placeholder">CL</div>
+          <div class="chaos-name">Leahy</div>
+          <div class="chaos-tooltip"><strong>Connor Leahy</strong><br>Conjecture CEO<br>Moratorium advocate<br>p(doom) ~90%</div>
+        </div>
+        <div class="chaos-person" style="left:25%;top:25%;">
+          <div class="chaos-photo"><img src="images/thinkers/tegmark.jpg" alt="Tegmark"></div>
+          <div class="chaos-name">Tegmark</div>
+          <div class="chaos-tooltip"><strong>Max Tegmark</strong><br>MIT / Future of Life Inst.<br>2023 pause letter organizer</div>
+        </div>
+        <div class="chaos-person" style="left:10%;top:30%;">
+          <div class="chaos-photo placeholder">DK</div>
+          <div class="chaos-name">Kokotajlo</div>
+          <div class="chaos-tooltip"><strong>Daniel Kokotajlo</strong><br>AI Futures Project<br>"AI 2027" scenario, ex-OpenAI<br>p(doom) ~70%</div>
+        </div>
+        <div class="chaos-person" style="left:5%;top:40%;">
+          <div class="chaos-photo placeholder">LA</div>
+          <div class="chaos-name">Aschenbrenner</div>
+          <div class="chaos-tooltip"><strong>Leopold Aschenbrenner</strong><br>Situational Awareness LLC<br>"AGI by 2027" essay</div>
+        </div>
+        <div class="chaos-person" style="left:35%;top:50%;">
+          <div class="chaos-photo"><img src="images/thinkers/hinton.jpg" alt="Hinton"></div>
+          <div class="chaos-name">Hinton</div>
+          <div class="chaos-tooltip"><strong>Geoffrey Hinton</strong><br>U. Toronto (emeritus)<br>"Godfather of AI" / 2024 Nobel<br>~50/50 odds</div>
+        </div>
+        <div class="chaos-person" style="left:30%;top:55%;">
+          <div class="chaos-photo"><img src="images/thinkers/bengio.jpg" alt="Bengio"></div>
+          <div class="chaos-name">Bengio</div>
+          <div class="chaos-tooltip"><strong>Yoshua Bengio</strong><br>Mila / U. Montreal<br>Intl. AI Safety Report chair</div>
+        </div>
+        <div class="chaos-person" style="left:40%;top:45%;">
+          <div class="chaos-photo"><img src="images/thinkers/russell.jpg" alt="Russell"></div>
+          <div class="chaos-name">Russell</div>
+          <div class="chaos-tooltip"><strong>Stuart Russell</strong><br>UC Berkeley<br>"Human Compatible" / AIMA</div>
+        </div>
+        <div class="chaos-person" style="left:35%;top:45%;">
+          <div class="chaos-photo placeholder">PC</div>
+          <div class="chaos-name">Christiano</div>
+          <div class="chaos-tooltip"><strong>Paul Christiano</strong><br>US AISI (NIST)<br>RLHF inventor, ex-ARC<br>p(doom) ~20-50%</div>
+        </div>
+        <div class="chaos-person" style="left:15%;top:50%;">
+          <div class="chaos-photo"><img src="images/thinkers/sutskever.jpg" alt="Sutskever"></div>
+          <div class="chaos-name">Sutskever</div>
+          <div class="chaos-tooltip"><strong>Ilya Sutskever</strong><br>Safe Superintelligence Inc.<br>OpenAI co-founder</div>
+        </div>
+        <div class="chaos-person" style="left:10%;top:70%;">
+          <div class="chaos-photo"><img src="images/people/dario-amodei.jpg" alt="Amodei"></div>
+          <div class="chaos-name">Amodei</div>
+          <div class="chaos-tooltip"><strong>Dario Amodei</strong><br>Anthropic CEO<br>"Machines of Loving Grace"<br>p(doom) 10-25%</div>
+        </div>
+        <div class="chaos-person" style="left:15%;top:80%;">
+          <div class="chaos-photo"><img src="images/people/sam-altman.jpg" alt="Altman"></div>
+          <div class="chaos-name">Altman</div>
+          <div class="chaos-tooltip"><strong>Sam Altman</strong><br>OpenAI CEO<br>"AGI in reach"</div>
+        </div>
+        <div class="chaos-person" style="left:25%;top:75%;">
+          <div class="chaos-photo"><img src="images/people/demis-hassabis.jpg" alt="Hassabis"></div>
+          <div class="chaos-name">Hassabis</div>
+          <div class="chaos-tooltip"><strong>Demis Hassabis</strong><br>Google DeepMind CEO<br>2024 Nobel / AlphaFold</div>
+        </div>
+        <div class="chaos-person" style="left:25%;top:70%;">
+          <div class="chaos-photo"><img src="images/thinkers/suleyman.jpg" alt="Suleyman"></div>
+          <div class="chaos-name">Suleyman</div>
+          <div class="chaos-tooltip"><strong>Mustafa Suleyman</strong><br>Microsoft AI CEO<br>"The Coming Wave"</div>
+        </div>
+        <div class="chaos-person" style="left:20%;top:60%;">
+          <div class="chaos-photo"><img src="images/people/elon-musk.jpg" alt="Musk"></div>
+          <div class="chaos-name">Musk</div>
+          <div class="chaos-tooltip"><strong>Elon Musk</strong><br>xAI founder<br>p(doom) 10-20% (oscillates)</div>
+        </div>
+        <div class="chaos-person" style="left:75%;top:95%;">
+          <div class="chaos-photo"><img src="images/people/yann-lecun.jpg" alt="LeCun"></div>
+          <div class="chaos-name">LeCun</div>
+          <div class="chaos-tooltip"><strong>Yann LeCun</strong><br>Meta Chief AI Scientist<br>"LLMs won't lead to AGI"<br>Turing Award</div>
+        </div>
+        <div class="chaos-person" style="left:70%;top:90%;">
+          <div class="chaos-photo"><img src="images/people/francois-chollet.jpg" alt="Chollet"></div>
+          <div class="chaos-name">Chollet</div>
+          <div class="chaos-tooltip"><strong>François Chollet</strong><br>Ndea / ARC Prize<br>Program synthesis focus</div>
+        </div>
+        <div class="chaos-person" style="left:75%;top:85%;">
+          <div class="chaos-photo"><img src="images/thinkers/marcus.jpg" alt="Marcus"></div>
+          <div class="chaos-name">Marcus</div>
+          <div class="chaos-tooltip"><strong>Gary Marcus</strong><br>NYU (emeritus)<br>Neurosymbolic advocate</div>
+        </div>
+        <div class="chaos-person" style="left:80%;top:95%;">
+          <div class="chaos-photo"><img src="images/thinkers/ng.jpg" alt="Ng"></div>
+          <div class="chaos-name">Ng</div>
+          <div class="chaos-tooltip"><strong>Andrew Ng</strong><br>Stanford / DeepLearning.AI<br>"AGI worry like Mars overpopulation"</div>
+        </div>
+        <div class="chaos-person" style="left:30%;top:97%;">
+          <div class="chaos-photo"><img src="images/thinkers/andreessen.jpg" alt="Andreessen"></div>
+          <div class="chaos-name">Andreessen</div>
+          <div class="chaos-tooltip"><strong>Marc Andreessen</strong><br>a16z co-founder<br>"AI will save the world" / e/acc</div>
+        </div>
+        <div class="chaos-person" style="left:40%;top:92%;">
+          <div class="chaos-photo"><img src="images/thinkers/cowen.jpg" alt="Cowen"></div>
+          <div class="chaos-name">Cowen</div>
+          <div class="chaos-tooltip"><strong>Tyler Cowen</strong><br>George Mason / Marginal Rev.<br>GDP-growth framing</div>
+        </div>
+        <div class="chaos-person" style="left:55%;top:80%;">
+          <div class="chaos-photo placeholder">JS</div>
+          <div class="chaos-name">Sevilla</div>
+          <div class="chaos-tooltip"><strong>Jaime Sevilla</strong><br>Epoch AI director<br>Personal median ~2043</div>
+        </div>
+        <div class="chaos-person" style="left:30%;top:65%;">
+          <div class="chaos-photo placeholder">BB</div>
+          <div class="chaos-name">Barnes</div>
+          <div class="chaos-tooltip"><strong>Beth Barnes</strong><br>METR founder/CEO<br>Task-length doubling researcher</div>
+        </div>
+        <div class="chaos-person" style="left:40%;top:75%;">
+          <div class="chaos-photo placeholder">HT</div>
+          <div class="chaos-name">Toner</div>
+          <div class="chaos-tooltip"><strong>Helen Toner</strong><br>Georgetown CSET<br>ex-OpenAI board / governance</div>
+        </div>
+      </div>
+    </div>
+    <p class="people-note">
+      ポジションは2026年4月時点の公開発言・論文・インタビューから推定した相対的スナップショット。カーソルを合わせると詳細が表示される。7名（Leahy / Kokotajlo / Aschenbrenner / Christiano / Sevilla / Barnes / Toner）はWikimedia Commonsに公開写真がないためモノグラム表示。
+    </p>
   </div>
 
   <!-- ═══════════ Evaluation Agencies ═══════════ -->

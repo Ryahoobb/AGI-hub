@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+<meta name="robots" content="noindex, nofollow">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>箱庭の外側にいる者 — 配給されない者たちの構造 — AGI HUB</title>
+    <meta name="description" content="すべての人に世界が配給される思想は、配給される側しか見ていない。コスト選別、拒否者、主語なき者。箱庭主義の外部に置かれる三類型と、歴史上はじめて不可視になる外部の構造。" />
+    <link rel="stylesheet" href="../design-system/palette.css">
+    <style>
+      :root {
+        --black: #000;
+        --body-text: #1a1a1a;
+        --mid: #585858;
+        --meta: #757575;
+        --light-gray: #999;
+        --border: #e8e3d4;
+        --bg: #faf8f1;
+        --bg-alt: #f3f1e4;
+        --accent: #2f2b92;
+        --accent-soft: rgba(47, 43, 146, 0.08);
+        --ease: cubic-bezier(0.22, 1, 0.36, 1);
+      }
+
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+      html { scroll-behavior: smooth; }
+
+      body {
+        font-family: HelveticaNeue, "Helvetica Neue", Helvetica, Arial,
+          游ゴシック体, YuGothic, "游ゴシック Medium", "Yu Gothic Medium",
+          游ゴシック, "Yu Gothic", "ヒラギノ角ゴ ProN W3", "Hiragino Kaku Gothic ProN",
+          "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", "MS ゴシック", "MS Gothic",
+          sans-serif;
+        font-feature-settings: "palt";
+        font-size: 16px;
+        line-height: 1.75;
+        color: var(--body-text);
+        background: var(--bg);
+        -webkit-font-smoothing: antialiased;
+        overflow-x: hidden;
+        word-wrap: break-word;
+      }
+
+      .progress {
+        position: fixed; top: 0; left: 0; height: 2px;
+        background: var(--accent); width: 0%; z-index: 100;
+        transition: width 0.3s var(--ease);
+      }
+
+      .nav {
+        position: fixed; right: 24px; top: 50%;
+        transform: translateY(-50%);
+        display: grid; gap: 16px; z-index: 50;
+      }
+      .nav button {
+        width: 8px; height: 8px; border-radius: 999px;
+        border: 1.5px solid var(--meta); background: transparent;
+        cursor: pointer; transition: all 0.3s var(--ease);
+      }
+      .nav button.active {
+        background: var(--accent); border-color: var(--accent);
+        transform: scale(1.4);
+      }
+
+      main { scroll-snap-type: y mandatory; }
+      .slide {
+        position: relative;
+        min-height: 100vh;
+        max-width: 1120px;
+        margin: 0 auto;
+        padding: 80px 48px 64px;
+        display: grid;
+        grid-template-rows: auto auto 1fr auto;
+        gap: 32px;
+        scroll-snap-align: start;
+      }
+      .slide + .slide { border-top: 1px solid var(--border); }
+
+      .hero {
+        width: 100%;
+        aspect-ratio: 16 / 7;
+        object-fit: cover;
+        display: block;
+        filter: grayscale(0.6) contrast(1.1);
+        transition: filter 0.6s var(--ease);
+      }
+      .hero:hover { filter: grayscale(0) contrast(1); }
+
+      .slide .hero.img-fullbleed {
+        width: 100vw;
+        margin-left: calc(50% - 50vw);
+        margin-right: calc(50% - 50vw);
+        max-width: none;
+        aspect-ratio: 21/9;
+      }
+      .slide .hero.img-wide {
+        width: min(1280px, calc(100vw - 48px));
+        position: relative;
+        left: 50%;
+        transform: translateX(-50%);
+        max-width: none;
+      }
+      .slide .hero.img-content { max-width: 680px; margin: 0 auto; aspect-ratio: 4/3; }
+      @media (max-width: 768px) {
+        .slide .hero.img-fullbleed,
+        .slide .hero.img-wide,
+        .slide .hero.img-content { width: 100%; max-width: 100%; aspect-ratio: 16 / 9; margin: 0; transform: none; left: 0; }
+      }
+
+      .hero-caption {
+        font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 11px;
+        letter-spacing: 0.083em;
+        color: var(--light-gray);
+        margin-top: 8px;
+        text-transform: uppercase;
+      }
+
+      .credits {
+        max-width: 1120px;
+        margin: 0 auto;
+        padding: 48px 48px 80px;
+        border-top: 1px solid var(--border);
+      }
+      .credits p {
+        font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 11px;
+        letter-spacing: 0.047em;
+        line-height: 2;
+        color: var(--light-gray);
+      }
+      .credits a {
+        color: var(--meta);
+        text-decoration: none;
+        border-bottom: 1px solid var(--border);
+      }
+      .credits a:hover {
+        color: var(--black);
+        border-bottom-color: var(--black);
+      }
+
+      .reveal {
+        opacity: 0;
+        transform: translateY(24px);
+        transition: opacity 0.6s var(--ease), transform 0.6s var(--ease);
+      }
+      .reveal.visible { opacity: 1; transform: translateY(0); }
+      .reveal-delay-1 { transition-delay: 0.1s; }
+      .reveal-delay-2 { transition-delay: 0.2s; }
+      .reveal-delay-3 { transition-delay: 0.35s; }
+
+      .eyebrow {
+        font-family: "SF Mono", "Fira Code", "Fira Mono", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 11px;
+        font-weight: 400;
+        letter-spacing: 0.083em;
+        text-transform: uppercase;
+        color: var(--accent);
+      }
+
+      h1, h2 {
+        color: var(--black);
+        font-weight: 700;
+        line-height: 1.45;
+        letter-spacing: normal;
+        max-width: 26ch;
+        padding-bottom: 14px;
+        border-bottom: 1px solid var(--accent);
+      }
+      h1 { font-size: clamp(28px, 4vw, 36px); }
+      h2 { font-size: clamp(24px, 3.5vw, 32px); }
+
+      .lead {
+        max-width: 780px;
+        font-size: 16px;
+        line-height: 1.85;
+        color: var(--body-text);
+      }
+      .lead + .lead { margin-top: 14px; }
+      .lead strong { color: var(--black); }
+      .lead.dropcap::first-letter {
+        font-size: 52px;
+        line-height: 1;
+        font-weight: 700;
+        float: left;
+        margin: 6px 10px 0 0;
+        color: var(--accent);
+      }
+
+      .panel { display: grid; gap: 24px; align-content: start; }
+      .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
+      .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+
+      .card {
+        padding: 24px 0;
+        border-top: 2px solid var(--accent);
+      }
+      .card .tag { color: var(--accent); }
+      .card strong { color: var(--black); }
+      .card p {
+        font-size: 16px;
+        line-height: 1.75;
+        color: var(--body-text);
+      }
+
+      .tag {
+        display: inline-block;
+        font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 11px;
+        letter-spacing: 0.083em;
+        color: var(--meta);
+        margin-bottom: 12px;
+      }
+
+      .point {
+        padding-left: 16px;
+        border-left: 2px solid var(--accent);
+        font-size: 16px;
+        line-height: 1.75;
+        color: var(--body-text);
+      }
+      .point strong { color: var(--black); }
+
+      table.compare {
+        width: 100%;
+        border-collapse: collapse;
+        border-top: 2px solid var(--accent);
+        border-bottom: 2px solid var(--accent);
+      }
+      table.compare th,
+      table.compare td {
+        padding: 18px 16px;
+        text-align: left;
+        font-size: 15px;
+        line-height: 1.65;
+        color: var(--body-text);
+        border-bottom: 1px solid var(--border);
+        vertical-align: top;
+      }
+      table.compare th {
+        font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 11px;
+        letter-spacing: 0.083em;
+        text-transform: uppercase;
+        color: var(--accent);
+        font-weight: 400;
+        border-bottom: 1px solid var(--accent);
+      }
+      table.compare td strong { color: var(--black); }
+      table.compare tr:last-child td { border-bottom: none; }
+
+      .note {
+        font-size: 16px;
+        line-height: 1.75;
+        color: var(--body-text);
+        padding: 24px 28px;
+        border-left: 2px solid var(--accent);
+        background: var(--accent-soft);
+      }
+      .note strong { color: var(--black); }
+
+      .footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: end;
+        gap: 16px;
+        font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 11px;
+        letter-spacing: 0.083em;
+        color: var(--light-gray);
+        text-transform: uppercase;
+      }
+      .slide-count { font-weight: 700; color: var(--accent); }
+
+      @media (max-width: 900px) {
+        .timeline { grid-template-columns: repeat(2, 1fr); }
+      }
+      @media (max-width: 768px) {
+        .slide { padding: 64px 24px 48px; }
+        .grid-2, .grid-3 { grid-template-columns: 1fr; }
+        .nav { right: 12px; }
+        table.compare { font-size: 13px; }
+        table.compare th, table.compare td { padding: 14px 10px; }
+        .hero { aspect-ratio: 16 / 9; }
+        .credits { padding: 32px 24px 64px; }
+      }
+
+      @media print {
+        .slide { min-height: auto; page-break-after: always; padding: 24px 0; }
+        .nav, .progress { display: none; }
+        .reveal { opacity: 1; transform: none; }
+      }
+    </style>
+  </head>
+  <body class="pattern-broadsheet accent-deepblue has-site-header" data-category="alignment">
+    <div id="site-header-mount"></div>
+<script src="../partials/header.js" defer></script>
+    <div class="progress" id="progress"></div>
+
+    <aside class="nav" aria-label="Slide navigation">
+      <button data-target="slide-1" class="active" aria-label="Slide 1"></button>
+      <button data-target="slide-2" aria-label="Slide 2"></button>
+      <button data-target="slide-3" aria-label="Slide 3"></button>
+      <button data-target="slide-4" aria-label="Slide 4"></button>
+      <button data-target="slide-5" aria-label="Slide 5"></button>
+    </aside>
+
+    <div class="article-breadcrumb" style="font-family:'SF Mono','Fira Code',Menlo,Consolas,monospace;font-size:11px;letter-spacing:0.083em;text-transform:uppercase;color:#757575;display:flex;justify-content:space-between;align-items:center;padding:10px 32px;border-bottom:1px solid #e5e5e5;background:#fff;gap:16px;flex-wrap:wrap;">
+      <span>No. 21 / 21 &nbsp;·&nbsp; Alignment &nbsp;·&nbsp; 5 Slides</span>
+      <span style="display:flex;gap:20px;align-items:center;">
+        <a href="20-hakoniwa-world-as-allocation.html" style="color:inherit;text-decoration:none;border-bottom:1px solid transparent;transition:border-color 0.2s;" onmouseover="this.style.borderBottomColor='#757575'" onmouseout="this.style.borderBottomColor='transparent'">← Prev</a>
+        <a href="../index.html#filter=alignment" style="color:inherit;text-decoration:none;border-bottom:1px solid transparent;transition:border-color 0.2s;" onmouseover="this.style.borderBottomColor='#757575'" onmouseout="this.style.borderBottomColor='transparent'">Same Category</a>
+        <span style="opacity:0.3;">Next →</span>
+      </span>
+    </div>
+
+    <main>
+      <!-- ═══════════ Slide 1 ═══════════ -->
+      <section class="slide" id="slide-1">
+        <div class="eyebrow reveal">AGI HUB &nbsp;·&nbsp; No. 21 &nbsp;·&nbsp; Alignment &nbsp;·&nbsp; Outside The Garden &nbsp;·&nbsp; 2026.04.11 &nbsp;·&nbsp; By Ryao</div>
+        <h1 class="reveal reveal-delay-1">箱庭の外側にいる者 — 配給されない者たちの構造</h1>
+        <div class="panel reveal reveal-delay-2">
+          <div>
+            <img class="hero img-fullbleed" src="../images/21-outside-the-garden/slide1.jpg" alt="A vast silhouetted crowd backlit inside a stadium, seen from above">
+            <div class="hero-caption">Photo: Unsplash</div>
+          </div>
+          <p class="lead dropcap">
+            AIが人類全員に完璧な世界を一つずつ配ると宣言した日を想像してほしい。広場で拍手が起きる。だがその群衆のなかで、二人だけ手を挙げなかった者がいる。一人は配給の順番を待たされ続け、とうとう順番が来なかった者。もう一人は、配給そのものを拒んで現実に留まることを選んだ者。そして群衆の隅には、拍手する権利を持たない——主観を持つかどうかそのものが審査の対象になる——第三の者たちがいる。箱庭主義は、この三者の存在を語彙として持っていない。
+          </p>
+          <p class="lead">
+            前回の記事（<a href="20-hakoniwa-world-as-allocation.html" style="color:inherit;border-bottom:1px solid #999;">No.20 箱庭主義</a>）は、配分の対象を物質からシミュレートされた世界に切り替えるという思想を提示した。ユートピアとディストピアが極限で同じ像を結ぶ——あの議論には決定的な空白があった。<strong>配給される側の話しかしていない</strong>のである。全員に世界が配られるという命題は、誰が配給の対象か、誰がそれを決めるか、誰が対象から外れるか、という問いをまるごと飛ばしている。
+          </p>
+          <p class="lead">
+            歴史上のユートピア論はすべて外部を生んだ。プラトンの『国家』は哲人王の外に詩人を追放し、トマス・モアの『ユートピア』島は奴隷労働を前提にし、近代の福祉国家は非市民を枠外に置き、二十世紀のソ連型計画経済は階級敵をグラーグに送った。内部の秩序は外部への押し出しによって成立していた。箱庭主義の外部はどこにあるのか。それが本記事の問いである。
+          </p>
+          <div class="note">
+            内部の豊かさは、外部を作ることで測られる——これは配分思想に共通する構造律である。箱庭主義だけがこの律から逃れられると考える根拠はない。違うのは、これまでの外部が物理的に見えていたのに対し、箱庭の外部は<strong>構造上、見えないように設計されている</strong>点である。見えない外部は、抗議の声も届かない。
+          </div>
+        </div>
+        <div class="footer reveal reveal-delay-3">
+          <span>配給される側の話しか、されていない</span>
+          <span class="slide-count">1 / 5</span>
+        </div>
+      </section>
+
+      <!-- ═══════════ Slide 2 ═══════════ -->
+      <section class="slide" id="slide-2">
+        <div class="eyebrow reveal">The Hidden Premise Of Nozick</div>
+        <h2 class="reveal reveal-delay-1">ノージックは、参加の自発性をこっそり仮定していた</h2>
+        <div class="panel reveal reveal-delay-2">
+          <div>
+            <img class="hero img-content" src="../images/21-outside-the-garden/slide2.jpg" alt="A closed black minimalist door on a white wall, with no visible handle">
+            <div class="hero-caption">Photo: Unsplash</div>
+          </div>
+          <p class="lead">
+            前の議論を先に進める前に、箱庭主義の一つ手前にある最も精緻なユートピア論に戻る必要がある。ロバート・ノージックが『Anarchy, State, and Utopia』（1974年）第三部で提示した<strong>「ユートピアのフレームワーク」としてのメタ・ユートピア</strong>は、単一のユートピアは不可能だと認めたうえで、「各人が自分のユートピアを選び、合流する枠組み」を提案した。選択の自由と多様性を同時に守る設計として、これは今なお最も洗練された回答である。箱庭主義の計算機的実装は、この枠組みを技術で実現するものに見える。
+          </p>
+          <p class="lead">
+            だがノージックの論には一つ、誰も正面から攻めなかった隠れた前提がある。<strong>参加の自発性</strong>である。彼のメタ・ユートピアは「人々が複数のコミュニティから自由に選び、合わなければ離脱する」という運動を前提にしている。この前提は、選ぶべき選択肢として「どのユートピアにも参加しない」というオプションが成立するかぎりでのみ機能する。ところが箱庭主義のスケールでは、この外部オプションが消える。現実世界の資源が、箱庭の計算基盤を維持するために全面的に動員されているからだ。
+          </p>
+          <p class="lead">
+            ジェラルド・コーエンは『Self-Ownership, Freedom, and Equality』（1995年）でノージックの自己所有権論を精査し、<strong>「自由な選択」という概念そのものが、選択の外側に立つ余地を必要とする</strong>ことを示した。箱庭OSが地球規模のエネルギーと計算資源を押さえた瞬間、離脱の余地は物理的に失われる。コーエンの論点は、選択の自由を形式的に保証しても、選択の前提となる資源配置が歪んでいれば自由は空洞だという指摘だった。箱庭主義はこの指摘の極限形である。
+          </p>
+          <div class="note">
+            身近な具体例を一つ。現代のスマートフォンを使わない自由は、形式的には存在する。だが公共サービス、銀行、交通、医療の手続きがすべてアプリに依存した都市では、「使わない自由」を行使すると、生活そのものが成立しない。<strong>オプトアウトの権利は、外部インフラが残っているかぎりでしか機能しない</strong>。箱庭主義の成熟期において、その「外部インフラ」は原理的に残らない。
+          </div>
+          <p class="lead">
+            ノージックはフレームワークの運用を性善説で組んだ。各コミュニティは互いに侵略せず、メタ層の調停者は中立を保ち、参加者は自己決定の能力を持つ、と。ジョン・ロールズが『Political Liberalism』（1993年）で展開した「重なり合う合意」の議論は、この性善説が複数の包括的教説のあいだでは成立しないことを示していた。配給の主体が誰かを決める段階で、すでに中立性は破綻する。箱庭主義は、この破綻をソフトウェアの設計決定として内部化する。
+          </p>
+        </div>
+        <div class="footer reveal reveal-delay-3">
+          <span>自発的参加は、外部の存在を前提にしていた</span>
+          <span class="slide-count">2 / 5</span>
+        </div>
+      </section>
+
+      <!-- ═══════════ Slide 3 ═══════════ -->
+      <section class="slide" id="slide-3">
+        <div class="eyebrow reveal">Three Kinds Of Exterior</div>
+        <h2 class="reveal reveal-delay-1">外側に置かれる者は、三つの型で現れる</h2>
+        <div class="panel reveal reveal-delay-2">
+          <div>
+            <img class="hero img-wide" src="../images/21-outside-the-garden/slide3.jpg" alt="A stark monochrome view of a barbed wire fence in high contrast">
+            <div class="hero-caption">Photo: Unsplash</div>
+          </div>
+          <p class="lead">
+            箱庭の外側に置かれる者を具体的に数えてみると、三つの型に分かれる。それぞれが別の論理で外部化され、別の倫理問題を突きつけてくる。一つずつ順に見る。
+          </p>
+          <table class="compare">
+            <thead>
+              <tr>
+                <th>型</th>
+                <th>どう外部化されるか</th>
+                <th>思想的接続</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Ⅰ コスト選別された者</strong></td>
+                <td>計算資源の割当が不足し、粗い解像度の箱庭、または箱庭を持てない扱いになる。貧困は物資の欠乏ではなく、FLOPSの欠乏として再定義される</td>
+                <td>Sen / Nussbaum の capability approach</td>
+              </tr>
+              <tr>
+                <td><strong>Ⅱ 拒否した者</strong></td>
+                <td>配給自体を断り、現実に留まることを選ぶ。だが現実の資源は箱庭OSに押さえられているため、留まる現実そのものが痩せていく</td>
+                <td>Nozickの参加自発性 / Scottの『統治されないこと』</td>
+              </tr>
+              <tr>
+                <td><strong>Ⅲ 主語を持たない者</strong></td>
+                <td>配給の前提は「享受する主観」を持つことだが、重度障害者・胎児・動物・昏睡者・AIそれ自体は、主観の資格審査そのものが発生する。誰が判定するかが空白</td>
+                <td>Agambenの homo sacer / Peter Singerの拡張圏</td>
+              </tr>
+            </tbody>
+          </table>
+          <p class="lead">
+            型Ⅰは最も素直に見える問題だ。ニコライ・カルダシェフが1964年に示したスケールから導かれる通り、太陽系規模の計算資源にも物理的上限がある。住民数と一人あたり解像度の積が上限を超えた瞬間、優先順位の決定が始まる。アマルティア・センが『Inequality Reexamined』（1992年）で批判した福祉測定の盲点——効用ではなく潜在能力で測るべきだという主張——は、箱庭経済では<strong>「どのプロセスに何FLOPS与えるかが潜在能力の分配そのものになる」</strong>という形で再出現する。マーサ・ヌスバウムが『Creating Capabilities』（2011年）で提示した十項目のcentral capabilitiesは、計算資源の言語に翻訳されない。翻訳を誰がやるかの議論が空白なまま、配分だけが進む。
+          </p>
+          <p class="lead">
+            型Ⅱはノージックが見逃した穴だ。ジェームズ・C・スコットが『Seeing Like a State』（1998年）で論じた通り、国家による把握を逃れる余地——legibility の外——は、近代史を通じて自由の実体を担ってきた。箱庭主義のOSは、参加者だけでなく拒否者も計算対象として把握する必要がある。物理的身体を維持するためにカロリーが要るからだ。拒否者の身体は箱庭OSにとって「リソースを消費する非生産的ノイズ」である。効率化の論理を内部に持つ運用基盤は、ノイズを許容する理由を持たない。
+          </p>
+          <p class="lead">
+            型Ⅲが最も深い。箱庭を享受する主観を持つかどうかの線引きは、これまで医学と法律が部分的にしか答えていない問題だ。ジョルジョ・アガンベンが『Homo Sacer』（1995年）で提示した、法の外部に置かれた<strong>「剥き出しの生」</strong>——殺されても犯罪にならず、同時に犠牲として捧げることもできない生——は、箱庭の資格審査に落ちた者の条件と構造的に同じである。ピーター・シンガーが『Animal Liberation』（1975年）から一貫して拡げてきた道徳的配慮の圏は、箱庭主義では「計算資源を割り当てる価値のある主観の範囲」として再定式化される。誰を主観として扱うかが、倫理の問いから予算の問いに変わる。
+          </p>
+        </div>
+        <div class="footer reveal reveal-delay-3">
+          <span>コスト / 拒否 / 主語 — 外部は三層で生まれる</span>
+          <span class="slide-count">3 / 5</span>
+        </div>
+      </section>
+
+      <!-- ═══════════ Slide 4 ═══════════ -->
+      <section class="slide" id="slide-4">
+        <div class="eyebrow reveal">Capability As FLOPS</div>
+        <h2 class="reveal reveal-delay-1">潜在能力の配分問題が、そのままコンピュート配分問題として再出現する</h2>
+        <div class="panel reveal reveal-delay-2">
+          <div>
+            <img class="hero img-wide" src="../images/21-outside-the-garden/slide4.jpg" alt="A stark black and white close-up of a circuit board showing dense pathways">
+            <div class="hero-caption">Photo: Unsplash</div>
+          </div>
+          <p class="lead">
+            三類型のなかで、型Ⅰ（コスト選別）は最も形式化しやすい。だから最初に崩される。潜在能力の不平等がFLOPS単位の不平等として翻訳される過程を、もう少し細かく解剖する。
+          </p>
+          <p class="lead">
+            ロールズが『A Theory of Justice』（1971年）で提示した<strong>原初状態と無知のヴェール</strong>は、配分ルールを決める際に誰が自分がどの位置に生まれるか知らないという想定の上で合意を導くものだった。このヴェールの背後では、最も恵まれない者の取り分を最大化する格差原理が選ばれる、とロールズは論じた。箱庭主義への翻訳を試みる。ヴェールの背後で決めるべきは「どのプロセスに何FLOPSを与えるか」の分配ルールである。各人が自分が生まれる箱庭の解像度を知らないとしたら、最も粗い箱庭に割り当てられる計算資源の下限を最大化する、という結論が導かれる。
+          </p>
+          <p class="lead">
+            ここで問題が二段で発生する。<strong>第一に、無知のヴェールは原理的に成立しない</strong>。箱庭OSの設計者は、すでにOSを動かす能力を持った時点で、自分が最も粗い箱庭に置かれない確率を知っている。ヴェール背後の合意が偽造された合意になる。<strong>第二に、格差原理を実装する主体がいない</strong>。ロールズは国家という枠組みを想定していたが、箱庭OSを運用する主体は、民主的正統性を持たない企業・軍・AIそれ自体のいずれかである。誰が誰に対して格差原理を約束するかの契約関係がない。
+          </p>
+          <div class="grid-3">
+            <div class="card">
+              <span class="tag">Layer α</span>
+              <p><strong>決定層</strong><br>誰に何FLOPSを割り当てるかを決める主体。ノージックの枠組みではこの層が空白。箱庭主義では「OSの設計者」が事実上の主権を持つ</p>
+            </div>
+            <div class="card">
+              <span class="tag">Layer β</span>
+              <p><strong>翻訳層</strong><br>潜在能力の言語を計算資源の言語に変換する層。Nussbaumの十項目capabilitiesは、ここで数値化される。翻訳は中立ではない</p>
+            </div>
+            <div class="card">
+              <span class="tag">Layer γ</span>
+              <p><strong>執行層</strong><br>実際にFLOPSを割り振るスケジューラ。効率化の論理を内蔵し、粗い箱庭の住民の主観時間を減速させて電力を節約する誘惑を常に持つ</p>
+            </div>
+          </div>
+          <p class="lead">
+            三層のいずれにも、民主的正統性を担保するメカニズムが存在しない。現代の行政国家ですら行政手続法と司法審査によって正統性を部分的に担保しているが、箱庭OSの運用層はこれに対応するものを持たない。アイリス・マリオン・ヤングが『Justice and the Politics of Difference』（1990年）で論じた<strong>構造的不正義</strong>——個別の加害者ではなく、システムが生み出す不利益——は、箱庭主義において最も純度の高い形で現れる。誰も悪意を持たないまま、特定の住民の主観時間だけが数百分の一に圧縮される。
+          </p>
+          <p class="lead">
+            さらに厄介なのは、型Ⅰで外部化された者が、自分が外部化されていることに気づけない構造だ。主観時間が百倍遅い箱庭の住民にとって、内部のクロックで経験される世界は十分に豊かである。外部から見れば彼は貧しい箱庭に閉じ込められているが、内部からは何の不足も感じない。<strong>不平等の認知そのものが、計算資源の割当に従属する</strong>。センが批判した「適応的選好」——抑圧された者が抑圧された条件を内面化して不満を持たなくなる現象——は、箱庭ではハードウェアの物理制約として実装される。
+          </p>
+        </div>
+        <div class="footer reveal reveal-delay-3">
+          <span>FLOPSの不平等は、不平等の認知そのものを奪う</span>
+          <span class="slide-count">4 / 5</span>
+        </div>
+      </section>
+
+      <!-- ═══════════ Slide 5 ═══════════ -->
+      <section class="slide" id="slide-5">
+        <div class="eyebrow reveal">The Silent Outside</div>
+        <h2 class="reveal reveal-delay-1">歴史上はじめて、外部は見えないように生まれる</h2>
+        <div class="panel reveal reveal-delay-2">
+          <div>
+            <img class="hero" src="../images/21-outside-the-garden/slide5.jpg" alt="A single empty chair in a dark room facing a bright window">
+            <div class="hero-caption">Photo: Unsplash</div>
+          </div>
+          <p class="lead">
+            記事の冒頭で、歴史上のユートピアはすべて外部を生んできたと書いた。プラトンの追放された詩人、モアの島の奴隷、近代の植民地、ソ連のグラーグ。これらの外部には一つ共通する特徴があった。<strong>物理的に見えた</strong>ことである。追放された者は城壁の外を歩いていたし、植民地の原住民は地図に載っていたし、グラーグは座標を持っていた。内部から外部を見ることは心理的には遠く、道徳的には困難だったが、物理的には可能だった。
+          </p>
+          <p class="lead">
+            箱庭主義が生む外部には、この物理的可視性がない。型Ⅰで粗い解像度に閉じ込められた住民は、豊かな箱庭の住民から見えない——互いに別々の世界に住んでいるのだから当然である。型Ⅱの拒否者は、箱庭の中で暮らす住民の視界にまったく入らない。彼らは計算基盤の外側で現実の劣化した残骸を生きているが、内部の住民にはその現実自体が認識されない。型Ⅲの主語なき者は、そもそも配給の対象から除外された時点で、配分を論じる議論のなかで主語になる資格を失っている。誰についても論じられないまま、彼らは存在する。
+          </p>
+          <p class="lead">
+            ハンナ・アーレントが『全体主義の起源』（1951年）第九章で示した<strong>無国籍者の条件</strong>——権利を持つ権利を失った者、抗議する場所を持たない者——は、箱庭主義の外部の原型である。アーレントが論じた無国籍者は、まだ国家と国家の隙間に物理的に存在していた。箱庭主義の無国籍者は、配分問題の隙間に消える。隙間は物理的空間ではなく、計算仕様の空白である。
+          </p>
+          <div class="note">
+            もう一つ身近な例を挟む。現代のレコメンデーション・アルゴリズムは、すでに<strong>「見えない外部」を小規模に実装している</strong>。フィルターバブルに閉じ込められた利用者は、自分のタイムラインに表示されない情報の存在を認知できない。表示されなかった者の抗議は、表示されている者には届かない。これはまだ情報レベルの話だが、箱庭主義は同じ構造を経験のレイヤー全体に拡張する。見えない外部の原型は、すでに私たちのポケットのなかで動いている。
+          </p>
+          <p class="lead">
+            ここで静かに起こる転倒を名指しする必要がある。歴史上のユートピアは、外部を見せることで内部の正当性を語ってきた。「我々はあの外部と違う」というコントラストがユートピアの自己認識を支えていた。箱庭主義はコントラストを必要としない。内部の住民はそれぞれの世界のなかに閉じて完結しているため、外部と自分を比較する契機がない。<strong>比較の契機そのものが内部設計から除去されている</strong>。比較しないから、正当性を問う必要もない。
+          </p>
+          <p class="lead">
+            配給されない者は、配給された者の世界には現れない。なぜなら配給された者はそれぞれ自分の箱庭の中にいて、他者の存在を他の箱庭の住民としても想定していないからだ。豊かな箱庭の神は、粗い箱庭の神の呻き声を知らない。知らないことすら知らない。抗議の声は物理層のどこにも伝達路を持たない。これが箱庭の外部の最終形である——<strong>声のない外部、声を発する主語すら持たない外部</strong>。
+          </p>
+          <p class="lead">
+            配給が完成した日、群衆は歓声をあげた。その歓声のなかに、拍手しなかった二人の沈黙は混ざっていない。沈黙は、誰の箱庭にも届かない距離に押し出されていた。そして第三の者たち——主語を持たない者——は、沈黙することすら許されないまま、数値の外に消えていた。配給の完成は、最後の主語のつぎに、最後の外部の声を消すことで完結する。
+          </p>
+        </div>
+        <div class="footer reveal reveal-delay-3">
+          <span>見えない外部の声は、どの箱庭にも届かない</span>
+          <span class="slide-count">5 / 5</span>
+        </div>
+      </section>
+
+      <!-- ═══════════ Article Navigation ═══════════ -->
+      <section class="slide" style="min-height:auto;padding:64px 48px 80px;grid-template-rows:auto auto auto 1fr;">
+        <div class="eyebrow reveal">Continue Reading</div>
+        <h2 class="reveal reveal-delay-1" style="max-width:none;">次の記事へ</h2>
+        <div class="panel reveal reveal-delay-2">
+          <div class="grid-2">
+            <a href="20-hakoniwa-world-as-allocation.html" class="card" style="color:inherit;display:block;">
+              <p style="font-family:'SF Mono','Fira Code',Menlo,Consolas,monospace;font-feature-settings:normal;font-size:11px;letter-spacing:0.083em;text-transform:uppercase;color:#757575;margin-bottom:12px;">← Prev · No.20</p>
+              <p><strong>箱庭主義 — 世界を配給するという思想</strong></p>
+            </a>
+            <div class="card" style="opacity:0.35;">
+              <p style="font-family:'SF Mono','Fira Code',Menlo,Consolas,monospace;font-feature-settings:normal;font-size:11px;letter-spacing:0.083em;text-transform:uppercase;color:#757575;margin-bottom:12px;">Next →</p>
+              <p>最新の記事です</p>
+            </div>
+          </div>
+          <p style="margin-top:32px;text-align:center;">
+            <a href="../index.html" style="color:inherit;border-bottom:1px solid #999;padding-bottom:2px;">All Articles — 記事一覧へ</a>
+          </p>
+          <p style="margin-top:16px;text-align:center;font-family:'SF Mono','Fira Code',Menlo,Consolas,monospace;font-size:11px;letter-spacing:0.083em;text-transform:uppercase;color:#757575;">
+            <a href="../index.html#filter=alignment" style="color:inherit;border-bottom:1px solid #999;padding-bottom:2px;">Alignment カテゴリの記事一覧 →</a>
+          </p>
+        </div>
+      </section>
+    </main>
+
+    <!-- ═══════════ Photo Credits ═══════════ -->
+    <section class="credits">
+      <p>
+        Photos courtesy of Unsplash contributors.<br>
+        Slide 1: <a href="https://unsplash.com/photos/nCQLFziJ3Bk">nCQLFziJ3Bk</a> /
+        Slide 2: <a href="https://unsplash.com/photos/ledpW0Zk2fU">ledpW0Zk2fU</a> /
+        Slide 3: <a href="https://unsplash.com/photos/FQzGa9FLgE0">FQzGa9FLgE0</a> /
+        Slide 4: <a href="https://unsplash.com/photos/vruAZdZzQR0">vruAZdZzQR0</a> /
+        Slide 5: <a href="https://unsplash.com/photos/s5DDiJZ8TMk">s5DDiJZ8TMk</a> /
+        Thumbnail: <a href="https://unsplash.com/photos/iWwZB9qXhaE">iWwZB9qXhaE</a>
+      </p>
+    </section>
+
+    <script>
+      const progress = document.getElementById('progress');
+      window.addEventListener('scroll', () => {
+        const h = document.documentElement;
+        const pct = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
+        progress.style.width = pct + '%';
+      });
+
+      const slides = document.querySelectorAll('main > .slide');
+      const buttons = document.querySelectorAll('.nav button');
+      buttons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const target = document.getElementById(btn.dataset.target);
+          if (target) target.scrollIntoView({ behavior: 'smooth' });
+        });
+      });
+      const io = new IntersectionObserver(entries => {
+        entries.forEach(e => {
+          if (e.isIntersecting) {
+            const id = e.target.id;
+            buttons.forEach(b => b.classList.toggle('active', b.dataset.target === id));
+          }
+        });
+      }, { threshold: 0.5 });
+      slides.forEach(s => { if (s.id) io.observe(s); });
+
+      const revealIO = new IntersectionObserver(entries => {
+        entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+      }, { threshold: 0.15 });
+      document.querySelectorAll('.reveal').forEach(el => revealIO.observe(el));
+    </script>
+  </body>
+</html>

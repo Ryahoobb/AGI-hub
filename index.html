@@ -593,24 +593,13 @@
         .nav-links a:not(:first-child) { display: none; }
       }
     </style>
-  </head>
-  <body>
+  <link rel="stylesheet" href="design-system/palette.css">
+</head>
+  <body class="has-site-header">
 
     <!-- ── Masthead ── -->
-    <header class="masthead">
-      <div class="masthead-inner">
-        <a href="index.html" class="logo"><span class="logo-mark"></span>AGI HUB</a>
-        <nav class="nav-links">
-          <a href="#picks">Picks</a>
-          <a href="#latest">Latest</a>
-          <a href="models-evals.html">Models</a>
-          <a href="#data">Data</a>
-          <a href="#taxonomy">Map</a>
-          <a href="#about">About</a>
-          <div id="google_translate_element"></div>
-        </nav>
-      </div>
-    </header>
+    <div id="site-header-mount"></div>
+<script src="partials/header.js" defer></script>
 
     <!-- ── Hero ── -->
     <section class="hero">

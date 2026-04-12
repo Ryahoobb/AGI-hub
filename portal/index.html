@@ -1,0 +1,896 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>AGI HUB — ブランド一覧とレベル別ガイド</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&family=Noto+Sans+JP:wght@400;500;700;900&family=Noto+Serif+JP:wght@500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#0a0a0a;
+    --body:#1a1a1a;
+    --dark:#333;
+    --meta:#757575;
+    --light:#999;
+    --vlight:#e5e5e5;
+    --faint:#f4f4f4;
+    --bg:#ffffff;
+    --cream:#faf8f4;
+    --rule:#000;
+    --accent:#C74675;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--bg);color:var(--body);
+    font-family:"Inter","Noto Sans JP",sans-serif;
+    font-size:15px;line-height:1.8;
+    letter-spacing:0.02em;
+    font-feature-settings:"palt";
+    -webkit-font-smoothing:antialiased;
+  }
+  .serif{font-family:"Noto Serif JP","Georgia",serif;font-feature-settings:normal}
+  .mono{font-family:"SF Mono",Menlo,Consolas,monospace;font-size:11px;letter-spacing:0.12em;text-transform:uppercase}
+  a{color:var(--ink);text-decoration:none}
+  img{display:block;max-width:100%}
+  ul{list-style:none}
+
+  /* ===== Header ===== */
+  header.site{
+    border-bottom:1px solid var(--ink);
+    padding:18px 40px;
+    display:flex;justify-content:space-between;align-items:center;
+    position:sticky;top:0;background:var(--bg);z-index:10;
+  }
+  header.site .brand{
+    font-weight:900;font-size:18px;letter-spacing:-0.01em;
+  }
+  header.site .brand em{font-style:normal;color:var(--accent)}
+  header.site nav{display:flex;gap:28px}
+  header.site nav a{font-family:"SF Mono",Menlo,monospace;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--meta)}
+  header.site nav a:hover{color:var(--ink)}
+
+  main{max-width:1280px;margin:0 auto;padding:0 40px}
+
+  /* ===== Hero ===== */
+  .hero{padding:120px 0 80px;border-bottom:1px solid var(--vlight)}
+  .hero .kicker{display:block;margin-bottom:24px;color:var(--meta)}
+  .hero .kicker .num{color:var(--accent);font-weight:700}
+  .hero h1{
+    font-size:88px;line-height:1.02;font-weight:900;
+    letter-spacing:-0.02em;color:var(--ink);margin-bottom:40px;max-width:1000px;
+  }
+  .hero h1 em{font-style:normal;color:var(--accent)}
+  .hero .lead{
+    font-size:20px;line-height:1.7;max-width:780px;color:var(--dark);
+    font-family:"Noto Serif JP",serif;
+  }
+  .hero .meta{
+    margin-top:48px;display:flex;gap:48px;padding-top:32px;border-top:1px solid var(--vlight);
+    flex-wrap:wrap;
+  }
+  .hero .meta div{min-width:160px}
+  .hero .meta .label{color:var(--meta);margin-bottom:6px}
+  .hero .meta .value{font-size:22px;font-weight:700;color:var(--ink);letter-spacing:-0.01em}
+
+  /* ===== Explorer (interactive 2D plane) ===== */
+  .dx{padding:90px 0;border-bottom:1px solid var(--vlight);background:var(--cream);margin:0 -40px;padding-left:40px;padding-right:40px}
+  .dx-inner{max-width:1280px;margin:0 auto}
+  .dx h2{font-size:48px;font-weight:900;letter-spacing:-0.015em;margin-bottom:8px;color:var(--ink)}
+  .dx h2 em{font-style:normal;color:var(--accent)}
+  .dx .sub{color:var(--meta);margin-bottom:48px;font-size:14px}
+
+  .explorer{
+    display:grid;grid-template-columns:1.5fr 1fr;gap:40px;align-items:stretch;
+  }
+  .plane-wrap{position:relative}
+  .plane{
+    position:relative;width:100%;aspect-ratio:1/1;
+    background:#fff;border:1px solid var(--ink);
+    cursor:crosshair;touch-action:none;user-select:none;
+    background-image:
+      linear-gradient(to right,transparent 49.9%,var(--vlight) 49.9%,var(--vlight) 50.1%,transparent 50.1%),
+      linear-gradient(to bottom,transparent 49.9%,var(--vlight) 49.9%,var(--vlight) 50.1%,transparent 50.1%),
+      radial-gradient(circle at center, var(--faint) 0%, transparent 60%);
+  }
+  .plane .axis-lbl{
+    position:absolute;font-family:"Noto Sans JP",sans-serif;
+    font-size:12px;letter-spacing:0.12em;color:var(--meta);font-weight:700;
+    pointer-events:none;background:rgba(255,255,255,0.85);padding:4px 10px;
+  }
+  .plane .axis-lbl.top{top:14px;left:50%;transform:translateX(-50%)}
+  .plane .axis-lbl.bottom{bottom:14px;left:50%;transform:translateX(-50%)}
+  .plane .axis-lbl.left{left:18px;top:50%;transform:translateY(-50%) rotate(-90deg);transform-origin:left center}
+  .plane .axis-lbl.right{right:18px;top:50%;transform:translateY(-50%) rotate(90deg);transform-origin:right center}
+
+  .brand-node{
+    position:absolute;transform:translate(-50%,-50%);
+    padding:10px 16px;background:#fff;border:1px solid var(--ink);
+    font-size:12px;font-weight:700;white-space:nowrap;
+    transition:all .25s;pointer-events:none;
+    font-family:"Inter","Noto Sans JP",sans-serif;
+  }
+  .brand-node.active{
+    background:var(--ink);color:#fff;
+    transform:translate(-50%,-50%) scale(1.15);
+    box-shadow:0 0 0 6px rgba(199,70,117,0.15);
+    border-color:var(--accent);
+  }
+  .brand-node .small{display:block;font-size:10px;font-weight:500;color:var(--meta);letter-spacing:0.04em;margin-top:2px}
+  .brand-node.active .small{color:rgba(255,255,255,0.7)}
+
+  .me{
+    position:absolute;width:28px;height:28px;
+    transform:translate(-50%,-50%);
+    pointer-events:none;z-index:3;
+  }
+  .me::before{
+    content:"";position:absolute;inset:0;
+    background:var(--accent);border-radius:50%;
+    animation:pulse 1.8s infinite ease-out;
+  }
+  .me::after{
+    content:"";position:absolute;inset:8px;
+    background:var(--accent);border-radius:50%;border:2px solid #fff;
+  }
+  @keyframes pulse{
+    0%{transform:scale(1);opacity:0.4}
+    100%{transform:scale(2.2);opacity:0}
+  }
+  .me-label{
+    position:absolute;transform:translate(-50%,-100%);
+    margin-top:-18px;font-family:"Noto Sans JP",sans-serif;
+    font-size:11px;letter-spacing:0.08em;
+    color:var(--accent);font-weight:700;white-space:nowrap;pointer-events:none;
+    background:#fff;padding:2px 8px;border:1px solid var(--accent);
+  }
+
+  .hint{
+    position:absolute;bottom:-28px;left:0;right:0;text-align:center;
+    font-family:"Noto Sans JP",sans-serif;font-size:12px;
+    letter-spacing:0.05em;color:var(--meta);
+  }
+
+  /* Live recommendation panel */
+  .rec{
+    background:#fff;border:1px solid var(--ink);
+    display:flex;flex-direction:column;overflow:hidden;
+  }
+  .rec .rec-cover{
+    width:100%;height:180px;object-fit:cover;
+    filter:grayscale(100%) contrast(1.05);
+    transition:opacity .3s;
+  }
+  .rec-inner{padding:32px 32px 32px;display:flex;flex-direction:column;flex:1}
+  .rec-inner .tag{
+    display:inline-block;padding:4px 12px;background:var(--accent);color:#fff;
+    font-family:"Noto Sans JP",sans-serif;font-size:11px;letter-spacing:0.08em;
+    margin-bottom:16px;align-self:flex-start;font-weight:700;
+  }
+  .rec h3{font-size:28px;font-weight:900;letter-spacing:-0.01em;margin-bottom:6px;line-height:1.2}
+  .rec .tagline{font-family:"Noto Serif JP",serif;font-style:italic;color:var(--dark);font-size:14px;margin-bottom:18px}
+  .rec p{font-size:13px;line-height:1.8;color:var(--dark);margin-bottom:20px;flex:1}
+  .rec .stats{
+    display:flex;gap:24px;padding:14px 0;border-top:1px solid var(--vlight);
+    border-bottom:1px solid var(--vlight);margin-bottom:20px;font-size:11px;color:var(--meta);
+    font-family:"Noto Sans JP",sans-serif;letter-spacing:0.04em;
+  }
+  .rec .stats b{color:var(--ink);font-weight:700;display:block;margin-top:2px;font-size:12px}
+  .rec a.cta{
+    display:inline-flex;align-items:center;justify-content:space-between;
+    padding:16px 20px;background:var(--ink);color:#fff;
+    font-weight:700;font-size:13px;letter-spacing:0.05em;
+    transition:background .2s;
+  }
+  .rec a.cta:hover{background:var(--accent)}
+  .rec a.cta::after{content:"→";margin-left:10px}
+
+  @media (max-width:900px){
+    .explorer{grid-template-columns:1fr;gap:60px}
+  }
+
+  /* ===== Brand Grid ===== */
+  .brands{padding:100px 0 60px}
+  .brands .layer-tag{
+    display:inline-block;font-family:"Noto Sans JP",sans-serif;font-size:11px;
+    letter-spacing:0.12em;color:#fff;background:var(--ink);padding:5px 12px;margin-bottom:18px;
+  }
+  .brands h2{font-size:52px;font-weight:900;letter-spacing:-0.02em;margin-bottom:12px}
+  .brands h2 em{font-style:normal;color:var(--accent)}
+  .brands .section-sub{color:var(--meta);margin-bottom:60px;max-width:680px;font-size:15px}
+
+  /* ===== Services layer ===== */
+  .services{padding:100px 0 80px;border-top:1px solid var(--ink);margin-top:60px}
+  .services .layer-tag{
+    display:inline-block;font-family:"Noto Sans JP",sans-serif;font-size:11px;
+    letter-spacing:0.12em;color:#fff;background:var(--accent);padding:5px 12px;margin-bottom:18px;
+  }
+  .services h2{font-size:52px;font-weight:900;letter-spacing:-0.02em;margin-bottom:12px}
+  .services h2 em{font-style:normal;color:var(--accent)}
+  .services .section-sub{color:var(--meta);margin-bottom:60px;max-width:760px;font-size:15px}
+  .svc-grid{
+    display:grid;grid-template-columns:repeat(3,1fr);gap:0;
+    border-top:1px solid var(--ink);border-left:1px solid var(--ink);
+  }
+  .svc{
+    border-right:1px solid var(--ink);border-bottom:1px solid var(--ink);
+    padding:40px 32px 36px;background:var(--bg);
+    display:flex;flex-direction:column;min-height:360px;
+    transition:background .2s;
+  }
+  .svc:hover{background:var(--cream)}
+  .svc .svc-num{
+    font-family:"Inter",sans-serif;font-size:14px;font-weight:900;color:var(--accent);
+    letter-spacing:0.08em;margin-bottom:20px;
+  }
+  .svc h3{font-size:26px;font-weight:900;letter-spacing:-0.01em;margin-bottom:8px;line-height:1.25}
+  .svc .tagline{font-family:"Noto Serif JP",serif;font-style:italic;color:var(--dark);font-size:14px;margin-bottom:20px}
+  .svc .desc{font-size:13px;color:var(--dark);line-height:1.8;margin-bottom:20px;flex:1}
+  .svc .target{
+    padding:14px 0;border-top:1px solid var(--vlight);font-size:12px;color:var(--meta);margin-bottom:18px;
+  }
+  .svc .target strong{color:var(--ink);display:block;margin-bottom:4px;font-size:11px;letter-spacing:0.05em}
+  .svc .cta-static{
+    display:inline-block;padding:14px 18px;background:var(--faint);
+    color:var(--meta);font-weight:700;font-size:12px;letter-spacing:0.08em;
+    border:1px dashed var(--light);text-align:center;
+  }
+  @media (max-width:900px){ .svc-grid{grid-template-columns:1fr} }
+
+  .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border-top:1px solid var(--ink);border-left:1px solid var(--ink)}
+  .card{
+    border-right:1px solid var(--ink);border-bottom:1px solid var(--ink);
+    background:var(--bg);
+    display:flex;flex-direction:column;min-height:560px;
+    transition:background .2s;
+    overflow:hidden;
+  }
+  .card:hover{background:var(--cream)}
+  .card .cover{
+    width:100%;height:200px;object-fit:cover;
+    filter:grayscale(100%) contrast(1.05);
+    transition:filter .3s;
+  }
+  .card:hover .cover{filter:grayscale(0%) contrast(1)}
+  .card .inner{padding:32px 32px 36px;display:flex;flex-direction:column;flex:1}
+  .card .lvl{margin-bottom:20px;color:var(--meta)}
+  .card .lvl .dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--accent);margin-right:8px;vertical-align:middle}
+  .card h3{font-size:28px;font-weight:900;letter-spacing:-0.01em;margin-bottom:6px;line-height:1.2}
+  .card .tagline{font-family:"Noto Serif JP",serif;color:var(--dark);font-size:15px;margin-bottom:20px;line-height:1.6;font-style:italic}
+  .card .desc{font-size:13px;color:var(--dark);margin-bottom:24px;line-height:1.8;flex:1}
+  .card .for{
+    padding:14px 0;border-top:1px solid var(--vlight);font-size:12px;color:var(--meta);margin-bottom:18px;
+  }
+  .card .for strong{color:var(--ink);display:block;margin-bottom:4px;font-size:11px;letter-spacing:0.08em;text-transform:uppercase}
+  .card .cta{
+    display:inline-flex;align-items:center;gap:8px;
+    padding:12px 0;font-size:13px;font-weight:700;color:var(--ink);
+    border-top:1px solid var(--ink);
+  }
+  .card .cta::after{content:"→";transition:transform .2s}
+  .card:hover .cta::after{transform:translateX(4px)}
+
+  /* Level indicators 1-5 */
+  .level-bar{display:inline-flex;gap:2px;margin-left:8px;vertical-align:middle}
+  .level-bar span{display:block;width:6px;height:10px;background:var(--vlight)}
+  .level-bar span.on{background:var(--ink)}
+
+  /* ===== Flow (media × services relationship) ===== */
+  .flow{padding:100px 0 80px;border-top:1px solid var(--ink);margin-top:60px;background:var(--cream);margin-left:-40px;margin-right:-40px;padding-left:40px;padding-right:40px}
+  .flow-inner{max-width:1280px;margin:0 auto}
+  .flow .layer-tag{
+    display:inline-block;font-family:"Noto Sans JP",sans-serif;font-size:11px;
+    letter-spacing:0.12em;color:var(--ink);background:#fff;padding:5px 12px;margin-bottom:18px;border:1px solid var(--ink);
+  }
+  .flow h2{font-size:48px;font-weight:900;letter-spacing:-0.02em;margin-bottom:12px}
+  .flow h2 em{font-style:normal;color:var(--accent)}
+  .flow .section-sub{color:var(--meta);margin-bottom:56px;max-width:720px;font-size:15px}
+
+  .flow-diagram{
+    display:grid;grid-template-columns:1fr 80px 1fr;gap:0;align-items:center;
+    background:#fff;border:1px solid var(--ink);padding:40px 32px;
+  }
+  .flow-col h4{
+    font-family:"Noto Sans JP",sans-serif;font-size:11px;font-weight:700;
+    color:var(--meta);letter-spacing:0.1em;margin-bottom:20px;padding-bottom:10px;
+    border-bottom:1px solid var(--vlight);
+  }
+  .flow-item{
+    padding:16px 18px;background:#fff;border:1px solid var(--ink);
+    margin-bottom:12px;position:relative;cursor:default;
+    transition:all .2s;
+  }
+  .flow-item:hover{background:var(--ink);color:#fff}
+  .flow-item:hover .ft-sub{color:rgba(255,255,255,0.65)}
+  .flow-item[data-flow]{cursor:pointer}
+  .flow-item.highlight{background:var(--ink);color:#fff}
+  .flow-item.highlight .ft-sub{color:rgba(255,255,255,0.65)}
+  .flow-item.dim{opacity:0.25}
+  .ft-title{font-weight:900;font-size:15px;letter-spacing:-0.01em}
+  .ft-sub{display:block;font-size:11px;color:var(--meta);margin-top:3px;font-weight:500}
+
+  .flow-arrows{
+    position:relative;height:100%;min-height:280px;
+  }
+  .flow-arrows svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+  .flow-arrows path{fill:none;stroke:var(--ink);stroke-width:1.5;transition:stroke .2s, opacity .2s}
+  .flow-arrows path.active{stroke:var(--accent);stroke-width:2.5}
+  .flow-arrows path.dimmed{opacity:0.15}
+
+  .flow-note{
+    margin-top:24px;padding:18px 22px;background:var(--faint);border-left:3px solid var(--accent);
+    font-size:13px;color:var(--dark);line-height:1.7;
+  }
+  .flow-note strong{color:var(--ink)}
+
+  @media (max-width:900px){
+    .flow-diagram{grid-template-columns:1fr;gap:24px}
+    .flow-arrows{display:none}
+  }
+
+  /* ===== Map ===== */
+  .map{padding:100px 0;border-top:1px solid var(--ink);margin-top:80px}
+  .map h2{font-size:44px;font-weight:900;letter-spacing:-0.02em;margin-bottom:48px}
+  .map h2 em{font-style:normal;color:var(--accent)}
+  .axis{
+    position:relative;height:340px;border:1px solid var(--ink);background:
+      linear-gradient(to right,transparent 49.9%,var(--vlight) 49.9%,var(--vlight) 50.1%,transparent 50.1%),
+      linear-gradient(to bottom,transparent 49.9%,var(--vlight) 49.9%,var(--vlight) 50.1%,transparent 50.1%);
+  }
+  .axis .lbl{position:absolute;font-family:"SF Mono",Menlo,monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--meta)}
+  .axis .lbl.top{top:12px;left:50%;transform:translateX(-50%)}
+  .axis .lbl.bottom{bottom:12px;left:50%;transform:translateX(-50%)}
+  .axis .lbl.left{left:12px;top:50%;transform:translateY(-50%) rotate(-90deg);transform-origin:left center}
+  .axis .lbl.right{right:12px;top:50%;transform:translateY(-50%) rotate(90deg);transform-origin:right center}
+  .node{
+    position:absolute;transform:translate(-50%,-50%);
+    padding:8px 14px;background:#fff;border:1px solid var(--ink);
+    font-size:12px;font-weight:700;white-space:nowrap;
+  }
+  .node.focus{background:var(--ink);color:#fff}
+
+  /* ===== Footer ===== */
+  footer{
+    border-top:1px solid var(--ink);padding:60px 40px;margin-top:80px;
+    display:flex;justify-content:space-between;flex-wrap:wrap;gap:32px;
+    color:var(--meta);font-size:12px;
+  }
+  footer .cols{display:flex;gap:64px;flex-wrap:wrap}
+  footer h4{font-family:"SF Mono",Menlo,monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink);margin-bottom:12px}
+  footer ul li{margin-bottom:6px}
+  footer a{color:var(--meta)}
+  footer a:hover{color:var(--ink)}
+
+  /* Responsive */
+  @media (max-width:900px){
+    .hero h1{font-size:52px}
+    .dx-grid{grid-template-columns:1fr}
+    .cards{grid-template-columns:1fr}
+    .brands h2{font-size:36px}
+    main{padding:0 24px}
+    header.site{padding:16px 24px}
+    .dx{margin:0 -24px;padding:60px 24px}
+  }
+</style>
+</head>
+<body>
+
+<header class="site">
+  <a class="brand" href="#top">AGI <em>HUB</em></a>
+  <nav>
+    <a href="#diagnostic">気分で探す</a>
+    <a href="#brands">読み物</a>
+    <a href="#services">施策候補</a>
+    <a href="#flow">関係性</a>
+    <a href="#map">位置づけ</a>
+  </nav>
+</header>
+
+<main id="top">
+
+  <!-- ===== HERO ===== -->
+  <section class="hero">
+    <span class="kicker mono"><span class="num">01</span> &nbsp;/ &nbsp;Portal &nbsp; · &nbsp; 2026</span>
+    <h1>AGIに<em>どこから</em>触れるかは、<br>あなたの温度で決めていい。</h1>
+    <p class="lead">
+      AGI HUBは、知能の次のフェーズを「論考・日常・未来・経営判断」の4つの声で語るメディア群です。
+      朝の食卓で読む話もあれば、取締役会の前に読むブリーフもある。
+      あなたがいま欲しい温度のメディアへ、最短で案内します。
+    </p>
+    <div class="meta">
+      <div><div class="label mono">Brands</div><div class="value">04 Media</div></div>
+      <div><div class="label mono">Articles</div><div class="value">21+</div></div>
+      <div><div class="label mono">Maps</div><div class="value">03 Structures</div></div>
+      <div><div class="label mono">Language</div><div class="value">JP / EN</div></div>
+    </div>
+  </section>
+
+  <!-- ===== EXPLORER ===== -->
+  <section class="dx" id="diagnostic">
+    <div class="dx-inner">
+      <h2>自分の<em>気分</em>を、置いてみてください。</h2>
+      <p class="sub">drag the dot · recommendation updates live</p>
+
+      <div class="explorer">
+        <div class="plane-wrap">
+          <div class="plane" id="plane">
+            <span class="axis-lbl top">じっくり深く</span>
+            <span class="axis-lbl bottom">気軽に日常で</span>
+            <span class="axis-lbl left">感じたい</span>
+            <span class="axis-lbl right">判断したい</span>
+
+            <div class="brand-node" data-brand="today" style="top:72%;left:30%">
+              AGI HUB Today
+              <span class="small">日常エッセイ</span>
+            </div>
+            <div class="brand-node" data-brand="main" style="top:28%;left:62%">
+              AGI HUB
+              <span class="small">本体アーカイブ</span>
+            </div>
+            <div class="brand-node" data-brand="exec" style="top:16%;left:86%">
+              Executive
+              <span class="small">ブリーフ</span>
+            </div>
+            <div class="brand-node" data-brand="jr" style="top:84%;left:12%">
+              Jr.
+              <span class="small">副読 · 参照</span>
+            </div>
+
+            <span class="me-label" id="me-label" style="top:50%;left:50%">あなたはここ</span>
+            <div class="me" id="me" style="top:50%;left:50%"></div>
+          </div>
+          <div class="hint">ドラッグで動かす · タップで飛ばす</div>
+        </div>
+
+        <aside class="rec" id="rec">
+          <img class="rec-cover" id="r-cover" src="https://images.unsplash.com/photo-1507842217343-583bb7270b66?w=800&q=80" alt="">
+          <div class="rec-inner">
+            <span class="tag">あなたにおすすめ</span>
+            <h3 id="r-title">AGI HUB</h3>
+            <div class="tagline" id="r-tagline">Intelligence, Alignment, and The Next Phase</div>
+            <p id="r-desc">重厚な論考アーカイブ。アラインメント・離陸速度論・産業爆発・ガバナンスなどを体系的に追えます。腰を据えて読む場所。</p>
+            <div class="stats">
+              <div>近さ<b id="r-dist">—</b></div>
+              <div>相性<b id="r-fit">—</b></div>
+              <div>深さ<b id="r-lvl">—</b></div>
+            </div>
+            <a class="cta" id="r-link" href="../index.html">このメディアを開く</a>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== BRANDS (Media layer) ===== -->
+  <section class="brands" id="brands">
+    <span class="layer-tag">LAYER 01 · 読み物（メディア）</span>
+    <h2>読んで、<em>近づく</em>。</h2>
+    <p class="section-sub">
+      広く撒くのがメディアの仕事です。気分と深さに合わせて、Today / AGI HUB / Executive の3本で温度を切り替えます。Jr.と地図系は参考位置。
+    </p>
+
+    <div class="cards">
+
+      <article class="card">
+        <img class="cover" src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=800&q=80" alt="">
+        <div class="inner">
+          <span class="lvl mono"><span class="dot"></span>参考 · 副読</span>
+          <h3>AGI HUB Jr.</h3>
+          <p class="tagline">「未来の話をしよう」</p>
+          <p class="desc">
+            子どもと大人がいっしょに読むための副読メディア。専門用語を使わず、暮らしから未来を想像する。メインの読み物ではなく、家族で話すときの補助線として参照する位置づけ。
+          </p>
+          <div class="for">
+            <strong>参照用途</strong>
+            子どもと未来の話をしたいとき・やさしい言葉で誰かに説明したいとき
+          </div>
+          <span class="cta" style="background:var(--faint);color:var(--meta);border-top-color:var(--vlight);cursor:default;pointer-events:none">準備中 — 別作業中</span>
+        </div>
+      </article>
+
+      <article class="card">
+        <img class="cover" src="https://images.unsplash.com/photo-1495197359483-d092478c170a?w=800&q=80" alt="">
+        <div class="inner">
+          <span class="lvl mono"><span class="dot"></span>レベル2 · 毎日 <span class="level-bar"><span class="on"></span><span class="on"></span><span></span><span></span><span></span></span></span>
+          <h3>AGI HUB Today</h3>
+          <p class="tagline">「暮らしと仕事と、10年後のこと。」</p>
+          <p class="desc">
+            ほぼ日刊のエッセイ集。AIが生活に溶けはじめた瞬間のスケッチを、やわらかい文体で毎朝。母がAIに敬語を使っていた話、冷蔵庫が献立を覚えた夜の話。技術ではなく、感触を残す。
+          </p>
+          <div class="for">
+            <strong>こんな人に</strong>
+            ChatGPTは触っているけど論文までは読まない人・毎朝の習慣読みにしたい人
+          </div>
+          <a class="cta" href="../brand/today.html">AGI HUB Today を開く</a>
+        </div>
+      </article>
+
+      <article class="card">
+        <img class="cover" src="https://images.unsplash.com/photo-1507842217343-583bb7270b66?w=800&q=80" alt="">
+        <div class="inner">
+          <span class="lvl mono"><span class="dot"></span>レベル4 · 深掘り <span class="level-bar"><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span><span></span></span></span>
+          <h3>AGI HUB</h3>
+          <p class="tagline">「Intelligence, Alignment, and The Next Phase」</p>
+          <p class="desc">
+            本体アーカイブ。アラインメント、離陸速度論、産業爆発、ガバナンスなど、21本を超える重厚な論考を格納する。構造図・思想系譜・分類ネットワークを備え、議論の地形を俯瞰できる。
+          </p>
+          <div class="for">
+            <strong>こんな人に</strong>
+            議論の流れを追いたい研究者・実装者・政策関係者・本気で理解したい人
+          </div>
+          <a class="cta" href="../index.html">AGI HUB 本体を開く</a>
+        </div>
+      </article>
+
+      <article class="card">
+        <img class="cover" src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=800&q=80" alt="">
+        <div class="inner">
+          <span class="lvl mono"><span class="dot"></span>レベル5 · 判断 <span class="level-bar"><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span></span></span>
+          <h3>AGI HUB Executive</h3>
+          <p class="tagline">「Briefing Papers」</p>
+          <p class="desc">
+            経営判断のためのブリーフィング。論考の結論・数値・リスクを、取締役会資料の密度で10分で読める形に圧縮する。投資家・CXO・ボード向け。意思決定の前に読むための一枚。
+          </p>
+          <div class="for">
+            <strong>こんな人に</strong>
+            CEO・CSO・投資家・ボードメンバー・判断の直前に論点整理が欲しい人
+          </div>
+          <a class="cta" href="../brand/executive.html">Executive Briefing を開く</a>
+        </div>
+      </article>
+
+      <article class="card">
+        <img class="cover" src="https://images.unsplash.com/photo-1569163139394-de4798d9c2c3?w=800&q=80" alt="">
+        <div class="inner">
+          <span class="lvl mono"><span class="dot"></span>地図 · 構造</span>
+          <h3>AGI Pill Map</h3>
+          <p class="tagline">「覚醒の地形図」</p>
+          <p class="desc">
+            AGIを初めて直視した人がたどる認知プロセスを、症候群と段階で地図化する。記事間の読み順・補助線として使う。Thinkers Mapと併用すると、自分の現在地がわかる。
+          </p>
+          <div class="for">
+            <strong>こんな人に</strong>
+            議論の全体像を掴みたい人・どの記事から読むか迷う人
+          </div>
+          <a class="cta" href="../pill-map.html">Pill Map を開く</a>
+        </div>
+      </article>
+
+      <article class="card">
+        <img class="cover" src="https://images.unsplash.com/photo-1529070538774-1843cb3265df?w=800&q=80" alt="">
+        <div class="inner">
+          <span class="lvl mono"><span class="dot"></span>地図 · 座標</span>
+          <h3>Thinkers &amp; Discussion Map</h3>
+          <p class="tagline">「誰が、どこに立っているか」</p>
+          <p class="desc">
+            AGIを巡る主要論者のポジションマップと、議論ネットワーク。楽観・慎重・規制推進・加速主義の軸で立ち位置を可視化する。背景文脈の早見表として機能する。
+          </p>
+          <div class="for">
+            <strong>こんな人に</strong>
+            議論の座標を知りたい人・誰の主張を信じるか迷っている人
+          </div>
+          <a class="cta" href="../thinkers.html">Thinkers Map を開く</a>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- ===== SERVICES (Hi-touch layer / candidate) ===== -->
+  <section class="services" id="services">
+    <span class="layer-tag">LAYER 02 · 施策候補（検討中）</span>
+    <h2>読むだけでは、<em>足りないとき</em>。</h2>
+    <p class="section-sub">
+      経営判断の直前、記事1本では答えが出ない問い、研究者同士の議論。こういう場面は読み物ではなく、一対一か双方向の場が適しています。以下はまだ検討段階の施策候補です。提供が決まったものではありません。
+    </p>
+
+    <div class="svc-grid">
+
+      <article class="svc">
+        <span class="svc-num">候補 01 / Briefing</span>
+        <h3>個別ブリーフィング</h3>
+        <p class="tagline">「取締役会の前に、論点を整える」</p>
+        <p class="desc">
+          経営判断を前にした経営層・投資家・政策担当者向けの個別セッション案。AGI戦略の論点整理、シナリオ検討、規制動向のインプットを想定。Executive記事を読んだうえでの持ち込みテーマに対応する形で設計中。
+        </p>
+        <div class="target">
+          <strong>想定対象</strong>
+          上場企業CEO／CSO／機関投資家／中央官公庁／ボードメンバー
+        </div>
+        <span class="cta-static">— 検討中 —</span>
+      </article>
+
+      <article class="svc">
+        <span class="svc-num">候補 02 / Community</span>
+        <h3>AGI Core コミュニティ</h3>
+        <p class="tagline">「読んだ人どうしで、深く話す」</p>
+        <p class="desc">
+          フロンティア研究を追っている実装者・研究者・戦略担当者向けの議論空間の構想。本体AGI HUBの記事を起点に、日本語で深く議論できる場をつくれないかを検討中。形式・運営体制・頻度は未定。
+        </p>
+        <div class="target">
+          <strong>想定対象</strong>
+          AIエンジニア／研究者／AGI議論を日本語で深めたい実務家
+        </div>
+        <span class="cta-static">— 検討中 —</span>
+      </article>
+
+      <article class="svc">
+        <span class="svc-num">候補 03 / Press &amp; Stage</span>
+        <h3>取材・登壇の受け口</h3>
+        <p class="tagline">「記者・番組ホストのための窓口」</p>
+        <p class="desc">
+          経済メディアの記者、ポッドキャスト／YouTube番組のホスト向け。引用可能な専門家コメント供給、登壇・ゲスト出演、共催イベント等の受け口を設けるかどうかを検討している段階。
+        </p>
+        <div class="target">
+          <strong>想定対象</strong>
+          新聞／雑誌記者、ポッドキャスト・YouTubeホスト、カンファレンス主催
+        </div>
+        <span class="cta-static">— 検討中 —</span>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- ===== FLOW (relationship) ===== -->
+  <section class="flow" id="flow">
+    <div class="flow-inner">
+      <span class="layer-tag">RELATIONSHIP · メディアとサービスの関係</span>
+      <h2>読み物が、<em>入り口</em>になる。</h2>
+      <p class="section-sub">
+        3つのメディアはそれぞれ別の施策候補に接続します。メディアは広く撒いて「この人たちに読まれている」という事実をつくり、そこから深い関係を必要とする人だけがサービス側に流れていく構造です。項目にカーソルを乗せると、接続先がハイライトされます。
+      </p>
+
+      <div class="flow-diagram">
+        <div class="flow-col">
+          <h4>LAYER 01 · 読み物</h4>
+          <div class="flow-item" data-flow="today">
+            <div class="ft-title">AGI HUB Today</div>
+            <span class="ft-sub">日常エッセイ · 毎朝の入口</span>
+          </div>
+          <div class="flow-item" data-flow="main">
+            <div class="ft-title">AGI HUB</div>
+            <span class="ft-sub">本体論考アーカイブ · 深掘り</span>
+          </div>
+          <div class="flow-item" data-flow="exec">
+            <div class="ft-title">AGI HUB Executive</div>
+            <span class="ft-sub">Briefing Papers · 判断資料</span>
+          </div>
+        </div>
+
+        <div class="flow-arrows">
+          <svg viewBox="0 0 80 280" preserveAspectRatio="none">
+            <!-- Today → Community (A-2)、Today → Main へのステップアップも想定 -->
+            <path id="p-today-comm" d="M 0 40 C 40 40, 40 140, 80 140" />
+            <!-- Main → Community (A-2 core) -->
+            <path id="p-main-comm" d="M 0 140 L 80 140" />
+            <!-- Main → Press/Stage -->
+            <path id="p-main-press" d="M 0 140 C 40 140, 40 230, 80 230" />
+            <!-- Executive → Briefing -->
+            <path id="p-exec-brief" d="M 0 230 C 40 230, 40 50, 80 50" />
+            <!-- Executive → Press -->
+            <path id="p-exec-press" d="M 0 230 L 80 230" />
+          </svg>
+        </div>
+
+        <div class="flow-col">
+          <h4>LAYER 02 · 施策候補</h4>
+          <div class="flow-item" data-svc="brief">
+            <div class="ft-title">個別ブリーフィング</div>
+            <span class="ft-sub">B-1 CEO / C-1 官僚 / 投資家</span>
+          </div>
+          <div class="flow-item" data-svc="comm">
+            <div class="ft-title">AGI Core コミュニティ</div>
+            <span class="ft-sub">A-2 実装者 / 研究者</span>
+          </div>
+          <div class="flow-item" data-svc="press">
+            <div class="ft-title">取材・登壇の受け口</div>
+            <span class="ft-sub">D-1 記者 / D-2 番組ホスト</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="flow-note">
+        <strong>読み方</strong>: Todayは最も広く撒く入口で、読者がコア層化したらコミュニティへ。本体AGI HUBは記者が引用するソース層になり、同時にコア読者の議論素材にもなる。Executiveは経営層の判断素材として書かれ、そのまま個別ブリーフィングの持ち込みテーマになる。<strong>サービスはメディアがあって初めて成立する</strong>ので、まずメディアの読者基盤づくりが先行します。
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== MAP ===== -->
+  <section class="map" id="map">
+    <h2>4ブランドの<em>立ち位置</em>。</h2>
+    <div class="axis">
+      <span class="lbl top">SERIOUS / DEEP</span>
+      <span class="lbl bottom">CASUAL / DAILY</span>
+      <span class="lbl left">INTUITIVE</span>
+      <span class="lbl right">ANALYTICAL</span>
+
+      <div class="node" style="top:22%;left:72%">AGI HUB</div>
+      <div class="node focus" style="top:12%;left:88%">Executive</div>
+      <div class="node" style="top:75%;left:30%">Today</div>
+      <div class="node" style="top:82%;left:14%">Jr.</div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="brand-block">
+    <div class="brand mono" style="font-weight:900;color:var(--ink);font-size:14px;margin-bottom:8px">AGI HUB · PORTAL</div>
+    <div>Intelligence, Alignment, and The Next Phase.</div>
+    <div style="margin-top:8px">Editorial by HODL1 Strategic Studio</div>
+  </div>
+  <div class="cols">
+    <div>
+      <h4>Brands</h4>
+      <ul>
+        <li><a href="../index.html">AGI HUB</a></li>
+        <li><a href="../brand/today.html">AGI HUB Today</a></li>
+        <li><span style="color:var(--light)">AGI HUB Jr.（準備中）</span></li>
+        <li><a href="../brand/executive.html">AGI HUB Executive</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Maps</h4>
+      <ul>
+        <li><a href="../pill-map.html">AGI Pill Map</a></li>
+        <li><a href="../thinkers.html">Thinkers Map</a></li>
+        <li><a href="../taxonomy-network.html">Discussion Map</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // ===== Brand data (positions match DOM %) =====
+  // Jr. は診断距離計算から除外する（参考扱い）
+  const BRANDS = {
+    today: {
+      x:30, y:72,
+      title:"AGI HUB Today",
+      tagline:"暮らしと仕事と、10年後のこと。",
+      desc:"ほぼ日刊のやわらかいエッセイ。AIが生活に溶けはじめた瞬間の感触を毎朝スケッチします。技術ではなく、肌ざわりの話。短時間で読めて、いつのまにか視界が広がります。",
+      link:"../brand/today.html",
+      level:"毎日 · 気軽に",
+      cover:"https://images.unsplash.com/photo-1495197359483-d092478c170a?w=800&q=80"
+    },
+    main: {
+      x:62, y:28,
+      title:"AGI HUB",
+      tagline:"Intelligence, Alignment, and The Next Phase.",
+      desc:"本体アーカイブ。アラインメント、離陸速度論、産業爆発、ガバナンスなど21本を超える重厚な論考と3つの構造マップ。議論の地形を体系的に追える、腰を据えて読む場所です。",
+      link:"../index.html",
+      level:"深掘り · じっくり",
+      cover:"https://images.unsplash.com/photo-1507842217343-583bb7270b66?w=800&q=80"
+    },
+    exec: {
+      x:86, y:16,
+      title:"AGI HUB Executive",
+      tagline:"Briefing Papers.",
+      desc:"経営判断のためのブリーフィング。論点・数値・リスクを取締役会資料の密度で10分に圧縮。CEO・CSO・投資家・ボードメンバー向け。意思決定の直前に読む一枚。",
+      link:"../brand/executive.html",
+      level:"判断 · 最短経路",
+      cover:"https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=800&q=80"
+    }
+  };
+
+  const plane = document.getElementById('plane');
+  const me = document.getElementById('me');
+  const meLabel = document.getElementById('me-label');
+  const nodes = plane.querySelectorAll('.brand-node');
+
+  function nearest(px, py){
+    let best = null, bestD = Infinity;
+    for(const key in BRANDS){
+      const b = BRANDS[key];
+      const dx = b.x - px, dy = b.y - py;
+      const d = Math.sqrt(dx*dx + dy*dy);
+      if(d < bestD){ bestD = d; best = key; }
+    }
+    return {key:best, dist:bestD};
+  }
+
+  function fitLabel(d){
+    if(d < 15) return "ぴったり";
+    if(d < 30) return "かなり合う";
+    if(d < 50) return "まあ合う";
+    return "ゆるい";
+  }
+
+  function update(px, py){
+    px = Math.max(2, Math.min(98, px));
+    py = Math.max(2, Math.min(98, py));
+    me.style.left = px + '%';
+    me.style.top = py + '%';
+    meLabel.style.left = px + '%';
+    meLabel.style.top = py + '%';
+
+    const {key, dist} = nearest(px, py);
+    const b = BRANDS[key];
+    nodes.forEach(n => n.classList.toggle('active', n.dataset.brand === key));
+
+    document.getElementById('r-title').textContent = b.title;
+    document.getElementById('r-tagline').textContent = b.tagline;
+    document.getElementById('r-desc').textContent = b.desc;
+    document.getElementById('r-link').href = b.link;
+    document.getElementById('r-cover').src = b.cover;
+    document.getElementById('r-dist').textContent = dist.toFixed(0);
+    document.getElementById('r-fit').textContent = fitLabel(dist);
+    document.getElementById('r-lvl').textContent = b.level;
+  }
+
+  function posFromEvent(e){
+    const rect = plane.getBoundingClientRect();
+    const t = e.touches ? e.touches[0] : e;
+    const x = ((t.clientX - rect.left) / rect.width) * 100;
+    const y = ((t.clientY - rect.top) / rect.height) * 100;
+    return {x, y};
+  }
+
+  let dragging = false;
+  function start(e){ dragging = true; const p = posFromEvent(e); update(p.x, p.y); e.preventDefault(); }
+  function move(e){ if(!dragging) return; const p = posFromEvent(e); update(p.x, p.y); e.preventDefault(); }
+  function end(){ dragging = false; }
+
+  plane.addEventListener('mousedown', start);
+  window.addEventListener('mousemove', move);
+  window.addEventListener('mouseup', end);
+  plane.addEventListener('touchstart', start, {passive:false});
+  window.addEventListener('touchmove', move, {passive:false});
+  window.addEventListener('touchend', end);
+
+  // initial state: center → AGI HUB (main)
+  update(55, 40);
+
+  // ===== Flow diagram hover highlights =====
+  const flowMap = {
+    today: { svc:['comm'], paths:['p-today-comm'] },
+    main:  { svc:['comm','press'], paths:['p-main-comm','p-main-press'] },
+    exec:  { svc:['brief','press'], paths:['p-exec-brief','p-exec-press'] }
+  };
+  const svcMap = {
+    brief: { flow:['exec'], paths:['p-exec-brief'] },
+    comm:  { flow:['today','main'], paths:['p-today-comm','p-main-comm'] },
+    press: { flow:['main','exec'], paths:['p-main-press','p-exec-press'] }
+  };
+  const allFlowItems = document.querySelectorAll('.flow-item');
+  const allPaths = document.querySelectorAll('.flow-arrows path');
+
+  function clearFlow(){
+    allFlowItems.forEach(el => el.classList.remove('highlight','dim'));
+    allPaths.forEach(p => p.classList.remove('active','dimmed'));
+  }
+  function highlight(activeFlow, activeSvc, activePaths){
+    allFlowItems.forEach(el => {
+      const f = el.dataset.flow, s = el.dataset.svc;
+      const on = activeFlow.includes(f) || activeSvc.includes(s);
+      el.classList.toggle('highlight', on);
+      el.classList.toggle('dim', !on);
+    });
+    allPaths.forEach(p => {
+      const on = activePaths.includes(p.id);
+      p.classList.toggle('active', on);
+      p.classList.toggle('dimmed', !on);
+    });
+  }
+
+  document.querySelectorAll('[data-flow]').forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      const k = el.dataset.flow;
+      highlight([k], flowMap[k].svc, flowMap[k].paths);
+    });
+    el.addEventListener('mouseleave', clearFlow);
+  });
+  document.querySelectorAll('[data-svc]').forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      const k = el.dataset.svc;
+      highlight(svcMap[k].flow, [k], svcMap[k].paths);
+    });
+    el.addEventListener('mouseleave', clearFlow);
+  });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,365 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AGI HUB · Executive — Briefing Papers</title>
+<style>
+  :root{
+    --ink:#1a1a1a;
+    --ink2:#4a4a4a;
+    --meta:#6b6b6b;
+    --bg:#ffffff;
+    --section-bg:#f7f7f5;
+    --navy:#14284b;
+    --divider:#d0d0d0;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased}
+  body{
+    font-family: "Hiragino Mincho ProN", "Hiragino Mincho Pro",
+      "Yu Mincho", YuMincho, "Noto Serif JP", "Times New Roman", serif;
+    font-size:16px;
+    line-height:1.85;
+    letter-spacing:0.02em;
+    font-feature-settings:normal;
+  }
+  .sans,.meta,.label,nav,button,table{
+    font-family: Inter, "Helvetica Neue", Arial,
+      "Hiragino Kaku Gothic ProN", "Noto Sans JP", sans-serif;
+    font-feature-settings:normal;
+  }
+  a{color:var(--ink);text-decoration:none}
+
+  /* ========== Header ========== */
+  header.site{
+    border-bottom:1px solid var(--ink);
+    padding:24px 56px 22px;
+    display:flex;justify-content:space-between;align-items:baseline;
+    max-width:1200px;margin:0 auto;
+  }
+  .brand{
+    font-family: "Hiragino Mincho ProN", "Yu Mincho", serif;
+    font-weight:500;font-size:19px;letter-spacing:0.22em;
+  }
+  .brand em{
+    font-family: Inter, sans-serif;font-style:normal;font-weight:300;
+    font-size:12px;letter-spacing:0.35em;color:var(--navy);margin-left:6px;
+  }
+  header.site .issue{
+    font-family: Inter, sans-serif;
+    font-size:10px;letter-spacing:0.3em;color:var(--meta);text-transform:uppercase;
+  }
+
+  /* ========== Hero (Featured Briefing) ========== */
+  section.hero{
+    max-width:860px;margin:0 auto;
+    padding:112px 56px 120px;
+    text-align:center;
+    border-bottom:1px solid var(--ink);
+  }
+  .hero .category{
+    font-family: Inter, sans-serif;
+    font-size:10px;letter-spacing:0.35em;text-transform:uppercase;
+    color:var(--navy);margin-bottom:36px;
+  }
+  .hero .category::before,.hero .category::after{
+    content:"";display:inline-block;width:32px;height:1px;
+    background:var(--navy);vertical-align:middle;margin:0 16px;
+  }
+  .hero h1{
+    font-family: "Hiragino Mincho ProN", "Yu Mincho", serif;
+    font-size:48px;font-weight:500;line-height:1.5;
+    letter-spacing:0.02em;color:var(--ink);margin-bottom:48px;
+  }
+  .hero .meta-row{
+    display:flex;justify-content:center;gap:48px;
+    padding:24px 0;
+    border-top:1px solid var(--divider);
+    border-bottom:1px solid var(--divider);
+    margin-bottom:48px;
+    font-family: Inter, sans-serif;
+    font-size:11px;letter-spacing:0.12em;color:var(--meta);
+    text-transform:uppercase;
+  }
+  .hero .meta-row span b{
+    display:block;font-weight:500;color:var(--ink);
+    font-size:13px;margin-top:6px;letter-spacing:0.05em;text-transform:none;
+    font-variant-numeric:tabular-nums;
+  }
+  .hero .actions{display:flex;justify-content:center;gap:16px}
+  .btn{
+    display:inline-block;padding:16px 36px;
+    font-family: Inter, sans-serif;
+    font-size:11px;letter-spacing:0.22em;text-transform:uppercase;font-weight:500;
+    cursor:pointer;transition:all .2s;
+  }
+  .btn.primary{background:var(--ink);color:#fff;border:1px solid var(--ink)}
+  .btn.primary:hover{background:var(--navy);border-color:var(--navy)}
+  .btn.secondary{background:transparent;color:var(--ink);border:1px solid var(--ink)}
+  .btn.secondary:hover{background:var(--ink);color:#fff}
+
+  /* ========== Section common ========== */
+  section.block{
+    max-width:1040px;margin:0 auto;
+    padding:96px 56px;
+    border-bottom:1px solid var(--divider);
+  }
+  .section-head{
+    display:flex;justify-content:space-between;align-items:baseline;
+    margin-bottom:48px;padding-bottom:20px;
+    border-bottom:1px solid var(--ink);
+  }
+  .section-head h2{
+    font-family: "Hiragino Mincho ProN", "Yu Mincho", serif;
+    font-size:24px;font-weight:500;letter-spacing:0.04em;
+  }
+  .section-head .label{
+    font-size:10px;letter-spacing:0.3em;color:var(--meta);text-transform:uppercase;
+  }
+
+  /* ========== Briefings table ========== */
+  table.briefings{width:100%;border-collapse:collapse}
+  table.briefings th,table.briefings td{
+    text-align:left;padding:24px 16px;
+    border-bottom:1px solid var(--divider);
+    vertical-align:top;
+  }
+  table.briefings th{
+    font-size:10px;letter-spacing:0.2em;text-transform:uppercase;
+    color:var(--meta);font-weight:500;padding-bottom:16px;
+  }
+  table.briefings td.no{
+    font-family: Inter, sans-serif;font-weight:500;font-size:12px;
+    color:var(--navy);letter-spacing:0.15em;width:72px;
+    font-variant-numeric:tabular-nums;
+  }
+  table.briefings td.date{
+    font-family: Inter, sans-serif;font-size:12px;color:var(--meta);
+    width:130px;font-variant-numeric:tabular-nums;letter-spacing:0.04em;
+  }
+  table.briefings td.title{
+    font-family: "Hiragino Mincho ProN", "Yu Mincho", serif;
+    font-size:17px;color:var(--ink);line-height:1.6;
+  }
+  table.briefings td.title .tag{
+    display:inline-block;margin-top:6px;
+    font-family: Inter, sans-serif;font-size:10px;
+    color:var(--meta);letter-spacing:0.15em;text-transform:uppercase;
+  }
+  table.briefings td.pdf{
+    width:80px;text-align:right;
+    font-family: Inter, sans-serif;font-size:11px;letter-spacing:0.1em;
+    text-transform:uppercase;
+  }
+  table.briefings td.pdf a{color:var(--navy)}
+  table.briefings td.pdf a:hover{text-decoration:underline}
+  table.briefings tr:hover td{background:var(--section-bg)}
+
+  /* ========== Topics ========== */
+  .topics{
+    display:grid;grid-template-columns:1fr 1fr;
+    border-top:1px solid var(--divider);
+    border-left:1px solid var(--divider);
+  }
+  .topic{
+    padding:40px 36px;
+    border-bottom:1px solid var(--divider);
+    border-right:1px solid var(--divider);
+  }
+  .topic .num{
+    font-family: Inter, sans-serif;font-size:10px;
+    color:var(--navy);letter-spacing:0.25em;margin-bottom:16px;
+  }
+  .topic h3{
+    font-family: "Hiragino Mincho ProN", "Yu Mincho", serif;
+    font-size:22px;font-weight:500;letter-spacing:0.04em;
+    color:var(--ink);margin-bottom:12px;
+  }
+  .topic p{
+    font-size:14px;color:var(--ink2);line-height:1.9;max-width:380px;
+  }
+
+  /* ========== Policy ========== */
+  section.policy-block{
+    background:var(--section-bg);
+    padding:96px 0;
+    border-bottom:1px solid var(--divider);
+  }
+  .policy-inner{max-width:860px;margin:0 auto;padding:0 56px}
+  .policy-label{
+    font-family: Inter, sans-serif;font-size:10px;
+    letter-spacing:0.3em;color:var(--navy);text-transform:uppercase;
+    margin-bottom:24px;
+  }
+  .policy-inner h2{
+    font-family: "Hiragino Mincho ProN", "Yu Mincho", serif;
+    font-size:32px;font-weight:500;letter-spacing:0.02em;
+    margin-bottom:40px;line-height:1.6;
+  }
+  .policy-inner ul{list-style:none}
+  .policy-inner li{
+    padding:20px 0 20px 36px;position:relative;
+    border-top:1px solid var(--divider);
+    font-size:16px;line-height:1.85;color:var(--ink);letter-spacing:0.02em;
+  }
+  .policy-inner li:last-child{border-bottom:1px solid var(--divider)}
+  .policy-inner li::before{
+    content:"—";position:absolute;left:0;top:20px;color:var(--navy);
+    font-family: Inter, sans-serif;font-weight:500;
+  }
+
+  /* ========== Footer ========== */
+  footer.site{
+    max-width:1200px;margin:0 auto;
+    padding:48px 56px 64px;
+    border-top:1px solid var(--ink);
+    font-family: Inter, sans-serif;
+    font-size:11px;color:var(--meta);line-height:2.0;letter-spacing:0.08em;
+  }
+  footer.site .row{display:flex;justify-content:space-between;margin-bottom:8px}
+  footer.site .row:last-child{margin-bottom:0}
+  footer.site b{color:var(--ink);font-weight:500}
+
+  @media (max-width:860px){
+    header.site{padding:20px 24px}
+    header.site nav{display:none}
+    .hero{padding:72px 24px 80px}
+    .hero h1{font-size:28px}
+    .hero .meta-row{flex-direction:column;gap:20px}
+    section.block{padding:56px 24px}
+    .topics{grid-template-columns:1fr}
+    table.briefings td.date{display:none}
+    .policy-inner{padding:0 24px}
+    .policy-inner h2{font-size:22px}
+  }
+</style>
+</head>
+<body>
+
+<header class="site">
+  <div class="brand">AGI HUB <em>· EXECUTIVE</em></div>
+  <div class="issue">ISSUE No.004 / APR 2026</div>
+</header>
+
+<section class="hero-image-wrap" style="max-width:1200px;margin:0 auto;padding:72px 56px 0">
+  <figure style="margin:0;position:relative;overflow:hidden">
+    <img src="images/executive-hero.jpg" alt="Classical marble columns" style="width:100%;aspect-ratio:21/9;object-fit:cover;filter:grayscale(0.3) contrast(1.05) brightness(0.95);display:block">
+    <figcaption style="position:absolute;left:24px;bottom:16px;font-family:Inter,sans-serif;font-size:10px;letter-spacing:0.2em;color:rgba(255,255,255,0.8);text-transform:uppercase">Photograph · Architecture of Governance</figcaption>
+  </figure>
+</section>
+
+<section class="hero">
+  <div class="category">Featured Briefing</div>
+  <h1>AGIタイムライン：<br>2027／2030／2035<br>の3シナリオ</h1>
+  <div class="meta-row">
+    <span>Briefing No.<b>004</b></span>
+    <span>Issued<b>2026.04.11</b></span>
+    <span>Next update<b>2026.04.25</b></span>
+    <span>Format<b>A4 · 2 pages</b></span>
+  </div>
+  <div class="actions">
+    <a href="#" class="btn primary">Read briefing</a>
+    <a href="#" class="btn secondary">Download PDF</a>
+  </div>
+</section>
+
+<section class="block">
+  <div class="section-head">
+    <h2>Latest Briefings</h2>
+    <div class="label">Updated weekly</div>
+  </div>
+  <table class="briefings">
+    <thead>
+      <tr>
+        <th>No.</th>
+        <th>Issued</th>
+        <th>Title</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="no">004</td>
+        <td class="date">2026.04.11</td>
+        <td class="title">AGIタイムライン：2027／2030／2035の3シナリオ<div class="tag">Timeline</div></td>
+        <td class="pdf"><a href="#">PDF ↓</a></td>
+      </tr>
+      <tr>
+        <td class="no">003</td>
+        <td class="date">2026.03.28</td>
+        <td class="title">10万人雇用企業のAI移行コスト試算<div class="tag">Industry Implications</div></td>
+        <td class="pdf"><a href="#">PDF ↓</a></td>
+      </tr>
+      <tr>
+        <td class="no">002</td>
+        <td class="date">2026.03.14</td>
+        <td class="title">海外制度事例：EU AI Act 実装の日本への含意<div class="tag">Policy</div></td>
+        <td class="pdf"><a href="#">PDF ↓</a></td>
+      </tr>
+      <tr>
+        <td class="no">001</td>
+        <td class="date">2026.02.28</td>
+        <td class="title">取締役会でAGIを議題にする前に<div class="tag">Investor Dialogue</div></td>
+        <td class="pdf"><a href="#">PDF ↓</a></td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<section class="block">
+  <div class="section-head">
+    <h2>By Topic</h2>
+    <div class="label">4 categories</div>
+  </div>
+  <div class="topics">
+    <div class="topic">
+      <div class="num">01</div>
+      <h3>産業含意</h3>
+      <p>業界別のAGI影響、バリューチェーン再編、組織移行コスト。業界横断の比較ではなく、10万人雇用企業という実体に対する含意として整理する。</p>
+    </div>
+    <div class="topic">
+      <div class="num">02</div>
+      <h3>政策動向</h3>
+      <p>日本・EU・米国の規制と制度の比較。海外事例を日本のコンテクストに翻訳し、政策立案者が参照できる一次ソースを提示する。</p>
+    </div>
+    <div class="topic">
+      <div class="num">03</div>
+      <h3>投資家対話</h3>
+      <p>IRでAIをどう語るか。取締役会・決算説明会・アナリスト質疑で使える論点整理と、開示のベストプラクティス。</p>
+    </div>
+    <div class="topic">
+      <div class="num">04</div>
+      <h3>タイムライン</h3>
+      <p>技術成熟度と社会実装の年次シナリオ。2027／2030／2035の3時点で何が起こりうるかを、3シナリオで分岐させた分析。</p>
+    </div>
+  </div>
+</section>
+
+<section class="policy-block">
+  <div class="policy-inner">
+    <div class="policy-label">Editorial Policy</div>
+    <h2>ブリーフは読み物ではない。<br>意思決定の材料である。</h2>
+    <ul>
+      <li>本ブリーフィングは情報提供であり、投資助言ではありません。</li>
+      <li>引用は一次ソース（政府資料・査読論文・OECD・Think Tank）に限定します。</li>
+      <li>広告・スポンサード記事は一切ありません。会員登録も求めません。</li>
+      <li>全ブリーフはA4 2ページに収め、PDF版を同時公開します。</li>
+      <li>秘書・スタッフが印刷してそのまま役員会・審議会に配布できる品質を基準とします。</li>
+    </ul>
+  </div>
+</section>
+
+<footer class="site">
+  <div class="row">
+    <span><b>Published by</b> &nbsp; AGI HUB · HODL1, Inc.</span>
+    <span>contact@agi-hub.jp</span>
+  </div>
+  <div class="row">
+    <span>Tokyo Stock Exchange Standard &nbsp; 2345</span>
+    <span>© 2026 HODL1, Inc. All rights reserved.</span>
+  </div>
+</footer>
+
+</body>
+</html>

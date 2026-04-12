@@ -5,15 +5,12 @@
 <title>AGI HUB Executive · No.004 — AGIタイムライン：2027／2030／2035</title>
 <style>
   /* ============================================================
-     A4 · 2-page briefing template
+     A4 · 4-page briefing
      印刷手順: Chrome で開く → ⌘P → 送信先「PDFに保存」
      設定: 用紙 A4 / 余白「なし」 / 背景のグラフィック ON / 倍率 100%
      出力: brand/pdf/executive-004.pdf
      ============================================================ */
-  @page {
-    size: A4 portrait;
-    margin: 0;
-  }
+  @page { size: A4 portrait; margin: 0; }
   @media print {
     html, body { width: 210mm; }
     .page { page-break-after: always; }
@@ -33,29 +30,31 @@
   body{
     font-family:"Hiragino Mincho ProN","Yu Mincho",YuMincho,"Noto Serif JP",serif;
     color:var(--ink);
-    font-size:10.5pt;
+    font-size:10pt;
     line-height:1.75;
     letter-spacing:0.02em;
     -webkit-font-smoothing:antialiased;
   }
   .sans{font-family:Inter,"Helvetica Neue","Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif}
+  a{color:var(--navy);text-decoration:none;border-bottom:0.4pt solid var(--navy)}
 
   /* --- page frame --- */
   .page{
-    width:210mm; min-height:297mm;
+    width:210mm; height:297mm;
     background:#fff;
-    padding:18mm 20mm 16mm;
+    padding:16mm 18mm 14mm;
     margin:0 auto 12px;
     position:relative;
     box-shadow:0 2px 12px rgba(0,0,0,0.08);
+    overflow:hidden;
   }
   @media print{ .page{ box-shadow:none; margin:0 } }
 
   /* --- running header --- */
   .run-head{
     display:flex;justify-content:space-between;align-items:baseline;
-    padding-bottom:6mm;border-bottom:0.6pt solid var(--ink);
-    font-family:Inter,sans-serif;font-size:8pt;letter-spacing:0.22em;
+    padding-bottom:4mm;border-bottom:0.6pt solid var(--ink);
+    font-family:Inter,sans-serif;font-size:7.5pt;letter-spacing:0.22em;
     color:var(--meta);text-transform:uppercase;
   }
   .run-head .brand{color:var(--ink);font-weight:500}
@@ -63,36 +62,36 @@
 
   /* --- running footer --- */
   .run-foot{
-    position:absolute;left:20mm;right:20mm;bottom:10mm;
+    position:absolute;left:18mm;right:18mm;bottom:8mm;
     display:flex;justify-content:space-between;
-    padding-top:4mm;border-top:0.4pt solid var(--divider);
-    font-family:Inter,sans-serif;font-size:7.5pt;letter-spacing:0.18em;
+    padding-top:3mm;border-top:0.4pt solid var(--divider);
+    font-family:Inter,sans-serif;font-size:7pt;letter-spacing:0.18em;
     color:var(--meta);text-transform:uppercase;
   }
   .run-foot .pg{color:var(--ink);font-weight:500;font-variant-numeric:tabular-nums}
 
   /* --- title block (page 1) --- */
-  .title-block{margin:10mm 0 8mm}
+  .title-block{margin:8mm 0 5mm}
   .kicker{
-    font-family:Inter,sans-serif;font-size:8pt;letter-spacing:0.3em;
-    color:var(--navy);text-transform:uppercase;margin-bottom:4mm;
+    font-family:Inter,sans-serif;font-size:7.5pt;letter-spacing:0.3em;
+    color:var(--navy);text-transform:uppercase;margin-bottom:3mm;
   }
   h1.main{
-    font-size:24pt;font-weight:500;line-height:1.45;letter-spacing:0.01em;
-    margin-bottom:6mm;
+    font-size:22pt;font-weight:500;line-height:1.45;letter-spacing:0.01em;
+    margin-bottom:5mm;
   }
   .lede{
-    font-size:11pt;line-height:1.95;color:var(--ink2);
-    max-width:165mm;margin-bottom:6mm;
+    font-size:10.5pt;line-height:1.9;color:var(--ink2);
+    max-width:165mm;margin-bottom:5mm;
   }
   .meta-strip{
-    display:flex;gap:12mm;padding:3mm 0;
+    display:flex;gap:10mm;padding:2.5mm 0;
     border-top:0.4pt solid var(--divider);border-bottom:0.4pt solid var(--divider);
-    font-family:Inter,sans-serif;font-size:7.5pt;color:var(--meta);
+    font-family:Inter,sans-serif;font-size:7pt;color:var(--meta);
     letter-spacing:0.12em;text-transform:uppercase;
   }
   .meta-strip span b{
-    display:block;font-weight:500;color:var(--ink);font-size:9pt;
+    display:block;font-weight:500;color:var(--ink);font-size:8.5pt;
     margin-top:2px;letter-spacing:0.04em;text-transform:none;
     font-variant-numeric:tabular-nums;
   }
@@ -100,94 +99,150 @@
   /* --- key findings --- */
   .findings{
     display:grid;grid-template-columns:1fr 1fr 1fr;gap:0;
-    margin:6mm 0 6mm;
+    margin:5mm 0 4mm;
     border-left:0.4pt solid var(--divider);
   }
   .find{
-    padding:4mm 5mm;border-right:0.4pt solid var(--divider);
+    padding:3mm 4mm;border-right:0.4pt solid var(--divider);
     border-top:0.4pt solid var(--divider);border-bottom:0.4pt solid var(--divider);
   }
   .find .num{
-    font-family:Inter,sans-serif;font-size:7pt;letter-spacing:0.2em;
-    color:var(--navy);margin-bottom:2mm;
+    font-family:Inter,sans-serif;font-size:6.5pt;letter-spacing:0.2em;
+    color:var(--navy);margin-bottom:1.5mm;
   }
-  .find h3{
-    font-size:11pt;font-weight:500;line-height:1.5;margin-bottom:2mm;
-  }
-  .find p{font-size:9pt;line-height:1.7;color:var(--ink2)}
+  .find h3{font-size:10pt;font-weight:500;line-height:1.5;margin-bottom:1.5mm}
+  .find p{font-size:8pt;line-height:1.65;color:var(--ink2)}
 
   /* --- figure --- */
   figure.fig{
-    margin:5mm 0;padding:4mm 0 3mm;
+    margin:4mm 0;padding:3mm 0 2mm;
     border-top:0.6pt solid var(--ink);border-bottom:0.4pt solid var(--divider);
   }
   figure.fig .cap{
-    font-family:Inter,sans-serif;font-size:7pt;letter-spacing:0.22em;
+    font-family:Inter,sans-serif;font-size:6.5pt;letter-spacing:0.22em;
     color:var(--meta);text-transform:uppercase;margin-bottom:1.5mm;
   }
-  figure.fig .t{font-size:10.5pt;margin-bottom:3mm}
+  figure.fig .t{font-size:10pt;margin-bottom:2.5mm}
   figure.fig svg{width:100%;height:auto;display:block}
   figure.fig figcaption{
-    font-family:Inter,sans-serif;font-size:7pt;color:var(--meta);
-    line-height:1.65;margin-top:2mm;letter-spacing:0.02em;
+    font-family:Inter,sans-serif;font-size:6.5pt;color:var(--meta);
+    line-height:1.6;margin-top:2mm;letter-spacing:0.02em;
   }
 
-  /* --- body columns (page 2) --- */
+  /* --- section heads --- */
   h2.sect{
     font-size:13pt;font-weight:500;letter-spacing:0.03em;
     padding-bottom:2mm;border-bottom:0.6pt solid var(--ink);
-    margin:8mm 0 5mm;
+    margin:5mm 0 4mm;display:flex;justify-content:space-between;align-items:baseline;
   }
-  .cols{column-count:2;column-gap:8mm;font-size:9.5pt;line-height:1.85;color:var(--ink)}
-  .cols p{margin-bottom:3mm;text-align:justify}
-  .cols p:first-child::first-letter{
-    float:left;font-size:28pt;line-height:0.9;
-    padding:1mm 2mm 0 0;color:var(--navy);font-weight:500;
+  h2.sect .num{
+    font-family:Inter,sans-serif;font-size:7pt;color:var(--navy);
+    letter-spacing:0.2em;font-weight:400;
+  }
+  h3.sub{
+    font-size:10pt;font-weight:500;margin:3mm 0 1.5mm;color:var(--ink);
   }
 
+  /* --- body columns --- */
+  .cols{column-count:2;column-gap:7mm;font-size:9pt;line-height:1.8;color:var(--ink)}
+  .cols p{margin-bottom:2.5mm;text-align:justify}
+  .cols.drop p:first-child::first-letter{
+    float:left;font-size:26pt;line-height:0.9;
+    padding:1mm 2mm 0 0;color:var(--navy);font-weight:500;
+  }
+  .single{font-size:9pt;line-height:1.85;color:var(--ink)}
+  .single p{margin-bottom:2.5mm}
+
+  /* --- definition list --- */
+  dl.def{
+    display:grid;grid-template-columns:46mm 1fr;gap:2mm 4mm;
+    margin:3mm 0;font-size:8.5pt;line-height:1.65;
+  }
+  dl.def dt{
+    font-family:"Hiragino Mincho ProN",serif;font-weight:500;color:var(--navy);
+    padding:2mm 0;border-top:0.4pt solid var(--divider);
+  }
+  dl.def dd{
+    color:var(--ink2);padding:2mm 0;border-top:0.4pt solid var(--divider);
+  }
+  dl.def dt:first-of-type,dl.def dd:first-of-type{border-top:0.6pt solid var(--ink)}
+
   /* --- matrix --- */
-  table.mx{width:100%;border-collapse:collapse;margin-top:4mm}
+  table.mx{width:100%;border-collapse:collapse;margin-top:3mm}
   table.mx th,table.mx td{
-    border:0.4pt solid var(--divider);padding:2.5mm 3mm;vertical-align:top;
-    font-size:8.5pt;line-height:1.65;
+    border:0.4pt solid var(--divider);padding:2mm 2.5mm;vertical-align:top;
+    font-size:7.8pt;line-height:1.55;
   }
   table.mx thead th{
-    background:#fbfbfa;font-family:Inter,sans-serif;font-size:7.5pt;
-    letter-spacing:0.12em;text-transform:uppercase;text-align:left;font-weight:500;
+    background:#fbfbfa;font-family:Inter,sans-serif;font-size:7pt;
+    letter-spacing:0.1em;text-transform:uppercase;text-align:left;font-weight:500;
   }
   table.mx tbody th{
     text-align:left;font-family:"Hiragino Mincho ProN",serif;font-weight:500;
-    color:var(--navy);background:#fbfbfa;width:30mm;
+    color:var(--navy);background:#fbfbfa;width:26mm;
   }
   table.mx tbody td{color:var(--ink2)}
+  table.mx tbody td b{color:var(--ink);font-weight:500}
+
+  /* --- pull quote --- */
+  .pull{
+    margin:4mm 0;padding:3mm 0;
+    border-top:0.4pt solid var(--ink);border-bottom:0.4pt solid var(--ink);
+    font-size:11.5pt;line-height:1.7;text-align:center;
+  }
+  .pull .at{
+    display:block;margin-top:2mm;font-family:Inter,sans-serif;font-size:6.5pt;
+    letter-spacing:0.2em;color:var(--meta);text-transform:uppercase;
+  }
+
+  /* --- related articles --- */
+  .related{
+    display:grid;grid-template-columns:1fr 1fr;gap:4mm;margin-top:4mm;
+  }
+  .related .card{
+    padding:4mm;border:0.4pt solid var(--divider);
+    display:block;color:var(--ink);text-decoration:none;border-bottom:0.4pt solid var(--divider);
+  }
+  .related .card .n{
+    font-family:Inter,sans-serif;font-size:6.5pt;letter-spacing:0.2em;
+    color:var(--navy);text-transform:uppercase;margin-bottom:1.5mm;
+  }
+  .related .card h4{font-size:10pt;font-weight:500;line-height:1.45;margin-bottom:2mm}
+  .related .card p{font-size:8pt;line-height:1.65;color:var(--ink2);margin-bottom:2mm}
+  .related .card .url{
+    font-family:Inter,sans-serif;font-size:6.5pt;color:var(--meta);
+    letter-spacing:0.05em;display:block;
+  }
 
   /* --- sources box --- */
   .sources{
-    margin-top:5mm;padding:3mm 4mm;background:var(--section-bg);
-    font-family:Inter,sans-serif;font-size:7pt;line-height:1.7;
+    margin-top:4mm;padding:3mm 4mm;background:var(--section-bg);
+    font-family:Inter,sans-serif;font-size:6.5pt;line-height:1.65;
     color:var(--meta);letter-spacing:0.02em;
   }
   .sources b{
     display:block;color:var(--ink);font-weight:500;
-    letter-spacing:0.18em;text-transform:uppercase;margin-bottom:1.5mm;
+    letter-spacing:0.18em;text-transform:uppercase;margin-bottom:1.5mm;font-size:7pt;
   }
   .sources ol{padding-left:4mm}
 
-  /* --- pull quote --- */
-  .pull{
-    margin:5mm 0;padding:4mm 0;
-    border-top:0.4pt solid var(--ink);border-bottom:0.4pt solid var(--ink);
-    font-size:12pt;line-height:1.7;text-align:center;
+  /* --- editorial box --- */
+  .editorial{
+    margin-top:4mm;padding:4mm 5mm;background:var(--navy);color:#fff;
   }
-  .pull .at{
-    display:block;margin-top:2mm;font-family:Inter,sans-serif;font-size:7pt;
-    letter-spacing:0.2em;color:var(--meta);text-transform:uppercase;
+  .editorial .l{
+    font-family:Inter,sans-serif;font-size:6.5pt;letter-spacing:0.25em;
+    text-transform:uppercase;color:rgba(255,255,255,0.65);margin-bottom:2mm;
   }
+  .editorial h3{
+    font-size:12pt;font-weight:500;line-height:1.55;margin-bottom:2mm;color:#fff;
+  }
+  .editorial p{font-size:8.5pt;line-height:1.7;color:rgba(255,255,255,0.85)}
 </style>
 </head>
 <body>
 
-<!-- ============ PAGE 1 ============ -->
+<!-- ============ PAGE 1 — Cover ============ -->
 <section class="page">
   <div class="run-head">
     <div class="brand sans">AGI HUB <em>· EXECUTIVE</em></div>
@@ -203,8 +258,8 @@
     <div class="meta-strip sans">
       <span>Issued<b>2026.04.11</b></span>
       <span>Next<b>2026.04.25</b></span>
-      <span>Format<b>A4 · 2 pages</b></span>
-      <span>Sources<b>11件 · 一次資料</b></span>
+      <span>Format<b>A4 · 4 pages</b></span>
+      <span>Sources<b>12件 · 一次資料</b></span>
     </div>
   </div>
 
@@ -212,88 +267,130 @@
     <div class="find">
       <div class="num sans">KEY FINDING 01</div>
       <h3>分岐点は技術ではなく制度</h3>
-      <p>3シナリオの差を決めているのは計算能力ではなく、各国政府が何をどこまで許すか。日本企業の変数は海外規制。</p>
+      <p>3シナリオの差を決めるのは計算能力ではなく、各国政府が何をどこまで許すか。日本企業の真の変数は海外規制である。</p>
     </div>
     <div class="find">
       <div class="num sans">KEY FINDING 02</div>
       <h3>当てるより、前提を言語化</h3>
-      <p>取締役会に必要なのは予測の精度ではなく、自社の投資計画がどの年を前提に組まれているかの自覚。</p>
+      <p>取締役会に必要なのは予測精度ではなく、自社の投資計画がどの年を前提に組まれているかの自覚である。</p>
     </div>
     <div class="find">
       <div class="num sans">KEY FINDING 03</div>
-      <h3>2027は排除しない</h3>
-      <p>Metaculusの中央値は2028年。2027シナリオを「あり得ない」として扱う経営計画は、すでに前提がずれている。</p>
+      <h3>2027は排除できない</h3>
+      <p>Metaculus中央値は2028年。2027を「あり得ない」として扱う経営計画は、すでに前提がずれている。</p>
     </div>
   </div>
 
   <figure class="fig">
     <div class="cap sans">Figure 1 · AGI Arrival Scenarios</div>
     <div class="t">主要研究機関の到達予測と3つの分岐経路（2025–2040）</div>
-    <svg viewBox="0 0 960 320" xmlns="http://www.w3.org/2000/svg">
+    <svg viewBox="0 0 960 300" xmlns="http://www.w3.org/2000/svg">
       <defs>
         <pattern id="gridp" width="60" height="40" patternUnits="userSpaceOnUse">
           <path d="M 60 0 L 0 0 0 40" fill="none" stroke="#eee" stroke-width="1"/>
         </pattern>
       </defs>
-      <rect x="60" y="20" width="880" height="240" fill="url(#gridp)"/>
-      <line x1="60" y1="260" x2="940" y2="260" stroke="#1a1a1a" stroke-width="1"/>
-      <line x1="60" y1="20" x2="60" y2="260" stroke="#1a1a1a" stroke-width="1"/>
+      <rect x="60" y="20" width="880" height="220" fill="url(#gridp)"/>
+      <line x1="60" y1="240" x2="940" y2="240" stroke="#1a1a1a" stroke-width="1"/>
+      <line x1="60" y1="20" x2="60" y2="240" stroke="#1a1a1a" stroke-width="1"/>
       <g font-family="Inter,sans-serif" font-size="10" fill="#6b6b6b" text-anchor="middle">
-        <text x="120" y="282">2025</text>
-        <text x="240" y="282">2027</text>
-        <text x="420" y="282">2030</text>
-        <text x="720" y="282">2035</text>
-        <text x="900" y="282">2040</text>
+        <text x="120" y="262">2025</text>
+        <text x="240" y="262">2027</text>
+        <text x="420" y="262">2030</text>
+        <text x="720" y="262">2035</text>
+        <text x="900" y="262">2040</text>
       </g>
       <g font-family="Inter,sans-serif" font-size="9" fill="#6b6b6b" text-anchor="end">
         <text x="54" y="30">Capability</text>
         <text x="54" y="75">AGI threshold</text>
-        <text x="54" y="160">Broad deploy</text>
-        <text x="54" y="255">Narrow AI</text>
+        <text x="54" y="150">Broad deploy</text>
+        <text x="54" y="235">Narrow AI</text>
       </g>
       <line x1="60" y1="75" x2="940" y2="75" stroke="#14284b" stroke-width="0.8" stroke-dasharray="4 4"/>
       <text x="935" y="68" font-family="Inter,sans-serif" font-size="9" fill="#14284b" text-anchor="end">AGI THRESHOLD</text>
-      <path d="M 120 245 Q 180 190 240 75 T 360 45" fill="none" stroke="#14284b" stroke-width="2.2"/>
+      <path d="M 120 225 Q 180 180 240 75 T 360 45" fill="none" stroke="#14284b" stroke-width="2.2"/>
       <circle cx="240" cy="75" r="5" fill="#14284b"/>
       <text x="252" y="72" font-family="Inter,sans-serif" font-size="10" fill="#14284b" font-weight="500">A · 2027 早期</text>
-      <path d="M 120 245 Q 240 210 360 160 T 560 75 L 700 45" fill="none" stroke="#1a1a1a" stroke-width="2.2"/>
+      <path d="M 120 225 Q 240 200 360 155 T 560 75 L 700 45" fill="none" stroke="#1a1a1a" stroke-width="2.2"/>
       <circle cx="560" cy="75" r="5" fill="#1a1a1a"/>
       <text x="572" y="72" font-family="Inter,sans-serif" font-size="10" fill="#1a1a1a" font-weight="500">B · 2030 標準</text>
-      <path d="M 120 245 Q 300 225 460 195 T 720 100 L 860 72" fill="none" stroke="#6b6b6b" stroke-width="2.2" stroke-dasharray="6 3"/>
+      <path d="M 120 225 Q 300 210 460 185 T 720 100 L 860 72" fill="none" stroke="#6b6b6b" stroke-width="2.2" stroke-dasharray="6 3"/>
       <circle cx="720" cy="100" r="5" fill="#6b6b6b"/>
       <text x="732" y="97" font-family="Inter,sans-serif" font-size="10" fill="#6b6b6b" font-weight="500">C · 2035 長期</text>
     </svg>
-    <figcaption>Sources — Metaculus AGI forecast (2026.03 median 2028), Epoch AI Compute Trends (2025.Q4), OECD AI Policy Observatory, MIT FutureTech 2026. Capability軸は定性指標として正規化。各経路は確率分布ではなく前提の束。</figcaption>
+    <figcaption>Sources — Metaculus AGI forecast (2026.03 median 2028), Epoch AI Compute Trends (2025.Q4), OECD AI Policy Observatory, MIT FutureTech 2026. Capability軸は定性指標として正規化。各経路は確率分布ではなく前提の束である。</figcaption>
   </figure>
 
   <div class="run-foot sans">
     <div>AGI HUB EXECUTIVE · No.004 · Timeline</div>
-    <div class="pg">01 / 02</div>
+    <div class="pg">01 / 04</div>
   </div>
 </section>
 
-<!-- ============ PAGE 2 ============ -->
+<!-- ============ PAGE 2 — Definition ============ -->
 <section class="page">
   <div class="run-head">
     <div class="brand sans">AGI HUB <em>· EXECUTIVE</em></div>
     <div>No.004 · 2026.04.11 · Timeline</div>
   </div>
 
-  <h2 class="sect">3つのシナリオを、それぞれの前提で読む</h2>
-  <div class="cols">
-    <p>シナリオAの2027年は、計算資源の供給制約が外れ、技術スパートがそのまま続く世界である。NVIDIA・TSMCの供給計画が前倒しになり、モデル規模が年4倍で伸び続ける場合に開く経路。Metaculusの早期側5%、Epoch AIの上振れケースが該当する。</p>
-    <p>シナリオBの2030年は、安全性検証と規制が実装速度を決める標準ケース。EU AI Actの本格適用（2026年8月）と米国の基盤モデル報告義務が、モデル更新サイクルに2〜3年の検証を織り込む。Metaculusの中央値2028年はこの経路の手前に乗る。</p>
-    <p>シナリオCの2035年は、アラインメントが未解決のまま物理制約が効いてくる経路。電力・水・冷却・半導体の現実的な壁が、スケーリングの限界収益を押し下げる。MIT FutureTechの保守ケースが該当する。</p>
-    <p>どのシナリオを前提に動いているかを、経営会議で30秒で答えられるか。本号の使い方は、答えを選ぶことではなく、その問いに自社が答えられるかをテストすることにある。</p>
+  <h2 class="sect">AGIとは何か。定義が変われば、時期も変わる<span class="num">§1</span></h2>
+
+  <div class="single">
+    <p>「AGIはいつ来るか」という問いは、「AGIとは何か」が決まっていないかぎり答えが定まらない。研究コミュニティと産業界では、すでに複数の定義が並走している。取締役会でこの議論を始める前に、どの定義を採用しているかを共有しておく必要がある。</p>
+  </div>
+
+  <dl class="def">
+    <dt>Metaculus の運用定義</dt>
+    <dd>2時間のチューリングテスト、SAT上位90%、モンテスマの復讐を2時間以内にクリア、Apollo 15レベルの組立タスク、これら4つを同一システムが達成すること。予測市場の標準定義で、中央値は2028年。</dd>
+
+    <dt>OpenAI の定義</dt>
+    <dd>「経済的に価値のある大半のタスクにおいて、人間を上回る高度に自律的なシステム」。OpenAI憲章の定義。経済価値基準であり、技術指標ではない。</dd>
+
+    <dt>DeepMind Levels of AGI</dt>
+    <dd>Level 0〜5の6段階（2023年論文）。L2（有能：成人の50%タイル以上）はすでに到達、L3（熟達：90%タイル）が研究フロンティア、L4（達人：99%タイル）が経営計画の対象となる閾値。</dd>
+
+    <dt>Morris et al. (2024)</dt>
+    <dd>「Performance × Generality」の2軸マトリクス。ナロー型の超人間から汎用型の人間並までを区別し、タスクごとに到達時期を独立に予測する枠組み。</dd>
+
+    <dt>本ブリーフの作業定義</dt>
+    <dd>DeepMind L4（達人：99%タイル）を基準線とする。理由は、経営上の意思決定に影響するのは「できる／できない」ではなく「置き換えが経済合理性に乗る水準」であり、L4以降で雇用の意思決定に直結するため。</dd>
+  </dl>
+
+  <h3 class="sub">定義によって、到達時期は3〜7年ずれる</h3>
+  <div class="single">
+    <p>同じ「AGI」という語でも、採用する定義によって中央値は大きく動く。OpenAIの経済価値定義なら2027〜2029年、DeepMind L4なら2030〜2033年、Morris et al.の汎用型超人間カテゴリなら2035年以降。研究者間の「予測の差」の半分は、定義の差で説明される。</p>
+    <p>経営会議でAGIの議論がすれ違うのは、予測精度の差ではなく、話者ごとに違う定義を使っていることが原因であることが多い。最初に定義を合わせるだけで、議論の生産性は倍になる。</p>
   </div>
 
   <div class="pull">
-    当てに行く議論ではない。<br>
-    どの年を前提にしているか、自分で言えるかの議論である。
-    <span class="at sans">— Editorial Note, No.004</span>
+    「いつ来るか」の前に、<br>
+    「何を指してAGIと呼んでいるか」を合わせよ。
+    <span class="at sans">— Editorial Note, No.004 §1</span>
   </div>
 
-  <h2 class="sect">各シナリオで、取締役会が先に決めておくこと</h2>
+  <div class="run-foot sans">
+    <div>AGI HUB EXECUTIVE · No.004 · §1 Definition</div>
+    <div class="pg">02 / 04</div>
+  </div>
+</section>
+
+<!-- ============ PAGE 3 — Scenarios & Impact ============ -->
+<section class="page">
+  <div class="run-head">
+    <div class="brand sans">AGI HUB <em>· EXECUTIVE</em></div>
+    <div>No.004 · 2026.04.11 · Timeline</div>
+  </div>
+
+  <h2 class="sect">3つのシナリオで、経営判断は具体的にどう変わるか<span class="num">§2</span></h2>
+
+  <div class="cols drop">
+    <p>シナリオA（2027）は、計算資源の供給制約が外れ、技術スパートが続く世界。NVIDIA・TSMCの供給計画が前倒しになり、モデル規模が年4倍で伸びる場合に開く経路。Metaculusの早期側5%、Epoch AIの上振れケースが該当する。</p>
+    <p>シナリオB（2030）は、安全性検証と規制が実装速度を決める標準ケース。EU AI Actの本格適用（2026年8月）と米国の基盤モデル報告義務が、モデル更新サイクルに2〜3年の検証を織り込む。Metaculusの中央値はこの経路の手前に乗る。</p>
+    <p>シナリオC（2035）は、アラインメント未解決のまま物理制約が効いてくる経路。電力・水・冷却・半導体の現実的な壁が、スケーリングの限界収益を押し下げる。MIT FutureTechの保守ケースが該当する。</p>
+    <p>重要なのはどれが「当たる」かではなく、自社の中計・CAPEX計画・人員計画が、暗黙のうちにどの年を前提にしているか。以下の表は、取締役会で先に決めておくべき4項目を、シナリオ別に具体化したものである。</p>
+  </div>
+
   <table class="mx">
     <thead>
       <tr>
@@ -306,31 +403,84 @@
     <tbody>
       <tr>
         <th>資本配分</th>
-        <td>AI関連CAPEXを2年以内に2倍。既存事業のCAPEX凍結も選択肢</td>
-        <td>年10〜15%の段階増。既存事業とのROIC比較で再配分</td>
-        <td>慣性のある配分を維持。AI投資はR&D枠内</td>
+        <td><b>AI関連CAPEXを2年で2倍</b>。売上高比1.4%→2.8%。既存事業CAPEXの10〜15%凍結も選択肢に</td>
+        <td>年10〜15%の段階増。売上高比1.4%→1.8%。既存事業とROIC比較で再配分</td>
+        <td>慣性の配分を維持。AI投資はR&D枠内に留め、売上高比0.8%前後</td>
       </tr>
       <tr>
         <th>雇用計画</th>
-        <td>新規採用凍結と再教育投資の前倒し。退職勧奨は2027までに制度化</td>
-        <td>自然減と配置転換で吸収。再教育予算を年次化</td>
-        <td>既存の人員計画を維持。AI対応は一部部門限定</td>
+        <td><b>新規採用凍結</b>と再教育投資の前倒し。1人あたり年120万円×3年。退職勧奨は2027までに制度化</td>
+        <td>自然減と配置転換で吸収。年次の再教育予算を売上高比0.3%で確保</td>
+        <td>既存の人員計画を維持。AI対応は部門限定（IT・法務・経理）</td>
       </tr>
       <tr>
         <th>IR開示</th>
-        <td>AI移行計画を中計に格上げ、シナリオ分析を有価証券報告書へ</td>
-        <td>統合報告書でリスク・機会の両論併記</td>
+        <td><b>中計をAI前提で全面改訂</b>。シナリオ分析を有報「事業等のリスク」に記載</td>
+        <td>統合報告書でリスク・機会の両論併記。マテリアリティ評価にAIを追加</td>
         <td>既存の事業リスク開示の枠内で言及</td>
       </tr>
       <tr>
-        <th>経営者の責任</th>
-        <td>移行計画の未策定は善管注意義務違反リスク</td>
-        <td>シナリオ分析の未実施が争点になりうる</td>
-        <td>現時点では裁判例なし</td>
+        <th>経営者責任</th>
+        <td><b>移行計画の未策定は善管注意義務違反リスク</b>。取締役会議事録での審議要記録</td>
+        <td>シナリオ分析の未実施が株主代表訴訟の争点になりうる</td>
+        <td>現時点では裁判例なし。ただし2028年以降に論点化の可能性</td>
+      </tr>
+      <tr>
+        <th>2026年内のNext</th>
+        <td>取締役会にAI戦略委員会を設置。CFO直属でCAPEX再審議</td>
+        <td>マテリアリティ評価を2026年中にアップデート</td>
+        <td>監査役会でシナリオ分析の監督方針を議論</td>
       </tr>
     </tbody>
   </table>
 
+  <div class="run-foot sans">
+    <div>AGI HUB EXECUTIVE · No.004 · §2 Scenarios</div>
+    <div class="pg">03 / 04</div>
+  </div>
+</section>
+
+<!-- ============ PAGE 4 — Sources & Related ============ -->
+<section class="page">
+  <div class="run-head">
+    <div class="brand sans">AGI HUB <em>· EXECUTIVE</em></div>
+    <div>No.004 · 2026.04.11 · Timeline</div>
+  </div>
+
+  <h2 class="sect">関連ブリーフ<span class="num">§3</span></h2>
+
+  <div class="single">
+    <p>本号で扱った論点は、過去のブリーフで個別に深掘りしている。取締役会で一つでも質問が出たら、該当号のPDFを添付して回覧すれば8割の下調べは終わる。</p>
+  </div>
+
+  <div class="related">
+    <a class="card" href="executive-003.pdf">
+      <div class="n sans">No.003 · 2026.03.28</div>
+      <h4>10万人雇用企業のAI移行コスト試算</h4>
+      <p>タスクベースでAI移行した場合の累積コストを3シナリオで試算。年次別・部門別に分解。本号のシナリオB・Cの数値根拠。</p>
+      <span class="url sans">agi-hub.jp/brand/pdf/executive-003.pdf</span>
+    </a>
+    <a class="card" href="executive-002.pdf">
+      <div class="n sans">No.002 · 2026.03.14</div>
+      <h4>EU AI Actが日本企業に効く日</h4>
+      <p>規制実装のタイムラインを日本企業の視点で整理。シナリオBの「規制が速度を決める」の一次資料。</p>
+      <span class="url sans">agi-hub.jp/brand/pdf/executive-002.pdf</span>
+    </a>
+    <a class="card" href="executive-001.pdf">
+      <div class="n sans">No.001 · 2026.02.28</div>
+      <h4>取締役会でAGIを議題にする前に</h4>
+      <p>機関投資家の関心事・アナリスト質問リスト・開示サンプル。本号の「経営者責任」欄の前提。</p>
+      <span class="url sans">agi-hub.jp/brand/pdf/executive-001.pdf</span>
+    </a>
+    <a class="card" href="../executive.html">
+      <div class="n sans">INDEX</div>
+      <h4>AGI HUB Executive 総目次</h4>
+      <p>既刊一覧と次号予告。隔週金曜、A4で2〜4ページ、広告ゼロ。</p>
+      <span class="url sans">agi-hub.jp/brand/executive.html</span>
+    </a>
+  </div>
+
+  <h2 class="sect">一次ソース<span class="num">§4</span></h2>
   <div class="sources sans">
     <b>Primary Sources</b>
     <ol>
@@ -338,15 +488,26 @@
       <li>Epoch AI — Compute Trends Across Three Eras of Machine Learning, 2025 Q4 update.</li>
       <li>OECD AI Policy Observatory — AI Compute and Climate 2025.</li>
       <li>MIT FutureTech — Scaling Limits and Physical Constraints of AI, Working Paper 2026-02.</li>
+      <li>Morris, Manyika, et al. — Levels of AGI: Operationalizing Progress on the Path to AGI, Google DeepMind, 2024.</li>
+      <li>OpenAI Charter — Our mission is to ensure that AGI benefits all of humanity (updated 2024).</li>
       <li>Regulation (EU) 2024/1689 — Artificial Intelligence Act, Official Journal, 12 July 2024.</li>
-      <li>Executive Order 14110, The White House, 30 October 2023.</li>
+      <li>Executive Order 14110 — Safe, Secure, and Trustworthy AI, The White House, 30 October 2023.</li>
       <li>経済産業省・総務省「AI事業者ガイドライン 第1.0版」2024年4月19日.</li>
+      <li>日本銀行金融研究所「AIの経済的影響に関するサーベイ」Discussion Paper 2025-J-8.</li>
+      <li>IMF Working Paper WP/24/101 — Gen-AI: Artificial Intelligence and the Future of Work, 2024.</li>
+      <li>NVIDIA FY2026 Q1 Earnings — Compute Supply Outlook, 2025.</li>
     </ol>
+  </div>
+
+  <div class="editorial">
+    <div class="l sans">Editorial Policy</div>
+    <h3>ブリーフは読み物ではない。意思決定の材料である。</h3>
+    <p>本ブリーフは情報提供であり、投資助言ではない。引用は一次ソースに限る。広告・スポンサード記事は載せない。会員登録もメール取得もない。秘書やスタッフが印刷して、そのまま役員会・審議会に配れる品質を基準にする。</p>
   </div>
 
   <div class="run-foot sans">
     <div>AGI HUB EXECUTIVE · agi-hub.jp · Editorial Board</div>
-    <div class="pg">02 / 02</div>
+    <div class="pg">04 / 04</div>
   </div>
 </section>
 

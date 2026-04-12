@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Colophon — AGI HUB</title>
+<meta name="description" content="AGI HUBの編集方針、引用ポリシー、AI生成比率、訂正方針、プライバシー、免責事項">
+
+<link rel="stylesheet" href="design-system/palette.css">
+
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --black: #000;
+    --body-text: #1a1a1a;
+    --meta: #757575;
+    --border: #e5e5e5;
+    --bg: #fff;
+  }
+
+  body {
+    font-family: HelveticaNeue, "Helvetica Neue", Helvetica, Arial,
+      游ゴシック体, YuGothic, "游ゴシック Medium", "Yu Gothic Medium",
+      游ゴシック, "Yu Gothic", "ヒラギノ角ゴ ProN W3", "Hiragino Kaku Gothic ProN",
+      sans-serif;
+    font-feature-settings: "palt";
+    font-size: 16px;
+    line-height: 1.85;
+    color: var(--body-text);
+    background: var(--bg);
+    -webkit-font-smoothing: antialiased;
+    word-wrap: break-word;
+  }
+
+  a { color: inherit; text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px; }
+  a:hover { opacity: 0.6; }
+
+  .mono {
+    font-family: "SF Mono", "Fira Code", "Fira Mono", Menlo, Consolas, monospace;
+    font-feature-settings: normal;
+    letter-spacing: 0.083em;
+    text-transform: uppercase;
+  }
+
+  .wrap {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 80px 48px 120px;
+  }
+
+  .eyebrow {
+    font-size: 11px;
+    color: var(--meta);
+    margin-bottom: 24px;
+  }
+
+  h1 {
+    font-size: 40px;
+    line-height: 1.25;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    margin-bottom: 48px;
+    padding-bottom: 32px;
+    border-bottom: 1px solid var(--black);
+  }
+
+  h2 {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--black);
+    margin-top: 56px;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+    font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+  }
+
+  h2:first-of-type { margin-top: 0; }
+
+  p { margin-bottom: 18px; }
+  p + p { margin-top: -4px; }
+
+  ul {
+    list-style: none;
+    margin-bottom: 18px;
+  }
+
+  ul li {
+    position: relative;
+    padding-left: 20px;
+    margin-bottom: 8px;
+  }
+
+  ul li::before {
+    content: "—";
+    position: absolute;
+    left: 0;
+    color: var(--meta);
+  }
+
+  .note {
+    font-size: 13px;
+    color: var(--meta);
+    border-left: 2px solid var(--border);
+    padding-left: 18px;
+    margin: 24px 0;
+  }
+
+  .footer-line {
+    margin-top: 96px;
+    padding-top: 32px;
+    border-top: 1px solid var(--border);
+    font-size: 12px;
+    color: var(--meta);
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  @media (max-width: 640px) {
+    .wrap { padding: 56px 24px 80px; }
+    h1 { font-size: 30px; }
+  }
+</style>
+</head>
+<body>
+
+<div id="site-header-mount"></div>
+<script src="partials/header.js" defer></script>
+
+<div class="wrap">
+
+  <div class="eyebrow mono">Colophon / Editorial Policy</div>
+  <h1>この場所の作り方と、読み方についての注記。</h1>
+
+  <h2>01 — Editorial Stance</h2>
+  <p>AGI HUBは、知能・アラインメント・文明の次相をめぐる思考を蓄積する個人アーカイブである。完成したレポートを提示する場ではなく、考えの途中を後から読み返せる形で留めておくための断章集である。破滅論と楽観論の両方から距離を取り、第三の視座を探すことを編集の軸にしている。</p>
+  <p>したがって記事は、結論の確からしさではなく、論点の射程と言語化の精度で書かれている。読者の行動を促すための文章ではない。</p>
+
+  <h2>02 — Authorship & AI Disclosure</h2>
+  <p>すべての記事は個人の編集責任のもとで企画・構成されている。執筆過程ではLLM（主にClaude）を下書き・構造化・言い換えに用いており、AI生成の文章が含まれる。ただし論点の選択、事実関係の確認、最終的な表現の採否は編集者が行う。</p>
+  <p>AIが書いた文章と人が書いた文章を逐一区別する表示は行わない。掲載された時点ですべて編集者の責任下にある、という扱いにしている。</p>
+
+  <h2>03 — Citation & Fair Use</h2>
+  <p>記事中の引用・数値・図版は、公開された一次情報または報道・論文・公式発表からの参照を原則とする。引用は日本の著作権法第32条および国際的なフェアユース慣行の範囲で行い、出典は本文中または注記で明示する。</p>
+  <p>人物写真については、Wikimedia Commons掲載のパブリックドメイン・CCライセンス画像、および各組織・本人の公式プロフィール画像を編集的引用として使用している。出典とライセンスは各ページの末尾に記載する。</p>
+  <p>本サイトの記事・文章・図版は、特記のない限り <strong>All Rights Reserved</strong> とする。短い引用（数百字以内）を出典とリンクを明示して行うことは歓迎するが、全文転載・商用利用・AI学習データとしての再配布には事前の許諾を要する。</p>
+
+  <h2>04 — Not Advice</h2>
+  <p>記事は投資助言・法務助言・医療助言ではない。特定の銘柄・プロジェクト・技術への言及は情報提供であり、推奨ではない。読者の判断と行動の結果について、本サイトは一切の責任を負わない。</p>
+
+  <h2>05 — Corrections</h2>
+  <p>事実誤認・誤記・出典の欠落を発見した場合は修正する。重大な訂正（主要な論点の撤回・数値の誤りなど）は記事末尾に訂正履歴を残す。軽微な誤字脱字・言い回しの調整はサイレントに更新する。</p>
+  <p>訂正依頼・事実関係の指摘は、下記連絡先まで。</p>
+
+  <h2>06 — Privacy & Tracking</h2>
+  <p>本サイトはアクセス解析ツール（Google Analytics等）、広告タグ、サードパーティCookieを設置していない。読者の閲覧行動は記録しない。</p>
+  <p>ホスティングはGitHub Pagesを利用しており、GitHub側のサーバーログは同社のポリシーに従って取得される。埋め込みサービスとしてGoogle Translateウィジェットを使用しており、翻訳機能を利用した場合にのみGoogleに通信が発生する。</p>
+  <p>現時点で本サイトは検索エンジンのクロールを拒否している（robots noindex / nofollow）。正式公開までの準備段階にあるため、外部からの参照はURLを直接知る読者に限られる。</p>
+
+  <h2>07 — Contact</h2>
+  <p>訂正依頼・引用許諾・その他の連絡は、編集者までメールで連絡してほしい。個別の質問・意見への返信は保証しないが、すべて目を通している。</p>
+  <p class="note">連絡先メールアドレスは正式公開時に掲載する。それまでは運営者を個別に知る読者からの直接連絡に限る。</p>
+
+  <h2>08 — Colophon</h2>
+  <ul>
+    <li>Design — Editorial Monotone / Helvetica Neue + 游ゴシック / palt global</li>
+    <li>Typography — SF Mono for labels, serif-free body</li>
+    <li>Hosting — GitHub Pages (static)</li>
+    <li>Build — Hand-written HTML/CSS, no framework</li>
+    <li>Established — 2026</li>
+  </ul>
+
+  <div class="footer-line">
+    <span class="mono">© 2026 AGI HUB — An Editorial Archive</span>
+    <span class="mono">Last updated: 2026-04-12</span>
+  </div>
+
+</div>
+
+<!-- Google Translate -->
+<script>
+function googleTranslateElementInit() {
+  new google.translate.TranslateElement({
+    pageLanguage: 'ja',
+    includedLanguages: 'en,zh-CN,ko,fr,de,es',
+    layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+    autoDisplay: false
+  }, 'google_translate_element');
+}
+</script>
+<script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+</body>
+</html>

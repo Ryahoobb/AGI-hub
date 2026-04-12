@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+    <title>自動化率77%の誤読 — 産業爆発はどの順番で起きるのか — AGI HUB</title>
+    <meta name="description" content="Anthropicの自動化率77%は経済全体の77%ではない。自動化のどこが、どの順番で、どの摩擦を抱えたまま進むかによって、産業爆発の形はまるで異なる。ボトルネック仕事の自動化が生産関数を書き換え、労働分配率がゼロに向かう回路を分解する。" />
+    <link rel="stylesheet" href="../design-system/palette.css">
+    <style>
+      :root {
+        --black: #000;
+        --body-text: #1a1a1a;
+        --mid: #585858;
+        --meta: #757575;
+        --light-gray: #999;
+        --border: #e8e3d4;
+        --bg: #faf8f1;
+        --bg-alt: #f3f1e4;
+        --accent: #2f2b92;
+        --accent-soft: rgba(47, 43, 146, 0.08);
+        --ease: cubic-bezier(0.22, 1, 0.36, 1);
+      }
+
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+      html { scroll-behavior: smooth; }
+
+      body {
+        font-family: HelveticaNeue, "Helvetica Neue", Helvetica, Arial,
+          游ゴシック体, YuGothic, "游ゴシック Medium", "Yu Gothic Medium",
+          游ゴシック, "Yu Gothic", "ヒラギノ角ゴ ProN W3", "Hiragino Kaku Gothic ProN",
+          "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", "MS ゴシック", "MS Gothic",
+          sans-serif;
+        font-feature-settings: "palt";
+        font-size: 16px;
+        line-height: 1.75;
+        color: var(--body-text);
+        background: var(--bg);
+        -webkit-font-smoothing: antialiased;
+        overflow-x: hidden;
+        word-wrap: break-word;
+      }
+
+      .progress {
+        position: fixed; top: 0; left: 0; height: 2px;
+        background: var(--accent); width: 0%; z-index: 100;
+        transition: width 0.3s var(--ease);
+      }
+
+      .nav {
+        position: fixed; right: 24px; top: 50%;
+        transform: translateY(-50%);
+        display: grid; gap: 16px; z-index: 50;
+      }
+      .nav button {
+        width: 8px; height: 8px; border-radius: 999px;
+        border: 1.5px solid var(--meta); background: transparent;
+        cursor: pointer; transition: all 0.3s var(--ease);
+      }
+      .nav button.active {
+        background: var(--accent); border-color: var(--accent);
+        transform: scale(1.4);
+      }
+
+      main { scroll-snap-type: y mandatory; }
+      .slide {
+        position: relative;
+        min-height: 100vh;
+        max-width: 1120px;
+        margin: 0 auto;
+        padding: 80px 48px 64px;
+        display: grid;
+        grid-template-rows: auto auto 1fr auto;
+        gap: 32px;
+        scroll-snap-align: start;
+      }
+      .slide + .slide { border-top: 1px solid var(--border); }
+
+      .hero {
+        width: 100%;
+        aspect-ratio: 16 / 7;
+        object-fit: cover;
+        display: block;
+        filter: grayscale(0.6) contrast(1.1);
+        transition: filter 0.6s var(--ease);
+      }
+      .hero:hover { filter: grayscale(0) contrast(1); }
+
+      .hero-caption {
+        font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 11px;
+        letter-spacing: 0.083em;
+        color: var(--light-gray);
+        margin-top: 8px;
+        text-transform: uppercase;
+      }
+
+      .credits {
+        max-width: 1120px;
+        margin: 0 auto;
+        padding: 48px 48px 80px;
+        border-top: 1px solid var(--border);
+      }
+      .credits p {
+        font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 11px;
+        letter-spacing: 0.047em;
+        line-height: 2;
+        color: var(--light-gray);
+      }
+      .credits a {
+        color: var(--meta);
+        text-decoration: none;
+        border-bottom: 1px solid var(--border);
+      }
+      .credits a:hover {
+        color: var(--black);
+        border-bottom-color: var(--black);
+      }
+
+      .reveal {
+        opacity: 0;
+        transform: translateY(24px);
+        transition: opacity 0.6s var(--ease), transform 0.6s var(--ease);
+      }
+      .reveal.visible { opacity: 1; transform: translateY(0); }
+      .reveal-delay-1 { transition-delay: 0.1s; }
+      .reveal-delay-2 { transition-delay: 0.2s; }
+      .reveal-delay-3 { transition-delay: 0.35s; }
+
+      .eyebrow {
+        font-family: "SF Mono", "Fira Code", "Fira Mono", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 11px;
+        font-weight: 400;
+        letter-spacing: 0.083em;
+        text-transform: uppercase;
+        color: var(--accent);
+      }
+
+      h1, h2 {
+        color: var(--black);
+        font-weight: 700;
+        line-height: 1.45;
+        letter-spacing: normal;
+        max-width: 26ch;
+        padding-bottom: 14px;
+        border-bottom: 1px solid var(--accent);
+      }
+      h1 { font-size: clamp(28px, 4vw, 36px); }
+      h2 { font-size: clamp(24px, 3.5vw, 32px); }
+
+      .lead {
+        max-width: 780px;
+        font-size: 16px;
+        line-height: 1.85;
+        color: var(--body-text);
+      }
+      .lead + .lead { margin-top: 14px; }
+      .lead strong { color: var(--black); }
+
+      .dropcap::first-letter {
+        float: left;
+        font-size: 3.6em;
+        line-height: 0.85;
+        padding: 4px 12px 0 0;
+        font-weight: 700;
+        color: var(--accent);
+      }
+
+      .panel { display: grid; gap: 24px; align-content: start; }
+      .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
+      .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+
+      .card {
+        padding: 24px 0;
+        border-top: 2px solid var(--accent);
+      }
+      .card .tag { color: var(--accent); }
+      .card strong { color: var(--black); }
+      .card p {
+        font-size: 16px;
+        line-height: 1.75;
+        color: var(--body-text);
+      }
+
+      .tag {
+        display: inline-block;
+        font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 11px;
+        letter-spacing: 0.083em;
+        color: var(--meta);
+        margin-bottom: 12px;
+      }
+
+      .point {
+        padding-left: 16px;
+        border-left: 2px solid var(--accent);
+        font-size: 16px;
+        line-height: 1.75;
+        color: var(--body-text);
+      }
+      .point strong { color: var(--black); }
+
+      .compare {
+        width: 100%;
+        border-collapse: collapse;
+        border-top: 2px solid var(--accent);
+        border-bottom: 2px solid var(--accent);
+      }
+      .compare th,
+      .compare td {
+        padding: 18px 16px;
+        text-align: left;
+        font-size: 15px;
+        line-height: 1.65;
+        color: var(--body-text);
+        border-bottom: 1px solid var(--border);
+        vertical-align: top;
+      }
+      .compare th {
+        font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 11px;
+        letter-spacing: 0.083em;
+        text-transform: uppercase;
+        color: var(--accent);
+        font-weight: 400;
+        border-bottom: 1px solid var(--accent);
+      }
+      .compare td strong { color: var(--black); }
+      .compare tr:last-child td { border-bottom: none; }
+
+      .note {
+        font-size: 16px;
+        line-height: 1.75;
+        color: var(--body-text);
+        padding: 24px 28px;
+        border-left: 2px solid var(--accent);
+        background: var(--accent-soft);
+      }
+      .note strong { color: var(--black); }
+
+      .footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: end;
+        gap: 16px;
+        font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 11px;
+        letter-spacing: 0.083em;
+        color: var(--light-gray);
+        text-transform: uppercase;
+      }
+      .slide-count { font-weight: 700; color: var(--accent); }
+
+      .slide .hero.img-fullbleed {
+        width: 100vw;
+        margin-left: calc(50% - 50vw);
+        margin-right: calc(50% - 50vw);
+        max-width: none;
+        aspect-ratio: 21/9;
+      }
+      .slide .hero.img-wide {
+        width: min(1280px, calc(100vw - 48px));
+        position: relative;
+        left: 50%;
+        transform: translateX(-50%);
+        max-width: none;
+      }
+      .slide .hero.img-content { max-width: 680px; margin: 0 auto; aspect-ratio: 4/3; }
+      .slide .hero.img-side-by-side { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+      @media (max-width: 768px) {
+        .slide { padding: 64px 24px 48px; }
+        .grid-2, .grid-3 { grid-template-columns: 1fr; }
+        .nav { right: 12px; }
+        .compare { font-size: 13px; }
+        .compare th, .compare td { padding: 14px 10px; }
+        .hero { aspect-ratio: 16 / 9; }
+        .credits { padding: 32px 24px 64px; }
+        .slide .hero.img-fullbleed,
+        .slide .hero.img-wide,
+        .slide .hero.img-content { width: 100%; max-width: 100%; aspect-ratio: 16/9; margin: 0; transform: none; left: 0; }
+      }
+
+      @media print {
+        .slide { min-height: auto; page-break-after: always; padding: 24px 0; }
+        .nav, .progress { display: none; }
+        .reveal { opacity: 1; transform: none; }
+      }
+    </style>
+  </head>
+  <body class="pattern-broadsheet accent-deepblue has-site-header" data-category="takeoff">
+    <div id="site-header-mount"></div>
+<script src="../partials/header.js" defer></script>
+    <div class="progress" id="progress"></div>
+
+    <aside class="nav" aria-label="Slide navigation">
+      <button data-target="slide-1" class="active" aria-label="Slide 1"></button>
+      <button data-target="slide-2" aria-label="Slide 2"></button>
+      <button data-target="slide-3" aria-label="Slide 3"></button>
+      <button data-target="slide-4" aria-label="Slide 4"></button>
+      <button data-target="slide-5" aria-label="Slide 5"></button>
+    </aside>
+
+    <div class="article-breadcrumb" style="font-family:'SF Mono','Fira Code',Menlo,Consolas,monospace;font-size:11px;letter-spacing:0.083em;text-transform:uppercase;color:#757575;display:flex;justify-content:space-between;align-items:center;padding:10px 32px;border-bottom:1px solid #e5e5e5;background:#fff;gap:16px;flex-wrap:wrap;">
+      <span>No. 26 / 26 &nbsp;·&nbsp; Takeoff &nbsp;·&nbsp; 5 Slides</span>
+      <span style="display:flex;gap:20px;align-items:center;">
+        <a href="25-pre-ethical-beyond-gesture.html" style="color:inherit;text-decoration:none;border-bottom:1px solid transparent;transition:border-color 0.2s;" onmouseover="this.style.borderBottomColor='#757575'" onmouseout="this.style.borderBottomColor='transparent'">← Prev</a>
+        <a href="../index.html#filter=takeoff" style="color:inherit;text-decoration:none;border-bottom:1px solid transparent;transition:border-color 0.2s;" onmouseover="this.style.borderBottomColor='#757575'" onmouseout="this.style.borderBottomColor='transparent'">Same Category</a>
+        <span style="opacity:0.3;">Next →</span>
+      </span>
+    </div>
+    <main>
+      <!-- ═══════════ Slide 1 ═══════════ -->
+      <section class="slide" id="slide-1">
+        <div class="eyebrow reveal">AGI HUB &nbsp;·&nbsp; No. 26 &nbsp;·&nbsp; Takeoff &nbsp;·&nbsp; The Misread Number &nbsp;·&nbsp; 2026.04.12 &nbsp;·&nbsp; By Ryao</div>
+        <h1 class="reveal reveal-delay-1">自動化率77%は、経済の77%ではない</h1>
+        <div class="panel reveal reveal-delay-2">
+          <div>
+            <img class="hero img-fullbleed" src="../images/26-automation-bottleneck-regime/slide1.jpg" alt="Monochrome industrial factory interior with large machinery">
+            <div class="hero-caption">Photo: Unsplash</div>
+          </div>
+          <p class="lead dropcap">
+            企業のAPI利用の77%が自動化に使われている。Anthropicが2025年9月に発表したEconomic Indexの数字だ。この一文を読んだ瞬間、頭の中で何が起きたか。おそらく「経済の8割近くがもうAIに置き換わりつつある」という映像が浮かんだ。その映像は、間違っている。
+          </p>
+          <p class="lead">
+            77%という数字が測っているのは、<strong>Anthropicの企業向けAPI（1P API）を契約し、すでにClaudeを業務に組み込んでいる顧客企業群のなかで、プログラム的に処理を委任しているトランスクリプトの割合</strong>だ。経済全体の77%ではない。AIを積極的に導入している企業群の、さらにAPI経由の利用パターンだけを切り取った局所的な数字である。同じAnthropicのデータでも、Claude.ai（消費者向けプラットフォーム）では2026年1月時点でaugmentationが52%、automationは45%にとどまる。プラットフォームが変わるだけで、数字の景色がまるで変わる。
+          </p>
+          <p class="lead">
+            ここに、産業爆発をめぐる議論の最も基本的な読み間違いがある。局所的なデータを全体に外挿する誘惑だ。自動化率の数字を前にしたとき、本当に問うべきなのは「何パーセントか」ではない。<strong>どの仕事が、どの順番で、どの摩擦を抱えたまま自動化されているのか</strong>。その順番と構造が見えなければ、77%も45%も、等しく使い物にならない。
+          </p>
+          <p class="lead">
+            97%という数字はさらに強い。Anthropicの同レポートは、企業APIで処理される経済タスクの97%がautomation-dominantだと報告した。だがここでも同じ留保が必要だ。APIに流れてくるタスクは、そもそもプログラム的に処理しやすいタスクに偏っている。バックオフィス、文書処理、CRM、スケジューリング、コーディング支援。高価値でデジタル化されていて文脈が閉じた領域への集中的な浸透が、97%という数字の実態だ。経済全体の97%が自動化されたわけではない。
+          </p>
+        </div>
+        <div class="footer reveal reveal-delay-3">
+          <span>局所的なデータを全体に外挿したとき、産業爆発の議論は崩れる</span>
+          <span class="slide-count">1 / 5</span>
+        </div>
+      </section>
+
+      <!-- ═══════════ Slide 2 ═══════════ -->
+      <section class="slide" id="slide-2">
+        <div class="eyebrow reveal">Partial Automation</div>
+        <h2 class="reveal reveal-delay-1">部分自動化は仕事を消さず、仕事の中身を変える</h2>
+        <div class="panel reveal reveal-delay-2">
+          <img class="hero img-content" src="../images/26-automation-bottleneck-regime/slide2.jpg" alt="Dark server room with electronic equipment">
+          <p class="lead">
+            では、高い自動化率が観測された領域では、雇用は崩壊しているのか。NBERのDaron Acemoglu、David Autor、Simon Johnsonらは2025年2月の論文「Artificial Intelligence and the Labor Market」で、AI曝露の高いタスクほど労働需要が減少する一方、<strong>企業レベルでは再配置や生産性向上が相殺し、マクロ的な雇用への影響はmodest（穏当）にとどまる</strong>と報告している。
+          </p>
+          <p class="lead">
+            ある職種のタスクの20%がAIに移ったとしても、その職種が消滅するとは限らない。蒸気機関が動力を機械化したとき、紡績工の数は減ったが繊維産業の雇用は拡大した。理由は単純で、コストが下がり需要が増えたからだ。ジェヴォンズが1865年に指摘した「石炭の効率が上がるほど総消費が増える」というパラドックスと同じ構造がここにもある。自動化された分だけ人間の仕事が減るという線形の想定は、需要の弾力性を無視している。
+          </p>
+          <p class="lead">
+            むしろ初期段階で起きるのは<strong>職務再編</strong>だ。低付加価値な工程がAIへ移行し、人間は監督、例外処理、顧客対応、意思決定、そして責任の引き受けにシフトする。この位相では、マクロの雇用統計には大きな変化が現れない。変化は、仕事の中身が入れ替わるという形で、組織の内部に閉じ込められている。
+          </p>
+          <p class="lead">
+            部分自動化を過小評価すべきではない。だがその破壊力は、「産業全体を一度に吹き飛ばす力」ではなく、<strong>「業務フローと組織設計を静かに組み替える力」</strong>として発現する。現場で見える変化が地味であることと、変化の深さは別の話だ。地表が揺れていないからといって、地殻が動いていないとは限らない。
+          </p>
+          <div class="note">
+            <strong>数値検証の留保:</strong> ソース文書はAnthropicの2026年1月データをaugmentation 56%、automation 41%としていたが、実際の報告書の数値はaugmentation 52%、automation 45%である。本稿では報告書の正確な数値を採用した。また、2025年8月に一時的にautomationがaugmentationを上回った後、11月に再びaugmentationが上回ったという推移も報告書で確認されている。
+          </div>
+        </div>
+        <div class="footer reveal reveal-delay-3">
+          <span>地表が揺れていないとき、地殻は動いている</span>
+          <span class="slide-count">2 / 5</span>
+        </div>
+      </section>
+
+      <!-- ═══════════ Slide 3 ═══════════ -->
+      <section class="slide" id="slide-3">
+        <div class="eyebrow reveal">The Chain Effect</div>
+        <h2 class="reveal reveal-delay-1">同じ30%でも、連続していれば意味が違う</h2>
+        <div class="panel reveal reveal-delay-2">
+          <img class="hero img-wide" src="../images/26-automation-bottleneck-regime/slide3.jpg" alt="Aerial view of busy shipping port with containers">
+          <p class="lead">
+            自動化率の量だけでなく、自動化がどう分布しているかが決定的に重要だ。ここで鍵になるのがtask chainingの概念である。
+          </p>
+          <p class="lead">
+            Mert Demirer、John Hortonらが2026年2月のNBER論文「Chaining Tasks, Redefining Work」で提示したモデルは明快だ。生産を連続する工程（step）の列として捉え、各工程を(1)手動、(2)AI補助、(3)完全自動化のいずれかで実行する。このとき、<strong>AIが実行する工程が連続する「チェーン」を形成すると、非線形な生産性向上が発生する</strong>。理由は、チェーン内ではAIシステムが完全な文脈を保持し、受け渡しエラーがゼロになり、処理の遷移が即時になるからだ。人間同士の受け渡しで失われていた情報と時間が、丸ごと消える。
+          </p>
+          <p class="lead">
+            比較分業の論理が崩壊する瞬間を、この論文は捉えている。アダム・スミスのピン工場以来、分業の生産性は「各工程を得意な主体が担当すること」で説明されてきた。だがAIが連続工程をチェーンとして飲み込むとき、工程間の調整コストそのものが消滅する。分業の根拠だった比較優位が、チェーンの内部では意味を失う。
+          </p>
+          <p class="lead">
+            自動化率が同じ30%であっても、仕事の流れのあちこちに散らばった30%と、入力から出力まで連続した30%では、企業に与えるインパクトがまるで違う。前者では人間の確認、再統合、責任分界が残り、組織構造はほぼ変わらない。後者では、<strong>仕事の塊そのものがAIに移り、企業は人員配置、部門設計、価格戦略、サービス提供方法を根本から再設計しなければならなくなる</strong>。
+          </p>
+          <div class="grid-2">
+            <div class="card">
+              <span class="tag">散在型 30%</span>
+              <p><strong>人間の受け渡しが残る。</strong>AIは各工程の補助に留まり、工程間の文脈は人間が保持する。組織構造は温存され、生産性向上は加算的に積み上がる。</p>
+            </div>
+            <div class="card">
+              <span class="tag">連続型 30%</span>
+              <p><strong>工程間の摩擦が消滅する。</strong>AIが入力から出力までを一貫して処理し、調整コストがゼロに近づく。組織構造が維持できなくなり、生産性向上は乗算的に跳ねる。</p>
+            </div>
+          </div>
+          <p class="lead">
+            この区別は実証的にも確認されている。同論文は、(1) AI実行工程がチェーンとして共起すること、(2) AI曝露工程が散在する職種ではjobレベルのAI実行率が低くなること、(3) AI実行工程に隣接する工程もAI実行される確率が高くなることを示した。チェーンは自己強化する。一度つながり始めると、隣接工程を引き込む力が働く。
+          </p>
+        </div>
+        <div class="footer reveal reveal-delay-3">
+          <span>チェーンは自己強化する — 一度つながり始めると、隣接工程を飲み込む</span>
+          <span class="slide-count">3 / 5</span>
+        </div>
+      </section>
+
+      <!-- ═══════════ Slide 4 ═══════════ -->
+      <section class="slide" id="slide-4">
+        <div class="eyebrow reveal">Bottleneck Regime</div>
+        <h2 class="reveal reveal-delay-1">ボトルネック仕事の自動化が生産関数を書き換える</h2>
+        <div class="panel reveal reveal-delay-2">
+          <img class="hero img-content" src="../images/26-automation-bottleneck-regime/slide4.jpg" alt="Aerial view of industrial factory complex">
+          <p class="lead">
+            チェーンが形成されても、経済全体の成長レジームが切り替わるとは限らない。切り替わるのは、<strong>ボトルネックとして機能している仕事が自動化されたとき</strong>だ。
+          </p>
+          <p class="lead">
+            Pascual Restrepoは2025年10月のNBER論文「We Won't be Missed」で、経済における仕事をbottleneck work（成長の律速段階にある仕事）とsupplementary work（付加的な仕事）に分類した。supplementary workがいくら自動化されても、成長率の天井は動かない。だがbottleneck workが自動化されると、生産関数の性質そのものが変わる。産出がcomputeに対して線形に依存するようになり、賃金はGDPから切り離され、労働分配率はゼロに向かう。
+          </p>
+          <table class="compare">
+            <thead>
+              <tr>
+                <th>属性</th>
+                <th>Bottleneck Work</th>
+                <th>Supplementary Work</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>定義</strong></td>
+                <td>経済成長の律速段階にある仕事。これが遅いと全体が遅い</td>
+                <td>成長に寄与するが、律速段階ではない仕事</td>
+              </tr>
+              <tr>
+                <td><strong>自動化時の効果</strong></td>
+                <td>生産関数の性質が変わる。産出がcomputeに線形依存</td>
+                <td>生産性向上は加算的。成長率の天井は動かない</td>
+              </tr>
+              <tr>
+                <td><strong>労働分配率</strong></td>
+                <td>ゼロに向かう</td>
+                <td>安定的に推移する</td>
+              </tr>
+              <tr>
+                <td><strong>例</strong></td>
+                <td>R&D、創薬候補の設計、新材料の発見、制度設計</td>
+                <td>バックオフィス、文書処理、ルーティン検査</td>
+              </tr>
+            </tbody>
+          </table>
+          <p class="lead">
+            Philip TrammellとAnton Korinekの2023年のNBER論文「Economic Growth under Transformative AI」は、このレジーム転換をさらに精密に整理した。<strong>完全な生産自動化だけで成長率は大きく跳ね上がり、R&Dの自動化はそれをさらに加速する追加要因</strong>だ、と。生産の自動化とR&Dの自動化は独立した寄与を持ち、両方が揃ったとき、成長曲線は歴史的に前例のない勾配を描く。
+          </p>
+          <p class="lead">
+            Benjamin Jonesが2025年10月のNBER論文「Artificial Intelligence in Research and Development」で指摘したのは、研究分野ごとの加速幅を決める3つの変数だ。AIが担うタスクの比率、そのタスクでのAIの生産性、そしてボトルネックの強さ。3番目の変数が決定的に重要で、AIがどれだけ速くなっても、ボトルネックが物理実験や臨床試験のように人間や現実世界の時定数に縛られている分野では、加速幅に上限がある。分野ごとに天井が違う。
+          </p>
+          <p class="lead">
+            この論点は推論の限界に近い。ボトルネック仕事が自動化されたとき労働分配率がゼロに向かうというRestrepoの命題は、理論モデルの帰結であって、まだ現実に観測された歴史的事実ではない。労働経済学の実証研究がこの命題を支持するか否認するかは、今後の検証に委ねられている。ただし、理論的な帰結の方向性自体は、Trammell-Korinek、Jones、いずれの枠組みとも整合している。
+          </p>
+        </div>
+        <div class="footer reveal reveal-delay-3">
+          <span>ボトルネックが動いたとき、天井が消える</span>
+          <span class="slide-count">4 / 5</span>
+        </div>
+      </section>
+
+      <!-- ═══════════ Slide 5 ═══════════ -->
+      <section class="slide" id="slide-5">
+        <div class="eyebrow reveal">The Sequence</div>
+        <h2 class="reveal reveal-delay-1">順番が見えれば、産業爆発の輪郭も見える</h2>
+        <div class="panel reveal reveal-delay-2">
+          <img class="hero" src="../images/26-automation-bottleneck-regime/slide5.jpg" alt="Black and white photo of industrial factory with pipes">
+          <p class="lead">
+            ここまでの議論を束ねると、産業爆発が「起きるか起きないか」という問い自体が粗すぎることがわかる。必要なのは、<strong>どの層が、どの順番で、どの摩擦を抱えたまま変わるかの見取り図</strong>だ。
+          </p>
+          <p class="lead">
+            EpochのGATE（General Assessment of Transformative Effects）モデルは、computeとautomationの関係だけでなく、非AI資本、投資フロー、労働再配置、資本蓄積の摩擦まで含めた動的統合評価を試みている。2025年3月のarXiv論文で彼らが示したのは、<strong>摩擦を入れないモデルは経済変化を過大評価する</strong>という単純だが重要な結論だ。
+          </p>
+          <p class="lead">
+            TSMCの2024年年次報告書は、先端プロセスノードの新工場を稼働させるまでに数年単位の建設期間と数百億ドル規模のCAPEXが必要であることを示している。ASMLの2025年年次報告書は、最先端EUV露光装置の納入までに最長6か月のリードタイムを報告した。IEAの2025年4月のレポート「Energy and AI」は、AI拡大に必要な送電インフラの増強に4年から8年かかると指摘した。ソフトウェアの自動化がどれだけ速く進んでも、半導体の供給能力、電力インフラ、物理的な資本形成は、それぞれ固有の時定数に縛られている。
+          </p>
+          <p class="lead">
+            Forethoughtは2025年5月のリサーチノート「The Industrial Explosion」で、産業爆発は技術爆発より遅れると整理した。知能のシンギュラリティと産業のシンギュラリティのあいだには長い時差が生まれうる。AIによるAI研究の自動化は情報の問題であり、ソフトウェアとcomputeがあれば原理的に進む。だが物理経済の自己増殖は、製造、電力、半導体、許認可、安全、保守といった別の時定数の束に制約される。
+          </p>
+          <p class="lead">
+            AGIはロボット自己複製を前提としない。AIの有力な駆動力はAI研究の自動化にあり、物理経済の自己増殖はその後段に位置する。産業変革の大きさは単純な平均自動化率では決まらない。<strong>局所的浸透が、チェーン化を経て、ボトルネック仕事に到達し、供給制約が追いつくまでのタイムラグ</strong>。この一連の階段のどこにいるかで、見える景色がまるで変わる。
+          </p>
+          <div class="point" style="margin-top:8px;">
+            <p>2026年の現在地は、階段の1段目と2段目のあいだだ。局所的で偏在した自動化が始まり、部分自動化による職務再編が静かに進行している段階。チェーン化が本格的に広がる3段目はまだ先にある。ボトルネック仕事の自動化が成長レジームを切り替える4段目は、さらにその先だ。そして4段目に到達しても、半導体の増産に3年、送電線の敷設に8年かかるという物理の時定数が、産業爆発の勾配に上限を設ける。</p>
+          </div>
+          <p class="lead" style="margin-top:20px;">
+            問いは残る。ボトルネック仕事そのものが、物理の時定数を短縮する方法をAIに発見させた場合、この階段構造は維持されるのか。物理的制約は確かに存在する。だが制約の大きさを所与とする思考は、制約を迂回する経路を見落とす。産業爆発を信じない人と信じる人の差は、物理の時定数を固定定数と見るか、内生変数と見るかにある。
+          </p>
+        </div>
+        <div class="footer reveal reveal-delay-3">
+          <span>物理の時定数は固定定数か、内生変数か</span>
+          <span class="slide-count">5 / 5</span>
+        </div>
+      </section>
+
+      <!-- ═══════════ Article Navigation ═══════════ -->
+      <section class="slide" style="min-height:auto;padding:64px 48px 80px;grid-template-rows:auto auto auto 1fr;">
+        <div class="eyebrow reveal">Continue Reading</div>
+        <h2 class="reveal reveal-delay-1" style="max-width:none;">次の記事へ</h2>
+        <div class="panel reveal reveal-delay-2">
+          <div class="grid-2">
+            <a href="25-pre-ethical-beyond-gesture.html" class="card" style="color:inherit;display:block;">
+              <p style="font-family:'SF Mono','Fira Code',Menlo,Consolas,monospace;font-feature-settings:normal;font-size:11px;letter-spacing:0.083em;text-transform:uppercase;color:#757575;margin-bottom:12px;">← Prev · No.25</p>
+              <p><strong>手を振って見送ることもできない — 倫理以前という場所</strong></p>
+            </a>
+            <div class="card" style="opacity:0.35;">
+              <p style="font-family:'SF Mono','Fira Code',Menlo,Consolas,monospace;font-feature-settings:normal;font-size:11px;letter-spacing:0.083em;text-transform:uppercase;color:#757575;margin-bottom:12px;">Next →</p>
+              <p>最新の記事です</p>
+            </div>
+          </div>
+          <p style="margin-top:32px;text-align:center;">
+            <a href="../index.html" style="color:inherit;border-bottom:1px solid #999;padding-bottom:2px;">All Articles — 記事一覧へ</a>
+          </p>
+          <p style="margin-top:16px;text-align:center;font-family:'SF Mono','Fira Code',Menlo,Consolas,monospace;font-size:11px;letter-spacing:0.083em;text-transform:uppercase;color:#757575;">
+            <a href="../index.html#filter=takeoff" style="color:inherit;border-bottom:1px solid #999;padding-bottom:2px;">Takeoff カテゴリの記事一覧 →</a>
+          </p>
+        </div>
+      </section>
+    </main>
+
+    <!-- ═══════════ Photo Credits & References ═══════════ -->
+    <section class="credits">
+      <p>
+        Photos courtesy of Unsplash contributors.<br>
+        Slide 1: <a href="https://unsplash.com/photos/pWUyHVJgLhg">pWUyHVJgLhg</a> /
+        Slide 2: <a href="https://unsplash.com/photos/OnI_TNcIv9U">OnI_TNcIv9U</a> /
+        Slide 3: <a href="https://unsplash.com/photos/JJCrTi0lvTs">JJCrTi0lvTs</a> /
+        Slide 4: <a href="https://unsplash.com/photos/_EFvjSgbw1c">_EFvjSgbw1c</a> /
+        Slide 5: <a href="https://unsplash.com/photos/KNerjdQGXKc">KNerjdQGXKc</a> /
+        Thumbnail: <a href="https://unsplash.com/photos/qafbp6O0Rr0">qafbp6O0Rr0</a>
+      </p>
+      <p style="margin-top:24px;">
+        Primary references:
+        Anthropic (2026) "Anthropic Economic Index: Economic Primitives," January 2026 report (augmentation 52% vs automation 45% on Claude.ai; API automation-dominant patterns).
+        Anthropic (2025) "Anthropic Economic Index: Uneven Geographic and Sectoral AI Adoption," September 2025 report (77% automation rate, 97% tasks automation-dominant in 1P API).
+        Daron Acemoglu, David Autor, Simon Johnson (2025) "Artificial Intelligence and the Labor Market," NBER Working Paper 33509 (aggregate employment effects modest despite high task-level AI exposure).
+        Mert Demirer, John J. Horton, Nicole Immorlica, Brendan Lucier, Peyman Shahidi (2026) "Chaining Tasks, Redefining Work: A Theory of AI Automation," NBER Working Paper 34859 (non-linear productivity gains from task chaining; comparative advantage failure in AI chains).
+        Pascual Restrepo (2025) "We Won't be Missed," NBER Working Paper 34423 (bottleneck work vs supplementary work; labor share approaches zero when bottleneck work is automated).
+        Philip Trammell, Anton Korinek (2023) "Economic Growth under Transformative AI," NBER Working Paper 31815 (full production automation drives growth rate jumps; R&D automation as additional accelerant).
+        Benjamin Jones (2025) "Artificial Intelligence in Research and Development," NBER Working Paper 34312 (three variables determining acceleration: AI task share, AI productivity, bottleneck strength).
+        Epoch AI (2025) "GATE: General Assessment of Transformative Effects," arXiv:2503.04941 (dynamic integrated assessment model; adjustment costs prevent overestimation).
+        TSMC (2025) "2024 Annual Report" (semiconductor supply expansion timelines; multi-year construction and tens of billions in CAPEX).
+        ASML (2026) "2025 Annual Report: Strategic Report" (EUV lithography equipment lead times up to six months).
+        IEA (2025) "Energy and AI," April 2025 report (power grid expansion 4-8 years for AI infrastructure).
+        Forethought (2025) "The Industrial Explosion," May 2025 research note (industrial explosion lags technological explosion).
+        Forethought (2025) "Preparing for the Intelligence Explosion," March 2025 (100 years of technological progress compressed into less than 10 years; institutional and capital constraints lag).
+        W. Stanley Jevons (1865) "The Coal Question" (efficiency paradox: increased coal efficiency led to increased total consumption).
+      </p>
+    </section>
+
+    <script>
+      const progress = document.getElementById('progress');
+      window.addEventListener('scroll', () => {
+        const h = document.documentElement;
+        const pct = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
+        progress.style.width = pct + '%';
+      });
+
+      const slides = document.querySelectorAll('main > .slide');
+      const buttons = document.querySelectorAll('.nav button');
+      buttons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const target = document.getElementById(btn.dataset.target);
+          if (target) target.scrollIntoView({ behavior: 'smooth' });
+        });
+      });
+      const io = new IntersectionObserver(entries => {
+        entries.forEach(e => {
+          if (e.isIntersecting) {
+            const id = e.target.id;
+            buttons.forEach(b => b.classList.toggle('active', b.dataset.target === id));
+          }
+        });
+      }, { threshold: 0.1 });
+      slides.forEach(s => { if (s.id) io.observe(s); });
+
+      const revealIO = new IntersectionObserver(entries => {
+        entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+      }, { threshold: 0.1 });
+      document.querySelectorAll('.reveal').forEach(el => revealIO.observe(el));
+    </script>
+  </body>
+</html>

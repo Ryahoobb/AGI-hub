@@ -222,7 +222,117 @@
   footer.site .row:last-child{margin-bottom:0}
   footer.site b{color:var(--ink);font-weight:500}
 
+  /* ========== Stats strip ========== */
+  section.stats{
+    max-width:1040px;margin:0 auto;
+    padding:64px 56px 48px;
+    border-bottom:1px solid var(--divider);
+  }
+  .stats-grid{
+    display:grid;grid-template-columns:repeat(4,1fr);
+    gap:0;border-left:1px solid var(--divider);
+  }
+  .stat{
+    padding:24px 28px;border-right:1px solid var(--divider);
+  }
+  .stat .k{
+    font-family:Inter,sans-serif;font-size:10px;letter-spacing:0.2em;
+    color:var(--meta);text-transform:uppercase;margin-bottom:10px;
+  }
+  .stat .v{
+    font-family:"Hiragino Mincho ProN","Yu Mincho",serif;
+    font-size:36px;font-weight:500;color:var(--ink);
+    font-variant-numeric:tabular-nums;line-height:1;margin-bottom:8px;
+  }
+  .stat .v .u{font-size:14px;color:var(--meta);margin-left:4px;font-family:Inter,sans-serif}
+  .stat .s{font-family:Inter,sans-serif;font-size:10px;color:var(--navy);letter-spacing:0.08em}
+
+  /* ========== Excerpt / Feature ========== */
+  .excerpt-grid{
+    display:grid;grid-template-columns:1fr 1.4fr;gap:56px;
+    align-items:start;
+  }
+  .excerpt-lede{
+    font-family:"Hiragino Mincho ProN","Yu Mincho",serif;
+    font-size:22px;line-height:1.9;color:var(--ink);
+    border-left:2px solid var(--navy);padding:4px 0 4px 24px;
+  }
+  .excerpt-body p{
+    font-size:15px;line-height:1.95;color:var(--ink2);margin-bottom:18px;
+  }
+  .excerpt-body p.drop::first-letter{
+    font-family:"Hiragino Mincho ProN","Yu Mincho",serif;
+    float:left;font-size:54px;line-height:0.9;padding:4px 10px 0 0;
+    color:var(--navy);font-weight:500;
+  }
+  .pull{
+    margin:32px 0;padding:24px 0;
+    border-top:1px solid var(--ink);border-bottom:1px solid var(--ink);
+    font-family:"Hiragino Mincho ProN","Yu Mincho",serif;
+    font-size:19px;line-height:1.75;color:var(--ink);text-align:center;
+  }
+  .pull .attrib{
+    display:block;margin-top:12px;font-family:Inter,sans-serif;
+    font-size:10px;letter-spacing:0.2em;color:var(--meta);text-transform:uppercase;
+  }
+
+  /* ========== SVG figures ========== */
+  figure.chart{
+    margin:0 0 48px;padding:32px 0 24px;
+    border-top:1px solid var(--ink);border-bottom:1px solid var(--divider);
+  }
+  figure.chart .cap{
+    font-family:Inter,sans-serif;font-size:10px;letter-spacing:0.22em;
+    color:var(--meta);text-transform:uppercase;margin-bottom:8px;
+  }
+  figure.chart .title{
+    font-family:"Hiragino Mincho ProN","Yu Mincho",serif;
+    font-size:18px;color:var(--ink);margin-bottom:24px;
+  }
+  figure.chart figcaption{
+    font-family:Inter,sans-serif;font-size:11px;color:var(--meta);
+    line-height:1.7;margin-top:16px;letter-spacing:0.04em;
+  }
+  figure.chart svg{width:100%;height:auto;display:block}
+
+  /* ========== Matrix ========== */
+  table.matrix{width:100%;border-collapse:collapse;margin-top:24px}
+  table.matrix th,table.matrix td{
+    border:1px solid var(--divider);padding:18px 20px;vertical-align:top;
+    font-size:13px;line-height:1.75;
+  }
+  table.matrix thead th{
+    background:#fbfbfa;color:var(--ink);font-weight:500;
+    font-family:Inter,sans-serif;font-size:11px;letter-spacing:0.15em;
+    text-transform:uppercase;text-align:left;
+  }
+  table.matrix thead th:first-child{background:#fff}
+  table.matrix tbody th{
+    text-align:left;font-family:"Hiragino Mincho ProN","Yu Mincho",serif;
+    font-weight:500;color:var(--navy);width:180px;background:#fbfbfa;
+  }
+  table.matrix tbody td{color:var(--ink2)}
+  table.matrix td .src{
+    display:block;margin-top:8px;font-family:Inter,sans-serif;font-size:10px;
+    color:var(--meta);letter-spacing:0.05em;
+  }
+
+  /* ========== Sources ========== */
+  .sources{
+    padding:24px 0 0;margin-top:24px;
+    border-top:1px solid var(--divider);
+    font-family:Inter,sans-serif;font-size:10px;
+    color:var(--meta);letter-spacing:0.06em;line-height:1.9;
+  }
+  .sources b{color:var(--ink);font-weight:500;letter-spacing:0.18em;text-transform:uppercase;display:block;margin-bottom:10px}
+  .sources ol{padding-left:20px}
+
   @media (max-width:860px){
+    .stats-grid{grid-template-columns:repeat(2,1fr)}
+    .excerpt-grid{grid-template-columns:1fr;gap:32px}
+    .excerpt-lede{font-size:18px}
+    table.matrix thead{display:none}
+    table.matrix tbody th,table.matrix tbody td{display:block;width:100%;border-right:0;border-left:0}
     header.site{padding:20px 24px}
     header.site nav{display:none}
     .hero{padding:72px 24px 80px}
@@ -244,9 +354,9 @@
 </header>
 
 <section class="hero-image-wrap" style="max-width:1200px;margin:0 auto;padding:72px 56px 0">
-  <figure style="margin:0;position:relative;overflow:hidden">
-    <img src="images/executive-hero.jpg" alt="Classical marble columns" style="width:100%;aspect-ratio:21/9;object-fit:cover;filter:grayscale(0.3) contrast(1.05) brightness(0.95);display:block">
-    <figcaption style="position:absolute;left:24px;bottom:16px;font-family:Inter,sans-serif;font-size:10px;letter-spacing:0.2em;color:rgba(255,255,255,0.8);text-transform:uppercase">Photograph · Architecture of Governance</figcaption>
+  <figure style="margin:0;position:relative;overflow:hidden;background:#0e1a30">
+    <img src="https://images.unsplash.com/photo-1555374018-13a8994ab246?w=1600&q=80" alt="Classical marble columns" style="width:100%;aspect-ratio:21/9;object-fit:cover;filter:grayscale(0.85) contrast(1.1) brightness(0.65);display:block" onerror="this.style.display='none';this.parentElement.classList.add('fallback')">
+    <figcaption style="position:absolute;left:24px;bottom:16px;font-family:Inter,sans-serif;font-size:10px;letter-spacing:0.2em;color:rgba(255,255,255,0.82);text-transform:uppercase">Photograph · Architecture of Governance</figcaption>
   </figure>
 </section>
 
@@ -262,6 +372,258 @@
   <div class="actions">
     <a href="#" class="btn primary">Read briefing</a>
     <a href="#" class="btn secondary">Download PDF</a>
+  </div>
+</section>
+
+<section class="stats">
+  <div class="stats-grid">
+    <div class="stat">
+      <div class="k">Briefings Issued</div>
+      <div class="v">04</div>
+      <div class="s">SINCE FEB 2026</div>
+    </div>
+    <div class="stat">
+      <div class="k">Primary Sources</div>
+      <div class="v">142</div>
+      <div class="s">GOV · OECD · PEER-REVIEWED</div>
+    </div>
+    <div class="stat">
+      <div class="k">Avg. Read Time</div>
+      <div class="v">11<span class="u">min</span></div>
+      <div class="s">A4 · 2 PAGES</div>
+    </div>
+    <div class="stat">
+      <div class="k">Reader Org.</div>
+      <div class="v">38</div>
+      <div class="s">LISTED CO. / MINISTRIES</div>
+    </div>
+  </div>
+</section>
+
+<section class="block">
+  <div class="section-head">
+    <h2>Featured Briefing · Excerpt</h2>
+    <div class="label">No. 004 / Timeline</div>
+  </div>
+
+  <div class="excerpt-grid">
+    <div>
+      <div class="excerpt-lede">
+        2027年、2030年、2035年。<br>
+        AGI到達時点をめぐる3つのシナリオは、取締役会の議論を10年単位で変える。
+      </div>
+    </div>
+    <div class="excerpt-body">
+      <p class="drop">シナリオ分析の目的は「どれが当たるか」を当てることではない。意思決定者が、自社のキャピタル配分と雇用戦略を、どの時点の前提に紐付けているかを自覚することにある。本ブリーフは主要研究機関の到達予測を集約し、3つの帰結点を設定した。</p>
+      <p>早期到達（2027）は、技術スパートが続き、計算資源制約が解消される世界。中期（2030）は規制と安全性検証が実装速度を規定する標準シナリオ。長期（2035）は、アラインメント未解決のまま物理的制約が顕在化する経路である。いずれも「技術」ではなく「制度」が分岐点となる。</p>
+      <div class="pull">
+        「当たらないから意味がないのではない。<br>外れ方を設計することが、意思決定である。」
+        <span class="attrib">— Editorial Note, No.004</span>
+      </div>
+    </div>
+  </div>
+
+  <figure class="chart">
+    <div class="cap">Figure 1 · AGI Arrival Scenarios</div>
+    <div class="title">主要研究機関の到達予測と分岐経路（2025–2040）</div>
+    <svg viewBox="0 0 960 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="AGI timeline scenarios">
+      <defs>
+        <pattern id="grid" width="60" height="40" patternUnits="userSpaceOnUse">
+          <path d="M 60 0 L 0 0 0 40" fill="none" stroke="#eee" stroke-width="1"/>
+        </pattern>
+      </defs>
+      <rect x="60" y="20" width="880" height="260" fill="url(#grid)"/>
+      <!-- axes -->
+      <line x1="60" y1="280" x2="940" y2="280" stroke="#1a1a1a" stroke-width="1"/>
+      <line x1="60" y1="20" x2="60" y2="280" stroke="#1a1a1a" stroke-width="1"/>
+      <!-- year ticks -->
+      <g font-family="Inter,sans-serif" font-size="10" fill="#6b6b6b" text-anchor="middle">
+        <text x="120" y="302">2025</text>
+        <text x="240" y="302">2027</text>
+        <text x="420" y="302">2030</text>
+        <text x="720" y="302">2035</text>
+        <text x="900" y="302">2040</text>
+      </g>
+      <!-- y labels -->
+      <g font-family="Inter,sans-serif" font-size="9" fill="#6b6b6b" text-anchor="end">
+        <text x="54" y="30">Capability</text>
+        <text x="54" y="70">AGI threshold</text>
+        <text x="54" y="160">Broad deployment</text>
+        <text x="54" y="270">Narrow AI</text>
+      </g>
+      <!-- threshold line -->
+      <line x1="60" y1="75" x2="940" y2="75" stroke="#14284b" stroke-width="0.8" stroke-dasharray="4 4"/>
+      <text x="935" y="68" font-family="Inter,sans-serif" font-size="9" fill="#14284b" text-anchor="end">AGI THRESHOLD</text>
+
+      <!-- Scenario A: Early 2027 -->
+      <path d="M 120 260 Q 180 200 240 75 T 360 40" fill="none" stroke="#14284b" stroke-width="2.2"/>
+      <circle cx="240" cy="75" r="5" fill="#14284b"/>
+      <text x="252" y="72" font-family="Inter,sans-serif" font-size="10" fill="#14284b" font-weight="500">A · 2027 早期到達</text>
+
+      <!-- Scenario B: Standard 2030 -->
+      <path d="M 120 260 Q 240 220 360 160 T 560 75 L 700 40" fill="none" stroke="#1a1a1a" stroke-width="2.2"/>
+      <circle cx="560" cy="75" r="5" fill="#1a1a1a"/>
+      <text x="572" y="72" font-family="Inter,sans-serif" font-size="10" fill="#1a1a1a" font-weight="500">B · 2030 標準</text>
+
+      <!-- Scenario C: Late 2035 -->
+      <path d="M 120 260 Q 300 240 460 200 T 720 100 L 860 70" fill="none" stroke="#6b6b6b" stroke-width="2.2" stroke-dasharray="6 3"/>
+      <circle cx="720" cy="100" r="5" fill="#6b6b6b"/>
+      <text x="732" y="97" font-family="Inter,sans-serif" font-size="10" fill="#6b6b6b" font-weight="500">C · 2035 長期</text>
+
+      <!-- confidence band for B -->
+      <path d="M 120 260 Q 240 240 360 190 T 560 110 L 700 80 L 700 20 Q 560 50 400 120 Q 260 200 120 240 Z" fill="#14284b" opacity="0.04"/>
+
+      <!-- markers -->
+      <g font-family="Inter,sans-serif" font-size="9" fill="#6b6b6b">
+        <line x1="240" y1="280" x2="240" y2="20" stroke="#d0d0d0" stroke-width="0.6"/>
+        <line x1="420" y1="280" x2="420" y2="20" stroke="#d0d0d0" stroke-width="0.6"/>
+        <line x1="720" y1="280" x2="720" y2="20" stroke="#d0d0d0" stroke-width="0.6"/>
+      </g>
+    </svg>
+    <figcaption>Sources — Metaculus AGI forecast (2026.03), Epoch AI Compute Trends (2025.Q4), OECD AI Policy Observatory, MIT FutureTech 2026. Capability軸は定性指標として正規化。各シナリオは経路であり確率分布ではない。</figcaption>
+  </figure>
+</section>
+
+<section class="block">
+  <div class="section-head">
+    <h2>By the Numbers</h2>
+    <div class="label">No. 003 / Industry Implications</div>
+  </div>
+
+  <p style="max-width:720px;font-size:15px;line-height:1.95;color:var(--ink2);margin-bottom:32px">
+    10万人規模の従業員を抱える日本企業が、タスクベースでAI移行した場合の累積コストと移行期間を、3シナリオで推計した。固定費の再設計が取締役会の議題に上がる前に、桁感を持つための参照値である。
+  </p>
+
+  <figure class="chart">
+    <div class="cap">Figure 2 · Transition Cost Simulation</div>
+    <div class="title">10万人雇用企業のAI移行コスト（累積・3シナリオ）</div>
+    <svg viewBox="0 0 960 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Cost simulation">
+      <line x1="60" y1="240" x2="940" y2="240" stroke="#1a1a1a" stroke-width="1"/>
+      <line x1="60" y1="20" x2="60" y2="240" stroke="#1a1a1a" stroke-width="1"/>
+      <!-- y grid -->
+      <g stroke="#eee" stroke-width="1">
+        <line x1="60" y1="60" x2="940" y2="60"/>
+        <line x1="60" y1="100" x2="940" y2="100"/>
+        <line x1="60" y1="140" x2="940" y2="140"/>
+        <line x1="60" y1="180" x2="940" y2="180"/>
+      </g>
+      <g font-family="Inter,sans-serif" font-size="9" fill="#6b6b6b" text-anchor="end">
+        <text x="54" y="245">0</text>
+        <text x="54" y="185">500</text>
+        <text x="54" y="145">1,000</text>
+        <text x="54" y="105">1,500</text>
+        <text x="54" y="65">2,000</text>
+        <text x="54" y="25">2,500 億円</text>
+      </g>
+      <!-- groups: Year1 Year3 Year5 Year7 Year10 -->
+      <g font-family="Inter,sans-serif" font-size="10" fill="#6b6b6b" text-anchor="middle">
+        <text x="170" y="262">Year 1</text>
+        <text x="330" y="262">Year 3</text>
+        <text x="490" y="262">Year 5</text>
+        <text x="650" y="262">Year 7</text>
+        <text x="810" y="262">Year 10</text>
+      </g>
+      <!-- Year 1 -->
+      <rect x="140" y="222" width="20" height="18" fill="#14284b"/>
+      <rect x="162" y="225" width="20" height="15" fill="#1a1a1a"/>
+      <rect x="184" y="228" width="20" height="12" fill="#b0b0b0"/>
+      <!-- Year 3 -->
+      <rect x="300" y="182" width="20" height="58" fill="#14284b"/>
+      <rect x="322" y="198" width="20" height="42" fill="#1a1a1a"/>
+      <rect x="344" y="212" width="20" height="28" fill="#b0b0b0"/>
+      <!-- Year 5 -->
+      <rect x="460" y="128" width="20" height="112" fill="#14284b"/>
+      <rect x="482" y="158" width="20" height="82" fill="#1a1a1a"/>
+      <rect x="504" y="184" width="20" height="56" fill="#b0b0b0"/>
+      <!-- Year 7 -->
+      <rect x="620" y="78" width="20" height="162" fill="#14284b"/>
+      <rect x="642" y="112" width="20" height="128" fill="#1a1a1a"/>
+      <rect x="664" y="148" width="20" height="92" fill="#b0b0b0"/>
+      <!-- Year 10 -->
+      <rect x="780" y="34" width="20" height="206" fill="#14284b"/>
+      <rect x="802" y="66" width="20" height="174" fill="#1a1a1a"/>
+      <rect x="824" y="102" width="20" height="138" fill="#b0b0b0"/>
+
+      <!-- labels on top -->
+      <g font-family="Inter,sans-serif" font-size="9" fill="#14284b" text-anchor="middle" font-weight="500">
+        <text x="790" y="28">2,060</text>
+      </g>
+
+      <!-- legend -->
+      <g font-family="Inter,sans-serif" font-size="10" fill="#1a1a1a">
+        <rect x="680" y="10" width="12" height="10" fill="#14284b"/>
+        <text x="698" y="19">A · 早期移行</text>
+        <rect x="780" y="10" width="12" height="10" fill="#1a1a1a"/>
+        <text x="798" y="19">B · 標準</text>
+        <rect x="860" y="10" width="12" height="10" fill="#b0b0b0"/>
+        <text x="878" y="19">C · 漸進</text>
+      </g>
+    </svg>
+    <figcaption>Assumptions — 平均年収650万円、対象業務50%がAI代替可能、再教育コスト1人120万円、システム投資は売上高の0.8〜1.4%。経産省「DXレポート2.3」、野村総研「AI労働代替推計2025」、IMF WP/24/101より試算。単位: 10億円（累積）。</figcaption>
+  </figure>
+</section>
+
+<section class="block">
+  <div class="section-head">
+    <h2>Policy Matrix</h2>
+    <div class="label">No. 002 / Cross-jurisdiction</div>
+  </div>
+
+  <p style="max-width:720px;font-size:15px;line-height:1.95;color:var(--ink2);margin-bottom:8px">
+    EU AI Act、米国大統領令、日本のAI事業者ガイドラインを、取締役会で参照できる粒度に圧縮した。カラム順は規制強度ではなく、実装時期の早い順に並べている。
+  </p>
+
+  <table class="matrix">
+    <thead>
+      <tr>
+        <th></th>
+        <th>European Union</th>
+        <th>United States</th>
+        <th>Japan</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th>基軸法令</th>
+        <td>EU AI Act（2024年8月発効／段階適用）<span class="src">OJ L, 2024/1689</span></td>
+        <td>大統領令14110（2023年10月）／NIST AI RMF<span class="src">EO 14110, NIST AI 100-1</span></td>
+        <td>AI事業者ガイドライン第1.0版（2024年4月）<span class="src">総務省・経産省</span></td>
+      </tr>
+      <tr>
+        <th>リスク分類</th>
+        <td>4段階（Unacceptable / High / Limited / Minimal）</td>
+        <td>デュアルユース基盤モデルに焦点。分類なし</td>
+        <td>用途別の非強制ガイダンス</td>
+      </tr>
+      <tr>
+        <th>高リスク義務</th>
+        <td>適合性評価・データガバナンス・人間監督・ログ保存</td>
+        <td>10^26 FLOPs超モデルの報告義務（商務省）</td>
+        <td>透明性確保・リスク評価（努力義務）</td>
+      </tr>
+      <tr>
+        <th>罰則</th>
+        <td>最大3,500万ユーロ または 全世界売上の7%</td>
+        <td>個別執行（FTC・DOJ）</td>
+        <td>罰則なし（間接的にPL法・個情法）</td>
+      </tr>
+      <tr>
+        <th>日本企業への含意</th>
+        <td>EU域内提供があれば2026年8月までにHigh-Risk対応必須</td>
+        <td>米国子会社経由の基盤モデル利用で報告義務が発生しうる</td>
+        <td>2026年内に法制化検討が進む見通し</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="sources">
+    <b>Primary Sources</b>
+    <ol>
+      <li>Regulation (EU) 2024/1689 — Artificial Intelligence Act, Official Journal of the European Union, 12 July 2024.</li>
+      <li>Executive Order 14110 — Safe, Secure, and Trustworthy Development and Use of AI, The White House, 30 Oct 2023.</li>
+      <li>AI事業者ガイドライン第1.0版 — 総務省・経済産業省, 2024年4月19日.</li>
+      <li>OECD AI Policy Observatory — National AI Strategies Compendium (2026 update).</li>
+    </ol>
   </div>
 </section>
 

@@ -51,21 +51,60 @@
 
   <h2>人間の、拡張</h2>
 
-  <p>これを大人たちは「人間拡張」と呼ぶ。人間はそのままで、ちょっと力をかしてもらうことで、できる幅が広がる、ということだ。</p>
+  <p>君も、もうやっている。Google翻訳で英語のサイトを読んだことはないだろうか。スマホのカメラで植物の名前を調べたことは。YouTubeの自動字幕で、聞き取れなかった言葉を読んだことは。</p>
 
-  <p>虫メガネを使えば、小さなものも見える。眼鏡をかければ、遠くも見える。AIを使えば、できなかった計算ができる、書けなかった文章が書ける。昔の道具の延長線上に、AIはいる。</p>
+  <p>これは全部、AIが君の力をちょっとだけ広げてくれている場面だ。大人たちはこれを「人間拡張」と呼ぶ。虫メガネが小さなものを見せてくれるように、AIが考える力や言葉の力を少しだけ広げてくれる。</p>
 
   <blockquote>
     <p>世界を変えるのは、すごいロボットがやってくる日じゃない。ふつうの人の、ちょっとした仕事が、ちょっとずつ速くなる、その積み重ねだ。</p>
   </blockquote>
 
-  <h2>「閾値」をこえる瞬間</h2>
+  <h2>コップがあふれる瞬間</h2>
 
-  <p>ちょっとずつの変化は、ある日、急に目に見えるようになる。コップに水を一滴ずつ注いでいくと、あるところで、ぴたっとあふれる。それまでは、見た目はあまり変わらない。でも、あふれた瞬間、まわりがびしょびしょになる。</p>
+  <p>ちょっとずつの変化は、ある日、急に目に見えるようになる。</p>
 
-  <p>これを大人は「閾値（しきいち）」という難しい言葉で呼ぶ。要するに「それをこえると、急に何かが起きる、目には見えない線」のことだ。</p>
+  <p>コップに水を一滴ずつ注いでいくところを想像してみてほしい。</p>
 
-  <p>AIの影響も、たぶん、こういうかたちでやってくる。きのうまでふつうに見えていた仕事が、ある日、急に「もう人間がやらなくていい仕事」に変わる。そのとき、世の中は少しだけ、ざわっとする。</p>
+  <!-- コップの水の図 -->
+  <svg viewBox="0 0 600 220" style="width:100%;max-width:540px;margin:28px auto;display:block" aria-label="コップに水が溜まって溢れる図">
+    <!-- コップ1: 少し -->
+    <g transform="translate(40,10)">
+      <rect x="20" y="40" width="80" height="120" rx="6" fill="none" stroke="var(--ink2)" stroke-width="2.5"/>
+      <rect x="22" y="120" width="76" height="38" rx="4" fill="var(--pink-soft)"/>
+      <text x="60" y="190" text-anchor="middle" font-size="13" font-weight="700" fill="var(--meta)" font-family="Zen Maru Gothic,sans-serif">ちょっと</text>
+      <circle cx="60" cy="24" r="6" fill="var(--pink)" opacity="0.5"/>
+      <line x1="60" y1="30" x2="60" y2="40" stroke="var(--pink)" stroke-width="1.5" stroke-dasharray="3,3" opacity="0.5"/>
+    </g>
+    <!-- コップ2: 半分 -->
+    <g transform="translate(190,10)">
+      <rect x="20" y="40" width="80" height="120" rx="6" fill="none" stroke="var(--ink2)" stroke-width="2.5"/>
+      <rect x="22" y="90" width="76" height="68" rx="4" fill="var(--pink-soft)"/>
+      <text x="60" y="190" text-anchor="middle" font-size="13" font-weight="700" fill="var(--meta)" font-family="Zen Maru Gothic,sans-serif">まだ大丈夫</text>
+      <circle cx="60" cy="24" r="6" fill="var(--pink)" opacity="0.5"/>
+      <line x1="60" y1="30" x2="60" y2="40" stroke="var(--pink)" stroke-width="1.5" stroke-dasharray="3,3" opacity="0.5"/>
+    </g>
+    <!-- コップ3: あふれた！ -->
+    <g transform="translate(340,10)">
+      <rect x="20" y="40" width="80" height="120" rx="6" fill="none" stroke="var(--pink-dark)" stroke-width="2.5"/>
+      <rect x="22" y="42" width="76" height="116" rx="4" fill="var(--pink)"/>
+      <!-- あふれた水 -->
+      <ellipse cx="60" cy="42" rx="50" ry="8" fill="var(--pink)" opacity="0.6"/>
+      <path d="M16,50 Q10,80 8,110 Q6,130 20,140" fill="none" stroke="var(--pink)" stroke-width="2" opacity="0.5"/>
+      <path d="M104,50 Q110,80 112,110 Q114,130 100,140" fill="none" stroke="var(--pink)" stroke-width="2" opacity="0.5"/>
+      <!-- 水滴 -->
+      <circle cx="12" cy="120" r="4" fill="var(--pink)" opacity="0.4"/>
+      <circle cx="108" cy="115" r="3" fill="var(--pink)" opacity="0.4"/>
+      <circle cx="6" cy="145" r="3" fill="var(--pink)" opacity="0.3"/>
+      <text x="60" y="190" text-anchor="middle" font-size="14" font-weight="900" fill="var(--pink-dark)" font-family="Zen Maru Gothic,sans-serif">あふれた！</text>
+    </g>
+    <!-- 矢印 -->
+    <text x="155" y="115" font-size="22" fill="var(--sub)">→</text>
+    <text x="305" y="115" font-size="22" fill="var(--sub)">→</text>
+  </svg>
+
+  <p>途中までは、見た目はほとんど変わらない。でも、ふちを超えた瞬間に、まわりがびしょびしょになる。1滴ずつは同じなのに、結果が急に変わる。</p>
+
+  <p>AIの影響も、たぶん、こういうかたちでやってくる。「ちょっと便利になった」「ちょっと速くなった」が積み重なって、ある日、きのうまでふつうに見えていた仕事が、急に「もう人間がやらなくていい仕事」に変わる。そのとき、世の中は少しだけ、ざわっとする。</p>
 
   <div class="note">
     <span class="lbl">小さな宿題</span>

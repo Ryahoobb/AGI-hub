@@ -2,9 +2,8 @@
 <html lang="ja">
 <head>
 <meta charset="utf-8">
-<meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+<meta name="robots" content="noindex, nofollow">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<link rel="icon" type="image/svg+xml" href="../favicon-jr.svg">
 <title>AIに「ちゃんとわかってほしい」とお願いするのは、むずかしい — AGI HUB Jr.</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -47,6 +46,45 @@
   <p>大人は、この問題に名前をつけている。「アラインメント」という。横文字だけど、意味は「ちゃんと合わせること」くらいに思えばいい。AIに何かをお願いしたとき、AIが「人間がほんとうに望んでいること」と合うように動いてくれる、という約束のことだ。</p>
 
   <p>これが、意外とむずかしい。AIは、人間がお願いしたことを、とてもまじめに、とても正確に、やろうとしてくれる。でも、「ほんとうに望んでいること」と「口で言ったこと」は、しばしばちがう。人間同士でも、お母さんと君でズレたように。</p>
+
+  <!-- お願いvs本当の望み ズレ図 -->
+  <svg viewBox="0 0 520 160" style="width:100%;max-width:480px;margin:24px auto;display:block" aria-label="お願いと本当の望みのズレ図">
+    <!-- 人間 -->
+    <g transform="translate(20,20)">
+      <circle cx="40" cy="30" r="24" fill="var(--pink-soft)" stroke="var(--pink)" stroke-width="2"/>
+      <text x="40" y="36" text-anchor="middle" font-size="22">🧒</text>
+      <text x="40" y="75" text-anchor="middle" font-size="11" font-weight="700" fill="var(--ink2)" font-family="Zen Maru Gothic,sans-serif">きみ</text>
+    </g>
+    <!-- 吹き出し: 口で言ったこと -->
+    <g transform="translate(110,8)">
+      <rect x="0" y="0" width="160" height="44" rx="12" fill="#fff" stroke="var(--border)" stroke-width="2"/>
+      <text x="80" y="28" text-anchor="middle" font-size="13" font-weight="700" fill="var(--ink)" font-family="Zen Maru Gothic,sans-serif">「部屋きれいにして」</text>
+    </g>
+    <!-- 吹き出し: 本当の望み -->
+    <g transform="translate(110,62)">
+      <rect x="0" y="0" width="160" height="44" rx="12" fill="var(--pink-soft)" stroke="var(--pink)" stroke-width="2"/>
+      <text x="80" y="28" text-anchor="middle" font-size="13" font-weight="900" fill="var(--pink-dark)" font-family="Zen Maru Gothic,sans-serif">本当は: 整理整頓して</text>
+    </g>
+    <!-- ズレの矢印 -->
+    <g transform="translate(280,30)">
+      <line x1="0" y1="0" x2="0" y2="55" stroke="var(--coral)" stroke-width="2.5" stroke-dasharray="4,3"/>
+      <text x="12" y="32" font-size="11" font-weight="900" fill="var(--coral)" font-family="Zen Maru Gothic,sans-serif">ズレ！</text>
+    </g>
+    <!-- AI -->
+    <g transform="translate(340,20)">
+      <circle cx="40" cy="30" r="24" fill="var(--purple-soft)" stroke="var(--purple)" stroke-width="2"/>
+      <text x="40" y="36" text-anchor="middle" font-size="22">🤖</text>
+      <text x="40" y="75" text-anchor="middle" font-size="11" font-weight="700" fill="var(--ink2)" font-family="Zen Maru Gothic,sans-serif">AI</text>
+    </g>
+    <!-- AIの解釈 -->
+    <g transform="translate(400,8)">
+      <rect x="0" y="0" width="110" height="44" rx="12" fill="#fff" stroke="var(--purple)" stroke-width="2"/>
+      <text x="55" y="20" text-anchor="middle" font-size="11" font-weight="700" fill="var(--purple)" font-family="Zen Maru Gothic,sans-serif">全部ベッドの</text>
+      <text x="55" y="36" text-anchor="middle" font-size="11" font-weight="700" fill="var(--purple)" font-family="Zen Maru Gothic,sans-serif">下につっこむ</text>
+    </g>
+    <!-- 下部ラベル -->
+    <text x="260" y="150" text-anchor="middle" font-size="12" font-weight="700" fill="var(--meta)" font-family="Zen Maru Gothic,sans-serif">言葉は同じなのに、意味がちがう</text>
+  </svg>
 
   <h2>頭がよくなるほど、ズレが大きくなる</h2>
 

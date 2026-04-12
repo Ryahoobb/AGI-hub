@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>越境的同意は成立しない — パラメータ書換と、もうそこにいない私 — AGI HUB</title>
+    <meta name="description" content="痛みを削り、嫉妬を消し、郷愁を除く。A-2象限への扉を開けるのは「書き換え前の自分」だが、その決定を引き受けるのは「書き換え後の別人」である。lobotomy、SSRIs、DBSの歴史は、A-2がすでに連続体の一点で始まっていることを示す。Ulysses pactの非対称逆転と、越境的同意という不可能性をめぐる四部作の第三章。" />
+    <link rel="stylesheet" href="../design-system/palette.css">
+    <style>
+      :root {
+        --black: #000;
+        --body-text: #1a1a1a;
+        --mid: #585858;
+        --meta: #757575;
+        --light-gray: #999;
+        --border: #e4e4e4;
+        --bg: #fafaf7;
+        --bg-alt: #f0efea;
+        --accent: #1a1a1a;
+        --accent-soft: rgba(26, 26, 26, 0.06);
+        --ease: cubic-bezier(0.22, 1, 0.36, 1);
+      }
+
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+      html { scroll-behavior: smooth; }
+
+      body {
+        font-family: HelveticaNeue, "Helvetica Neue", Helvetica, Arial,
+          游ゴシック体, YuGothic, "游ゴシック Medium", "Yu Gothic Medium",
+          游ゴシック, "Yu Gothic", "ヒラギノ角ゴ ProN W3", "Hiragino Kaku Gothic ProN",
+          "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", "MS ゴシック", "MS Gothic",
+          sans-serif;
+        font-feature-settings: "palt";
+        font-size: 16px;
+        line-height: 1.75;
+        color: var(--body-text);
+        background: var(--bg);
+        -webkit-font-smoothing: antialiased;
+        overflow-x: hidden;
+        word-wrap: break-word;
+      }
+
+      .progress {
+        position: fixed; top: 0; left: 0; height: 2px;
+        background: var(--accent); width: 0%; z-index: 100;
+        transition: width 0.3s var(--ease);
+      }
+
+      .nav {
+        position: fixed; right: 24px; top: 50%;
+        transform: translateY(-50%);
+        display: grid; gap: 16px; z-index: 50;
+      }
+      .nav button {
+        width: 8px; height: 8px; border-radius: 999px;
+        border: 1.5px solid var(--meta); background: transparent;
+        cursor: pointer; transition: all 0.3s var(--ease);
+      }
+      .nav button.active {
+        background: var(--accent); border-color: var(--accent);
+        transform: scale(1.4);
+      }
+
+      main { scroll-snap-type: y mandatory; }
+      .slide {
+        position: relative;
+        min-height: 100vh;
+        max-width: 1120px;
+        margin: 0 auto;
+        padding: 80px 48px 64px;
+        display: grid;
+        grid-template-rows: auto auto 1fr auto;
+        gap: 32px;
+        scroll-snap-align: start;
+      }
+      .slide + .slide { border-top: 1px solid var(--border); }
+
+      .hero {
+        width: 100%;
+        aspect-ratio: 16 / 7;
+        object-fit: cover;
+        display: block;
+        filter: grayscale(0.7) contrast(1.12);
+        transition: filter 0.6s var(--ease);
+      }
+      .hero:hover { filter: grayscale(0.2) contrast(1); }
+
+      .slide .hero.img-fullbleed {
+        width: 100vw;
+        margin-left: calc(50% - 50vw);
+        margin-right: calc(50% - 50vw);
+        max-width: none;
+        aspect-ratio: 21/9;
+      }
+      .slide .hero.img-wide {
+        width: min(1280px, calc(100vw - 48px));
+        position: relative;
+        left: 50%;
+        transform: translateX(-50%);
+        max-width: none;
+      }
+      .slide .hero.img-content { max-width: 680px; margin: 0 auto; aspect-ratio: 4/3; }
+      @media (max-width: 768px) {
+        .slide .hero.img-fullbleed,
+        .slide .hero.img-wide,
+        .slide .hero.img-content { width: 100%; max-width: 100%; aspect-ratio: 16 / 9; margin: 0; transform: none; left: 0; }
+      }
+
+      .hero-caption {
+        font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 11px;
+        letter-spacing: 0.083em;
+        color: var(--light-gray);
+        margin-top: 8px;
+        text-transform: uppercase;
+      }
+
+      .credits {
+        max-width: 1120px;
+        margin: 0 auto;
+        padding: 48px 48px 80px;
+        border-top: 1px solid var(--border);
+      }
+      .credits p {
+        font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 11px;
+        letter-spacing: 0.047em;
+        line-height: 2;
+        color: var(--light-gray);
+      }
+      .credits a {
+        color: var(--meta);
+        text-decoration: none;
+        border-bottom: 1px solid var(--border);
+      }
+      .credits a:hover {
+        color: var(--black);
+        border-bottom-color: var(--black);
+      }
+
+      .reveal {
+        opacity: 0;
+        transform: translateY(24px);
+        transition: opacity 0.6s var(--ease), transform 0.6s var(--ease);
+      }
+      .reveal.visible { opacity: 1; transform: translateY(0); }
+      .reveal-delay-1 { transition-delay: 0.1s; }
+      .reveal-delay-2 { transition-delay: 0.2s; }
+      .reveal-delay-3 { transition-delay: 0.35s; }
+
+      .eyebrow {
+        font-family: "SF Mono", "Fira Code", "Fira Mono", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 11px;
+        font-weight: 400;
+        letter-spacing: 0.083em;
+        text-transform: uppercase;
+        color: var(--mid);
+      }
+
+      h1, h2 {
+        color: var(--black);
+        font-weight: 700;
+        line-height: 1.45;
+        letter-spacing: normal;
+        max-width: 28ch;
+        padding-bottom: 14px;
+        border-bottom: 1px solid var(--black);
+      }
+      h1 { font-size: clamp(28px, 4vw, 36px); }
+      h2 { font-size: clamp(24px, 3.5vw, 32px); }
+
+      .lead {
+        max-width: 780px;
+        font-size: 16px;
+        line-height: 1.88;
+        color: var(--body-text);
+      }
+      .lead + .lead { margin-top: 14px; }
+      .lead strong { color: var(--black); }
+      .lead.dropcap::first-letter {
+        font-size: 52px;
+        line-height: 1;
+        font-weight: 700;
+        float: left;
+        margin: 6px 10px 0 0;
+        color: var(--black);
+      }
+
+      .panel { display: grid; gap: 24px; align-content: start; }
+      .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
+      .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+
+      .card {
+        padding: 24px 0;
+        border-top: 2px solid var(--black);
+      }
+      .card .tag { color: var(--mid); }
+      .card strong { color: var(--black); }
+      .card p {
+        font-size: 15.5px;
+        line-height: 1.78;
+        color: var(--body-text);
+      }
+
+      .tag {
+        display: inline-block;
+        font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 11px;
+        letter-spacing: 0.083em;
+        color: var(--meta);
+        margin-bottom: 12px;
+      }
+
+      .point {
+        padding-left: 16px;
+        border-left: 2px solid var(--black);
+        font-size: 16px;
+        line-height: 1.78;
+        color: var(--body-text);
+      }
+      .point strong { color: var(--black); }
+
+      table.compare {
+        width: 100%;
+        border-collapse: collapse;
+        border-top: 2px solid var(--black);
+        border-bottom: 2px solid var(--black);
+      }
+      table.compare th,
+      table.compare td {
+        padding: 18px 16px;
+        text-align: left;
+        font-size: 15px;
+        line-height: 1.68;
+        color: var(--body-text);
+        border-bottom: 1px solid var(--border);
+        vertical-align: top;
+      }
+      table.compare th {
+        font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 11px;
+        letter-spacing: 0.083em;
+        text-transform: uppercase;
+        color: var(--mid);
+        font-weight: 400;
+        border-bottom: 1px solid var(--black);
+      }
+      table.compare td strong { color: var(--black); }
+      table.compare tr:last-child td { border-bottom: none; }
+
+      .note {
+        font-size: 16px;
+        line-height: 1.78;
+        color: var(--body-text);
+        padding: 24px 28px;
+        border-left: 2px solid var(--black);
+        background: var(--accent-soft);
+      }
+      .note strong { color: var(--black); }
+
+      .footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: end;
+        gap: 16px;
+        font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 11px;
+        letter-spacing: 0.083em;
+        color: var(--light-gray);
+        text-transform: uppercase;
+      }
+      .slide-count { font-weight: 700; color: var(--black); }
+
+      @media (max-width: 900px) {
+        .grid-3 { grid-template-columns: 1fr; }
+      }
+      @media (max-width: 768px) {
+        .slide { padding: 64px 24px 48px; }
+        .grid-2, .grid-3 { grid-template-columns: 1fr; }
+        .nav { right: 12px; }
+        table.compare { font-size: 13px; }
+        table.compare th, table.compare td { padding: 14px 10px; }
+        .hero { aspect-ratio: 16 / 9; }
+        .credits { padding: 32px 24px 64px; }
+      }
+
+      @media print {
+        .slide { min-height: auto; page-break-after: always; padding: 24px 0; }
+        .nav, .progress { display: none; }
+        .reveal { opacity: 1; transform: none; }
+      }
+    </style>
+  </head>
+  <body class="pattern-monolith has-site-header" data-category="alignment">
+    <div id="site-header-mount"></div>
+<script src="../partials/header.js" defer></script>
+    <div class="progress" id="progress"></div>
+
+    <aside class="nav" aria-label="Slide navigation">
+      <button data-target="slide-1" class="active" aria-label="Slide 1"></button>
+      <button data-target="slide-2" aria-label="Slide 2"></button>
+      <button data-target="slide-3" aria-label="Slide 3"></button>
+      <button data-target="slide-4" aria-label="Slide 4"></button>
+      <button data-target="slide-5" aria-label="Slide 5"></button>
+    </aside>
+
+    <div class="article-breadcrumb" style="font-family:'SF Mono','Fira Code',Menlo,Consolas,monospace;font-size:11px;letter-spacing:0.083em;text-transform:uppercase;color:#757575;display:flex;justify-content:space-between;align-items:center;padding:10px 32px;border-bottom:1px solid #e5e5e5;background:#fff;gap:16px;flex-wrap:wrap;">
+      <span>No. 24 / 24 &nbsp;·&nbsp; Alignment &nbsp;·&nbsp; 5 Slides</span>
+      <span style="display:flex;gap:20px;align-items:center;">
+        <a href="23-ethics-beyond-allocation.html" style="color:inherit;text-decoration:none;border-bottom:1px solid transparent;transition:border-color 0.2s;" onmouseover="this.style.borderBottomColor='#757575'" onmouseout="this.style.borderBottomColor='transparent'">← Prev</a>
+        <a href="../index.html#filter=alignment" style="color:inherit;text-decoration:none;border-bottom:1px solid transparent;transition:border-color 0.2s;" onmouseover="this.style.borderBottomColor='#757575'" onmouseout="this.style.borderBottomColor='transparent'">Same Category</a>
+        <span style="opacity:0.3;">Next →</span>
+      </span>
+    </div>
+
+    <main>
+      <!-- ═══════════ Slide 1 ═══════════ -->
+      <section class="slide" id="slide-1">
+        <div class="eyebrow reveal">AGI HUB &nbsp;·&nbsp; No. 24 &nbsp;·&nbsp; Alignment &nbsp;·&nbsp; Cross-Temporal Consent &nbsp;·&nbsp; 2026.04.12 &nbsp;·&nbsp; By Ryao</div>
+        <h1 class="reveal reveal-delay-1">越境的同意は成立しない — パラメータ書換と、もうそこにいない私</h1>
+        <div class="panel reveal reveal-delay-2">
+          <div>
+            <img class="hero img-fullbleed" src="../images/24-cross-temporal-consent/slide1.jpg" alt="A dark hallway with light leaking in through a half-open door at the far end">
+            <div class="hero-caption">Photo: Unsplash</div>
+          </div>
+          <p class="lead dropcap">
+            あなたは明日の朝、主治医に勧められた抗うつ薬を飲む。薬は予想よりよく効く。先月亡くなった妻のことが、そこまで悲しくなくなる。最初は救いとして受け取る。だが三年後、あなたは彼女の写真を見て、一度も涙を流さない。写真の彼女は笑っていて、あなたもうっすら微笑み返す。これは治癒だろうか。それとも、あなたは彼女のいる世界からもう退場していて、退場したことにあなた自身は気づいていないのだろうか。
+          </p>
+          <p class="lead">
+            この問いは、服薬の是非を問うているのではない。問うているのは別のことである。<strong>服薬を決めたときのあなたの同意に、服薬後のあなたは含まれていたのか</strong>。服薬前のあなたは、妻を忘れることに同意する資格を本当に持っていたのか。服薬後のあなたは、服薬前のあなたを理解しているのか、それとも別人として放置しているのか。同じ身体、同じ名前、同じ銀行口座。だが慈悲を消した朝の決定を、慈悲を消した後の自分が取り消すことはできない。取り消したいと思うことすら、もうできない。
+          </p>
+          <p class="lead">
+            前稿 <a href="23-ethics-beyond-allocation.html" style="color:inherit;border-bottom:1px solid #999;">No.23 配分の向こう側</a> の末尾に置いた四象限マトリクスを、もう一度短く掲げる。本四部作は、ポストシンギュラリティにおける人類の存続形態を二軸で切り分けてきた。軸(A/B)は肉体の維持か放棄か、軸(1/2)は人間らしさの維持か書き換えか。No.22「許された側の風景」と No.23 は A-1 象限(肉体も人間らしさも維持)を掘った。No.20「箱庭主義」は B-1 象限(肉体放棄・人間らしさ維持)を描いた。本稿が扱うのは、残る二つの象限のうち <strong>A-2 — 肉体は保つが、認知のパラメータを書き換える</strong> である。
+          </p>
+          <table class="compare">
+            <thead>
+              <tr>
+                <th></th>
+                <th>(1) 人間らしさを維持</th>
+                <th>(2) 人間らしさを書き換え</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>(A) 肉体を維持</strong></td>
+                <td>A-1: 強化人間<br>→ <a href="22-permitted-side-landscape.html">No.22</a> / <a href="23-ethics-beyond-allocation.html">No.23</a></td>
+                <td><strong>A-2: パラメータ書換</strong><br>本稿が掘るのはここ。身体の連続性を保ったまま、情動・欲求・記憶の重みづけを別物に設定する</td>
+              </tr>
+              <tr>
+                <td><strong>(B) 肉体を放棄</strong></td>
+                <td>B-1: 箱庭住民<br>→ <a href="20-hakoniwa-world-as-allocation.html">No.20</a></td>
+                <td>B-2: 別存在への遷移<br>→ 次稿 No.25 で扱う予定</td>
+              </tr>
+            </tbody>
+          </table>
+          <p class="lead">
+            A-2 象限が特異な位置にあるのは、<strong>身体の連続性があるからこそ、魂の不連続性が鋭く立ち上がる</strong>からである。B-1 の箱庭住民は、身体を捨てるときに連続性の問いを一度正面から受ける。B-2 の別存在は、そもそも人格という概念ごと別座標系に移す。だが A-2 の住民は、朝も夜も同じ顔で鏡に映る。家族も職場も騙される。本人さえ騙される。書換前の自分と書換後の自分をつなぐ法的・社会的な糸は切れない。にもかかわらず、倫理的主体として同一人物かどうかの問いは、身体の連続性ではどうにも保証されない。
+          </p>
+          <div class="note">
+            本稿の核となる主張を一段落で先に置く。<strong>慈悲を消すという決定に、慈悲を消した後の自分の同意は存在しない</strong>。A-2 への扉は、開けた後の自分に許可を取れない唯一の種類の扉である。開けたのは、もうそこにいない私だ。この一文の意味するところを、Derek Parfit の人格同一性論、Jon Elster の Ulysses pact 論、そして lobotomy・SSRIs・DBS という20世紀後半からの医学史を通じて、段階的に掘り下げる。両義性は最後まで維持する。本稿は A-2 を悪と断定しない。ただし A-2 の扉が、扉としてどのような非対称性を抱えているかを、隠さずに並べる。
+          </div>
+        </div>
+        <div class="footer reveal reveal-delay-3">
+          <span>本稿の射程は A-2 象限 — 身体は残り、認知が書き換えられる</span>
+          <span class="slide-count">1 / 5</span>
+        </div>
+      </section>
+
+      <!-- ═══════════ Slide 2 ═══════════ -->
+      <section class="slide" id="slide-2">
+        <div class="eyebrow reveal">The Gradient Of Rewrite</div>
+        <h2 class="reveal reveal-delay-1">パラメータ書換に、きれいな境界線はない</h2>
+        <div class="panel reveal reveal-delay-2">
+          <div>
+            <img class="hero img-content" src="../images/24-cross-temporal-consent/slide2.jpg" alt="Scattered white pills on a dark surface, overhead view, low contrast">
+            <div class="hero-caption">Photo: Unsplash</div>
+          </div>
+          <p class="lead">
+            A-2 を抽象語のまま論じることを、最初に禁じておく必要がある。「人間らしさを書き換える」は、遠い未来の SF 的決断ではない。それは情動回路の具体的なパラメータを、一つずつ下げたり上げたりする作業の積み重ねであり、現在の医学はすでにその連続体の一点にいる。段階を並べて見せる。並べたときに見えるのは、「どこからが別種か」に客観的な切断面がないという事実である。
+          </p>
+          <table class="compare">
+            <thead>
+              <tr>
+                <th>書換の段階</th>
+                <th>それが消すもの</th>
+                <th>社会的評価</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>痛みの削除</strong></td>
+                <td>末梢・中枢の侵害受容。疼痛は退場する</td>
+                <td>医療の延長線上。誰も反対しない</td>
+              </tr>
+              <tr>
+                <td><strong>恐怖の鈍化</strong></td>
+                <td>扁桃体由来の警戒反応。PTSDの治療文脈でも議論される</td>
+                <td>治療としては許容。閾値次第で論争になる</td>
+              </tr>
+              <tr>
+                <td><strong>嫉妬の消去</strong></td>
+                <td>特定の他者に向けられた占有欲求と比較の刺し傷</td>
+                <td>人格介入に見える。パートナー関係の再定義を迫る</td>
+              </tr>
+              <tr>
+                <td><strong>郷愁の除去</strong></td>
+                <td>過去の事物への愛着と、失ったものを悼む能力</td>
+                <td>「過去を愛する能力」を奪う。倫理的に重い</td>
+              </tr>
+              <tr>
+                <td><strong>自己連続性の緩和</strong></td>
+                <td>昨日の自分と今日の自分を同一視する内的つなぎ目</td>
+                <td>本人を消去することに接近する。別人化の臨界点</td>
+              </tr>
+              <tr>
+                <td><strong>睡眠の不要化</strong></td>
+                <td>一日の回復サイクル。時間意識の構造が変わる</td>
+                <td>もはや同じ種の生活時間を生きていない</td>
+              </tr>
+            </tbody>
+          </table>
+          <p class="lead">
+            この表を上から下へ読んでいくと、奇妙なことに気づく。<strong>どの行で「ここから別種だ」と線を引くべきかが、誰にも決められない</strong>。痛みの削除は医療の延長線上にある。これを拒む論者は少ない。嫉妬の消去は人格介入の気配を帯びる。郷愁の除去はさらに重い。過去の事物を愛する能力は、倫理的主体性のかなり深い層に結びついている。自己連続性の緩和に至ると、本人という概念そのものが希薄化する。睡眠の不要化は、生活時間の文法を書き換え、24時間周期の中で共有されてきた人間という枠組みから静かに脱落する。
+          </p>
+          <p class="lead">
+            しかしこれらの間に、自然な切断面はない。痛み → 恐怖 → 嫉妬 → 郷愁 → 連続性 → 睡眠。どの隣接ペアも、差分は量的であって質的ではない。線を引こうとした瞬間、読者自身の内的な基準が揺れはじめる。「郷愁の除去はダメだが嫉妬の消去は許容」と引いた線は、別の読者によって「嫉妬の消去はダメだが恐怖の鈍化は許容」の位置に引き直される。線の位置は文化ごと、個人ごと、時代ごとに動き、そして動いているという事実がこの連続体の本性である。
+          </p>
+          <p class="lead">
+            Robert Nozick は『Anarchy, State, and Utopia』(1974) 第3章で、全ての経験を最適化して供給する experience machine にプラグインするかと読者に問うた。Nozick の意図は反 hedonism の論証であり、多くの人はプラグインを拒否すると予測した。A-2 の段階表は、この思考実験を逆向きに使い直すことを可能にする。experience machine は外側から経験を注入する装置だった。A-2 は内側の回路を書き換える装置である。しかも段階的に、少しずつ、医学の言語で、現在すでに使われている。<strong>プラグインを拒否した人間も、A-2 は飲んでいるかもしれない</strong>。この段差の消失こそ、A-2 の倫理的な厄介さの根源である。
+          </p>
+          <div class="note">
+            ここで一つ断りを入れる。表のすべての行を同じ倫理的重量で扱っているわけではない。痛みの削除を望む患者と、郷愁の除去を望む患者の間には、動機にも結果にも重大な差がある。ただし差があることと、その差に普遍的な線を引けることは別である。本稿の主張は前者を認めたうえで後者を疑うことにある。段階が連続している事実から目を背けると、A-2 の倫理は段階の入口で議論することを拒否し、出口の極端な事例(睡眠の不要化、自己連続性の緩和)だけを論じる片足論になる。
+          </div>
+        </div>
+        <div class="footer reveal reveal-delay-3">
+          <span>A-2 は連続体であり、切断面は外から与えられない</span>
+          <span class="slide-count">2 / 5</span>
+        </div>
+      </section>
+
+      <!-- ═══════════ Slide 3 ═══════════ -->
+      <section class="slide" id="slide-3">
+        <div class="eyebrow reveal">Cross-Temporal Consent</div>
+        <h2 class="reveal reveal-delay-1">縛る側の自分は、もう戻ってこない</h2>
+        <div class="panel reveal reveal-delay-2">
+          <div>
+            <img class="hero img-wide" src="../images/24-cross-temporal-consent/slide3.jpg" alt="Abstract black-and-white rendering of a brain, close-up, heavy grayscale">
+            <div class="hero-caption">Photo: Unsplash</div>
+          </div>
+          <p class="lead">
+            本節が記事の哲学的な心臓部である。A-2 の扉を開けるとき、誰が誰に同意を与えているのか、という問いに正面から入る。この問いに名前を与えるために、本稿では <strong>越境的同意(cross-temporal consent)</strong> という語を使う。これは本稿の造語である。英語圏の生命倫理学にも決定理論にも、同じ表現で流通している標準用語はない。時間を越えて働く同意という概念を論じた文献は存在するが(事前指示書、ulysses contract、future-oriented consent 等)、本稿が指そうとしている非対称性を一語で名指しする用語はまだない。造語である旨をここで明記し、出自は credits に再記する。
+          </p>
+          <p class="lead">
+            Derek Parfit は『Reasons and Persons』(1984) 第3部で、人格の同一性は二値的な事柄ではなく、程度問題であると論じた。Parfit が繰り返し用いた fission cases — 脳半球の一方を別の身体に移植する思考実験 — の狙いは、同一性が真か偽のどちらかを取る関係ではないことを示すことにあった。Parfit の結論は一文に縮められる。「同一性それ自体は重要ではない。重要なのは心理的連続性である」(Identity is not what matters. What matters is psychological continuity.) この主張は、personal identity を身体の単一性でも魂の単一性でもなく、記憶・性格・意図の連続的な糸に還元する。
+          </p>
+          <p class="lead">
+            Parfit の論が A-2 にとって決定的なのは、この還元が両刃だからである。心理的連続性が同一性の条件なら、<strong>心理的連続性が切断されたとき、そこには二人の別人がいる</strong>。A-2 のパラメータ書換は、記憶を残し、名前を残し、銀行口座を残すが、心理的連続性のいくつかの糸を確実に切る。嫉妬を消した者と消す前の者は、Parfit の基準で同一人物とは呼びにくい。郷愁を除いた者と除く前の者は、過去の同じ出来事に対して異なる感情アーキテクチャを持つ。身体が連続していても、Parfit の意味では不連続である。Parfit 自身はこの不連続性を必ずしも悲劇としては読まなかった。むしろ彼は「自己への過度な執着」からの解放の可能性として読んだ。本稿はそこから先を受け取り、解放と消去の境界を問う。
+          </p>
+          <p class="lead">
+            次に Ulysses pact の構造を呼び出す。ギリシャ神話のオデュッセウスは、セイレーンの歌の致死的な誘惑を知りつつ、それを聴きたいと望んだ。彼の解決は、部下に耳栓を配り、自分自身をマストに縛りつけさせ、航海中にどれだけ叫んでも縛りを解くなと命じることだった。マストに縛られた理性的な現在のオデュッセウスが、歌に屈する非理性的な未来のオデュッセウスを先回りして縛る。Jon Elster が『Ulysses Unbound: Studies in Rationality, Precommitment, and Constraints』(Cambridge University Press, 2000) で精緻化したこの構造は、現代の意思決定論において precommitment の原型となった。事前指示書、禁酒誓約、ダイエットの罰金契約、そして憲法による自己制約。いずれも「いまの自分が、あとの自分を縛る」という時間の非対称性を使う。
+          </p>
+          <div class="note">
+            ここで Ulysses pact と A-2 の非対称を並べる。<strong>Ulysses pact では、縛る側(現在の理性的自己)と縛られる側(未来の誘惑に屈する自己)の時間関係は不可逆である</strong>。縛る側は決定を下し、縛られる側はその決定を引き受ける。しかし縛る側は、航海が終われば戻ってくる。セイレーンの海域を抜けたあと、マストの縄は解かれ、縛る側のオデュッセウスが再び主導権を取り戻す。A-2 は、この戻りの経路を消す。パラメータ書換を承認した現在の自分は、書換後の自分の中に<strong>残らない</strong>。嫉妬を消す決定を下した「嫉妬を持っていた自分」は、薬の効き目が最大化した朝には、もう意思決定能力を持たない亡霊になっている。
+          </div>
+          <p class="lead">
+            この非対称性をもう一段掘ると、越境的同意の不可能性が見える。通常の同意は「同じ主体が、自分の身に起きることに対して承認を与える」構造を持つ。医療同意、契約同意、性的同意、いずれもそうである。Ulysses pact は少しだけこの構造を緩める。現在の自分が未来の自分に対して事前拘束を与えるが、未来の自分は理論上、縛りを解く能力を残している(実際にオデュッセウスは叫び続けた)。A-2 はこの緩みすら消す。<strong>書換後の自分は、書換前の自分と連続していない</strong>。だから書換前の自分の決定を、書換後の自分が追認することも、撤回することもできない。追認しようとした瞬間、追認する主体は書換後の別人であり、書換前の決定内容を内側から理解する資格を失っている。撤回しようとしても同じである。書換前の自分はもう存在せず、書換後の自分に拒否する根拠がない。同意の連鎖が、時間の切断面で断ち切れる。
+          </p>
+          <p class="lead">
+            論証の折れ目を自分で示しておく。ここまでの論は、書換前後の二人を「別人」と呼ぶかどうかの語彙選択に依存している。身体の連続性を重く見る立場からは、二人は同じ人間であり、越境的同意は不可能どころか通常の自己決定の一形態にすぎない。本稿は Parfit の心理的連続性論に依拠して別人側を取っているが、この選択は論証というより立場宣言に近い。<strong>別人かどうかを厳密に決める手続きは、倫理学にも神経科学にも存在しない</strong>。本稿がそれでも別人側を取るのは、A-2 の臨床的現実(次節で示す)が、同一人物の普通の自己決定として処理した瞬間に見えなくなってしまう層を持つからである。
+          </p>
+        </div>
+        <div class="footer reveal reveal-delay-3">
+          <span>越境的同意は、時間の切断面で連鎖が断ち切れる</span>
+          <span class="slide-count">3 / 5</span>
+        </div>
+      </section>
+
+      <!-- ═══════════ Slide 4 ═══════════ -->
+      <section class="slide" id="slide-4">
+        <div class="eyebrow reveal">Already In Progress</div>
+        <h2 class="reveal reveal-delay-1">A-2 は未来の倫理問題ではない</h2>
+        <div class="panel reveal reveal-delay-2">
+          <div>
+            <img class="hero img-wide" src="../images/24-cross-temporal-consent/slide4.jpg" alt="A long dim hospital corridor with fluorescent lights and closed doors receding into shadow">
+            <div class="hero-caption">Photo: Unsplash</div>
+          </div>
+          <p class="lead">
+            越境的同意の問いは、SF の未来問題として扱うと力を失う。A-2 はすでに、20世紀後半から医学と薬物の領域で進行している。身体は保たれ、認知が書き換えられる。これが A-2 の定義そのものであり、この定義に合致する臨床事例は、歴史上に少なくとも三つ、規模と影響の大きさの点で無視できない形で存在する。三つを順番に呼び出す。
+          </p>
+          <p class="lead">
+            第一は <strong>lobotomy</strong> である。ポルトガルの神経科医 Egas Moniz は1935年以降、前頭葉白質切除術(leucotomy)を精神疾患の治療として実施した。Moniz はこの業績により1949年にノーベル生理学・医学賞を受賞している。米国では Walter Freeman が1940年代後半から transorbital lobotomy(眼窩経由白質切除術)を考案し、従来の開頭手術を簡便化することで大量実施を可能にした。Freeman 自身は生涯で数千例を手がけ、1940年代末から1950年代半ばにかけて米国内では 40,000 例以上が実施されたと推計されている(Mical Raz, "The Lobotomy Letters", University of Rochester Press, 2013 を含む複数の医学史研究に基づく)。これは本稿の論点として決定的である。lobotomy は <strong>身体を維持したまま人格の一部を切除する</strong> 処置として、当時の精神医学の正統な選択肢として承認された。患者の強迫観念、攻撃性、抑うつの強度は軽減した。同時に発動性、創造性、将来計画の能力、感情の深さも失われた。身体は残った。名前も残った。だが戻ってきた人物を、元の人物と同じと呼べるかは別問題である。
+          </p>
+          <p class="lead">
+            第二は <strong>SSRIs と人格変容</strong> である。Peter D. Kramer 『Listening to Prozac』(Viking, 1993) は、SSRI 系抗うつ薬 fluoxetine(商品名 Prozac)の服用が、治療適応の境界を超えて「よりよい自己」への変容を引き起こす現象を臨床症例として記録した。Kramer がこの本で導入した "better than well"(健康以上) という表現は、薬物が病気を治すのではなく、健康な人格を別の健康な人格に書き換えるという構造を指している。患者の一部は服薬後の自分を「ようやく本当の自分に会えた」と感じ、服薬をやめることを恐れる。元の自分には戻りたくないと報告する。Kramer はこの現象を肯定でも否定でもなく、薬理学が人格概念そのものを変形させる圧力として記述した。本稿が注目するのは、この症例における <strong>服薬前と服薬後の自己の評価が非対称</strong> という点である。服薬後の自己は服薬前の自己を「病気だった」と再定義する。服薬前の自己は、服薬後の自己を評価する機会を永久に失う。
+          </p>
+          <p class="lead">
+            第三は <strong>Deep Brain Stimulation(DBS) の人格変容症例</strong> である。Parkinson 病の運動症状に対する DBS は、視床下核(STN)への電極埋込によって顕著な運動機能改善をもたらす一方で、少数ながら重要な割合の患者に衝動制御障害、過食、性欲亢進、病的賭博、軽躁等の非運動症状を引き起こすことが複数の症例報告で知られている。Schüpbach M. et al. (2006) "Neurosurgery in Parkinson disease: a distressed mind in a repaired body?" Neurology 66(12):1811–1816 は、この現象を臨床家の語彙で正面から扱った論文である。論文のタイトルそのものが本稿の A-2 の定義と重なる。"a distressed mind in a repaired body" — 修復された身体の中の、苦悩する精神。著者らが報告した症例では、運動機能は改善した一方で、患者の人格・家族関係・職業適応が破綻する事例が複数観察された。身体は確かに保たれた。だが「身体の連続性が倫理的主体の連続性を保証するとは限らない」という本稿のテーゼは、この論文の臨床観察に最もよく合致する。
+          </p>
+          <div class="note">
+            ここで三例を並べ直す。lobotomy は外科が人格の一部を切除する。SSRIs は薬理が人格の重みづけを再配線する。DBS は電気が回路の動作点を動かす。<strong>介入の手段は違うが、結果としての A-2 の定義 — 身体を維持したまま認知を書き換える — は同じ</strong>である。そしてこの三例は、全て当事者の同意の下で(少なくとも制度的にはそう記録されて)実施されている。Kramer が描いた SSRIs 患者は「元には戻りたくない」と言う。DBS 患者は術後の人格変容を後悔する場合もあれば、むしろ歓迎する場合もある。lobotomy の患者の多くは、術後に自分の喪失を言語化する能力を既に失っていた。越境的同意の不可能性は、遠い未来の思考実験ではない。20世紀後半の臨床記録の中に、すでに半世紀分の実例が蓄積されている。
+          </div>
+          <p class="lead">
+            これを逆向きに読むと、現代の倫理学が A-2 に対してどれほど無防備かが見える。事前指示書、インフォームド・コンセント、意思決定能力評価、いずれも <strong>同一主体が時間を越えて同じであることを前提としている</strong>。Parfit の批判が本当に通るなら、この前提は A-2 の連続体の上では崩れている。崩れていることを認めた瞬間、上記三例の倫理的扱いはやり直しを迫られる。lobotomy の時代に患者が署名した同意書は、術後の人格に対してどの程度の拘束力を持っていたのか。Prozac を飲む前の「病気だった自己」は、飲んだ後の「よりよい自己」に何を依頼したことになるのか。DBS のスイッチを入れる前の Parkinson 患者は、スイッチを入れた後の衝動的な別人を事前に承認していたと言えるのか。これらの問いに現代の生命倫理は、まだ一貫した答えを持っていない。
+          </p>
+        </div>
+        <div class="footer reveal reveal-delay-3">
+          <span>A-2 は半世紀前から連続体の一点で始まっている</span>
+          <span class="slide-count">4 / 5</span>
+        </div>
+      </section>
+
+      <!-- ═══════════ Slide 5 ═══════════ -->
+      <section class="slide" id="slide-5">
+        <div class="eyebrow reveal">The Door And The One Who Left</div>
+        <h2 class="reveal reveal-delay-1">扉を開けたのは、もうそこにいない私だ</h2>
+        <div class="panel reveal reveal-delay-2">
+          <div>
+            <img class="hero" src="../images/24-cross-temporal-consent/slide5.jpg" alt="A door slightly ajar in a dark room, a thin sliver of light crossing the floor">
+            <div class="hero-caption">Photo: Unsplash</div>
+          </div>
+          <p class="lead">
+            A-2 の扉を開けるという決定は、決定する主体と、決定の結果を引き受ける主体が一致しない。ここまでの論証が正しければ、この一文は単なる修辞ではなく、心理的連続性の切断としての文字通りの事実を指している。すると素朴な問いが立ち上がる。<strong>これは自殺と何が違うのか</strong>。書換前の自分は、書換後の別人に場所を明け渡して退場する。家族も職場も気づかない形で、だが Parfit の基準では確かに退場する。退場の事実を埋める何かがあるとすれば、それは身体の物理的連続性しかない。
+          </p>
+          <p class="lead">
+            身体の連続性は、ある種の安心を与える。同じ顔、同じ声、同じ筋肉の記憶。しかし安心の根拠としては薄い。lobotomy を受けた患者の身体も連続していた。SSRIs で "better than well" の状態に移った患者の身体も連続していた。DBS 後に衝動的な賭博に走った患者の身体も連続していた。身体の連続性は、倫理的主体の連続性のための必要条件ですらないかもしれない。そしてもし十分条件でもないなら、A-2 と自殺を分ける線は、外側から見た物理的な残存だけに頼ることになる。これは倫理学が拠りどころにするには、あまりに薄い根拠である。
+          </p>
+          <p class="lead">
+            Ulysses pact の逆転構造を、最後にもう一度掲げる。マストに縛られたオデュッセウスは、セイレーンの海域を抜けたあと、必ず戻ってくる。航海が終われば縄は解かれ、縛った側の理性的自己が主導権を取り戻す。物語の時間は円環を閉じる。A-2 は、この円環を閉じない。嫉妬を消す決定を下したあとの朝、嫉妬を持っていた自分はもう存在せず、嫉妬のない自分が朝食をとり、鏡を見て、決定を下したはずの自分を理解せずに一日を始める。<strong>どちらが本来の自分かを決める審級は、どこにもない</strong>。書換前の自分が本物で、書換後の自分が偽物だという主張には根拠がない。逆もない。二人の間に上下関係を置く第三の視点が不在であり、不在であるがゆえに、どちらかを優先して救う倫理は建たない。
+          </p>
+          <div class="note">
+            ここで両義性を維持する。A-2 は悪ではない。<strong>痛みからの解放を望む権利、絶えることのない嫉妬の苦しみから降りる権利、数十年の郷愁に潰される前に郷愁を下ろす権利は、誰にでもある</strong>。この権利を先回りして封じる議論は、本稿の意図ではない。本稿が置きたいのは別の事実である。A-2 の権利を行使するとき、<strong>行使する主体と恩恵を受ける主体は別人であるかもしれない</strong>、という非対称性を、権利の行使者は一度だけ、行使の直前に見つめる必要がある。見つめた上で行使するなら、それは成熟した選択である。見つめずに行使するなら、それは薬の処方箋に署名する以上の何かが起きていることに気づかないままで、気づかないまま扉の向こう側に出てしまうことに等しい。
+          </div>
+          <p class="lead">
+            四象限の残る一つ、B-2 は次稿で扱う。B-2 は肉体も人間パラメータも捨てる。そこでは越境的同意の不可能性は違う顔で現れる。B-2 の住民にとって、「書換前の自分」という概念はそもそも翻訳不能になる。A-2 の困難さは、書換前と書換後が同じ語彙で会話できるかに見えて会話できない点にあった。B-2 の困難さは、書換前の語彙そのものが後から見て意味を持たない点にある。二つの困難さは種類が違う。本稿の射程はここまでで閉じる。
+          </p>
+          <p class="lead">
+            最後に、冒頭に置いた抗うつ薬を飲む朝の場面に戻る。薬を飲むあなたは、三年後に妻の写真を見て涙を流さないあなたを、本当に知っているだろうか。知っているつもりで飲み、その知ったつもりの内容は、三年後のあなたには届かない。三年後のあなたは、薬を飲んだ朝の決定を覆すこともできないし、感謝することもできない。そもそも、感謝するか覆すかを判断する基準が、三年後のあなたの中には異なる形で配置されている。決定の責任は、同じ身体の内側で宙に浮いたままになる。
+          </p>
+          <p class="lead" style="font-size:18px;line-height:1.9;font-weight:700;border-top:2px solid var(--black);padding-top:24px;margin-top:32px;">
+            A-2 への扉を開けたのは、もうそこにいない私だ。
+          </p>
+        </div>
+        <div class="footer reveal reveal-delay-3">
+          <span>開けた者は残らず、残った者は開けていない</span>
+          <span class="slide-count">5 / 5</span>
+        </div>
+      </section>
+
+      <!-- ═══════════ Article Navigation ═══════════ -->
+      <section class="slide" style="min-height:auto;padding:64px 48px 80px;grid-template-rows:auto auto auto 1fr;">
+        <div class="eyebrow reveal">Continue Reading</div>
+        <h2 class="reveal reveal-delay-1" style="max-width:none;">次の記事へ</h2>
+        <div class="panel reveal reveal-delay-2">
+          <div class="grid-2">
+            <a href="23-ethics-beyond-allocation.html" class="card" style="color:inherit;display:block;">
+              <p style="font-family:'SF Mono','Fira Code',Menlo,Consolas,monospace;font-feature-settings:normal;font-size:11px;letter-spacing:0.083em;text-transform:uppercase;color:#757575;margin-bottom:12px;">← Prev · No.23</p>
+              <p><strong>配分の向こう側 — 拡張ガイアと、倫理の最後の居場所</strong></p>
+            </a>
+            <div class="card" style="opacity:0.35;">
+              <p style="font-family:'SF Mono','Fira Code',Menlo,Consolas,monospace;font-feature-settings:normal;font-size:11px;letter-spacing:0.083em;text-transform:uppercase;color:#757575;margin-bottom:12px;">Next →</p>
+              <p>最新の記事です</p>
+            </div>
+          </div>
+          <p style="margin-top:32px;text-align:center;">
+            <a href="../index.html" style="color:inherit;border-bottom:1px solid #999;padding-bottom:2px;">All Articles — 記事一覧へ</a>
+          </p>
+          <p style="margin-top:16px;text-align:center;font-family:'SF Mono','Fira Code',Menlo,Consolas,monospace;font-size:11px;letter-spacing:0.083em;text-transform:uppercase;color:#757575;">
+            <a href="../index.html#filter=alignment" style="color:inherit;border-bottom:1px solid #999;padding-bottom:2px;">Alignment カテゴリの記事一覧 →</a>
+          </p>
+        </div>
+      </section>
+    </main>
+
+    <!-- ═══════════ Photo Credits ═══════════ -->
+    <section class="credits">
+      <p>
+        Photos courtesy of Unsplash contributors.<br>
+        Slide 1: <a href="https://unsplash.com/photos/sDMicEfJmHg">sDMicEfJmHg</a> /
+        Slide 2: <a href="https://unsplash.com/photos/3nwYFtexa4o">3nwYFtexa4o</a> /
+        Slide 3: <a href="https://unsplash.com/photos/m-yAg03XdOk">m-yAg03XdOk</a> /
+        Slide 4: <a href="https://unsplash.com/photos/lldl9L5oYYA">lldl9L5oYYA</a> /
+        Slide 5: <a href="https://unsplash.com/photos/KBuWjEVavM8">KBuWjEVavM8</a> /
+        Thumbnail: <a href="https://unsplash.com/photos/CL3orMYdm-I">CL3orMYdm-I</a>
+      </p>
+      <p style="margin-top:24px;">
+        Note on provenance: 本稿で用いた「越境的同意(cross-temporal consent)」は本稿の造語であり、英語圏の生命倫理学・決定理論の標準用語ではない。時間を越えて働く同意の問題群は事前指示書(advance directive)、Ulysses contract、future-oriented consent 等の語で部分的に論じられてきたが、書換前後の自己の別人性が同意の連鎖を切断する非対称性を一語で名指しする用語は存在しない。本稿の「越境的同意の不可能性」はこの欠落を埋めるための作業概念であり、Parfit の心理的連続性論と Elster の precommitment 論の合流点に位置づけられる。
+      </p>
+      <p style="margin-top:16px;">
+        Primary references: Derek Parfit (1984) *Reasons and Persons*, Oxford University Press, Part 3 (personal identity as degree, fission cases). Robert Nozick (1974) *Anarchy, State, and Utopia*, Basic Books, Chapter 3 ("The Experience Machine"). Jon Elster (2000) *Ulysses Unbound: Studies in Rationality, Precommitment, and Constraints*, Cambridge University Press. Peter D. Kramer (1993) *Listening to Prozac*, Viking (SSRIs と "better than well"). Schüpbach M., Gargiulo M., Welter M. L., et al. (2006) "Neurosurgery in Parkinson disease: a distressed mind in a repaired body?" *Neurology* 66(12):1811–1816. Mical Raz (2013) *The Lobotomy Letters: The Making of American Psychiatric Surgery*, University of Rochester Press (Freeman transorbital lobotomy の実施規模). Egas Moniz の1949年ノーベル生理学・医学賞は Nobel Foundation の公式記録による史実。
+      </p>
+    </section>
+
+    <script>
+      const progress = document.getElementById('progress');
+      window.addEventListener('scroll', () => {
+        const h = document.documentElement;
+        const pct = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
+        progress.style.width = pct + '%';
+      });
+
+      const slides = document.querySelectorAll('main > .slide');
+      const buttons = document.querySelectorAll('.nav button');
+      buttons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const target = document.getElementById(btn.dataset.target);
+          if (target) target.scrollIntoView({ behavior: 'smooth' });
+        });
+      });
+      const io = new IntersectionObserver(entries => {
+        entries.forEach(e => {
+          if (e.isIntersecting) {
+            const id = e.target.id;
+            buttons.forEach(b => b.classList.toggle('active', b.dataset.target === id));
+          }
+        });
+      }, { threshold: 0.1 });
+      slides.forEach(s => { if (s.id) io.observe(s); });
+
+      const revealIO = new IntersectionObserver(entries => {
+        entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+      }, { threshold: 0.1 });
+      document.querySelectorAll('.reveal').forEach(el => revealIO.observe(el));
+    </script>
+  </body>
+</html>

@@ -331,13 +331,13 @@
             企業のAPI利用の77%が自動化に使われている。Anthropicが2025年9月に発表したEconomic Indexの数字だ。この一文を読んだ瞬間、頭の中で何が起きたか。おそらく「経済の8割近くがもうAIに置き換わりつつある」という映像が浮かんだ。その映像は、間違っている。
           </p>
           <p class="lead">
-            77%という数字が測っているのは、<strong>Anthropicの企業向けAPI（1P API）を契約し、すでにClaudeを業務に組み込んでいる顧客企業群のなかで、プログラム的に処理を委任しているトランスクリプトの割合</strong>だ。経済全体の77%ではない。AIを積極的に導入している企業群の、さらにAPI経由の利用パターンだけを切り取った局所的な数字である。同じAnthropicのデータでも、Claude.ai（消費者向けプラットフォーム）では2026年1月時点でaugmentationが52%、automationは45%にとどまる。プラットフォームが変わるだけで、数字の景色がまるで変わる。
+            77%という数字が測っているのは、<strong>Anthropicの企業向けAPI（1P API）を契約し、すでにClaudeを業務に組み込んでいる顧客企業群のなかで、プログラム的に処理を委任しているトランスクリプトの割合</strong>だ。経済全体の77%ではない。AIを積極的に導入している企業群の、さらにAPI経由の利用パターンだけを切り取った局所的な数字である。同じAnthropicのデータでも、Claude.ai（消費者向けプラットフォーム）では景色が違う。2025年1月の計測開始時点ではaugmentationが56%、automationは41%だった。2025年8月に一時automationが逆転したが、11月には再びaugmentationが52%、automationが45%に戻った。プラットフォームと時期が変わるだけで、数字の意味がまるで変わる。
           </p>
           <p class="lead">
             ここに、産業爆発をめぐる議論の最も基本的な読み間違いがある。局所的なデータを全体に外挿する誘惑だ。自動化率の数字を前にしたとき、本当に問うべきなのは「何パーセントか」ではない。<strong>どの仕事が、どの順番で、どの摩擦を抱えたまま自動化されているのか</strong>。その順番と構造が見えなければ、77%も45%も、等しく使い物にならない。
           </p>
           <p class="lead">
-            97%という数字はさらに強い。Anthropicの同レポートは、企業APIで処理される経済タスクの97%がautomation-dominantだと報告した。だがここでも同じ留保が必要だ。APIに流れてくるタスクは、そもそもプログラム的に処理しやすいタスクに偏っている。バックオフィス、文書処理、CRM、スケジューリング、コーディング支援。高価値でデジタル化されていて文脈が閉じた領域への集中的な浸透が、97%という数字の実態だ。経済全体の97%が自動化されたわけではない。
+            97%という数字はさらに強い。Anthropicの同レポートは、O*NETが定義する経済タスクのカテゴリを横断的に見たとき、API利用において97%のタスクカテゴリがautomation-dominantなパターンを示すと報告した。これは「処理されたタスクの97%が自動化」という意味ではなく、「タスクの種類を分類すると、ほぼすべての種類でAPI利用は自動化パターンが優勢」という意味だ。だがここでも同じ留保が必要で、APIに流れてくるタスクは、そもそもプログラム的に処理しやすいタスクに偏っている。バックオフィス、文書処理、CRM、スケジューリング、コーディング支援。高価値でデジタル化されていて文脈が閉じた領域への集中的な浸透が、97%という数字の実態だ。経済全体の97%が自動化されたわけではない。
           </p>
         </div>
         <div class="footer reveal reveal-delay-3">
@@ -365,7 +365,7 @@
             部分自動化を過小評価すべきではない。だがその破壊力は、「産業全体を一度に吹き飛ばす力」ではなく、<strong>「業務フローと組織設計を静かに組み替える力」</strong>として発現する。現場で見える変化が地味であることと、変化の深さは別の話だ。地表が揺れていないからといって、地殻が動いていないとは限らない。
           </p>
           <div class="note">
-            <strong>数値検証の留保:</strong> ソース文書はAnthropicの2026年1月データをaugmentation 56%、automation 41%としていたが、実際の報告書の数値はaugmentation 52%、automation 45%である。本稿では報告書の正確な数値を採用した。また、2025年8月に一時的にautomationがaugmentationを上回った後、11月に再びaugmentationが上回ったという推移も報告書で確認されている。
+            <strong>数値の読み方に関する注記:</strong> Anthropicの2026年1月レポートには複数時点のデータが含まれる。augmentation 56%・automation 41%は2025年1月のベースライン値、augmentation 52%・automation 45%は2025年11月の最新値である。2025年8月には一時的にautomationがaugmentationを逆転したが、11月に再びaugmentationが上回った。本稿では推移の全体像を記述した。
           </div>
         </div>
         <div class="footer reveal reveal-delay-3">
@@ -543,7 +543,7 @@
       </p>
       <p style="margin-top:24px;">
         Primary references:
-        Anthropic (2026) "Anthropic Economic Index: Economic Primitives," January 2026 report (augmentation 52% vs automation 45% on Claude.ai; API automation-dominant patterns).
+        Anthropic (2026) "Anthropic Economic Index: Economic Primitives," January 2026 report (Claude.ai: augmentation 56% / automation 41% in Jan 2025 → 52% / 45% in Nov 2025; API automation-dominant patterns).
         Anthropic (2025) "Anthropic Economic Index: Uneven Geographic and Sectoral AI Adoption," September 2025 report (77% automation rate, 97% tasks automation-dominant in 1P API).
         Menaka Hampole, Dimitris Papanikolaou, Lawrence D.W. Schmidt, Bryan Seegmiller (2025) "Artificial Intelligence and the Labor Market," NBER Working Paper 33509 (aggregate employment effects modest despite high task-level AI exposure).
         Mert Demirer, John J. Horton, Nicole Immorlica, Brendan Lucier, Peyman Shahidi (2026) "Chaining Tasks, Redefining Work: A Theory of AI Automation," NBER Working Paper 34859 (non-linear productivity gains from task chaining; comparative advantage failure in AI chains).

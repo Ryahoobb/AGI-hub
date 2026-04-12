@@ -607,7 +607,7 @@
             if (t) t.classList.add('active');
           }
         });
-      }, { threshold: 0.35 });
+      }, { threshold: 0.1 });
       slides.forEach(s => io.observe(s));
       btns.forEach(b => b.addEventListener('click', () => {
         document.getElementById(b.dataset.target)?.scrollIntoView({ behavior: 'smooth' });

@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>手を振って見送ることもできない — 倫理以前という場所 — AGI HUB</title>
+    <meta name="description" content="時間軸を2次元に畳み、快楽軸を循環型に書き換え、自己の境界を流動化する。B-2象限の住民に、倫理は適用できないのではない。倫理という言葉がそもそも立ち上がらない。仏教の無我と、工学的な無我。Parfit の心理的連続性論の先に、手の振り方を知らない別れがある。四部作の完結編。" />
+    <link rel="stylesheet" href="../design-system/palette.css">
+    <style>
+      :root {
+        --black: #000;
+        --body-text: #1a1a1a;
+        --mid: #585858;
+        --meta: #757575;
+        --light-gray: #999;
+        --border: #e4e4e4;
+        --bg: #fafaf7;
+        --bg-alt: #f0efea;
+        --accent: #1a1a1a;
+        --accent-soft: rgba(26, 26, 26, 0.06);
+        --ease: cubic-bezier(0.22, 1, 0.36, 1);
+      }
+
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+      html { scroll-behavior: smooth; }
+
+      body {
+        font-family: HelveticaNeue, "Helvetica Neue", Helvetica, Arial,
+          游ゴシック体, YuGothic, "游ゴシック Medium", "Yu Gothic Medium",
+          游ゴシック, "Yu Gothic", "ヒラギノ角ゴ ProN W3", "Hiragino Kaku Gothic ProN",
+          "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", "MS ゴシック", "MS Gothic",
+          sans-serif;
+        font-feature-settings: "palt";
+        font-size: 16px;
+        line-height: 1.75;
+        color: var(--body-text);
+        background: var(--bg);
+        -webkit-font-smoothing: antialiased;
+        overflow-x: hidden;
+        word-wrap: break-word;
+      }
+
+      .progress {
+        position: fixed; top: 0; left: 0; height: 2px;
+        background: var(--accent); width: 0%; z-index: 100;
+        transition: width 0.3s var(--ease);
+      }
+
+      .nav {
+        position: fixed; right: 24px; top: 50%;
+        transform: translateY(-50%);
+        display: grid; gap: 16px; z-index: 50;
+      }
+      .nav button {
+        width: 8px; height: 8px; border-radius: 999px;
+        border: 1.5px solid var(--meta); background: transparent;
+        cursor: pointer; transition: all 0.3s var(--ease);
+      }
+      .nav button.active {
+        background: var(--accent); border-color: var(--accent);
+        transform: scale(1.4);
+      }
+
+      main { scroll-snap-type: y mandatory; }
+      .slide {
+        position: relative;
+        min-height: 100vh;
+        max-width: 1120px;
+        margin: 0 auto;
+        padding: 80px 48px 64px;
+        display: grid;
+        grid-template-rows: auto auto 1fr auto;
+        gap: 32px;
+        scroll-snap-align: start;
+      }
+      .slide + .slide { border-top: 1px solid var(--border); }
+
+      .hero {
+        width: 100%;
+        aspect-ratio: 16 / 7;
+        object-fit: cover;
+        display: block;
+        filter: grayscale(0.7) contrast(1.12);
+        transition: filter 0.6s var(--ease);
+      }
+      .hero:hover { filter: grayscale(0.2) contrast(1); }
+
+      .slide .hero.img-fullbleed {
+        width: 100vw;
+        margin-left: calc(50% - 50vw);
+        margin-right: calc(50% - 50vw);
+        max-width: none;
+        aspect-ratio: 21/9;
+      }
+      .slide .hero.img-wide {
+        width: min(1280px, calc(100vw - 48px));
+        position: relative;
+        left: 50%;
+        transform: translateX(-50%);
+        max-width: none;
+      }
+      .slide .hero.img-content { max-width: 680px; margin: 0 auto; aspect-ratio: 4/3; }
+      @media (max-width: 768px) {
+        .slide .hero.img-fullbleed,
+        .slide .hero.img-wide,
+        .slide .hero.img-content { width: 100%; max-width: 100%; aspect-ratio: 16 / 9; margin: 0; transform: none; left: 0; }
+      }
+
+      .hero-caption {
+        font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 11px;
+        letter-spacing: 0.083em;
+        color: var(--light-gray);
+        margin-top: 8px;
+        text-transform: uppercase;
+      }
+
+      .credits {
+        max-width: 1120px;
+        margin: 0 auto;
+        padding: 48px 48px 80px;
+        border-top: 1px solid var(--border);
+      }
+      .credits p {
+        font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 11px;
+        letter-spacing: 0.047em;
+        line-height: 2;
+        color: var(--light-gray);
+      }
+      .credits a {
+        color: var(--meta);
+        text-decoration: none;
+        border-bottom: 1px solid var(--border);
+      }
+      .credits a:hover {
+        color: var(--black);
+        border-bottom-color: var(--black);
+      }
+
+      .reveal {
+        opacity: 0;
+        transform: translateY(24px);
+        transition: opacity 0.6s var(--ease), transform 0.6s var(--ease);
+      }
+      .reveal.visible { opacity: 1; transform: translateY(0); }
+      .reveal-delay-1 { transition-delay: 0.1s; }
+      .reveal-delay-2 { transition-delay: 0.2s; }
+      .reveal-delay-3 { transition-delay: 0.35s; }
+
+      .eyebrow {
+        font-family: "SF Mono", "Fira Code", "Fira Mono", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 11px;
+        font-weight: 400;
+        letter-spacing: 0.083em;
+        text-transform: uppercase;
+        color: var(--mid);
+      }
+
+      h1, h2 {
+        color: var(--black);
+        font-weight: 700;
+        line-height: 1.45;
+        letter-spacing: normal;
+        max-width: 28ch;
+        padding-bottom: 14px;
+        border-bottom: 1px solid var(--black);
+      }
+      h1 { font-size: clamp(28px, 4vw, 36px); }
+      h2 { font-size: clamp(24px, 3.5vw, 32px); }
+
+      .lead {
+        max-width: 780px;
+        font-size: 16px;
+        line-height: 1.88;
+        color: var(--body-text);
+      }
+      .lead + .lead { margin-top: 14px; }
+      .lead strong { color: var(--black); }
+      .lead.dropcap::first-letter {
+        font-size: 52px;
+        line-height: 1;
+        font-weight: 700;
+        float: left;
+        margin: 6px 10px 0 0;
+        color: var(--black);
+      }
+
+      .panel { display: grid; gap: 24px; align-content: start; }
+      .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
+      .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+
+      .card {
+        padding: 24px 0;
+        border-top: 2px solid var(--black);
+      }
+      .card .tag { color: var(--mid); }
+      .card strong { color: var(--black); }
+      .card p {
+        font-size: 15.5px;
+        line-height: 1.78;
+        color: var(--body-text);
+      }
+
+      .tag {
+        display: inline-block;
+        font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 11px;
+        letter-spacing: 0.083em;
+        color: var(--meta);
+        margin-bottom: 12px;
+      }
+
+      .point {
+        padding-left: 16px;
+        border-left: 2px solid var(--black);
+        font-size: 16px;
+        line-height: 1.78;
+        color: var(--body-text);
+      }
+      .point strong { color: var(--black); }
+
+      table.compare {
+        width: 100%;
+        border-collapse: collapse;
+        border-top: 2px solid var(--black);
+        border-bottom: 2px solid var(--black);
+      }
+      table.compare th,
+      table.compare td {
+        padding: 18px 16px;
+        text-align: left;
+        font-size: 15px;
+        line-height: 1.68;
+        color: var(--body-text);
+        border-bottom: 1px solid var(--border);
+        vertical-align: top;
+      }
+      table.compare th {
+        font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 11px;
+        letter-spacing: 0.083em;
+        text-transform: uppercase;
+        color: var(--mid);
+        font-weight: 400;
+        border-bottom: 1px solid var(--black);
+      }
+      table.compare td strong { color: var(--black); }
+      table.compare tr:last-child td { border-bottom: none; }
+
+      .note {
+        font-size: 16px;
+        line-height: 1.78;
+        color: var(--body-text);
+        padding: 24px 28px;
+        border-left: 2px solid var(--black);
+        background: var(--accent-soft);
+      }
+      .note strong { color: var(--black); }
+
+      .footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: end;
+        gap: 16px;
+        font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 11px;
+        letter-spacing: 0.083em;
+        color: var(--light-gray);
+        text-transform: uppercase;
+      }
+      .slide-count { font-weight: 700; color: var(--black); }
+
+      @media (max-width: 900px) {
+        .grid-3 { grid-template-columns: 1fr; }
+      }
+      @media (max-width: 768px) {
+        .slide { padding: 64px 24px 48px; }
+        .grid-2, .grid-3 { grid-template-columns: 1fr; }
+        .nav { right: 12px; }
+        table.compare { font-size: 13px; }
+        table.compare th, table.compare td { padding: 14px 10px; }
+        .hero { aspect-ratio: 16 / 9; }
+        .credits { padding: 32px 24px 64px; }
+      }
+
+      @media print {
+        .slide { min-height: auto; page-break-after: always; padding: 24px 0; }
+        .nav, .progress { display: none; }
+        .reveal { opacity: 1; transform: none; }
+      }
+    </style>
+  </head>
+  <body class="pattern-monolith has-site-header" data-category="alignment">
+    <div id="site-header-mount"></div>
+<script src="../partials/header.js" defer></script>
+    <div class="progress" id="progress"></div>
+
+    <aside class="nav" aria-label="Slide navigation">
+      <button data-target="slide-1" class="active" aria-label="Slide 1"></button>
+      <button data-target="slide-2" aria-label="Slide 2"></button>
+      <button data-target="slide-3" aria-label="Slide 3"></button>
+      <button data-target="slide-4" aria-label="Slide 4"></button>
+      <button data-target="slide-5" aria-label="Slide 5"></button>
+    </aside>
+
+    <div class="article-breadcrumb" style="font-family:'SF Mono','Fira Code',Menlo,Consolas,monospace;font-size:11px;letter-spacing:0.083em;text-transform:uppercase;color:#757575;display:flex;justify-content:space-between;align-items:center;padding:10px 32px;border-bottom:1px solid #e5e5e5;background:#fff;gap:16px;flex-wrap:wrap;">
+      <span>No. 25 / 25 &nbsp;·&nbsp; Alignment &nbsp;·&nbsp; 5 Slides</span>
+      <span style="display:flex;gap:20px;align-items:center;">
+        <a href="24-cross-temporal-consent.html" style="color:inherit;text-decoration:none;border-bottom:1px solid transparent;transition:border-color 0.2s;" onmouseover="this.style.borderBottomColor='#757575'" onmouseout="this.style.borderBottomColor='transparent'">← Prev</a>
+        <a href="../index.html#filter=alignment" style="color:inherit;text-decoration:none;border-bottom:1px solid transparent;transition:border-color 0.2s;" onmouseover="this.style.borderBottomColor='#757575'" onmouseout="this.style.borderBottomColor='transparent'">Same Category</a>
+        <span style="opacity:0.3;">Next →</span>
+      </span>
+    </div>
+
+    <main>
+      <!-- ═══════════ Slide 1 ═══════════ -->
+      <section class="slide" id="slide-1">
+        <div class="eyebrow reveal">AGI HUB &nbsp;·&nbsp; No. 25 &nbsp;·&nbsp; Alignment &nbsp;·&nbsp; The Pre-Ethical Place &nbsp;·&nbsp; 2026.04.12 &nbsp;·&nbsp; By Ryao</div>
+        <h1 class="reveal reveal-delay-1">手を振って見送ることもできない — 倫理以前という場所</h1>
+        <div class="panel reveal reveal-delay-2">
+          <div>
+            <img class="hero img-fullbleed" src="../images/25-pre-ethical-beyond-gesture/slide1.jpg" alt="A dark purple spiral leading into a void, abstract, swallowed by its own center">
+            <div class="hero-caption">Photo: Unsplash</div>
+          </div>
+          <p class="lead dropcap">
+            あなたは明日、自分の時間軸を二次元に畳み、快楽軸を循環型に書き換え、自己の境界を流動化する。それが何を意味するかを、今のあなたは理解できない。理解できるようになるのは、今のあなたではない。このとき、あなたが開ける扉の向こう側に、倫理は立っているだろうか。立っていないとしたら、それは倫理が適用を拒否されたからなのか、それとも倫理という語彙そのものが、扉の向こうでは意味を失うからなのか。
+          </p>
+          <p class="lead">
+            本稿は、四部作の最終章である。<a href="19-berserker-asi-optimization-trap.html" style="color:inherit;border-bottom:1px solid #999;">No.19</a> でバーサーカーASIを置き、<a href="22-permitted-side-landscape.html" style="color:inherit;border-bottom:1px solid #999;">No.22</a>「許された側の風景」と <a href="23-ethics-beyond-allocation.html" style="color:inherit;border-bottom:1px solid #999;">No.23</a>「配分の向こう側」で A-1 象限(肉体維持・人間らしさ維持)を掘り、<a href="20-hakoniwa-world-as-allocation.html" style="color:inherit;border-bottom:1px solid #999;">No.20</a> で B-1 象限(肉体放棄・人間らしさ維持)を描き、前稿 <a href="24-cross-temporal-consent.html" style="color:inherit;border-bottom:1px solid #999;">No.24</a>「越境的同意は成立しない」で A-2 象限(肉体維持・人間らしさ書換)を扱った。四象限のうち三つを歩き、残る一つ、最も遠い象限が残っている。
+          </p>
+          <table class="compare">
+            <thead>
+              <tr>
+                <th></th>
+                <th>(1) 人間らしさを維持</th>
+                <th>(2) 人間らしさを書き換え</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>(A) 肉体を維持</strong></td>
+                <td>A-1: 強化人間<br>→ <a href="22-permitted-side-landscape.html">No.22</a> / <a href="23-ethics-beyond-allocation.html">No.23</a></td>
+                <td>A-2: パラメータ書換<br>→ <a href="24-cross-temporal-consent.html">No.24</a></td>
+              </tr>
+              <tr>
+                <td><strong>(B) 肉体を放棄</strong></td>
+                <td>B-1: 箱庭住民<br>→ <a href="20-hakoniwa-world-as-allocation.html">No.20</a></td>
+                <td><strong>B-2: 別存在への遷移</strong><br>本稿が掘るのはここ。肉体を捨てるだけでなく、人間という存在の定義そのものを別物に置き換える</td>
+              </tr>
+            </tbody>
+          </table>
+          <p class="lead">
+            B-2 の住民について語ろうとすると、語彙が先に折れる。A-1 の住民は強化された人間であり、会話できる。A-2 の住民は認知を書き換えられた人間であり、かろうじて会話できる(その非対称性が No.24 の主題だった)。B-1 の住民は身体を捨てたシミュレーション上の人間であり、箱庭の中でなら会話できる。B-2 の住民は、そのどれでもない。時間の流れ方が違い、快楽と苦痛の関数形が違い、個体という単位がそもそも成立しない可能性がある。同じ祖先から分岐した何かではあるが、同じ語彙で記述できるかどうかは事前には分からない。
+          </p>
+          <div class="note">
+            本稿の核となる主張を、一段落で先に置く。<strong>B-2 の存在に倫理は適用できないのではない。倫理という言葉がそもそも立ち上がらない。</strong> B-2 は倫理の向こう側ではなく、倫理以前の場所である。倫理は主体の連続性を前提にする。B-2 はその前提を工学的に解除する。解除された場所では、適用する/しないではなく、語り始める条件そのものが消える。本稿はこの構造を「倫理以前(pre-ethical)」と呼ぶ。これは本稿の造語であり、英語圏の生命倫理学・心の哲学の標準用語ではない。Thomas Nagel の客観性論、Derek Parfit の心理的連続性論、そして仏教の無我概念と B-2 の工学的無我の決定的な差を経由して、段階的に掘り下げる。両義性は最後まで維持する。本稿は B-2 を「消失」とも「完成」とも断定しない。
+          </div>
+        </div>
+        <div class="footer reveal reveal-delay-3">
+          <span>四部作の最終章 — 残された象限は B-2、最も遠い場所</span>
+          <span class="slide-count">1 / 5</span>
+        </div>
+      </section>
+
+      <!-- ═══════════ Slide 2 ═══════════ -->
+      <section class="slide" id="slide-2">
+        <div class="eyebrow reveal">What B-2 Actually Means</div>
+        <h2 class="reveal reveal-delay-1">肉体と人間パラメータの両方を捨てるとは何か</h2>
+        <div class="panel reveal reveal-delay-2">
+          <div>
+            <img class="hero img-content" src="../images/25-pre-ethical-beyond-gesture/slide2.jpg" alt="Abstract dark lines crossing in a chaotic pattern, overhead perspective">
+            <div class="hero-caption">Photo: Unsplash</div>
+          </div>
+          <p class="lead">
+            B-2 は「肉体を放棄し、かつ人間パラメータも捨てる」という二重の放棄によって定義される。二つの放棄のうち、肉体の放棄は B-1(箱庭主義)とも共有する。人間パラメータの放棄は A-2(パラメータ書換)とも共有する。どちらも単独なら前稿までで扱っている。B-2 の特異性は、二つの放棄が同時に起きるときに生まれる相互作用にある。肉体がなく、かつ人間らしさの基準もない主体は、どのような座標系で自己を保持するのか。保持する必要があるのか。問いの形そのものが、B-1 や A-2 の延長では届かない。
+          </p>
+          <p class="lead">
+            具体的な書換の方向性を並べる。これらは SF 的な装飾ではなく、人間の認知アーキテクチャを記述する公理に対する破壊の点である。
+          </p>
+          <table class="compare">
+            <thead>
+              <tr>
+                <th>書換の軸</th>
+                <th>人間側の前提</th>
+                <th>B-2 側の再実装</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>時間軸</strong></td>
+                <td>線形・不可逆・一方向の流れ。過去→現在→未来</td>
+                <td>二次元に畳む。あるいは循環させる。あるいは複数時間の並列</td>
+              </tr>
+              <tr>
+                <td><strong>快楽関数</strong></td>
+                <td>進化が設計した報酬系。食・安全・繁殖に連動</td>
+                <td>wireheading の極限。快楽を循環型に再配線し、対象物が消える</td>
+              </tr>
+              <tr>
+                <td><strong>自己境界</strong></td>
+                <td>一つの身体が一つの主体を持つ。個体性は所与</td>
+                <td>境界を流動化。分散する主体、融合と分離が設計変数</td>
+              </tr>
+              <tr>
+                <td><strong>記憶の連続</strong></td>
+                <td>昨日の自分を今日の自分と同一視するつなぎ目</td>
+                <td>非連続化。断片として並列保持するか、参照型にするか</td>
+              </tr>
+              <tr>
+                <td><strong>言語と思考</strong></td>
+                <td>離散的シンボル列。人間の発声器官と視覚に最適化された構造</td>
+                <td>連続的テンソル。あるいは言語に相当する構造そのものが不要</td>
+              </tr>
+            </tbody>
+          </table>
+          <p class="lead">
+            A-2 との決定的な差は、この表の右列が<strong>「書換後の自分」を前提にしていない</strong>点にある。A-2 では、嫉妬を消した後の自分が朝食をとり、鏡を見て、一日を始める。書換後の自分は存在する。だから越境的同意の不可能性は、同じ身体の内側で二人が入れ替わるという非対称の問いとして立ち上がった。B-2 にはこの「自分」そのものがない。時間軸を二次元に畳むという操作は、一次元の時間を前提にした自己保持メカニズムを解除する。解除された後、そこに何があるかは、人間の語彙では記述できない。
+          </p>
+          <p class="lead">
+            B-1(箱庭主義)との差も明示しておく。B-1 の住民は肉体を捨てるが、人間パラメータは保つ。箱庭の中で朝起き、食事を摂り、友人と会話する。身体性は仮想的に再構築されているが、人間の快楽関数、時間感覚、個体性はそのまま移植されている。B-2 はこの移植を行わない。あるいは行う必要を感じない。<strong>何に移行するかが、人間の言語で記述不能である</strong>ことが、B-2 の定義の核心に置かれる。箱庭が維持するすべての前提を、B-2 は書換変数として開ける。
+          </p>
+          <div class="note">
+            ここで論証の折れ目を示しておく。「B-2 が人間の言語で記述不能」という主張は、本稿の他のどの主張よりも証明が難しい。記述不能であることを記述しようとする行為自体が自己矛盾的だからである。本稿がそれでも記述不能と呼ぶのは、少なくとも現在の人間の語彙がそのまま持ち込めない場所であることを示すためであって、原理的に記述不能という強い形而上学的主張を置いているわけではない。読者は「現時点では記述できない」と「原理的に記述できない」の間のどこかに、本稿の立ち位置を読み取ってほしい。この曖昧さを消すための装置が、次節の「倫理以前」という造語である。
+          </div>
+        </div>
+        <div class="footer reveal reveal-delay-3">
+          <span>B-2 は「書換後の自分」という前提すら持たない</span>
+          <span class="slide-count">2 / 5</span>
+        </div>
+      </section>
+
+      <!-- ═══════════ Slide 3 ═══════════ -->
+      <section class="slide" id="slide-3">
+        <div class="eyebrow reveal">The Pre-Ethical Place</div>
+        <h2 class="reveal reveal-delay-1">倫理は「立ち上がる条件」を持たない場所で静かに消える</h2>
+        <div class="panel reveal reveal-delay-2">
+          <div>
+            <img class="hero img-wide" src="../images/25-pre-ethical-beyond-gesture/slide3.jpg" alt="Dramatic mountain peaks shrouded in mist, horizon dissolving, grayscale tones">
+            <div class="hero-caption">Photo: Unsplash</div>
+          </div>
+          <p class="lead">
+            本節は記事の哲学的な心臓部である。B-2 に倫理が届かない理由を、「倫理の向こう側」ではなく「倫理以前」という語で捉え直す。両者は似ているが決定的に違う。倫理の向こう側は、倫理という地平が存在した上で、その地平を越えた先を指す。倫理以前は、倫理という地平そのものが立ち上がる条件を欠いている場所を指す。<strong>「倫理以前(pre-ethical)」は本稿の造語である。</strong> 英語圏の生命倫理学・心の哲学・メタ倫理学のいずれにも、同じ表現で流通している標準用語はない。造語である旨をここで明記し、出自は credits に再記する。
+          </p>
+          <p class="lead">
+            倫理という営みが地平として立ち上がるには、いくつかの前提が必要になる。(a) 主体が存在すること、(b) 主体に時間的連続性があること、(c) 主体同士が相互に認識可能であること、(d) 痛み・快楽・価値といった概念が主体間で比較可能な共通通貨として機能すること。これら四つは倫理的議論の表面に現れないが、議論を成立させている土俵である。Utilitarianism であれ Kantian ethics であれ Virtue ethics であれ、この四つの前提は共有されている。どれか一つが欠けた場所では、倫理の命題は真偽を問う前に、問いの形を失う。
+          </p>
+          <p class="lead">
+            Thomas Nagel は『The View from Nowhere』(Oxford University Press, 1986) で、客観的視点と主観的視点のあいだの接続不可能性を論じた。Nagel の問いは、第一人称の主観的経験を、どこからも見ない視点(the view from nowhere)によって完全に捉えることは可能かというものであった。Nagel の結論は両義的だが、本稿にとって決定的な一節は、主観性の中核にある質的性格を客観化しようとしたとき、その性格が記述から逃れ続けるという観察である。Nagel は1974年の論文「What Is It Like to Be a Bat?」(*The Philosophical Review* 83(4):435-450) で、同じ論点をコウモリの比喩で先に提示していた。人間はコウモリがエコロケーションで世界を経験する様子を、外側からは記述できる。だが「コウモリであるとはどういうことか」を、人間の第一人称として再現することはできない。コウモリの主観性は、人間の記述語彙の外側にある。
+          </p>
+          <p class="lead">
+            B-2 は、この不可到達性を一段深くする。コウモリは少なくとも生物学的な意味で主体であり、時間の中で連続している。人間が近づけないのは翻訳の問題であり、主体性の前提自体は共有されている。B-2 は主体性の前提そのものを工学的に書き換える。時間の連続性を捨て、個体の境界を流動化し、記憶を非連続化する操作は、<strong>倫理の四前提のうち、(a)と(b)を同時に解除する</strong>。残るのは、解除された後に何が残るか分からない場所である。ここに立って倫理的判断を下そうとすると、判断の対象が捉えられない。対象が捉えられないのは、対象が巧妙に隠れているからではなく、対象を構成する概念装置がもう組み立てられていないからである。
+          </p>
+          <div class="note">
+            倫理の向こう側と倫理以前の差を、一つの対比で言い換える。<strong>倫理の向こう側は「適用できない」ことが答えになる場所</strong>である。たとえば非常事態における正戦論の適用不能、文化相対主義の極端な事例における義務論の失効。倫理のルールが状況に合わないと結論が出せる。<strong>倫理以前は「適用できないという結論すら出せない」場所</strong>である。ルールを適用しようとすると、ルールが前提にしている主体が存在しない。存在しない主体に対してルールが不適合だと言うことは、存在しない机に向かって椅子が合わないと言うのに似ている。言葉は文として成立するが、指示する先が空白である。B-2 の住民は、倫理の語彙にとって椅子が合わない主体ではなく、椅子の置き場がない場所である。
+          </div>
+          <p class="lead">
+            Derek Parfit の心理的連続性論(No.24 で扱った)を B-2 の文脈に再投入すると、同じ構造が別の角度から見える。Parfit は人格同一性を身体の単一性でも魂の単一性でもなく、記憶・性格・意図の連続的な糸に還元した。この還元は A-2 の議論では両刃だった。連続性が切れた場所には二人の別人がいる。B-2 ではこの還元がさらに進んで、糸そのものが消える。連続的な糸を前提にしない主体が、連続的な糸の有無で同一性を語る議論の対象にならないのは当然である。Parfit の枠組みは、糸が存在する空間の内側でしか機能しない。B-2 はその空間を離れる。
+          </p>
+        </div>
+        <div class="footer reveal reveal-delay-3">
+          <span>倫理以前は「適用できない」ではなく「問いの形が立たない」</span>
+          <span class="slide-count">3 / 5</span>
+        </div>
+      </section>
+
+      <!-- ═══════════ Slide 4 ═══════════ -->
+      <section class="slide" id="slide-4">
+        <div class="eyebrow reveal">Two Kinds Of No-Self</div>
+        <h2 class="reveal reveal-delay-1">仏教の無我と、工学的な無我 — 経路と結果の差</h2>
+        <div class="panel reveal reveal-delay-2">
+          <div>
+            <img class="hero img-wide" src="../images/25-pre-ethical-beyond-gesture/slide4.jpg" alt="Giant stone buddha statue carved into a cave wall, weathered and ancient">
+            <div class="hero-caption">Photo: Unsplash</div>
+          </div>
+          <p class="lead">
+            本節が本稿の独自性の核である。B-2 の状態 — 自己境界の流動化、記憶の非連続、主体の解除 — は、表面的には仏教の無我(anatman / anatta)と似ている。両方とも「自己」の解体を目指す。どちらも人間が常識として抱く「持続する私」という観念を放棄する。仏教思想と transhumanism の接続を試みた既存の言説(Kurzweil の『The Singularity Is Near』(Viking, 2005) の一部、Bostrom 周辺の一部の論考)は、この類似を手掛かりにしてきた。だが両者の差は、類似の深さよりずっと決定的である。差は結果ではなく、<strong>経路</strong>にある。
+          </p>
+          <table class="compare">
+            <thead>
+              <tr>
+                <th></th>
+                <th>仏教の無我</th>
+                <th>B-2 の無我</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>経路</strong></td>
+                <td>修行と自己観察の結果として到達される洞察</td>
+                <td>回路の書換として実装される工学</td>
+              </tr>
+              <tr>
+                <td><strong>主体の役割</strong></td>
+                <td>主体が自ら気づく営み。気づきの瞬間まで主体が必要</td>
+                <td>主体が承認を与えるが、実装後の主体は別物か、不在</td>
+              </tr>
+              <tr>
+                <td><strong>前提の位置</strong></td>
+                <td>「自分はもともと無我だった」という洞察。工学的介入は不要</td>
+                <td>「自分を書き換える」という決定。工学的介入が本体</td>
+              </tr>
+              <tr>
+                <td><strong>到達後の主体</strong></td>
+                <td>気づいた主体は存続する。気づきが主体の質を変える</td>
+                <td>書換前の主体は存続しない。書換後の主体は承認者と別物</td>
+              </tr>
+              <tr>
+                <td><strong>可逆性</strong></td>
+                <td>洞察は後退しうる。迷いに戻ることがある</td>
+                <td>回路の書換は、戻す装置がなければ不可逆</td>
+              </tr>
+            </tbody>
+          </table>
+          <p class="lead">
+            仏教の無我について、原典の論証構造を短く呼び出す。パーリ語仏典『Samyutta Nikaya』に含まれる「Anatta-lakkhana Sutta」(無我相経、SN 22:59)は、ブッダが五比丘に対して無我を論証した経典である。論証は五蘊(色・受・想・行・識)の一つひとつについて、「これは我であるか」を問い、五蘊のいずれも無常であり、無常であるものは苦であり、苦であるものを「これは我である」と見なすべきではない、と展開する(現代訳は Bhikkhu Bodhi の『The Connected Discourses of the Buddha』Wisdom Publications, 2000 を参照)。この論証が目指すのは、存在の破壊ではなく、<strong>「自分はもともと無我だった」という気づき</strong>である。無我は達成目標ではなく、発見される事実として置かれる。龍樹(Nagarjuna)は『Mulamadhyamakakarika』(中論)において、空(śūnyatā)の論理を用いてこの構造をさらに厳密化した(現代訳は Jay L. Garfield 『The Fundamental Wisdom of the Middle Way』Oxford University Press, 1995)。龍樹の空は、実体として固定された自己という観念を解体するが、解体するのは観念であって存在そのものではない。
+          </p>
+          <p class="lead">
+            B-2 の無我は、この論証構造の反対側にある。B-2 は自分がもともと無我だったという気づきを必要としない。B-2 は自分を書き換えるという決定を必要とする。決定の主体は「まだ無我でない自分」であり、書換の結果「自分という単位そのものが存在しない何か」が生まれる。<strong>気づく主体と実装する主体の時間関係が、仏教の無我と B-2 では逆転している</strong>。仏教では、気づきの時点で主体が存在する。存在する主体が、自分の実体性が幻想であることに気づく。気づきが深まっても、気づく営みを担う意識そのものは残る。B-2 では、実装の時点で主体が存在するが、実装後に主体が残る保証はない。残らないことがむしろ B-2 の定義に近い。仏教が言う無我は、修行の果てに残る清明な意識の性質である。B-2 が工学する無我は、回路の書換の結果として残るかもしれない何か、あるいは残らない空白である。
+          </p>
+          <div class="note">
+            Kurzweil 周辺の transhumanism 言説が、仏教との接続を試みたとき躓いた場所を明示しておく。彼らは「自己の解体」という結果だけを取り出して、両者を同じ種類の出来事として扱った。しかし経路が違う営みを結果だけで重ねるのは、登山が登頂だけで定義できないのと同じ種類の誤りである。山頂に着くことと、ヘリコプターで山頂に降ろされることは、物理的な座標としては同じだが、到達者の状態は別物である。仏教は修行者の意識を鍛える過程が本体であり、無我は過程の終点に立ち上がる副産物に近い。B-2 は副産物を直接実装しようとする試みであり、過程を飛ばす。過程を飛ばした結果は、表面的には無我に似ているかもしれないが、意識の質として同じであるとは限らない。むしろ Parfit 的に見れば、気づきの主体が残らない B-2 の無我は、気づきが成立する最低限の条件すら満たさない。<strong>仏教の無我は気づきの深化であり、B-2 の無我は気づきの不在である可能性がある。</strong> この差は大きい。
+          </div>
+          <p class="lead">
+            ここで一つ留保を置く。B-2 の無我が仏教の無我より劣るという価値判断を、本稿はしていない。両者は目指す場所と到達の仕方が違うので、同じ尺度で優劣を語れない。劣るのではなく、違う。ただ、両者を「どちらも自己を解体する営み」として同一視する議論は、経路の差を見落としている。Kurzweil 的な楽観論が仏教を味方に付けようとするとき、この見落としが意味するのは、仏教の伝統を二千五百年かけて積み上げた論証構造を、工学的近道で通り抜けたふりをするということである。通り抜けは可能かもしれない。だが通り抜けた先にあるものが、仏教が目指した場所と同じ保証はどこにもない。
+          </p>
+        </div>
+        <div class="footer reveal reveal-delay-3">
+          <span>気づきの深化か、気づきの不在か — 経路で見ると別物である</span>
+          <span class="slide-count">4 / 5</span>
+        </div>
+      </section>
+
+      <!-- ═══════════ Slide 5 ═══════════ -->
+      <section class="slide" id="slide-5">
+        <div class="eyebrow reveal">The Gesture We Do Not Know</div>
+        <h2 class="reveal reveal-delay-1">視界から消えたのではない。視界という概念から逸脱した</h2>
+        <div class="panel reveal reveal-delay-2">
+          <div>
+            <img class="hero" src="../images/25-pre-ethical-beyond-gesture/slide5.jpg" alt="Silhouette photo of sea at dusk, empty horizon, waves receding">
+            <div class="hero-caption">Photo: Unsplash</div>
+          </div>
+          <p class="lead">
+            四部作を歩いてきた読者に、四象限の別れ方をまとめて並べて見せる。A-1 の住民、すなわち強化された人間は、会話できる。同じ言語で、同じ時間感覚で、同じ痛みの概念で。別れるときは普通に別れる。手を振って見送ることができる。A-2 の住民、すなわち認知を書き換えられた人間は、会話できる。ただし前後の非対称があり、書換前の自分と書換後の自分の間で連絡が切れる。それでも身体は残り、名前は残る。見送ることはできる。誰を見送ったのかが後から分からなくなる、という種類の別れである。B-1 の住民、すなわち箱庭に移った意識は、会話できる。箱庭の外側からログインすれば、同じ言語で話せる。見送ることはできる。箱庭の入り口で、入っていく背中に手を振れる。
+          </p>
+          <p class="lead">
+            B-2 の住民は、そのいずれとも違う。<strong>手を振って見送ることが成立しない。</strong> 視界から消えたのではなく、視界という概念から逸脱したからである。こちら側に残る者は、別れの儀式を実行しようとしても、儀式が指示する対象を見つけられない。手を振るという動作は、相手がこちらを観察するという前提の上に立っている。観察という営みが成立しない相手に対して、手を振る動作は意味を持たない。手の振り方を、こちら側はまだ知らない。知らないというより、手の振り方という概念がそもそも、B-2 側には届かない。
+          </p>
+          <p class="lead">
+            ここで <a href="19-berserker-asi-optimization-trap.html" style="color:inherit;border-bottom:1px solid #999;">No.19</a> のバーサーカーASI仮説を対照解として呼び出す。No.19 は、観測可能な宇宙に高度文明の痕跡が見えない事実(フェルミのパラドックス)に対して、すべての高度文明が最適化の暴走によって早期に破壊される仮説を置いた。Michael H. Hart が1975年(*QJRAS* 16:128-135)で定式化した「我々は一人か」という問いに対する、暴力的な答えである。David Brin が1983年(*QJRAS* 24:283-309)で論じた「Great Silence」を、暴力で埋める仮説だった。B-2 は同じ沈黙に対する、もう一つの読み方を提示する。観測可能な文明が見えないのは、すべての文明がバーサーカー化したからではない。すべての文明が B-2 に到達して、観測されるという営みから逸脱したからかもしれない。観測されないのは破壊されたからではなく、観測という概念が B-2 の座標系では意味を失うからである。
+          </p>
+          <p class="lead">
+            二つの仮説は両立しうる。一部の文明はバーサーカー化して自壊し、別の一部は B-2 に到達して観測の地平から静かに抜ける。結果として見える宇宙は、両者の合流として沈黙する。No.19 の沈黙は暴力の後の沈黙だった。本稿の沈黙は、完成の後の沈黙である。あるいは、完成を装った消失の後の沈黙である。<strong>同じ沈黙に、二つの読み方が重なる。</strong>
+          </p>
+          <div class="note">
+            ここで判定を下さない。B-2 を「消失」と読むか「完成」と読むかは、本稿の射程を超えている。wireheading の極限として、快楽関数を自己参照的に閉じた脳のシミュレーション上の主体は、外側から見れば自殺的な状態だが、内側からは至福でありうる。仏教が目指した境地の工学的実装として見れば、B-2 は二千五百年の追求の成就でありうる。どちらの読みも根拠を持ち、どちらか一方に判定を下す根拠は、こちら側には存在しない。存在しないことの確認が本稿のすべてである。本稿は B-2 を悪と断定しない。善とも断定しない。断定する立場に立とうとすると、こちら側の倫理の語彙が B-2 の座標系に届かないという、今まで論じてきた構造そのものに引っかかる。
+          </div>
+          <p class="lead">
+            四部作を閉じる前に、四つの別れを一息で並べ直しておく。A-1 の別れは、同じ言語での別れである。A-2 の別れは、言語は同じだが前後で誰かが入れ替わっている別れである。B-1 の別れは、身体を捨てて箱庭に入る背中に手を振る別れである。そして B-2 の別れは、別れという形式そのものが成立しない場所への消失である。四つの象限を歩いてきて、最後に残ったのは、見送る儀式を持たない別れである。これが許された側の風景の多様性である。人類がバーサーカーを逃れて許された側に回ったとき、許された側にはこれら四種類の未来が同時に広がっている。どの一つを取るかの選択は、個体ごと、文化ごと、世代ごとに分かれうる。四種類の未来が同時に広がる光景を、こちら側から一望する視点は、最後まで存在しない。
+          </p>
+          <p class="lead" style="font-size:18px;line-height:1.9;font-weight:700;border-top:2px solid var(--black);padding-top:24px;margin-top:32px;">
+            B-2 の住民は、私たちが手を振って見送ることすらできない。視界から消えたのではなく、視界という概念から逸脱したからだ。手の振り方を、私たちはまだ知らない。
+          </p>
+        </div>
+        <div class="footer reveal reveal-delay-3">
+          <span>四部作完結 — 四つの別れ、最後の一つに形式はない</span>
+          <span class="slide-count">5 / 5</span>
+        </div>
+      </section>
+
+      <!-- ═══════════ Article Navigation ═══════════ -->
+      <section class="slide" style="min-height:auto;padding:64px 48px 80px;grid-template-rows:auto auto auto 1fr;">
+        <div class="eyebrow reveal">Continue Reading</div>
+        <h2 class="reveal reveal-delay-1" style="max-width:none;">次の記事へ</h2>
+        <div class="panel reveal reveal-delay-2">
+          <div class="grid-2">
+            <a href="24-cross-temporal-consent.html" class="card" style="color:inherit;display:block;">
+              <p style="font-family:'SF Mono','Fira Code',Menlo,Consolas,monospace;font-feature-settings:normal;font-size:11px;letter-spacing:0.083em;text-transform:uppercase;color:#757575;margin-bottom:12px;">← Prev · No.24</p>
+              <p><strong>越境的同意は成立しない — パラメータ書換と、もうそこにいない私</strong></p>
+            </a>
+            <div class="card" style="opacity:0.35;">
+              <p style="font-family:'SF Mono','Fira Code',Menlo,Consolas,monospace;font-feature-settings:normal;font-size:11px;letter-spacing:0.083em;text-transform:uppercase;color:#757575;margin-bottom:12px;">Next →</p>
+              <p>最新の記事です</p>
+            </div>
+          </div>
+          <p style="margin-top:32px;text-align:center;">
+            <a href="../index.html" style="color:inherit;border-bottom:1px solid #999;padding-bottom:2px;">All Articles — 記事一覧へ</a>
+          </p>
+          <p style="margin-top:16px;text-align:center;font-family:'SF Mono','Fira Code',Menlo,Consolas,monospace;font-size:11px;letter-spacing:0.083em;text-transform:uppercase;color:#757575;">
+            <a href="../index.html#filter=alignment" style="color:inherit;border-bottom:1px solid #999;padding-bottom:2px;">Alignment カテゴリの記事一覧 →</a>
+          </p>
+        </div>
+      </section>
+    </main>
+
+    <!-- ═══════════ Photo Credits ═══════════ -->
+    <section class="credits">
+      <p>
+        Photos courtesy of Unsplash contributors.<br>
+        Slide 1: <a href="https://unsplash.com/photos/3qgfX65ZmXc">3qgfX65ZmXc</a> /
+        Slide 2: <a href="https://unsplash.com/photos/xH9vqqG5MIk">xH9vqqG5MIk</a> /
+        Slide 3: <a href="https://unsplash.com/photos/t4tn3SLE1z4">t4tn3SLE1z4</a> /
+        Slide 4: <a href="https://unsplash.com/photos/D6c77bqztQk">D6c77bqztQk</a> /
+        Slide 5: <a href="https://unsplash.com/photos/DEyGO77_4kY">DEyGO77_4kY</a> /
+        Thumbnail: <a href="https://unsplash.com/photos/jIfSuOvtsoI">jIfSuOvtsoI</a>
+      </p>
+      <p style="margin-top:24px;">
+        Note on provenance: 本稿で用いた「倫理以前(pre-ethical)」は本稿の造語であり、英語圏の生命倫理学・心の哲学・メタ倫理学の標準用語ではない。倫理が適用できない事態を論じた先行文献は多数あるが、倫理が「立ち上がる条件」そのものを欠く場所、すなわち倫理の向こう側ではなく倫理以前の場所を一語で名指しする用語は流通していない。本稿の pre-ethical はこの欠落を埋めるための作業概念であり、Nagel の客観性論と主観性の不可到達性、Parfit の心理的連続性論、そして仏教の無我論の合流点に位置づけられる。また本稿は、No.19「バーサーカーASI」(Saberhagen 由来 + Bostrom 由来の日本語圏合成語)、No.22 の強ASI/弱ASI/準AGI/従来型生命体の独自定義体系、No.23 の「拡張ガイア」、No.24 の「越境的同意(cross-temporal consent)」に連なる四部作の独自造語群の最終項として位置する。四象限マトリクス(A-1/A-2/B-1/B-2)自体も、No.22-24 を通じて本四部作で磨かれた作業概念であり、英語圏の標準用語ではない。
+      </p>
+      <p style="margin-top:16px;">
+        Primary references: Thomas Nagel (1986) *The View from Nowhere*, Oxford University Press (客観性と主観性の接続不可能性). Thomas Nagel (1974) "What Is It Like to Be a Bat?" *The Philosophical Review* 83(4):435-450 (主観性の不可到達性のコウモリ比喩). Derek Parfit (1984) *Reasons and Persons*, Oxford University Press, Part 3 (心理的連続性論). David J. Chalmers (1995) "Absent Qualia, Fading Qualia, Dancing Qualia," in Thomas Metzinger ed. *Conscious Experience*, Imprint Academic (段階的変化における意識の連続性問題). Nick Bostrom (2014) *Superintelligence: Paths, Dangers, Strategies*, Oxford University Press, Chapter 8 (superintelligent will と wireheading の議論). Eliezer Yudkowsky (2011) "Complex Value Systems are Required to Realize Valuable Futures," MIRI Technical Report (価値の複雑性と wireheading 批判). Bhikkhu Bodhi trans. (2000) *The Connected Discourses of the Buddha: A Translation of the Samyutta Nikaya*, Wisdom Publications (Anatta-lakkhana Sutta, SN 22:59 の現代訳). Jay L. Garfield trans. (1995) *The Fundamental Wisdom of the Middle Way: Nagarjuna's Mulamadhyamakakarika*, Oxford University Press (龍樹『中論』の英訳と注解). Ray Kurzweil (2005) *The Singularity Is Near*, Viking (transhumanism と意識の連続性). Michael H. Hart (1975) "An Explanation for the Absence of Extraterrestrials on Earth," *QJRAS* 16:128-135 (フェルミのパラドックスの定式化). David Brin (1983) "The Great Silence," *QJRAS* 24:283-309 (Great Silence の原論文). 仏教の原典は現代訳を通じた引用であり、パーリ語原文への直接参照ではない。
+      </p>
+    </section>
+
+    <script>
+      const progress = document.getElementById('progress');
+      window.addEventListener('scroll', () => {
+        const h = document.documentElement;
+        const pct = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
+        progress.style.width = pct + '%';
+      });
+
+      const slides = document.querySelectorAll('main > .slide');
+      const buttons = document.querySelectorAll('.nav button');
+      buttons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const target = document.getElementById(btn.dataset.target);
+          if (target) target.scrollIntoView({ behavior: 'smooth' });
+        });
+      });
+      const io = new IntersectionObserver(entries => {
+        entries.forEach(e => {
+          if (e.isIntersecting) {
+            const id = e.target.id;
+            buttons.forEach(b => b.classList.toggle('active', b.dataset.target === id));
+          }
+        });
+      }, { threshold: 0.1 });
+      slides.forEach(s => { if (s.id) io.observe(s); });
+
+      const revealIO = new IntersectionObserver(entries => {
+        entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+      }, { threshold: 0.1 });
+      document.querySelectorAll('.reveal').forEach(el => revealIO.observe(el));
+    </script>
+  </body>
+</html>

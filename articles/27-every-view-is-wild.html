@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+    <title>どちらに転んでも、現在は異常である — AGI HUB</title>
+    <link rel="stylesheet" href="../design-system/palette.css">
+    <style>
+      :root {
+        --black: #000;
+        --body-text: #1a1a1a;
+        --mid: #585858;
+        --meta: #757575;
+        --light-gray: #999;
+        --border: #ddd5bd;
+        --bg: #f3f1e9;
+        --bg-alt: #ebe7d3;
+        --accent: #b23a2f;
+        --accent-soft: rgba(178, 58, 47, 0.09);
+        --ease: cubic-bezier(0.22, 1, 0.36, 1);
+      }
+
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+      html { scroll-behavior: smooth; }
+
+      body {
+        font-family: HelveticaNeue, "Helvetica Neue", Helvetica, Arial,
+          游ゴシック体, YuGothic, "游ゴシック Medium", "Yu Gothic Medium",
+          游ゴシック, "Yu Gothic", "ヒラギノ角ゴ ProN W3", "Hiragino Kaku Gothic ProN",
+          "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", "MS ゴシック", "MS Gothic",
+          sans-serif;
+        font-feature-settings: "palt";
+        font-size: 16px;
+        line-height: 1.75;
+        color: var(--body-text);
+        background: var(--bg);
+        -webkit-font-smoothing: antialiased;
+        overflow-x: hidden;
+        word-wrap: break-word;
+      }
+
+      .progress {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 2px;
+        background: var(--accent);
+        width: 0%;
+        z-index: 100;
+        transition: width 0.3s var(--ease);
+      }
+
+      .nav {
+        position: fixed;
+        right: 24px;
+        top: 50%;
+        transform: translateY(-50%);
+        display: grid;
+        gap: 16px;
+        z-index: 50;
+      }
+
+      .nav button {
+        width: 8px;
+        height: 8px;
+        border-radius: 999px;
+        border: 1.5px solid var(--meta);
+        background: transparent;
+        cursor: pointer;
+        transition: all 0.3s var(--ease);
+      }
+
+      .nav button.active {
+        background: var(--accent);
+        border-color: var(--accent);
+        transform: scale(1.4);
+      }
+
+      main { scroll-snap-type: y mandatory; }
+
+      .slide {
+        position: relative;
+        min-height: 100vh;
+        max-width: 1120px;
+        margin: 0 auto;
+        padding: 80px 48px 64px;
+        display: grid;
+        grid-template-rows: auto auto 1fr auto;
+        gap: 32px;
+        scroll-snap-align: start;
+      }
+
+      .slide + .slide { border-top: 1px solid var(--border); }
+
+      .hero {
+        width: 100%;
+        aspect-ratio: 16 / 7;
+        object-fit: cover;
+        display: block;
+        filter: grayscale(0.6) contrast(1.1);
+        transition: filter 0.6s var(--ease);
+      }
+
+      .hero:hover { filter: grayscale(0) contrast(1); }
+
+      .slide .hero.img-fullbleed {
+        width: 100vw;
+        margin-left: calc(50% - 50vw);
+        margin-right: calc(50% - 50vw);
+        max-width: none;
+        aspect-ratio: 21/9;
+      }
+      .slide .hero.img-wide {
+        width: min(1280px, calc(100vw - 48px));
+        position: relative;
+        left: 50%;
+        transform: translateX(-50%);
+        max-width: none;
+      }
+      .slide .hero.img-content { max-width: 680px; margin: 0 auto; aspect-ratio: 4/3; }
+      .slide .hero.img-side-by-side { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+      .hero-caption {
+        font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 11px;
+        letter-spacing: 0.083em;
+        color: var(--light-gray);
+        margin-top: 8px;
+        text-transform: uppercase;
+      }
+
+      .credits {
+        max-width: 1120px;
+        margin: 0 auto;
+        padding: 48px 48px 80px;
+        border-top: 1px solid var(--border);
+      }
+
+      .credits p {
+        font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 11px;
+        letter-spacing: 0.047em;
+        line-height: 2;
+        color: var(--light-gray);
+      }
+
+      .credits a {
+        color: var(--meta);
+        text-decoration: none;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .credits a:hover {
+        color: var(--black);
+        border-bottom-color: var(--black);
+      }
+
+      .reveal {
+        opacity: 0;
+        transform: translateY(24px);
+        transition: opacity 0.6s var(--ease), transform 0.6s var(--ease);
+      }
+      .reveal.visible { opacity: 1; transform: translateY(0); }
+      .reveal-delay-1 { transition-delay: 0.1s; }
+      .reveal-delay-2 { transition-delay: 0.2s; }
+      .reveal-delay-3 { transition-delay: 0.35s; }
+
+      .eyebrow {
+        font-family: "SF Mono", "Fira Code", "Fira Mono", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        color: var(--accent);
+      }
+
+      h1, h2 {
+        color: var(--black);
+        font-weight: 800;
+        line-height: 1.35;
+        letter-spacing: -0.01em;
+        max-width: 24ch;
+        padding-bottom: 16px;
+        border-bottom: 3px double var(--accent);
+      }
+
+      h1 { font-size: clamp(30px, 4.4vw, 38px); }
+      h2 { font-size: clamp(26px, 3.8vw, 34px); }
+
+      .lead {
+        max-width: 780px;
+        font-size: 16px;
+        line-height: 1.75;
+        color: var(--body-text);
+      }
+
+      .lead + .lead { margin-top: 8px; }
+
+      .panel { display: grid; gap: 24px; align-content: start; }
+      .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
+      .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+
+      .card {
+        padding: 24px 20px 24px 0;
+        border-top: 3px solid var(--accent);
+        background: transparent;
+      }
+
+      .card .tag { color: var(--accent); font-weight: 700; }
+      .card strong { color: var(--black); }
+
+      .card p {
+        font-size: 16px;
+        line-height: 1.75;
+        color: var(--body-text);
+      }
+
+      .tag {
+        display: inline-block;
+        font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 11px;
+        letter-spacing: 0.083em;
+        color: var(--meta);
+        margin-bottom: 12px;
+      }
+
+      .bullets { display: grid; gap: 16px; }
+
+      .point {
+        padding-left: 16px;
+        border-left: 3px solid var(--accent);
+        font-size: 16px;
+        line-height: 1.75;
+        color: var(--body-text);
+      }
+
+      .point strong { color: var(--black); }
+
+      .timeline {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1px;
+        background: var(--border);
+      }
+
+      .timeline-step {
+        display: grid;
+        gap: 8px;
+        padding: 20px 16px;
+        background: var(--bg);
+      }
+
+      .timeline-step.highlight {
+        background: var(--accent);
+      }
+      .timeline-step.highlight .num,
+      .timeline-step.highlight p,
+      .timeline-step.highlight strong {
+        color: var(--bg);
+      }
+
+      .timeline-step .num {
+        font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 11px;
+        font-weight: 400;
+        letter-spacing: 0.083em;
+        text-transform: uppercase;
+        color: var(--meta);
+      }
+
+      .timeline-step p {
+        font-size: 15px;
+        line-height: 1.65;
+        color: var(--body-text);
+      }
+
+      .timeline-step strong { color: var(--black); }
+
+      table.compare {
+        width: 100%;
+        border-collapse: collapse;
+        border-top: 3px solid var(--accent);
+        border-bottom: 3px double var(--accent);
+        background: var(--bg);
+      }
+
+      table.compare th,
+      table.compare td {
+        padding: 18px 16px;
+        text-align: left;
+        font-size: 15px;
+        line-height: 1.65;
+        color: var(--body-text);
+        border-bottom: 1px solid var(--border);
+        vertical-align: top;
+      }
+
+      table.compare th {
+        font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 11px;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--accent);
+        font-weight: 700;
+        border-bottom: 1px solid var(--accent);
+        background: var(--accent-soft);
+      }
+
+      table.compare td strong { color: var(--black); }
+      table.compare tr:last-child td { border-bottom: none; }
+
+      .note {
+        font-size: 17px;
+        line-height: 1.7;
+        color: var(--body-text);
+        padding: 24px 28px;
+        margin: 12px 0;
+        border-left: 4px solid var(--accent);
+        background: var(--accent-soft);
+        position: relative;
+      }
+      .note::before {
+        content: "EVIDENCE";
+        display: block;
+        font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.15em;
+        color: var(--accent);
+        margin-bottom: 10px;
+      }
+
+      .note strong { color: var(--accent); }
+
+      .footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: end;
+        gap: 16px;
+        font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 11px;
+        letter-spacing: 0.083em;
+        color: var(--light-gray);
+        text-transform: uppercase;
+      }
+
+      .slide-count {
+        font-weight: 700;
+        color: var(--accent);
+      }
+
+      /* SVG diagram styles */
+      .svg-diagram {
+        max-width: 680px;
+        margin: 24px auto;
+      }
+      .svg-diagram svg {
+        width: 100%;
+        height: auto;
+      }
+
+      @media (max-width: 768px) {
+        .slide { padding: 64px 24px 48px; }
+        .grid-2, .grid-3, .timeline { grid-template-columns: 1fr; }
+        .nav { right: 12px; }
+        table.compare { font-size: 13px; }
+        table.compare th, table.compare td { padding: 14px 10px; }
+        .hero { aspect-ratio: 16 / 9; }
+        .slide .hero.img-fullbleed,
+        .slide .hero.img-wide {
+          width: 100%; max-width: 100%; aspect-ratio: 16/9; margin: 0; transform: none; left: 0;
+          position: static;
+        }
+        .slide .hero.img-content { max-width: 100%; aspect-ratio: 16 / 9; }
+        .credits { padding: 32px 24px 64px; }
+      }
+
+      @media print {
+        .slide { min-height: auto; page-break-after: always; padding: 24px 0; }
+        .nav, .progress { display: none; }
+        .reveal { opacity: 1; transform: none; }
+      }
+    </style>
+  </head>
+  <body class="pattern-investigation has-site-header" data-category="takeoff">
+    <div id="site-header-mount"><header style="font:500 15px/48px Inter,sans-serif;padding:0 24px;border-bottom:1px solid #222;color:#aaa">AGI HUB</header></div>
+<script src="../partials/header.js" defer></script>
+    <div class="progress" id="progress"></div>
+
+    <aside class="nav" aria-label="Slide navigation">
+      <button data-target="slide-1" class="active" aria-label="Slide 1"></button>
+      <button data-target="slide-2" aria-label="Slide 2"></button>
+      <button data-target="slide-3" aria-label="Slide 3"></button>
+      <button data-target="slide-4" aria-label="Slide 4"></button>
+      <button data-target="slide-5" aria-label="Slide 5"></button>
+    </aside>
+
+    <div class="article-breadcrumb" style="font-family:'SF Mono','Fira Code',Menlo,Consolas,monospace;font-size:11px;letter-spacing:0.083em;text-transform:uppercase;color:#757575;display:flex;justify-content:space-between;align-items:center;padding:10px 32px;border-bottom:1px solid #e5e5e5;background:#fff;gap:16px;flex-wrap:wrap;">
+      <span>No. 27 / 27 &nbsp;&middot;&nbsp; Takeoff &nbsp;&middot;&nbsp; 5 Slides</span>
+      <span style="display:flex;gap:20px;align-items:center;">
+        <a href="26-automation-bottleneck-regime.html" style="color:inherit;text-decoration:none;">&larr; Prev</a>
+        <a href="../index.html#filter=takeoff" style="color:inherit;text-decoration:none;">Same Category</a>
+        <span style="opacity:0.3;">Next &rarr;</span>
+      </span>
+    </div>
+
+    <main>
+
+      <!-- ═══════════ SLIDE 1 ═══════════ -->
+      <section class="slide" id="slide-1">
+        <div class="eyebrow reveal">AGI HUB &middot; No. 27 &middot; Takeoff &middot; The Triple Fork &middot; 2026.04.13 &middot; By Ryao</div>
+        <h1 class="reveal reveal-delay-1">穏当な未来予測は、なぜ存在しないのか</h1>
+        <img class="hero img-fullbleed reveal reveal-delay-2" src="../images/every-view-is-wild/slide1.jpg" alt="Aerial view of road intersection at dusk">
+
+        <div class="panel reveal reveal-delay-3">
+          <p class="lead">あなたが明日、人類の未来について穏当な見解を述べようとする。銀河に広がるかもしれないとは言いたくない。自滅するとも言いたくない。「まあ、普通に続くだろう」と落ち着いた一文を書こうとする。その瞬間、あなたは発見する。そんな文を書くための根拠が、この宇宙のどこにも存在しないことを。</p>
+
+          <p class="lead">2021年7月、Open Philanthropy共同創設者のHolden Karnofskyは "All Possible Views About Humanity's Future Are Wild" と題した論考を発表した。「Most Important Century」シリーズの導入記事であり、その主張は挑発的に単純だった。人類の未来について取りうるあらゆる立場は、例外なく「常識外れ」に着地する。楽観でも、保守でも、懐疑でも。穏当な中間地帯は存在しない。</p>
+
+          <p class="lead">この論証が不気味なのは、Karnofskyが特定の未来を予言しているからではない。<strong>予言の不在そのものが異常だと証明している</strong>からだ。三本の分岐路がある。どれを選んでも、あなたは「信じがたい」と感じる場所に立つ。一つの分岐だけが奇妙なのではない。分岐構造全体が、現在という時間の異常さを告発している。</p>
+
+          <!-- SVG: Triple Fork Diagram -->
+          <div class="svg-diagram">
+            <svg viewBox="0 0 680 260" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <marker id="arrowR" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+                  <path d="M0,0 L8,3 L0,6" fill="#b23a2f"/>
+                </marker>
+              </defs>
+              <!-- Center label -->
+              <rect x="240" y="100" width="200" height="44" rx="4" fill="none" stroke="#1a1a1a" stroke-width="2"/>
+              <text x="340" y="127" text-anchor="middle" font-family="'SF Mono',monospace" font-size="12" fill="#1a1a1a" letter-spacing="0.08em">PRESENT MOMENT</text>
+              <!-- Three forks -->
+              <line x1="440" y1="110" x2="600" y2="40" stroke="#b23a2f" stroke-width="2" marker-end="url(#arrowR)"/>
+              <line x1="440" y1="122" x2="600" y2="122" stroke="#b23a2f" stroke-width="2" marker-end="url(#arrowR)"/>
+              <line x1="440" y1="134" x2="600" y2="210" stroke="#b23a2f" stroke-width="2" marker-end="url(#arrowR)"/>
+              <!-- Labels -->
+              <text x="614" y="44" font-family="'SF Mono',monospace" font-size="11" fill="#b23a2f" letter-spacing="0.06em">OPTIMIST</text>
+              <text x="614" y="58" font-family="sans-serif" font-size="10" fill="#757575">銀河文明の起源</text>
+              <text x="614" y="126" font-family="'SF Mono',monospace" font-size="11" fill="#b23a2f" letter-spacing="0.06em">CONSERVATIVE</text>
+              <text x="614" y="140" font-family="sans-serif" font-size="10" fill="#757575">10万年でも同じ図</text>
+              <text x="614" y="214" font-family="'SF Mono',monospace" font-size="11" fill="#b23a2f" letter-spacing="0.06em">SKEPTIC</text>
+              <text x="614" y="228" font-family="sans-serif" font-size="10" fill="#757575">沈黙が意味するもの</text>
+              <!-- Convergence: WILD -->
+              <rect x="30" y="96" width="160" height="52" rx="4" fill="#b23a2f"/>
+              <text x="110" y="128" text-anchor="middle" font-family="'SF Mono',monospace" font-size="14" fill="#f3f1e9" font-weight="700" letter-spacing="0.12em">ALL VIEWS: WILD</text>
+              <line x1="190" y1="122" x2="240" y2="122" stroke="#b23a2f" stroke-width="2" stroke-dasharray="6,4"/>
+            </svg>
+          </div>
+
+          <p class="lead">なぜ穏当さが消えるのか。Karnofskyの論証を解剖し、三つの分岐がそれぞれどう「野性的な」結論に帰結するかを検証する。そして、2021年に書かれたこの地図が2026年の現実においてどう見えるかを重ねる。</p>
+        </div>
+
+        <div class="footer">
+          <span>三つの分岐路が全て異常に帰結する構造</span>
+          <span class="slide-count">1 / 5</span>
+        </div>
+      </section>
+
+      <!-- ═══════════ SLIDE 2 ═══════════ -->
+      <section class="slide" id="slide-2">
+        <div class="eyebrow reveal">Galaxy-Scale Civilization</div>
+        <h2 class="reveal reveal-delay-1">銀河を埋め尽くす文明の、最初の100年</h2>
+        <img class="hero img-wide reveal reveal-delay-2" src="../images/every-view-is-wild/slide2.jpg" alt="Interior of a large telescope structure">
+
+        <div class="panel reveal reveal-delay-3">
+          <p class="lead">Karnofskyの楽観シナリオは、彼自身が「最も可能性が高い」と考える立場だ。21世紀中にAIが生産性の爆発的成長を引き起こし、人類は「技術的に成熟した」文明に到達する。銀河全体に自律的な居住地を展開し、デジタルな存在を含む膨大な人口を複数の恒星系に維持する能力を手にする。</p>
+
+          <p class="lead">この見方がwildなのは明白だ。だが、Karnofskyが強調するのは宇宙進出の壮大さではない。<strong>value lock-in</strong>という概念だ。宇宙進出の初期リーダーが、その後の数十億年にわたる銀河文明の価値観を事実上決定してしまう。光速の制約により、一度広がった文明の価値体系を後から統一的に書き換えることは物理的に不可能になる。つまり、最初の100年で固定された倫理的枠組みが、銀河の寿命と同じ時間スケールで凍結される。</p>
+
+          <p class="lead">蒸気機関の歴史が教える構造がここにある。ウィリアム・スタンレー・ジェヴォンズは1865年に、蒸気機関の熱効率が改善されるほどイギリスの石炭総消費量が増加する逆説を記録した。効率の向上が用途を拡大し、総量を増やす。Karnofskyの銀河シナリオは、この構造を宇宙スケールに転写している。AIによる生産性向上は、生産活動を縮小するのではなく、拡張可能なフロンティアを爆発的に広げる。ジェヴォンズの石炭が銀河全体に置き換わった、とも言える。</p>
+
+          <div class="note">
+            2021年の時点でKarnofskyは「21世紀中のAIによる生産性爆発」を中心シナリオとした。2026年現在、GPT-4（2023年3月）、Claude 3.5 Sonnet（2024年6月）、Gemini 2.0（2025年12月）、そしてscaling lawsの実証的裏付け（Kaplan et al. 2020, Hoffmann et al. 2022）は、この予測のタイムラインをむしろ前倒ししている。Karnofskyは現在Anthropicに在籍しており、彼自身の予測の検証に最も近い場所にいる。
+          </div>
+
+          <p class="lead">数兆人が将来存在するかもしれない人類のうち、現在生きている80億人は「最初のほんの一握り」にあたる。Karnofskyはこれを、歴史上かつてないほどの倫理的重みが現在の意思決定にかかっていることの根拠とする。楽観的だから安心できる話では全くない。楽観シナリオこそが、最も重い責任を突きつけている。</p>
+        </div>
+
+        <div class="footer">
+          <span>楽観シナリオが突きつける、value lock-inの重み</span>
+          <span class="slide-count">2 / 5</span>
+        </div>
+      </section>
+
+      <!-- ═══════════ SLIDE 3 ═══════════ -->
+      <section class="slide" id="slide-3">
+        <div class="eyebrow reveal">The Conservative Shock</div>
+        <h2 class="reveal reveal-delay-1">10万年に引き延ばしても、図は変わらない</h2>
+        <img class="hero img-content reveal reveal-delay-2" src="../images/every-view-is-wild/slide3.jpg" alt="Canyon geological layers">
+
+        <div class="panel reveal reveal-delay-3">
+          <p class="lead">楽観シナリオを拒否する。100年では速すぎる。ニュートンの物理学から量子力学まで300年かかった。AGIから技術的成熟までなら500年、場合によっては10万年の科学的蓄積が必要だ。この立場は穏当に聞こえる。Karnofskyはそこを突く。</p>
+
+          <p class="lead">銀河の存続期間はおよそ100億年だ。その時間軸でチャートを描いたとき、「100年で到達」と「10万年で到達」の差は、グラフ上で視認できない。Karnofskyは実際に両方のチャートを並べて見せた。ほぼ同一の図になる。保守的な見積もりは、楽観シナリオの結論を否定しない。到着が遅れるだけで、到着する事実は変わらない。</p>
+
+          <!-- SVG: Logarithmic Timeline -->
+          <div class="svg-diagram">
+            <svg viewBox="0 0 680 220" xmlns="http://www.w3.org/2000/svg">
+              <!-- Axis -->
+              <line x1="60" y1="160" x2="640" y2="160" stroke="#1a1a1a" stroke-width="1.5"/>
+              <!-- Time markers -->
+              <line x1="100" y1="155" x2="100" y2="165" stroke="#1a1a1a" stroke-width="1"/>
+              <text x="100" y="180" text-anchor="middle" font-family="'SF Mono',monospace" font-size="10" fill="#757575">10^2 yr</text>
+              <text x="100" y="193" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#999">100年</text>
+
+              <line x1="230" y1="155" x2="230" y2="165" stroke="#1a1a1a" stroke-width="1"/>
+              <text x="230" y="180" text-anchor="middle" font-family="'SF Mono',monospace" font-size="10" fill="#757575">10^5 yr</text>
+              <text x="230" y="193" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#999">10万年</text>
+
+              <line x1="490" y1="155" x2="490" y2="165" stroke="#1a1a1a" stroke-width="1"/>
+              <text x="490" y="180" text-anchor="middle" font-family="'SF Mono',monospace" font-size="10" fill="#757575">10^10 yr</text>
+              <text x="490" y="193" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#999">100億年</text>
+
+              <!-- Two scenarios as bars -->
+              <rect x="80" y="60" width="20" height="80" rx="2" fill="#b23a2f" opacity="0.9"/>
+              <text x="90" y="50" text-anchor="middle" font-family="'SF Mono',monospace" font-size="9" fill="#b23a2f">楽観</text>
+              <rect x="210" y="60" width="20" height="80" rx="2" fill="#b23a2f" opacity="0.5"/>
+              <text x="220" y="50" text-anchor="middle" font-family="'SF Mono',monospace" font-size="9" fill="#b23a2f">保守</text>
+
+              <!-- Galaxy lifespan bar -->
+              <rect x="80" y="120" width="550" height="20" rx="2" fill="none" stroke="#1a1a1a" stroke-width="1" stroke-dasharray="4,3"/>
+              <text x="355" y="134" text-anchor="middle" font-family="'SF Mono',monospace" font-size="9" fill="#757575">銀河の存続期間</text>
+
+              <!-- Arrow annotation -->
+              <line x1="120" y1="85" x2="200" y2="85" stroke="#999" stroke-width="1" stroke-dasharray="3,3"/>
+              <text x="160" y="78" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#999">差は見えない</text>
+            </svg>
+          </div>
+
+          <p class="lead">ここに、Karnofskyの論証で最も鋭利な刃がある。「保守的であること」は「穏当であること」と同義ではない。保守的な見積もりを採用しても、結論は同じだ。我々は、銀河の歴史において「ほぼ無生命」から「生命で満たされた」状態への遷移が起きるまさにその一瞬に存在している。100年後にその遷移が始まるか、10万年後に始まるかは、100億年のスケールでは丸め誤差にすぎない。</p>
+
+          <p class="lead">W. Ross Ashbyが1956年の『Introduction to Cybernetics』で定式化した必要多様性の法則を思い出すと、この構造がより鮮明になる。制御系の多様性は、被制御系の多様性と同等以上でなければならない。銀河規模の文明は銀河規模の制御系を必要とし、その構築にかかる時間は数百年でも数万年でも、銀河の寿命に対しては瞬きの一瞬だ。保守派が「まだ早い」と言い続けても、構造は変わらない。遅延が結論を変えるには、銀河そのものの寿命と同程度の遅延が必要になる。</p>
+
+          <p class="lead">つまり、保守的であることの代償は高い。「穏当な未来」を描くためには、保守的であるだけでは足りず、宇宙進出が原理的に不可能であるか、人類が到達前に消滅するか、どちらかを主張する必要がある。保守派は自覚なく懐疑派の領域に踏み込んでいる。</p>
+        </div>
+
+        <div class="footer">
+          <span>保守的な見積もりが穏当さを保証しない逆説</span>
+          <span class="slide-count">3 / 5</span>
+        </div>
+      </section>
+
+      <!-- ═══════════ SLIDE 4 ═══════════ -->
+      <section class="slide" id="slide-4">
+        <div class="eyebrow reveal">Fermi's Silence</div>
+        <h2 class="reveal reveal-delay-1">沈黙が語る、最も不都合な推論</h2>
+        <img class="hero img-wide reveal reveal-delay-2" src="../images/every-view-is-wild/slide4.jpg" alt="Grayscale satellite dish against empty sky">
+
+        <div class="panel reveal reveal-delay-3">
+          <p class="lead">では、宇宙進出そのものを否定する。人類は銀河に広がらない。技術的に不可能だから。やる動機がないから。先に自滅するから。この懐疑的な立場は、一見すると最も「穏当」に聞こえる。だがKarnofskyは、懐疑派がフェルミパラドックスの前で沈黙せざるを得ないことを指摘する。</p>
+
+          <p class="lead">フェルミパラドックスの核心は、二つの観測事実の組み合わせにある。第一に、宇宙進出は物理法則の範囲内で実現可能に見える。第二に、銀河は空である。この組み合わせ自体が異常だ。「穏当」な世界は、銀河が知的生命で溢れているか、宇宙旅行が原理的に不可能であるか、どちらかの世界だろう。だが現実はそのどちらでもない。</p>
+
+          <p class="lead">Karnofskyは懐疑派の根拠を6つに分類した。それぞれが依存する前提と、反証可能性の度合いを検証すると、興味深い構造が浮かび上がる。</p>
+
+          <table class="compare">
+            <thead>
+              <tr>
+                <th>懐疑の類型</th>
+                <th>依存する前提</th>
+                <th>反証可能性</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>技術的不可能</strong></td>
+                <td>物理法則が恒星間航行を許容しない</td>
+                <td style="color:var(--accent);">低い &mdash; 現在の物理学と矛盾</td>
+              </tr>
+              <tr>
+                <td><strong>動機の不在</strong></td>
+                <td>十分に進んだ文明は拡張を望まない</td>
+                <td>検証不能 &mdash; 進んだ文明の心理を推測</td>
+              </tr>
+              <tr>
+                <td><strong>文明の不安定性</strong></td>
+                <td>多惑星文明は数十億年維持できない</td>
+                <td>中程度 &mdash; 自己複製probe不要論と矛盾</td>
+              </tr>
+              <tr>
+                <td><strong>自滅</strong></td>
+                <td>全ての知的文明が宇宙進出前に滅びる</td>
+                <td style="color:var(--accent);">現時点で最も支持者が多いが、<strong>100%のフィルタ率</strong>を要求</td>
+              </tr>
+              <tr>
+                <td><strong>先行文明の存在</strong></td>
+                <td>異星文明が先に銀河を植民済み</td>
+                <td style="color:var(--accent);">観測証拠なし &mdash; 銀河は空に見える</td>
+              </tr>
+              <tr>
+                <td><strong>隠蔽・シミュレーション</strong></td>
+                <td>我々の観測が根本的に誤っている</td>
+                <td>検証不能 &mdash; 原理的に反証できない</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <p class="lead">6つの類型のうち、反証可能な主張は少数だ。そして反証可能なもの（「技術的に不可能」「先行文明の存在」）は、現在の物理学や観測データと既に緊張関係にある。残る主張は検証不能な領域に逃げ込んでいる。Karnofskyは「50%以上の確率で懐疑的立場が正しい」と認めつつも、懐疑派が穏当であるためには、これらの論拠の少なくとも一つが「圧倒的に高い確率で正しい」ことを示す必要があると指摘する。</p>
+
+          <div class="note">
+            フェルミパラドックスの分析が示唆する最も不都合な推論がここにある。「銀河が空である」ことが「人類が最初の知的文明、あるいは極めて初期の知的文明である」ことを意味するなら、<strong>銀河規模の文明への最も困難なステップは、人類がすでに踏破している</strong>ことになる。生命の起源、多細胞化、知能の発達、言語の獲得、技術文明の構築。これらの累積的な「奇跡」が最大のボトルネックであり、残りのステップ（宇宙進出）は相対的に容易だという結論だ。Robin Hansonが1998年に "The Great Filter" 論文で定式化したこの推論を、Karnofskyは自身の文脈に再配置している。
+          </div>
+
+          <p class="lead">ここに論証の折れ目がある。フェルミパラドックスからの推論は、「銀河に他の文明がいない」という観測の不在を根拠にしている。不在の証明は原理的に弱い。SETIの探査範囲は銀河全体のごく一部であり、「見つかっていない」ことが「存在しない」ことを意味するかどうかは、探査のカバー率に依存する。Karnofskyはこの弱点を明示的には扱っていない。だが、この弱さを認めてなお、論証の骨格は残る。なぜなら、フェルミの問いに対する「穏当な回答」が存在しないこと自体が、彼の主張の核心だからだ。</p>
+        </div>
+
+        <div class="footer">
+          <span>懐疑的立場もまた、穏当さを確保できない</span>
+          <span class="slide-count">4 / 5</span>
+        </div>
+      </section>
+
+      <!-- ═══════════ SLIDE 5 ═══════════ -->
+      <section class="slide" id="slide-5">
+        <div class="eyebrow reveal">Inversion</div>
+        <h2 class="reveal reveal-delay-1">あの青い点は、起源だった</h2>
+        <img class="hero reveal reveal-delay-2" src="../images/every-view-is-wild/slide5.jpg" alt="Earth atmosphere seen from orbit">
+
+        <div class="panel reveal reveal-delay-3">
+          <p class="lead">カール・セーガンは1990年、ボイジャー1号が60億キロメートルの彼方から撮影した地球の写真を「Pale Blue Dot」と名づけた。「この点の上で、人類のあらゆる喜びと苦しみが繰り広げられた。あらゆる王と農民、あらゆる若い恋人たちが」。この修辞は、人類の矮小さを詩的に表現するものとして定着した。</p>
+
+          <p class="lead">Karnofskyはこの修辞を反転させる。もし彼の分析が正しければ、あの青い点は宇宙における人類のちっぽけさを示すのではなく、<strong>銀河文明の起源地</strong>を示している。数千億の恒星系に広がるかもしれない文明の、種子がここにある。セーガンが描いた「ちっぽけさ」は、正確には「起源性」と読み替えるべきものだった。</p>
+
+          <p class="lead">2021年にこの文章が書かれてから5年が経った。その間に起きたことは、Karnofskyの予測の射程が短すぎた可能性を示唆している。彼は「21世紀中に」と書いた。だが<a href="26-automation-bottleneck-regime.html" style="color:inherit;border-bottom:1px solid #999;transition:border-color 0.3s;">産業爆発の前提条件</a>は、2020年代後半に既に部分的に整い始めている。OpenAIの研究者たちが語る「数年以内のAGI」という時間感覚、Anthropicのscaling researchが示す能力曲線の傾き、Google DeepMindのGeminiアーキテクチャの拡張速度。これらはいずれも、「21世紀中」という悠長なスケジュールを内側から圧縮している。</p>
+
+          <p class="lead">だが、この記事の核心は予測の精度にはない。Karnofskyの本当の功績は、<strong>未来の内容ではなく、未来の構造を証明した</strong>ことだ。どの分岐を選んでも「異常」に着地するという構造は、個々の予測が外れても崩れない。楽観シナリオの具体的なタイムラインが変わっても、保守シナリオの年数が伸びても、懐疑シナリオの根拠が一つ崩れても、三叉路の構造自体は残る。なぜなら、穏当な選択肢を生成するためには、フェルミパラドックスを解決する必要があり、その解決策はどれも穏当ではないからだ。</p>
+
+          <p class="lead">冒頭で、あなたは人類の未来について穏当な一文を書こうとした。それが不可能であることを、5枚のスライドを通じて検証した。では、残る問いはこうだ。</p>
+
+          <p class="lead" style="font-size:18px;font-weight:700;color:var(--black);max-width:680px;">穏当な未来が存在しないという事実を前にして、我々の次の判断は何に基づくべきか。「異常な時代にいる」という認識は、意思決定の基盤になりうるのか。それとも、異常さの認識そのものが、判断を麻痺させる装置にすぎないのか。</p>
+        </div>
+
+        <div class="footer">
+          <span>穏当さの不在は、判断の基盤になるか</span>
+          <span class="slide-count">5 / 5</span>
+        </div>
+      </section>
+
+      <!-- ═══════════ Article Navigation ═══════════ -->
+      <section class="slide" style="min-height:auto;padding:64px 48px 80px;grid-template-rows:auto auto auto 1fr;">
+        <div class="eyebrow reveal">Continue Reading</div>
+        <h2 class="reveal reveal-delay-1" style="max-width:none;">次の記事へ</h2>
+        <div class="panel reveal reveal-delay-2">
+          <div class="grid-2">
+            <a href="26-automation-bottleneck-regime.html" class="card" style="color:inherit;display:block;">
+              <p style="font-family:'SF Mono','Fira Code',Menlo,Consolas,monospace;font-feature-settings:normal;font-size:11px;letter-spacing:0.083em;text-transform:uppercase;color:#757575;margin-bottom:12px;">&larr; Prev &middot; No.26</p>
+              <p><strong>自動化率77%の誤読 &mdash; 産業爆発を信じない合理性は、どこで壊れるか</strong></p>
+            </a>
+            <div class="card" style="opacity:0.35;">
+              <p style="font-family:'SF Mono','Fira Code',Menlo,Consolas,monospace;font-feature-settings:normal;font-size:11px;letter-spacing:0.083em;text-transform:uppercase;color:#757575;margin-bottom:12px;">Next &rarr;</p>
+              <p>最新の記事です</p>
+            </div>
+          </div>
+          <p style="margin-top:32px;text-align:center;">
+            <a href="../index.html" style="color:inherit;border-bottom:1px solid #999;padding-bottom:2px;">All Articles &mdash; 記事一覧へ</a>
+          </p>
+          <p style="margin-top:16px;text-align:center;font-family:'SF Mono','Fira Code',Menlo,Consolas,monospace;font-size:11px;letter-spacing:0.083em;text-transform:uppercase;color:#757575;">
+            <a href="../index.html#filter=takeoff" style="color:inherit;border-bottom:1px solid #999;padding-bottom:2px;">Takeoff カテゴリの記事一覧 &rarr;</a>
+          </p>
+        </div>
+      </section>
+    </main>
+
+    <footer class="credits">
+      <p>
+        Photos: All images from <a href="https://unsplash.com">Unsplash</a> (free license).
+        Slide 1: <a href="https://unsplash.com/photos/DPo30-zDO5g">Aerial intersection road</a> /
+        Slide 2: <a href="https://unsplash.com/photos/pU9c26VJZCc">Telescope interior</a> /
+        Slide 3: <a href="https://unsplash.com/photos/WeYamle9fDM">Mountain canyon scenery</a> /
+        Slide 4: <a href="https://unsplash.com/photos/sE95ZRwJo5U">Grayscale satellite dish</a> /
+        Slide 5: <a href="https://unsplash.com/photos/7Cz6bWjdlDs">Space Shuttle orbiting Earth</a> /
+        Thumbnail: <a href="https://unsplash.com/photos/YOId6dA4c0I">Nebula on black background</a>
+      </p>
+      <p style="margin-top:16px;">
+        References:<br>
+        [1] Holden Karnofsky, "All Possible Views About Humanity's Future Are Wild," Cold Takes, July 13, 2021.<br>
+        [2] W. Stanley Jevons, <em>The Coal Question</em>, Macmillan, 1865.<br>
+        [3] Robin Hanson, "The Great Filter &mdash; Are We Almost Past It?," George Mason University, 1998.<br>
+        [4] W. Ross Ashby, <em>An Introduction to Cybernetics</em>, Chapman &amp; Hall, 1956.<br>
+        [5] Jared Kaplan et al., "Scaling Laws for Neural Language Models," OpenAI / Johns Hopkins, arXiv:2001.08361, January 2020.<br>
+        [6] Jordan Hoffmann et al., "Training Compute-Optimal Large Language Models" (Chinchilla), DeepMind, arXiv:2203.15556, March 2022.<br>
+        [7] Carl Sagan, <em>Pale Blue Dot: A Vision of the Human Future in Space</em>, Random House, 1994.<br>
+        [8] Nick Bostrom, "Are We Living in a Computer Simulation?," <em>Philosophical Quarterly</em>, Vol. 53, No. 211, pp. 243&ndash;255, 2003.<br>
+        [9] Enrico Fermi (attributed), "Where Is Everybody?," informal remark at Los Alamos National Laboratory, 1950.
+      </p>
+      <p style="margin-top:16px;">
+        Note on provenance: This article analyzes the argumentative structure of Karnofsky's "Most Important Century" series. The "triple fork" framing and the specific connection to Jevons's paradox at galactic scale are editorial constructions of AGI HUB, not Karnofsky's own terminology.
+      </p>
+    </footer>
+
+
+    <!-- ═══════════ Reader Feedback ═══════════ -->
+    <section class="feedback-section" style="max-width:720px;margin:0 auto;padding:64px 24px 48px;">
+      <h3 style="font-family:'SF Mono','Fira Code',Menlo,Consolas,monospace;font-feature-settings:normal;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--meta,#757575);margin-bottom:32px;text-align:center;">Reader Feedback</h3>
+
+      <form id="feedback-form" style="display:grid;gap:24px;" onsubmit="return submitFeedback(event)">
+        <fieldset style="border:none;padding:0;">
+          <legend style="font-size:13px;color:var(--mid,#585858);margin-bottom:12px;">評価 <span style="color:#b00;">*</span></legend>
+          <div style="display:flex;gap:8px;align-items:center;">
+            <span style="font-size:12px;color:var(--meta,#757575);">1</span>
+            <div id="star-group" style="display:flex;gap:4px;">
+              <input type="radio" name="stars" value="1" id="s1" required style="display:none;">
+              <label for="s1" class="star-label" data-value="1">&#9733;</label>
+              <input type="radio" name="stars" value="2" id="s2" style="display:none;">
+              <label for="s2" class="star-label" data-value="2">&#9733;</label>
+              <input type="radio" name="stars" value="3" id="s3" style="display:none;">
+              <label for="s3" class="star-label" data-value="3">&#9733;</label>
+              <input type="radio" name="stars" value="4" id="s4" style="display:none;">
+              <label for="s4" class="star-label" data-value="4">&#9733;</label>
+              <input type="radio" name="stars" value="5" id="s5" style="display:none;">
+              <label for="s5" class="star-label" data-value="5">&#9733;</label>
+            </div>
+            <span style="font-size:12px;color:var(--meta,#757575);">5</span>
+          </div>
+        </fieldset>
+
+        <div>
+          <label for="fb-comment" style="font-size:13px;color:var(--mid,#585858);display:block;margin-bottom:8px;">コメント <span style="color:#b00;">*</span></label>
+          <textarea id="fb-comment" required rows="4" style="width:100%;padding:12px;font-size:14px;line-height:1.6;border:1px solid var(--border,#e4e4e4);border-radius:4px;background:var(--bg-alt,#f0efea);color:var(--body-text,#1a1a1a);font-family:inherit;resize:vertical;"></textarea>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+          <div>
+            <label for="fb-name" style="font-size:13px;color:var(--mid,#585858);display:block;margin-bottom:8px;">名前</label>
+            <input type="text" id="fb-name" style="width:100%;padding:10px 12px;font-size:14px;border:1px solid var(--border,#e4e4e4);border-radius:4px;background:var(--bg-alt,#f0efea);color:var(--body-text,#1a1a1a);font-family:inherit;">
+          </div>
+          <div>
+            <label for="fb-email" style="font-size:13px;color:var(--mid,#585858);display:block;margin-bottom:8px;">メールアドレス <span style="color:#b00;">*</span></label>
+            <input type="email" id="fb-email" required style="width:100%;padding:10px 12px;font-size:14px;border:1px solid var(--border,#e4e4e4);border-radius:4px;background:var(--bg-alt,#f0efea);color:var(--body-text,#1a1a1a);font-family:inherit;">
+          </div>
+        </div>
+
+        <button type="submit" id="fb-submit" style="justify-self:center;padding:10px 40px;font-size:13px;font-family:'SF Mono','Fira Code',Menlo,Consolas,monospace;letter-spacing:0.06em;text-transform:uppercase;border:1px solid var(--accent,#1a1a1a);border-radius:4px;background:transparent;color:var(--accent,#1a1a1a);cursor:pointer;transition:all 0.2s ease;">Send Feedback</button>
+      </form>
+
+      <div id="fb-success" style="display:none;text-align:center;padding:32px 0;">
+        <p style="font-size:14px;color:var(--mid,#585858);">フィードバックを送信しました。ありがとうございます。</p>
+      </div>
+      <div id="fb-error" style="display:none;text-align:center;padding:16px 0;">
+        <p style="font-size:13px;color:#b00;">送信に失敗しました。時間をおいて再度お試しください。</p>
+      </div>
+
+      <style>
+        .star-label{font-size:28px;cursor:pointer;color:var(--border,#e4e4e4);transition:color .15s ease;user-select:none;}
+        .star-label:hover{color:var(--meta,#757575);}
+        .star-label.active{color:var(--accent,#1a1a1a);}
+        #fb-submit:hover{background:var(--accent,#1a1a1a);color:var(--bg,#fafaf7);}
+        @media(max-width:600px){
+          .feedback-section div[style*="grid-template-columns"]{grid-template-columns:1fr !important;}
+        }
+      </style>
+
+      <iframe name="fb-iframe" style="display:none;"></iframe>
+
+      <script>
+      (function(){
+        const FORM_URL='https://docs.google.com/forms/d/e/1FAIpQLSclh1ETzrlXD4py-MJhlcMfL22vznue-1dLCWMlRCkelwA-xQ/formResponse';
+        const FIELDS={email:'emailAddress',stars:'entry.1131711956',articleNo:'entry.897250758',comment:'entry.242373434',name:'entry.420368578'};
+        function getArticleNo(){
+          const ey=document.querySelector('.eyebrow');
+          if(ey){const m=ey.textContent.match(/No\.\s*(\d+)/);if(m)return m[1];}
+          const m2=location.pathname.match(/(\d+)-/);
+          return m2?m2[1]:'';
+        }
+        document.querySelectorAll('.star-label').forEach(function(label){
+          label.addEventListener('click',function(){
+            document.querySelectorAll('.star-label').forEach(function(l){l.classList.remove('active');});
+            var v=parseInt(this.dataset.value);
+            var labels=document.querySelectorAll('.star-label');
+            labels.forEach(function(l){if(parseInt(l.dataset.value)<=v)l.classList.add('active');});
+          });
+        });
+        window.submitFeedback=function(e){
+          e.preventDefault();
+          var form=document.getElementById('feedback-form');
+          var btn=document.getElementById('fb-submit');
+          var stars=form.querySelector('input[name="stars"]:checked');
+          if(!stars){alert('評価を選択してください');return false;}
+          btn.disabled=true;btn.textContent='Sending...';
+          var params=new URLSearchParams();
+          params.append(FIELDS.email,document.getElementById('fb-email').value);
+          params.append(FIELDS.stars,stars.value);
+          params.append(FIELDS.articleNo,getArticleNo());
+          params.append(FIELDS.comment,document.getElementById('fb-comment').value);
+          params.append(FIELDS.name,document.getElementById('fb-name').value);
+          fetch(FORM_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:params.toString()})
+          .then(function(){
+            form.style.display='none';
+            document.getElementById('fb-success').style.display='block';
+          })
+          .catch(function(){
+            document.getElementById('fb-error').style.display='block';
+            btn.disabled=false;btn.textContent='Send Feedback';
+          });
+          return false;
+        };
+      })();
+      </script>
+    </section>
+
+
+    <script>
+      const buttons = Array.from(document.querySelectorAll('.nav button'));
+      const slides = Array.from(document.querySelectorAll('.slide'));
+      const progress = document.getElementById('progress');
+
+      function setActive(id) {
+        buttons.forEach(b => b.classList.toggle('active', b.dataset.target === id));
+      }
+
+      buttons.forEach(b => {
+        b.addEventListener('click', () => {
+          document.getElementById(b.dataset.target)?.scrollIntoView({ behavior: 'smooth' });
+        });
+      });
+
+      const navObserver = new IntersectionObserver(entries => {
+        entries.forEach(e => { if (e.isIntersecting) setActive(e.target.id); });
+      }, { threshold: 0.5 });
+
+      slides.forEach(s => navObserver.observe(s));
+
+      const revealObserver = new IntersectionObserver(entries => {
+        entries.forEach(e => {
+          if (e.isIntersecting) {
+            e.target.classList.add('visible');
+          }
+        });
+      }, { threshold: 0.15 });
+
+      document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+      window.addEventListener('scroll', () => {
+        const h = document.documentElement;
+        const scrolled = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
+        progress.style.width = scrolled + '%';
+      });
+    </script>
+
+    <!-- Google Translate Widget -->
+    <script>
+    function googleTranslateElementInit() {
+      new google.translate.TranslateElement({
+        pageLanguage: 'ja',
+        includedLanguages: 'en,zh-CN,ko,fr,de,es',
+        layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+        autoDisplay: false
+      }, 'google_translate_element');
+    }
+    </script>
+    <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+  </body>
+</html>

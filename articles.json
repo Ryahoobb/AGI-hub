@@ -1,5 +1,16 @@
 [
   {
+    "no": 28,
+    "slug": "28-pdoom-distribution",
+    "category": "risk",
+    "date": "2026.04.13",
+    "slides": "7 Slides",
+    "thumb": "",
+    "title": "p(doom)の分布 — なぜ人類は自らの破滅確率を合意できないのか",
+    "excerpt": "AI Impacts 2,778名の中央値5%、Yudkowskyの95%超、LeCunの0.01%未満。4桁にわたる散乱は、データ不足ではなく問いの構造が合意を許さないことを示す。Carlsmithの6段階分解、XPTの収束失敗、双峰分布の発見から、測定不能なリスクへの向き合い方を問う。",
+    "featured": true
+  },
+  {
     "no": 27,
     "slug": "27-every-view-is-wild",
     "category": "takeoff",
@@ -8,7 +19,7 @@
     "thumb": "images/thumb-every-view-is-wild.jpg",
     "title": "どちらに転んでも、現在は異常である",
     "excerpt": "Holden Karnofskyの \"Most Important Century\" を軸に、von Foersterの人口双曲線、Hansonの脳エミュレーション経済、Karnofskyの原子あたり経済限界を統合する。楽観でも保守でも懐疑でも、穏当な未来予測は存在しない。三叉路の構造全体が、現在という時間の異常さを告発している。",
-    "featured": true
+    "featured": false
   },
   {
     "no": 26,

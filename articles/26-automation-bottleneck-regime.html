@@ -288,6 +288,61 @@
             </div>
           </div>
           <p class="lead">これらの資本は、前のセクションで見た段階論のどこに効くのか。TSMCとASMLの投資は、チェーン化（段階2）で必要になるAIチップの供給能力を、ボトルネック到達（段階3）の前に積み上げている。Figureの量産工場とxAIの計算基盤は、ソフトウェア自動化を物理世界に接地させる段階4の前提条件を先行して建設している。IEAが指摘する送電インフラの4-8年は、この資本がフル稼働するまでの時定数だ。資本の投入は段階論と無関係に動いているのではない。<strong>段階2から段階4への移行を物理的に可能にするインフラを、移行が起きる前に建設している</strong>。</p>
+
+          <div class="svg-diagram">
+            <svg viewBox="0 0 680 280" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <marker id="arrowDown26b" markerWidth="6" markerHeight="8" refX="3" refY="8" orient="auto">
+                  <path d="M0,0 L3,8 L6,0" fill="var(--accent, #2f2b92)"/>
+                </marker>
+              </defs>
+              <!-- Stage boxes -->
+              <rect x="40" y="20" width="130" height="50" rx="3" fill="none" stroke="#ccc" stroke-width="1.5"/>
+              <text x="105" y="42" text-anchor="middle" font-family="'SF Mono',monospace" font-size="10" fill="#999" letter-spacing="0.05em">STAGE 1</text>
+              <text x="105" y="58" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#999">局所的な自動化</text>
+
+              <rect x="190" y="20" width="130" height="50" rx="3" fill="none" stroke="var(--accent, #2f2b92)" stroke-width="1.5"/>
+              <text x="255" y="42" text-anchor="middle" font-family="'SF Mono',monospace" font-size="10" fill="var(--accent, #2f2b92)" letter-spacing="0.05em">STAGE 2</text>
+              <text x="255" y="58" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#1a1a1a">チェーン形成</text>
+
+              <rect x="340" y="20" width="130" height="50" rx="3" fill="none" stroke="var(--accent, #2f2b92)" stroke-width="2"/>
+              <text x="405" y="42" text-anchor="middle" font-family="'SF Mono',monospace" font-size="10" fill="var(--accent, #2f2b92)" letter-spacing="0.05em">STAGE 3</text>
+              <text x="405" y="58" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#1a1a1a">ボトルネック到達</text>
+
+              <rect x="490" y="20" width="150" height="50" rx="3" fill="var(--accent-soft, rgba(47,43,146,0.08))" stroke="var(--accent, #2f2b92)" stroke-width="2"/>
+              <text x="565" y="42" text-anchor="middle" font-family="'SF Mono',monospace" font-size="10" fill="var(--accent, #2f2b92)" letter-spacing="0.05em" font-weight="700">STAGE 4</text>
+              <text x="565" y="58" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#1a1a1a">レジーム転換</text>
+
+              <!-- Arrows between stages -->
+              <line x1="170" y1="45" x2="190" y2="45" stroke="#ccc" stroke-width="1.5" marker-end="url(#arrowDown26b)"/>
+              <line x1="320" y1="45" x2="340" y2="45" stroke="var(--accent, #2f2b92)" stroke-width="1.5" marker-end="url(#arrowDown26b)"/>
+              <line x1="470" y1="45" x2="490" y2="45" stroke="var(--accent, #2f2b92)" stroke-width="1.5" marker-end="url(#arrowDown26b)"/>
+
+              <!-- Capital investment annotations -->
+              <!-- TSMC/ASML → Stage 2 -->
+              <line x1="255" y1="70" x2="255" y2="115" stroke="var(--accent, #2f2b92)" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#arrowDown26b)"/>
+              <rect x="170" y="115" width="170" height="52" rx="3" fill="var(--accent-soft, rgba(47,43,146,0.08))" stroke="var(--accent, #2f2b92)" stroke-width="1"/>
+              <text x="255" y="133" text-anchor="middle" font-family="'SF Mono',monospace" font-size="9" fill="var(--accent, #2f2b92)" letter-spacing="0.04em">半導体インフラ</text>
+              <text x="255" y="148" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#1a1a1a">TSMC $38-42B</text>
+              <text x="255" y="161" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#757575">AIチップ供給能力を積み上げ</text>
+
+              <!-- Figure/xAI → Stage 4 -->
+              <line x1="565" y1="70" x2="565" y2="115" stroke="var(--accent, #2f2b92)" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#arrowDown26b)"/>
+              <rect x="480" y="115" width="170" height="52" rx="3" fill="var(--accent-soft, rgba(47,43,146,0.08))" stroke="var(--accent, #2f2b92)" stroke-width="1"/>
+              <text x="565" y="133" text-anchor="middle" font-family="'SF Mono',monospace" font-size="9" fill="var(--accent, #2f2b92)" letter-spacing="0.04em">物理インフラ</text>
+              <text x="565" y="148" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#1a1a1a">Figure $1B + xAI 100万GPU</text>
+              <text x="565" y="161" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#757575">物理自動化の前提を先行建設</text>
+
+              <!-- Current position marker -->
+              <line x1="105" y1="20" x2="105" y2="10" stroke="#999" stroke-width="1.5"/>
+              <line x1="192" y1="20" x2="192" y2="10" stroke="#999" stroke-width="1.5"/>
+              <line x1="105" y1="10" x2="192" y2="10" stroke="#999" stroke-width="1.5"/>
+              <text x="148" y="7" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#999">← 2026年現在地</text>
+
+              <!-- IEA time constraint annotation -->
+              <text x="255" y="190" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#757575" font-style="italic">※送電インフラ整備に4〜8年（IEA推計）</text>
+            </svg>
+          </div>
           <p class="lead">産業爆発を「起きるかもしれない仮説」ではなく「既に数千億ドルが賭けられたプロジェクト」として扱うべき理由がここにある。投資が回収不能になるリスクを取ってなお動いている主体がいる以上、「起きない」と主張する側にも同等の根拠が求められる。</p>
           <div class="note">
             <strong>forward-looking statementに関する注記:</strong> TSMC Arizona追加投資$100B、xAI Memphis 100万GPU、Figure BotQ量産計画は、いずれも各社の将来見通しであり確定支出ではない。NVIDIAの公式開示にも「safe harbor / reliance on third parties to manufacture, assemble, package and test」と明記されている。本稿はこれらを「企業が取るリスクの規模感」として引用している。CEO発言はfrontier labsの内部期待と戦略姿勢の強い証拠だが、独立した科学的証明ではない。

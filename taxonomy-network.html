@@ -195,10 +195,27 @@
 
   @media (max-width: 900px) {
     .page-header { padding: 32px 24px 0; }
-    .legend { padding: 16px 24px; }
+    .page-title { font-size: 28px; }
+    .legend { padding: 16px 24px; gap: 16px; }
     .info-panel { padding: 0 24px 48px; }
     .grid-section { padding: 0 24px 64px; }
     .topic-grid { grid-template-columns: 1fr; }
+    .topic-filler.span-2,
+    .topic-filler.span-3 { grid-column: span 1; }
+    #graph-container { min-height: 360px; height: 55vh; }
+  }
+  @media (max-width: 480px) {
+    .page-header { padding: 24px 16px 0; }
+    .page-title { font-size: 24px; }
+    .page-subtitle { font-size: 14px; }
+    .legend { padding: 12px 16px; gap: 12px; flex-wrap: wrap; }
+    .info-panel { padding: 0 16px 36px; }
+    .grid-section { padding: 0 16px 48px; }
+    #graph-container { min-height: 300px; height: 50vh; }
+    .topic { padding: 16px; min-height: 100px; }
+    .topic-img { width: calc(100% + 32px); margin: 0 -16px 12px; }
+    .topic-thumb { width: calc(100% + 32px); margin: -16px -16px 12px; }
+    .domain-header { flex-direction: column; gap: 4px; }
   }
 </style>
 </head>
@@ -936,7 +953,8 @@
 
   // ── Position nodes ──
   function positionNodes() {
-    var pad = 60;
+    var isMobile = W < 600;
+    var pad = isMobile ? 36 : 60;
     domains.forEach(function(d) {
       d.px = pad + d.x * (W - pad * 2);
       d.py = pad + d.y * (H - pad * 2);
@@ -951,7 +969,7 @@
       var idx = siblings.indexOf(t);
       var count = siblings.length;
       var angle = (Math.PI * 2 * idx / count) - Math.PI / 2;
-      var radius = 55 + count * 6;
+      var radius = isMobile ? 35 + count * 4 : 55 + count * 6;
       t.px = dom.px + Math.cos(angle) * radius;
       t.py = dom.py + Math.sin(angle) * radius;
     });
@@ -990,7 +1008,7 @@
 
     // Topic nodes
     topics.forEach(function(t) {
-      var r = t.link ? 6 : 4;
+      var r = t.link ? (isMobile ? 5 : 6) : (isMobile ? 3 : 4);
       ctx.beginPath();
       ctx.arc(t.px, t.py, r, 0, Math.PI * 2);
       if (t.link) {
@@ -1006,23 +1024,25 @@
     });
 
     // Domain nodes
+    var isMobile = W < 600;
+    var domR = isMobile ? 10 : 14;
     domains.forEach(function(d) {
       ctx.beginPath();
-      ctx.arc(d.px, d.py, 14, 0, Math.PI * 2);
+      ctx.arc(d.px, d.py, domR, 0, Math.PI * 2);
       ctx.fillStyle = '#1a1a1a';
       ctx.fill();
 
       // Label
-      ctx.font = '700 10px "SF Mono", "Fira Code", Menlo, monospace';
+      ctx.font = isMobile ? '700 8px "SF Mono", "Fira Code", Menlo, monospace' : '700 10px "SF Mono", "Fira Code", Menlo, monospace';
       ctx.fillStyle = '#1a1a1a';
       ctx.textAlign = 'center';
-      ctx.fillText(d.name, d.px, d.py + 28);
+      ctx.fillText(d.name, d.px, d.py + (isMobile ? 20 : 28));
     });
 
     // Domain numbers
     domains.forEach(function(d) {
       var num = d.id.replace('d', '');
-      ctx.font = '700 9px "SF Mono", Menlo, monospace';
+      ctx.font = isMobile ? '700 7px "SF Mono", Menlo, monospace' : '700 9px "SF Mono", Menlo, monospace';
       ctx.fillStyle = '#fff';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
@@ -1089,6 +1109,47 @@
   canvas.addEventListener('mouseleave', function() {
     tooltip.classList.remove('visible');
   });
+
+  // ── Touch support ──
+  canvas.addEventListener('touchstart', function(e) {
+    var touch = e.touches[0];
+    var rect = canvas.getBoundingClientRect();
+    var mx = touch.clientX - rect.left;
+    var my = touch.clientY - rect.top;
+    var hit = null;
+    var hitDist = Infinity;
+
+    allNodes.forEach(function(n) {
+      var dx = mx - n.px, dy = my - n.py;
+      var dist = Math.sqrt(dx*dx + dy*dy);
+      var threshold = n.id.startsWith('d') ? 20 : 14;
+      if (dist < threshold && dist < hitDist) {
+        hit = n;
+        hitDist = dist;
+      }
+    });
+
+    if (hit) {
+      e.preventDefault();
+      if (hit.link) {
+        window.location.href = hit.link;
+      } else {
+        var tt = tooltip;
+        if (hit.id.startsWith('d')) {
+          var count = topics.filter(function(t) { return t.domain === hit.id; }).length;
+          var linked = topics.filter(function(t) { return t.domain === hit.id && t.link; }).length;
+          tt.innerHTML = '<div class="tt-label">Domain</div><div class="tt-name">' + hit.name + '</div><div class="tt-desc">' + count + ' topics / ' + linked + ' covered</div>';
+        } else {
+          var label = hit.article ? hit.article : 'Coming Soon';
+          tt.innerHTML = '<div class="tt-label">' + label + '</div><div class="tt-name">' + hit.name + '</div><div class="tt-desc">' + (hit.desc || '') + '</div>';
+        }
+        tt.style.left = Math.min(touch.clientX + 10, window.innerWidth - 290) + 'px';
+        tt.style.top = (touch.clientY - 60) + 'px';
+        tt.classList.add('visible');
+        setTimeout(function() { tt.classList.remove('visible'); }, 2500);
+      }
+    }
+  }, { passive: false });
 })();
 </script>
 

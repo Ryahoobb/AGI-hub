@@ -40,16 +40,6 @@ body {
 a { color: var(--accent); text-decoration: none; }
 .mono { font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace; font-feature-settings: normal; letter-spacing: 0.05em; }
 
-/* ── Masthead ── */
-.masthead { background: var(--black); color: #fff; }
-.masthead-inner { max-width: 1200px; margin: 0 auto; padding: 20px 48px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
-.logo { font-family: "SF Mono", Menlo, monospace; font-size: 18px; font-weight: 700; letter-spacing: 0.1em; color: #fff; }
-.logo a { color: #fff; }
-.logo-mark { display: inline-block; width: 10px; height: 10px; background: #fff; margin-right: 10px; vertical-align: 1px; }
-.nav-links { display: flex; gap: 28px; font-family: "SF Mono", Menlo, monospace; font-size: 11px; letter-spacing: 0.083em; text-transform: uppercase; }
-.nav-links a { color: var(--light-gray); transition: color 0.2s; }
-.nav-links a:hover { color: #fff; }
-
 /* ── Sections ── */
 .section { max-width: 1200px; margin: 0 auto; padding: 96px 48px; }
 .section + .section { border-top: 1px solid var(--border); }
@@ -190,16 +180,16 @@ h2 { font-size: clamp(28px, 4vw, 44px); font-weight: 800; line-height: 1.2; colo
   z-index: 2;
 }
 .timeline-pin .pin-face {
-  width: 56px; height: 56px;
+  width: 44px; height: 44px;
   border-radius: 50%;
   border: 3px solid #fff;
-  box-shadow: 0 0 0 2px var(--accent), 0 6px 16px rgba(47, 43, 146, 0.35);
+  box-shadow: 0 0 0 2px var(--accent), 0 4px 12px rgba(47, 43, 146, 0.35);
   background-color: var(--accent);
   background-size: cover;
   background-position: center top;
   position: relative;
   z-index: 2;
-  margin-top: -28px;
+  margin-top: -22px;
   transition: transform 0.3s var(--ease-bounce);
   overflow: hidden;
   display: flex;
@@ -207,11 +197,11 @@ h2 { font-size: clamp(28px, 4vw, 44px); font-weight: 800; line-height: 1.2; colo
   justify-content: center;
   color: #fff;
   font-family: "SF Mono", Menlo, monospace;
-  font-size: 14px;
+  font-size: 12px;
   font-weight: 800;
   letter-spacing: 0.05em;
 }
-.timeline-pin:hover .pin-face { transform: scale(1.15); z-index: 5; }
+.timeline-pin:hover .pin-face { transform: scale(1.25); z-index: 5; }
 .timeline-pin.metaculus .pin-face {
   background: var(--green);
   box-shadow: 0 0 0 2px var(--green), 0 6px 16px rgba(26, 122, 58, 0.35);
@@ -220,7 +210,7 @@ h2 { font-size: clamp(28px, 4vw, 44px); font-weight: 800; line-height: 1.2; colo
 
 .timeline-pin .pin-line {
   position: absolute;
-  top: 28px;
+  top: 22px;
   left: 50%;
   transform: translateX(-50%);
   width: 1px;
@@ -231,10 +221,10 @@ h2 { font-size: clamp(28px, 4vw, 44px); font-weight: 800; line-height: 1.2; colo
 
 .timeline-pin .pin-card {
   position: absolute;
-  top: 90px;
+  top: 42px;
   left: 50%;
   transform: translateX(-50%);
-  padding: 10px 14px;
+  padding: 8px 12px;
   background: #fff;
   border: 1px solid var(--border);
   border-top: 3px solid var(--accent);
@@ -246,7 +236,7 @@ h2 { font-size: clamp(28px, 4vw, 44px); font-weight: 800; line-height: 1.2; colo
 /* Quote bubble — appears on hover of pin */
 .timeline-pin .pin-quote {
   position: absolute;
-  top: 90px;
+  top: 42px;
   left: 50%;
   transform: translateX(-50%) translateY(-12px);
   margin-top: 0;
@@ -304,17 +294,17 @@ h2 { font-size: clamp(28px, 4vw, 44px); font-weight: 800; line-height: 1.2; colo
 }
 .timeline-pin.metaculus .pin-card { border-top-color: var(--green); min-width: 160px; }
 .timeline-pin .pin-name {
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 800;
   color: var(--black);
   letter-spacing: -0.01em;
 }
 .timeline-pin .pin-year {
   font-family: "SF Mono", Menlo, monospace;
-  font-size: 18px;
+  font-size: 15px;
   font-weight: 700;
   color: var(--accent);
-  margin-top: 2px;
+  margin-top: 1px;
   letter-spacing: -0.02em;
 }
 .timeline-pin.metaculus .pin-year { color: var(--green); }
@@ -353,39 +343,6 @@ h2 { font-size: clamp(28px, 4vw, 44px); font-weight: 800; line-height: 1.2; colo
   white-space: nowrap;
 }
 
-/* "GAP" indicator */
-.gap-indicator {
-  position: absolute;
-  top: 180px;
-  height: 24px;
-  border-bottom: 2px dashed var(--world);
-  color: var(--world);
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-}
-.gap-indicator::before, .gap-indicator::after {
-  content: '';
-  position: absolute;
-  width: 2px;
-  height: 16px;
-  background: var(--world);
-  bottom: 0;
-}
-.gap-indicator::before { left: 0; }
-.gap-indicator::after { right: 0; }
-.gap-indicator .gap-label {
-  position: absolute;
-  bottom: 4px;
-  font-family: "SF Mono", Menlo, monospace;
-  font-size: 11px;
-  font-weight: 700;
-  color: var(--world);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  background: #fff;
-  padding: 0 10px;
-}
 
 /* ══════════════════════════════════════
    SECTION: WORLD DATA — big infographic
@@ -1038,11 +995,10 @@ h2 { font-size: clamp(28px, 4vw, 44px); font-weight: 800; line-height: 1.2; colo
   <p class="lead reveal">予測市場では当てた人が儲かる。だから口先だけの意見より精度が出る。CEOの発言にも株価と評判がかかっている。どちらも身銭を切った予測だ。</p>
 
   <div id="spoiler-toggle" style="margin-top:40px;padding:24px;background:#fff;border:1px dashed var(--accent);text-align:center;">
-    <p style="font-size:14px;color:var(--mid);margin-bottom:16px;">世界の具体的な数値は、あなたの予測にバイアスをかけます。<br><strong style="color:var(--accent);">先に自分の予測を入力することを推奨します。</strong></p>
+    <p style="font-size:14px;color:var(--mid);margin-bottom:16px;">具体的な数字は隠してある。先に自分の直感で答えたいなら、下へスクロール。</p>
     <button type="button" id="reveal-world" style="padding:12px 28px;background:transparent;color:var(--accent);border:2px solid var(--accent);font-family:inherit;font-size:13px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;cursor:pointer;">
-      バイアス覚悟で先に見る ↓
+      先に数字を見る ↓
     </button>
-    <p style="font-size:11px;color:var(--meta);margin-top:12px;font-family:'SF Mono',monospace;letter-spacing:0.05em;">先に自分の予測を入力するなら ↓ へスクロール</p>
   </div>
 
   <div class="big-stat-grid" id="world-data" style="display:none;">
@@ -1164,13 +1120,13 @@ h2 { font-size: clamp(28px, 4vw, 44px); font-weight: 800; line-height: 1.2; colo
       <div class="value-row">
         <div class="value-box you" style="grid-column: 1 / -1;">
           <div class="value-box-label">あなたの予測</div>
-          <div class="value-num"><span id="q2-display">2032</span></div>
+          <div class="value-num"><span id="q2-display">2035</span></div>
         </div>
       </div>
 
       <div class="slider-container">
         <div class="slider-track-bg"></div>
-        <input type="range" id="q2" min="2026" max="2050" value="2032" step="1">
+        <input type="range" id="q2" min="2026" max="2050" value="2035" step="1">
         <div class="slider-labels"><span>2026</span><span>2038</span><span>2050+</span></div>
       </div>
     </div>

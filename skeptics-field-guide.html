@@ -138,7 +138,46 @@
 
   /* ── Responsive ── */
   @media (max-width: 900px) { .page { padding: 0 24px; } .hero-content { padding: 44px 24px; } .card-sections { grid-template-columns: 1fr; } .sources-list { columns: 1; } .align-gap { grid-template-columns: 1fr; } .stbl .sf { font-size: 12px; } }
-  @media (max-width: 480px) { .page { padding: 0 16px; } .hero-content { padding: 32px 16px; } .hero-counts { gap: 20px; } .hero-counts strong { font-size: 22px; } .card { grid-template-columns: 36px 1fr; } .card-body { padding: 18px 16px 20px; } .card-claim { font-size: 16px; padding-left: 12px; } .pill-title { display: none; } .domain-title { font-size: 18px; } .stbl { font-size: 12px; } .stbl .sq { white-space: normal; } .cat-banner { height: 120px; } }
+  @media (max-width: 480px) { .page { padding: 0 16px; } .hero-content { padding: 32px 16px; } .hero-counts { gap: 20px; } .hero-counts strong { font-size: 22px; } .card { grid-template-columns: 36px 1fr; } .card-body { padding: 18px 16px 20px; } .card-claim { font-size: 16px; padding-left: 12px; } .pill-title { display: none; } .domain-title { font-size: 18px; } .stbl { font-size: 12px; } .stbl .sq { white-space: normal; } .cat-banner { height: 120px; } .bias-groups { grid-template-columns: 1fr; } }
+
+  /* ═══ BIAS MAP ═══ */
+  .bias-map { margin-bottom: 64px; }
+  .bias-map-title { font-family: var(--ff-mono); font-size: 12px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 8px; padding-bottom: 12px; border-bottom: 2px solid #1a1a1a; }
+  .bias-map-sub { font-size: 15px; line-height: 1.7; color: #757575; max-width: 680px; margin-bottom: 28px; }
+  .bias-groups { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 32px; }
+  .bias-group { border: 1px solid #e5e5e5; border-radius: 6px; padding: 24px; transition: box-shadow 0.25s; }
+  .bias-group:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.04); }
+  .bias-group-head { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+  .bias-group-icon { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 700; flex-shrink: 0; color: #fff; }
+  .bias-group-name { font-size: 17px; font-weight: 700; }
+  .bias-group-count { font-family: var(--ff-mono); font-size: 11px; color: #999; margin-left: auto; }
+  .bias-group-desc { font-size: 13px; line-height: 1.6; color: #757575; margin-bottom: 14px; }
+  .bias-items { display: flex; flex-direction: column; gap: 8px; margin-bottom: 14px; }
+  .bias-item { font-size: 13px; line-height: 1.5; padding-left: 12px; border-left: 2px solid #e5e5e5; }
+  .bias-item strong { color: #1a1a1a; }
+  .bias-item span { color: #999; font-size: 12px; }
+  .bias-claims { display: flex; flex-wrap: wrap; gap: 4px; }
+  .bias-claim-num { display: inline-block; font-family: var(--ff-mono); font-size: 10px; font-weight: 700; color: #999; background: #f5f5f5; padding: 2px 6px; border-radius: 3px; transition: all 0.2s; text-decoration: none; }
+  .bias-claim-num:hover { background: #1a1a1a; color: #fff; }
+  .bias-heat { width: 100%; border-collapse: collapse; margin-bottom: 16px; }
+  .bias-heat th { font-family: var(--ff-mono); font-size: 9px; letter-spacing: 0.08em; text-transform: uppercase; color: #999; font-weight: 600; padding: 8px 6px; text-align: center; border-bottom: 1px solid #e5e5e5; }
+  .bias-heat th:first-child { text-align: left; width: 140px; }
+  .bias-heat td { padding: 6px; text-align: center; border-bottom: 1px solid #f0f0f0; }
+  .bias-heat td:first-child { text-align: left; font-size: 12px; font-weight: 600; }
+  .bh-cell { width: 28px; height: 28px; border-radius: 4px; margin: 0 auto; }
+  .bh-3 { background: #1a1a1a; }
+  .bh-2 { background: #888; }
+  .bh-1 { background: #d5d5d5; }
+  .bh-0 { background: #f5f5f5; }
+  .bias-legend { display: flex; gap: 16px; align-items: center; font-family: var(--ff-mono); font-size: 10px; color: #999; }
+  .bias-legend-item { display: inline-flex; align-items: center; gap: 4px; }
+  .bias-legend-swatch { width: 12px; height: 12px; border-radius: 2px; display: inline-block; }
+  .bias-tag { display: inline-block; font-family: var(--ff-mono); font-size: 9px; padding: 2px 6px; border-radius: 3px; margin-left: 6px; vertical-align: middle; line-height: 1; letter-spacing: 0.02em; }
+  .bias-tag-linear { color: #1a1a1a; background: rgba(26,26,26,0.08); }
+  .bias-tag-anchor { color: #555; background: rgba(85,85,85,0.08); }
+  .bias-tag-category { color: #888; background: rgba(136,136,136,0.1); }
+  .bias-tag-control { color: #aaa; background: rgba(170,170,170,0.12); }
+  @media (max-width: 900px) { .bias-groups { grid-template-columns: 1fr; } .bias-heat th, .bias-heat td { padding: 4px 3px; font-size: 8px; } }
 </style>
 </head>
 <body class="has-site-header">
@@ -156,6 +195,7 @@
     <div class="hero-counts">
       <div><strong>8</strong>カテゴリ</div>
       <div><strong>38</strong>否定主張</div>
+      <div><strong>11</strong>バイアス</div>
       <div><strong>28</strong>関連記事</div>
     </div>
   </div>
@@ -165,6 +205,106 @@
 
 <div class="intro">
   <p>AGI否定論38の主張を構造的に可視化し、各主張に対応する事実と証拠を配置した。</p>
+</div>
+
+<!-- ═══ BIAS MAP ═══ -->
+<div class="bias-map">
+  <div class="bias-map-title">Cognitive Bias Map — なぜ否定するのか</div>
+  <p class="bias-map-sub">38の否定主張は独立に見えるが、駆動する認知バイアスは11種に収束する。否定の内容ではなく構造を見れば、異なるカテゴリの主張が同じ認知パターンから生まれていることがわかる。</p>
+
+  <div class="bias-groups">
+    <div class="bias-group">
+      <div class="bias-group-head">
+        <div class="bias-group-icon" style="background:#1a1a1a;">直</div>
+        <div class="bias-group-name">線形思考の罠</div>
+        <div class="bias-group-count">12 claims</div>
+      </div>
+      <div class="bias-group-desc">指数関数的な変化を直線で予測し、現状が続くと無意識に仮定する。最も広範囲に作用するバイアス群。物理の壁と時間の壁を支配する。</div>
+      <div class="bias-items">
+        <div class="bias-item"><strong>線形外挿バイアス</strong> 指数曲線の初期区間を見て鈍化したと判断する <span>02, 03, 10, 11, 22, 34, 36</span></div>
+        <div class="bias-item"><strong>正常性バイアス</strong> 非連続な変化を「ありえない」と排除する <span>12, 18, 25</span></div>
+        <div class="bias-item"><strong>現状維持バイアス</strong> 今の技術的制約が未来も続くと見なす <span>03, 15, 35, 36</span></div>
+      </div>
+      <div class="bias-claims">
+        <a class="bias-claim-num" href="#c02">02</a><a class="bias-claim-num" href="#c03">03</a><a class="bias-claim-num" href="#c10">10</a><a class="bias-claim-num" href="#c11">11</a><a class="bias-claim-num" href="#c12">12</a><a class="bias-claim-num" href="#c15">15</a><a class="bias-claim-num" href="#c18">18</a><a class="bias-claim-num" href="#c22">22</a><a class="bias-claim-num" href="#c25">25</a><a class="bias-claim-num" href="#c34">34</a><a class="bias-claim-num" href="#c35">35</a><a class="bias-claim-num" href="#c36">36</a>
+      </div>
+    </div>
+
+    <div class="bias-group">
+      <div class="bias-group-head">
+        <div class="bias-group-icon" style="background:#555;">錨</div>
+        <div class="bias-group-name">過去への固着</div>
+        <div class="bias-group-count">12 claims</div>
+      </div>
+      <div class="bias-group-desc">過去のAI冬、失敗した技術予測、似て非なる歴史的事例に認知が固定される。歴史の壁を支配する。</div>
+      <div class="bias-items">
+        <div class="bias-item"><strong>アンカリング</strong> 過去のAI冬・失敗体験が基準点になる <span>02, 04, 11, 19</span></div>
+        <div class="bias-item"><strong>利用可能性ヒューリスティック</strong> 鮮やかな失敗記憶に引きずられる <span>09, 15, 20</span></div>
+        <div class="bias-item"><strong>偽のアナロジー</strong> 表面的に似た過去事例を不当に適用する <span>21, 24, 26</span></div>
+        <div class="bias-item"><strong>確証バイアス</strong> 懐疑を裏付ける証拠だけを集める <span>09, 23</span></div>
+      </div>
+      <div class="bias-claims">
+        <a class="bias-claim-num" href="#c02">02</a><a class="bias-claim-num" href="#c04">04</a><a class="bias-claim-num" href="#c09">09</a><a class="bias-claim-num" href="#c11">11</a><a class="bias-claim-num" href="#c15">15</a><a class="bias-claim-num" href="#c17">17</a><a class="bias-claim-num" href="#c19">19</a><a class="bias-claim-num" href="#c20">20</a><a class="bias-claim-num" href="#c21">21</a><a class="bias-claim-num" href="#c23">23</a><a class="bias-claim-num" href="#c24">24</a><a class="bias-claim-num" href="#c26">26</a>
+      </div>
+    </div>
+
+    <div class="bias-group">
+      <div class="bias-group-head">
+        <div class="bias-group-icon" style="background:#888;">混</div>
+        <div class="bias-group-name">概念の混同</div>
+        <div class="bias-group-count">9 claims</div>
+      </div>
+      <div class="bias-group-desc">「知能」「理解」「意識」を混同し、AIが達成するたびにゴールを動かす。能力の壁に集中的に出現する。</div>
+      <div class="bias-items">
+        <div class="bias-item"><strong>カテゴリーエラー</strong> 意識と知能、身体と理解を混同する <span>01, 05, 06, 07, 33</span></div>
+        <div class="bias-item"><strong>ゴールポスト移動</strong> AIが達成するたびに「知能」の定義を後退させる <span>01, 04, 06, 08</span></div>
+        <div class="bias-item"><strong>自然主義的誤謬</strong> 賢い→道徳的の根拠なき飛躍 <span>32</span></div>
+        <div class="bias-item"><strong>ストローマン</strong> 自己複製のような極端条件にすり替える <span>16</span></div>
+      </div>
+      <div class="bias-claims">
+        <a class="bias-claim-num" href="#c01">01</a><a class="bias-claim-num" href="#c04">04</a><a class="bias-claim-num" href="#c05">05</a><a class="bias-claim-num" href="#c06">06</a><a class="bias-claim-num" href="#c07">07</a><a class="bias-claim-num" href="#c08">08</a><a class="bias-claim-num" href="#c16">16</a><a class="bias-claim-num" href="#c32">32</a><a class="bias-claim-num" href="#c33">33</a>
+      </div>
+    </div>
+
+    <div class="bias-group">
+      <div class="bias-group-head">
+        <div class="bias-group-icon" style="background:#aaa;">幻</div>
+        <div class="bias-group-name">制御の幻想</div>
+        <div class="bias-group-count">11 claims</div>
+      </div>
+      <div class="bias-group-desc">「人間はいつでも止められる」「中道が正しい」という根拠なき安心。安全の壁と制度の壁を支配する。</div>
+      <div class="bias-items">
+        <div class="bias-item"><strong>楽観バイアス</strong> 制御可能性を系統的に過大評価する <span>24, 25, 27, 28, 29, 30, 31, 38</span></div>
+        <div class="bias-item"><strong>範囲非感受性</strong> 知能差のスケールを直感で把握できない <span>14, 30, 31</span></div>
+        <div class="bias-item"><strong>中庸バイアス</strong> 「中間が正しい」という根拠なき安心 <span>37</span></div>
+        <div class="bias-item"><strong>曖昧さ回避</strong> 予測の不確実性を「来ない」証拠と読み替える <span>13</span></div>
+      </div>
+      <div class="bias-claims">
+        <a class="bias-claim-num" href="#c13">13</a><a class="bias-claim-num" href="#c14">14</a><a class="bias-claim-num" href="#c24">24</a><a class="bias-claim-num" href="#c25">25</a><a class="bias-claim-num" href="#c27">27</a><a class="bias-claim-num" href="#c28">28</a><a class="bias-claim-num" href="#c29">29</a><a class="bias-claim-num" href="#c30">30</a><a class="bias-claim-num" href="#c31">31</a><a class="bias-claim-num" href="#c37">37</a><a class="bias-claim-num" href="#c38">38</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Heatmap: Bias group × Category -->
+  <div class="diagram">
+    <div class="diagram-title">バイアス × カテゴリ — どの認知パターンがどの否定領域を駆動するか</div>
+    <table class="bias-heat">
+      <thead><tr><th></th><th>I<br>能力</th><th>II<br>時間</th><th>III<br>経済</th><th>IV<br>歴史</th><th>V<br>制度</th><th>VI<br>安全</th><th>VII<br>物理</th><th>VIII<br>認識</th></tr></thead>
+      <tbody>
+        <tr><td>線形思考の罠</td><td><div class="bh-cell bh-2"></div></td><td><div class="bh-cell bh-3"></div></td><td><div class="bh-cell bh-2"></div></td><td><div class="bh-cell bh-1"></div></td><td><div class="bh-cell bh-1"></div></td><td><div class="bh-cell bh-0"></div></td><td><div class="bh-cell bh-3"></div></td><td><div class="bh-cell bh-0"></div></td></tr>
+        <tr><td>過去への固着</td><td><div class="bh-cell bh-2"></div></td><td><div class="bh-cell bh-2"></div></td><td><div class="bh-cell bh-2"></div></td><td><div class="bh-cell bh-3"></div></td><td><div class="bh-cell bh-1"></div></td><td><div class="bh-cell bh-0"></div></td><td><div class="bh-cell bh-0"></div></td><td><div class="bh-cell bh-0"></div></td></tr>
+        <tr><td>概念の混同</td><td><div class="bh-cell bh-3"></div></td><td><div class="bh-cell bh-0"></div></td><td><div class="bh-cell bh-1"></div></td><td><div class="bh-cell bh-0"></div></td><td><div class="bh-cell bh-0"></div></td><td><div class="bh-cell bh-2"></div></td><td><div class="bh-cell bh-0"></div></td><td><div class="bh-cell bh-0"></div></td></tr>
+        <tr><td>制御の幻想</td><td><div class="bh-cell bh-0"></div></td><td><div class="bh-cell bh-1"></div></td><td><div class="bh-cell bh-1"></div></td><td><div class="bh-cell bh-0"></div></td><td><div class="bh-cell bh-3"></div></td><td><div class="bh-cell bh-3"></div></td><td><div class="bh-cell bh-0"></div></td><td><div class="bh-cell bh-2"></div></td></tr>
+      </tbody>
+    </table>
+    <div class="bias-legend">
+      <span>濃度 =</span>
+      <span class="bias-legend-item"><span class="bias-legend-swatch bh-3"></span> 支配的</span>
+      <span class="bias-legend-item"><span class="bias-legend-swatch bh-2"></span> 顕著</span>
+      <span class="bias-legend-item"><span class="bias-legend-swatch bh-1"></span> 存在</span>
+      <span class="bias-legend-item"><span class="bias-legend-swatch bh-0"></span> 不在</span>
+    </div>
+  </div>
 </div>
 
 <!-- ══════════════════════════════════════════════════════════ -->
@@ -580,6 +720,37 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
     if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
   });
 });
+
+/* ── Bias tags on claim cards ── */
+(function(){
+  const B = {
+    1:['混'], 2:['直','錨'], 3:['直'], 4:['混','錨'], 5:['混'], 6:['混'], 7:['混'], 8:['混'],
+    9:['錨'], 10:['直'], 11:['直','錨'], 12:['直'], 13:['幻'], 14:['幻'], 15:['直','錨'],
+    16:['混'], 17:['錨'], 18:['直'], 19:['錨'], 20:['錨'], 21:['錨'], 22:['直'], 23:['錨'],
+    24:['錨','幻'], 25:['直','幻'], 26:['錨'], 27:['幻'], 28:['幻'], 29:['幻'], 30:['幻'],
+    31:['幻'], 32:['混'], 33:['混'], 34:['直'], 35:['直'], 36:['直'], 37:['幻'], 38:['幻']
+  };
+  const L = {
+    '直':['線形思考','bias-tag-linear'],
+    '錨':['過去固着','bias-tag-anchor'],
+    '混':['概念混同','bias-tag-category'],
+    '幻':['制御幻想','bias-tag-control']
+  };
+  document.querySelectorAll('.card').forEach(function(card){
+    var m = card.id && card.id.match(/^c(\d+)$/);
+    if(!m) return;
+    var n = parseInt(m[1],10), tags = B[n];
+    if(!tags) return;
+    var claim = card.querySelector('.card-claim');
+    if(!claim) return;
+    tags.forEach(function(k){
+      var s = document.createElement('span');
+      s.className = 'bias-tag ' + L[k][1];
+      s.textContent = L[k][0];
+      claim.appendChild(s);
+    });
+  });
+})();
 </script>
 </body>
 </html>

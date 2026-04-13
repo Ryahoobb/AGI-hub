@@ -216,9 +216,11 @@
         line-height: 1.2;
         letter-spacing: -0.02em;
         color: var(--black);
-        max-width: 20ch;
-        margin-bottom: 24px;
+        max-width: 1120px;
+        margin: 0 auto;
+        padding: 48px 48px 0;
       }
+      .article-title:empty { display: none; }
       h1 { font-size: clamp(30px, 4.4vw, 40px); }
       h2 { font-size: clamp(26px, 3.8vw, 34px); }
 
@@ -1077,12 +1079,8 @@
           .then(function (articles) {
             var match = articles.find(function (a) { return a.slug === slug; });
             if (!match) return;
-            var h1 = document.querySelector('h1');
-            if (!h1) return;
-            var titleEl = document.createElement('div');
-            titleEl.className = 'article-title reveal';
-            titleEl.textContent = match.title;
-            h1.parentNode.insertBefore(titleEl, h1);
+            var slot = document.getElementById('article-title-slot');
+            if (slot) slot.textContent = match.title;
           });
       })();
     </script>

@@ -2,10 +2,7 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-
-<meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<link rel="icon" type="image/svg+xml" href="favicon.svg">
 <title>AI Job Displacement Tracker — AGI HUB</title>
 <meta name="description" content="AIによる世界の雇用代替をリアルタイムで追跡するダッシュボード">
 
@@ -193,8 +190,16 @@
 <body class="has-site-header">
 
 <!-- ── Site header (AGI HUB shared) ── -->
-<div id="site-header-mount"><header style="font:500 15px/48px Inter,sans-serif;padding:0 24px;border-bottom:1px solid #222;color:#aaa">AGI HUB</header></div>
-<script src="partials/header.js" defer></script>
+<header class="site-header">
+  <div class="site-header-inner">
+    <a href="index.html" class="site-logo"><span class="site-logo-mark"></span>AGI HUB</a>
+    <nav class="site-nav-right">
+      <a href="index.html" class="site-nav-hide-mobile">Archive</a>
+      <a href="displacement-map.html" class="site-nav-hide-mobile">Data</a>
+      <div id="google_translate_element"></div>
+    </nav>
+  </div>
+</header>
 
 <div class="dashboard">
 

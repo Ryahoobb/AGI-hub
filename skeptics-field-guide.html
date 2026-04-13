@@ -736,19 +736,31 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
     '混':['概念混同','bias-tag-category'],
     '幻':['制御幻想','bias-tag-control']
   };
+  function injectTags(el, tags){
+    tags.forEach(function(k){
+      var s = document.createElement('span');
+      s.className = 'bias-tag ' + L[k][1];
+      s.textContent = L[k][0];
+      el.appendChild(s);
+    });
+  }
+  /* Claim cards */
   document.querySelectorAll('.card').forEach(function(card){
     var m = card.id && card.id.match(/^c(\d+)$/);
     if(!m) return;
     var n = parseInt(m[1],10), tags = B[n];
     if(!tags) return;
     var claim = card.querySelector('.card-claim');
-    if(!claim) return;
-    tags.forEach(function(k){
-      var s = document.createElement('span');
-      s.className = 'bias-tag ' + L[k][1];
-      s.textContent = L[k][0];
-      claim.appendChild(s);
-    });
+    if(claim) injectTags(claim, tags);
+  });
+  /* Summary table */
+  document.querySelectorAll('.stbl tbody tr:not(.cat-row)').forEach(function(tr){
+    var sn = tr.querySelector('.sn');
+    if(!sn) return;
+    var n = parseInt(sn.textContent,10), tags = B[n];
+    if(!tags) return;
+    var sq = tr.querySelector('.sq');
+    if(sq) injectTags(sq, tags);
   });
 })();
 </script>

@@ -862,22 +862,31 @@
       const slides = [...document.querySelectorAll(".slide")];
       const navButtons = [...document.querySelectorAll(".nav button")];
       const progress = document.getElementById("progress");
-      const observer = new IntersectionObserver(
+
+      const navObserver = new IntersectionObserver(
         entries => {
           entries.forEach(entry => {
             if (entry.isIntersecting) {
-              entry.target.querySelectorAll(".reveal").forEach(el => el.classList.add("visible"));
               const id = entry.target.id;
               navButtons.forEach(button => button.classList.toggle("active", button.dataset.target === id));
               const index = slides.findIndex(slide => slide.id === id);
-              progress.style.width = `${((index + 1) / slides.length) * 100}%`;
+              if (progress) progress.style.width = `${((index + 1) / slides.length) * 100}%`;
             }
           });
         },
-        { threshold: 0.45 }
+        { threshold: 0.1 }
       );
+      slides.forEach(slide => navObserver.observe(slide));
 
-      slides.forEach(slide => observer.observe(slide));
+      const revealObserver = new IntersectionObserver(
+        entries => {
+          entries.forEach(e => {
+            if (e.isIntersecting) e.target.classList.add("visible");
+          });
+        },
+        { threshold: 0.15, rootMargin: "0px 0px -60px 0px" }
+      );
+      document.querySelectorAll(".reveal").forEach(el => revealObserver.observe(el));
 
       navButtons.forEach(button => {
         button.addEventListener("click", () => {

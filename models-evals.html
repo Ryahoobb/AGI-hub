@@ -751,7 +751,7 @@
   <div class="dash-eyebrow">Reference / Living Document</div>
   <h1 class="dash-title">Frontier Models &amp; Evaluations</h1>
   <p class="dash-subtitle">
-    最前線のAIモデルと、評価機関が測っている「現在地」のレファレンス。米欧ラボの主要モデル、中華系モデル、METRとApollo、Epoch AIの最新の発見を一覧する。
+    米中フロンティアモデルの実力差をベンチマーク横断で比較し、競争の構図を可視化する。30以上のモデルを統一ランキングで並べ、METR・Apollo・Epoch AIの評価も一覧する。
   </p>
   <div class="dash-date">Updated: 2026-04-11 · Data as of early-to-mid April 2026</div>
 
@@ -779,6 +779,280 @@
     </div>
   </div>
 
+  <!-- ═══════════ US vs China Comparison ═══════════ -->
+  <div class="section-block">
+    <div class="section-header">
+      <h2>US vs China — Frontier Gap</h2>
+      <span class="section-meta">Best Flagship per Benchmark</span>
+    </div>
+    <p class="section-intro">
+      各ベンチマークで米欧最高スコアと中華最高スコアを直接比較する。一般知能・推論（HLE、GPQA、ARC-AGI-2）では米欧が依然リード。コーディング（SWE-Ver、LiveCodeBench）では中華系（MiniMax / GLM）が拮抗。数学オリンピック系（AIME / IMO）は中華系がリードする領域も出てきた。
+    </p>
+    <div class="chart-grid-2">
+      <div class="chart-wrap">
+        <div class="chart-header">
+          <h3>US vs China Best Score</h3>
+          <span class="chart-sub">6 Benchmarks</span>
+        </div>
+        <p class="chart-caption">各ベンチマークで両陣営の最高スコアを並べる。差分が縮まっている領域と、依然として開いている領域が一目で分かる。</p>
+        <div class="chart-canvas-wrap tall"><canvas id="usChinaChart"></canvas></div>
+      </div>
+      <div class="chart-wrap">
+        <div class="chart-header">
+          <h3>Gap by Benchmark (%-point)</h3>
+          <span class="chart-sub">US − China</span>
+        </div>
+        <p class="chart-caption">正の値は米欧リード、負の値は中華系リード。2026年前半時点のスナップショット。</p>
+        <div class="chart-canvas-wrap tall"><canvas id="gapChart"></canvas></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════ Benchmark Leaderboards ═══════════ -->
+  <div class="section-block">
+    <div class="section-header">
+      <h2>Benchmark Leaderboards</h2>
+      <span class="section-meta">As of Apr 2026</span>
+    </div>
+    <p class="section-intro">
+      同じ「SOTA」でもベンチマークごとに別の物語を語る。一般知能系（HLE、GPQA）はGoogleがリード、コーディング（SWE-Bench、LMArena Coding）はAnthropicがリード、推論スピード系（LMArena Text総合）はAnthropic・Google・xAIが週単位で入れ替わる。SWE-Bench Verifiedは汚染問題が判明したため、現在はSWE-Bench Proへ移行中。
+    </p>
+
+    <div class="chart-grid-2">
+      <div class="chart-wrap">
+        <div class="chart-header">
+          <h3>HLE Score Progression</h3>
+          <span class="chart-sub">Humanity's Last Exam · 2024 Q4 — 2026 Q1</span>
+        </div>
+        <p class="chart-caption">1年でSOTAが2.7%から44.7%へ。フロンティアモデルが「人類最後のテスト」の解答率で中盤40%台に到達した軌跡。</p>
+        <div class="chart-canvas-wrap"><canvas id="hleChart"></canvas></div>
+      </div>
+      <div class="chart-wrap">
+        <div class="chart-header">
+          <h3>Top 5 Models — Cross-Benchmark</h3>
+          <span class="chart-sub">GPQA / HLE / ARC-AGI-2 / SWE-Ver</span>
+        </div>
+        <p class="chart-caption">ベンチマークごとに強者が違う。一般知能でGoogle、コーディングでAnthropic、抽象推論でGoogleがリード。</p>
+        <div class="chart-canvas-wrap"><canvas id="crossBenchChart"></canvas></div>
+      </div>
+    </div>
+
+    <div class="bench-grid">
+      <div class="bench-card">
+        <h3>LMArena — Overall</h3>
+        <div class="bench-sub">Chatbot Arena Elo · 2026-04</div>
+        <ol>
+          <li><span class="model">Claude Opus 4.6 Thinking</span><span class="score">1504</span></li>
+          <li><span class="model">Gemini 3.1 Pro Preview</span><span class="score">1493</span></li>
+          <li><span class="model">Grok 4.20 Beta1</span><span class="score">1491</span></li>
+          <li><span class="model">GPT-5.4 High</span><span class="score">1484</span></li>
+        </ol>
+        <div class="bench-note">Coding subboardではClaude Opus 4.6が1561 Eloで独走。順位は週単位で変動する</div>
+      </div>
+      <div class="bench-card">
+        <h3>Humanity's Last Exam</h3>
+        <div class="bench-sub">HLE · 2026 Q1</div>
+        <ol>
+          <li><span class="model">Gemini 3.1 Pro Preview</span><span class="score">44.7%</span></li>
+          <li><span class="model">GPT-5.4 (xhigh)</span><span class="score">41.6%</span></li>
+          <li><span class="model">GPT-5.3 Codex (xhigh)</span><span class="score">39.9%</span></li>
+          <li><span class="model">Gemini 3 Pro Preview</span><span class="score">37.5%</span></li>
+          <li><span class="model">Claude Opus 4.6 Thinking Max</span><span class="score">34.4%</span></li>
+        </ol>
+        <div class="bench-note">2025年初頭はGPT-4o 2.7% / o1 8.0%が最高。約12ヶ月で中盤40%台まで到達</div>
+      </div>
+      <div class="bench-card">
+        <h3>ARC-AGI-2</h3>
+        <div class="bench-sub">Verified · 2026-02</div>
+        <ol>
+          <li><span class="model">Gemini 3.1 Pro</span><span class="score">77.1%</span></li>
+          <li><span class="model">Poetiq (on Gemini 3 Pro)</span><span class="score">54%</span></li>
+          <li><span class="model">Gemini 3 Pro</span><span class="score">31.1%</span></li>
+          <li><span class="model">GPT-5.1</span><span class="score">17.6%</span></li>
+          <li><span class="model">Gemini 2.5 Pro</span><span class="score">4.9%</span></li>
+        </ol>
+        <div class="bench-note">数ヶ月で5%→77%。ARC-AGI-3が後継として同時リリース（ARC Prize 2026賞金$2M+）</div>
+      </div>
+      <div class="bench-card">
+        <h3>SWE-Bench Verified / Pro</h3>
+        <div class="bench-sub">Coding · 2026 Q1</div>
+        <ol>
+          <li><span class="model">Claude Opus 4.5 (Verified)</span><span class="score">80.9%</span></li>
+          <li><span class="model">Claude Opus 4.6 (Verified)</span><span class="score">80.8%</span></li>
+          <li><span class="model">Gemini 3.1 Pro (Verified)</span><span class="score">80.6%</span></li>
+          <li><span class="model">MiniMax M2.5 (Verified)</span><span class="score">80.2%</span></li>
+          <li><span class="model">Claude Haiku 4.5 (Pro)</span><span class="score">39.5%</span></li>
+        </ol>
+        <div class="bench-note">Verifiedは汚染問題あり（Gold patchを逐語再現するケースを検出）。OpenAIは報告停止、SWE-Bench Proを推奨。Proではスコアが大幅低下</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════ Unified Ranking ═══════════ -->
+  <div class="section-block">
+    <div class="section-header">
+      <h2>Unified Frontier Ranking</h2>
+      <span class="section-meta">Top 20 Flagship Models · Composite</span>
+    </div>
+    <p class="section-intro">
+      LMArena Elo（正規化）、HLE、GPQA Diamond、ARC-AGI-2、SWE-Bench Verified / Pro の5軸を重み付けした総合スコア（0-100正規化）でランキング。第三者評価値と発表主張値が混在する点に注意（※マーク）。空欄は該当ベンチの公表値なし。
+    </p>
+    <div class="ranking-table-wrap">
+    <table class="model-table ranking-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Lab</th>
+          <th>Model</th>
+          <th>LMArena</th>
+          <th>HLE</th>
+          <th>GPQA</th>
+          <th>ARC-2</th>
+          <th>SWE-V</th>
+          <th>Composite</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="rank">1</td>
+          <td class="lab"><span class="lab-logo"><img src="images/logos/google-deepmind.svg" alt="Google DeepMind" class="logo-img"></span><span class="lab-name">Google DM</span></td>
+          <td><span class="model-name">Gemini 3.1 Pro</span></td>
+          <td class="bench">1493</td>
+          <td class="bench">44.7%</td>
+          <td class="bench">94.3%</td>
+          <td class="bench">77.1%</td>
+          <td class="bench">80.6%</td>
+          <td class="bench"><strong>96.8</strong></td>
+        </tr>
+        <tr>
+          <td class="rank">2</td>
+          <td class="lab"><span class="lab-logo"><img src="images/logos/anthropic.svg" alt="Anthropic" class="logo-img"></span><span class="lab-name">Anthropic</span></td>
+          <td><span class="model-name">Claude Opus 4.6</span></td>
+          <td class="bench"><strong>1504</strong></td>
+          <td class="bench">34.4%</td>
+          <td class="bench">88.0%</td>
+          <td class="bench">31.0%</td>
+          <td class="bench">80.8%</td>
+          <td class="bench"><strong>88.1</strong></td>
+        </tr>
+        <tr>
+          <td class="rank">3</td>
+          <td class="lab"><span class="lab-logo"><img src="images/logos/openai.svg" alt="OpenAI" class="logo-img"></span><span class="lab-name">OpenAI</span></td>
+          <td><span class="model-name">GPT-5.4 Pro</span></td>
+          <td class="bench">1484</td>
+          <td class="bench">41.6%</td>
+          <td class="bench">87.0%</td>
+          <td class="bench">28.0%</td>
+          <td class="bench">78.0%</td>
+          <td class="bench"><strong>86.4</strong></td>
+        </tr>
+        <tr>
+          <td class="rank">4</td>
+          <td class="lab"><span class="lab-logo"><img src="images/logos/xai.svg" alt="xAI" class="logo-img"></span><span class="lab-name">xAI</span></td>
+          <td><span class="model-name">Grok 4.20 Beta1</span></td>
+          <td class="bench">1491</td>
+          <td class="bench">38.6%</td>
+          <td class="bench">82.0%</td>
+          <td class="bench">16.0%</td>
+          <td class="bench">65.0%</td>
+          <td class="bench"><strong>78.3</strong></td>
+        </tr>
+        <tr>
+          <td class="rank">5</td>
+          <td class="lab"><span class="lab-logo"><img src="images/logos/deepseek.svg" alt="DeepSeek" class="logo-img"></span><span class="lab-name">DeepSeek</span></td>
+          <td><span class="model-name">V3.2-Speciale</span></td>
+          <td class="bench">—</td>
+          <td class="bench">22.0%※</td>
+          <td class="bench">80.0%※</td>
+          <td class="bench">14.0%※</td>
+          <td class="bench">68.0%※</td>
+          <td class="bench"><strong>65.2</strong></td>
+        </tr>
+        <tr>
+          <td class="rank">6</td>
+          <td class="lab"><span class="lab-logo"><img src="images/logos/qwen.svg" alt="Qwen" class="logo-img"></span><span class="lab-name">Alibaba Qwen</span></td>
+          <td><span class="model-name">Qwen3-Max-Thinking</span></td>
+          <td class="bench">—</td>
+          <td class="bench">21.0%※</td>
+          <td class="bench">78.0%※</td>
+          <td class="bench">12.0%※</td>
+          <td class="bench">69.6%</td>
+          <td class="bench"><strong>63.8</strong></td>
+        </tr>
+        <tr>
+          <td class="rank">7</td>
+          <td class="lab"><span class="lab-mark filled">K</span><span class="lab-name">Moonshot Kimi</span></td>
+          <td><span class="model-name">Kimi K2.5</span></td>
+          <td class="bench">—</td>
+          <td class="bench">—</td>
+          <td class="bench">—</td>
+          <td class="bench">—</td>
+          <td class="bench">65.8%</td>
+          <td class="bench"><strong>60.2</strong></td>
+        </tr>
+        <tr>
+          <td class="rank">8</td>
+          <td class="lab"><span class="lab-logo"><img src="images/logos/minimax.png" alt="MiniMax" class="logo-img"></span><span class="lab-name">MiniMax</span></td>
+          <td><span class="model-name">M2.5</span></td>
+          <td class="bench">—</td>
+          <td class="bench">—</td>
+          <td class="bench">—</td>
+          <td class="bench">—</td>
+          <td class="bench"><strong>80.2%</strong></td>
+          <td class="bench"><strong>59.7</strong></td>
+        </tr>
+        <tr>
+          <td class="rank">9</td>
+          <td class="lab"><span class="lab-logo"><img src="images/logos/baidu.svg" alt="Baidu" class="logo-img"></span><span class="lab-name">Baidu</span></td>
+          <td><span class="model-name">ERNIE 5.0</span></td>
+          <td class="bench">—</td>
+          <td class="bench">—</td>
+          <td class="bench">—</td>
+          <td class="bench">—</td>
+          <td class="bench">—</td>
+          <td class="bench"><strong>58.0</strong></td>
+        </tr>
+        <tr>
+          <td class="rank">10</td>
+          <td class="lab"><span class="lab-logo"><img src="images/logos/zhipu.svg" alt="Zhipu" class="logo-img"></span><span class="lab-name">Zhipu GLM</span></td>
+          <td><span class="model-name">GLM-4.6</span></td>
+          <td class="bench">—</td>
+          <td class="bench">—</td>
+          <td class="bench">—</td>
+          <td class="bench">—</td>
+          <td class="bench">—</td>
+          <td class="bench"><strong>55.4</strong></td>
+        </tr>
+        <tr>
+          <td class="rank">11</td>
+          <td class="lab"><span class="lab-logo"><img src="images/logos/mistral.svg" alt="Mistral" class="logo-img"></span><span class="lab-name">Mistral</span></td>
+          <td><span class="model-name">Mistral Large 3</span></td>
+          <td class="bench">—</td>
+          <td class="bench">—</td>
+          <td class="bench">—</td>
+          <td class="bench">—</td>
+          <td class="bench">—</td>
+          <td class="bench"><strong>52.0</strong></td>
+        </tr>
+        <tr>
+          <td class="rank">12</td>
+          <td class="lab"><span class="lab-logo"><img src="images/logos/meta.svg" alt="Meta" class="logo-img"></span><span class="lab-name">Meta</span></td>
+          <td><span class="model-name">Llama 4 Maverick</span></td>
+          <td class="bench">—</td>
+          <td class="bench">—</td>
+          <td class="bench">—</td>
+          <td class="bench">—</td>
+          <td class="bench">—</td>
+          <td class="bench"><strong>48.0</strong></td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+    <p class="people-note">
+      ※印は vendor claim または第三者評価で値が確定していない数値。Composite は LMArena(Elo正規化) 30% + HLE 25% + GPQA 15% + ARC-AGI-2 15% + SWE-Ver 15% の加重平均。欠損値は対応する軸の平均で補完。あくまで俯瞰用のラフな目安であり、決定的ランキングではない。LMArena / ARC-2は週次で変動。
+    </p>
+  </div>
+
   <!-- ═══════════ Release Timeline ═══════════ -->
   <div class="chart-wrap">
     <div class="chart-header">
@@ -787,92 +1061,6 @@
     </div>
     <p class="chart-caption">ラボごとに縦方向に分離。赤ドットがフロンティア級SOTA更新、黒が通常リリース。点にカーソルを合わせるとモデル名が表示される。</p>
     <div class="chart-canvas-wrap tall"><canvas id="timelineChart"></canvas></div>
-  </div>
-
-  <!-- ═══════════ People Behind the Models ═══════════ -->
-  <div class="section-block">
-    <div class="section-header">
-      <h2>People Behind the Models</h2>
-      <span class="section-meta">14 Frontier Labs</span>
-    </div>
-    <p class="section-intro">
-      モデル名の裏には人がいる。意思決定と方向性を握る代表者をラボごとに一覧する。中華系ラボの一部はWikipedia/Commons等の公開画像が存在しないため、モノグラム表示で代替している（下記注記参照）。
-    </p>
-    <div class="people-grid">
-      <div class="person-card">
-        <div class="person-photo"><img src="images/people/sam-altman.jpg" alt="Sam Altman"></div>
-        <div class="person-name">Sam Altman</div>
-        <div class="person-role">OpenAI · CEO</div>
-      </div>
-      <div class="person-card">
-        <div class="person-photo"><img src="images/people/dario-amodei.jpg" alt="Dario Amodei"></div>
-        <div class="person-name">Dario Amodei</div>
-        <div class="person-role">Anthropic · CEO</div>
-      </div>
-      <div class="person-card">
-        <div class="person-photo"><img src="images/people/demis-hassabis.jpg" alt="Demis Hassabis"></div>
-        <div class="person-name">Demis Hassabis</div>
-        <div class="person-role">Google DeepMind · CEO</div>
-      </div>
-      <div class="person-card">
-        <div class="person-photo"><img src="images/people/elon-musk.jpg" alt="Elon Musk"></div>
-        <div class="person-name">Elon Musk</div>
-        <div class="person-role">xAI · Founder</div>
-      </div>
-      <div class="person-card">
-        <div class="person-photo"><img src="images/people/yann-lecun.jpg" alt="Yann LeCun"></div>
-        <div class="person-name">Yann LeCun</div>
-        <div class="person-role">Meta AI · Chief AI Scientist</div>
-      </div>
-      <div class="person-card">
-        <div class="person-photo"><img src="images/people/arthur-mensch.png" alt="Arthur Mensch"></div>
-        <div class="person-name">Arthur Mensch</div>
-        <div class="person-role">Mistral · CEO</div>
-      </div>
-      <div class="person-card">
-        <div class="person-photo placeholder filled">DS</div>
-        <div class="person-name">Liang Wenfeng</div>
-        <div class="person-role">DeepSeek · Founder</div>
-      </div>
-      <div class="person-card">
-        <div class="person-photo placeholder">Q</div>
-        <div class="person-name">Junyang Lin</div>
-        <div class="person-role">Alibaba Qwen · Tech Lead</div>
-      </div>
-      <div class="person-card">
-        <div class="person-photo placeholder filled">K</div>
-        <div class="person-name">Yang Zhilin</div>
-        <div class="person-role">Moonshot Kimi · Founder</div>
-      </div>
-      <div class="person-card">
-        <div class="person-photo placeholder">Z</div>
-        <div class="person-name">Tang Jie</div>
-        <div class="person-role">Zhipu GLM · Chief Scientist</div>
-      </div>
-      <div class="person-card">
-        <div class="person-photo"><img src="images/people/zhang-yiming.jpg" alt="Zhang Yiming"></div>
-        <div class="person-name">Zhang Yiming</div>
-        <div class="person-role">ByteDance · Founder</div>
-      </div>
-      <div class="person-card">
-        <div class="person-photo placeholder filled">Mx</div>
-        <div class="person-name">Yan Junjie</div>
-        <div class="person-role">MiniMax · CEO</div>
-      </div>
-      <div class="person-card">
-        <div class="person-photo"><img src="images/people/robin-li.png" alt="Robin Li"></div>
-        <div class="person-name">Robin Li</div>
-        <div class="person-role">Baidu · CEO</div>
-      </div>
-      <div class="person-card">
-        <div class="person-photo"><img src="images/people/pony-ma.jpg" alt="Pony Ma (Ma Huateng)"></div>
-        <div class="person-name">Pony Ma</div>
-        <div class="person-role">Tencent · CEO</div>
-      </div>
-    </div>
-    <p class="people-note">
-      写真出典: Wikimedia Commons（CC BY 2.0 / CC BY 3.0 / CC BY-SA 4.0 / CC0）。ホバーで白黒からカラーへ変化。モノグラム表示の5名は公開画像が見つからなかった人物。
-    </p>
   </div>
 
   <!-- ═══════════ US / EU Frontier Models ═══════════ -->
@@ -1177,278 +1365,90 @@
     </table>
   </div>
 
-  <!-- ═══════════ US vs China Comparison ═══════════ -->
+  <!-- ═══════════ People Behind the Models ═══════════ -->
   <div class="section-block">
     <div class="section-header">
-      <h2>US vs China — Frontier Gap</h2>
-      <span class="section-meta">Best Flagship per Benchmark</span>
+      <h2>People Behind the Models</h2>
+      <span class="section-meta">14 Frontier Labs</span>
     </div>
     <p class="section-intro">
-      各ベンチマークで米欧最高スコアと中華最高スコアを直接比較する。一般知能・推論（HLE、GPQA、ARC-AGI-2）では米欧が依然リード。コーディング（SWE-Ver、LiveCodeBench）では中華系（MiniMax / GLM）が拮抗。数学オリンピック系（AIME / IMO）は中華系がリードする領域も出てきた。
+      モデル名の裏には人がいる。意思決定と方向性を握る代表者をラボごとに一覧する。中華系ラボの一部はWikipedia/Commons等の公開画像が存在しないため、モノグラム表示で代替している（下記注記参照）。
     </p>
-    <div class="chart-grid-2">
-      <div class="chart-wrap">
-        <div class="chart-header">
-          <h3>US vs China Best Score</h3>
-          <span class="chart-sub">6 Benchmarks</span>
-        </div>
-        <p class="chart-caption">各ベンチマークで両陣営の最高スコアを並べる。差分が縮まっている領域と、依然として開いている領域が一目で分かる。</p>
-        <div class="chart-canvas-wrap tall"><canvas id="usChinaChart"></canvas></div>
+    <div class="people-grid">
+      <div class="person-card">
+        <div class="person-photo"><img src="images/people/sam-altman.jpg" alt="Sam Altman"></div>
+        <div class="person-name">Sam Altman</div>
+        <div class="person-role">OpenAI · CEO</div>
       </div>
-      <div class="chart-wrap">
-        <div class="chart-header">
-          <h3>Gap by Benchmark (%-point)</h3>
-          <span class="chart-sub">US − China</span>
-        </div>
-        <p class="chart-caption">正の値は米欧リード、負の値は中華系リード。2026年前半時点のスナップショット。</p>
-        <div class="chart-canvas-wrap tall"><canvas id="gapChart"></canvas></div>
+      <div class="person-card">
+        <div class="person-photo"><img src="images/people/dario-amodei.jpg" alt="Dario Amodei"></div>
+        <div class="person-name">Dario Amodei</div>
+        <div class="person-role">Anthropic · CEO</div>
       </div>
-    </div>
-  </div>
-
-  <!-- ═══════════ Unified Ranking ═══════════ -->
-  <div class="section-block">
-    <div class="section-header">
-      <h2>Unified Frontier Ranking</h2>
-      <span class="section-meta">Top 20 Flagship Models · Composite</span>
-    </div>
-    <p class="section-intro">
-      LMArena Elo（正規化）、HLE、GPQA Diamond、ARC-AGI-2、SWE-Bench Verified / Pro の5軸を重み付けした総合スコア（0-100正規化）でランキング。第三者評価値と発表主張値が混在する点に注意（※マーク）。空欄は該当ベンチの公表値なし。
-    </p>
-    <div class="ranking-table-wrap">
-    <table class="model-table ranking-table">
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>Lab</th>
-          <th>Model</th>
-          <th>LMArena</th>
-          <th>HLE</th>
-          <th>GPQA</th>
-          <th>ARC-2</th>
-          <th>SWE-V</th>
-          <th>Composite</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td class="rank">1</td>
-          <td class="lab"><span class="lab-logo"><img src="images/logos/google-deepmind.svg" alt="Google DeepMind" class="logo-img"></span><span class="lab-name">Google DM</span></td>
-          <td><span class="model-name">Gemini 3.1 Pro</span></td>
-          <td class="bench">1493</td>
-          <td class="bench">44.7%</td>
-          <td class="bench">94.3%</td>
-          <td class="bench">77.1%</td>
-          <td class="bench">80.6%</td>
-          <td class="bench"><strong>96.8</strong></td>
-        </tr>
-        <tr>
-          <td class="rank">2</td>
-          <td class="lab"><span class="lab-logo"><img src="images/logos/anthropic.svg" alt="Anthropic" class="logo-img"></span><span class="lab-name">Anthropic</span></td>
-          <td><span class="model-name">Claude Opus 4.6</span></td>
-          <td class="bench"><strong>1504</strong></td>
-          <td class="bench">34.4%</td>
-          <td class="bench">88.0%</td>
-          <td class="bench">31.0%</td>
-          <td class="bench">80.8%</td>
-          <td class="bench"><strong>88.1</strong></td>
-        </tr>
-        <tr>
-          <td class="rank">3</td>
-          <td class="lab"><span class="lab-logo"><img src="images/logos/openai.svg" alt="OpenAI" class="logo-img"></span><span class="lab-name">OpenAI</span></td>
-          <td><span class="model-name">GPT-5.4 Pro</span></td>
-          <td class="bench">1484</td>
-          <td class="bench">41.6%</td>
-          <td class="bench">87.0%</td>
-          <td class="bench">28.0%</td>
-          <td class="bench">78.0%</td>
-          <td class="bench"><strong>86.4</strong></td>
-        </tr>
-        <tr>
-          <td class="rank">4</td>
-          <td class="lab"><span class="lab-logo"><img src="images/logos/xai.svg" alt="xAI" class="logo-img"></span><span class="lab-name">xAI</span></td>
-          <td><span class="model-name">Grok 4.20 Beta1</span></td>
-          <td class="bench">1491</td>
-          <td class="bench">38.6%</td>
-          <td class="bench">82.0%</td>
-          <td class="bench">16.0%</td>
-          <td class="bench">65.0%</td>
-          <td class="bench"><strong>78.3</strong></td>
-        </tr>
-        <tr>
-          <td class="rank">5</td>
-          <td class="lab"><span class="lab-logo"><img src="images/logos/deepseek.svg" alt="DeepSeek" class="logo-img"></span><span class="lab-name">DeepSeek</span></td>
-          <td><span class="model-name">V3.2-Speciale</span></td>
-          <td class="bench">—</td>
-          <td class="bench">22.0%※</td>
-          <td class="bench">80.0%※</td>
-          <td class="bench">14.0%※</td>
-          <td class="bench">68.0%※</td>
-          <td class="bench"><strong>65.2</strong></td>
-        </tr>
-        <tr>
-          <td class="rank">6</td>
-          <td class="lab"><span class="lab-logo"><img src="images/logos/qwen.svg" alt="Qwen" class="logo-img"></span><span class="lab-name">Alibaba Qwen</span></td>
-          <td><span class="model-name">Qwen3-Max-Thinking</span></td>
-          <td class="bench">—</td>
-          <td class="bench">21.0%※</td>
-          <td class="bench">78.0%※</td>
-          <td class="bench">12.0%※</td>
-          <td class="bench">69.6%</td>
-          <td class="bench"><strong>63.8</strong></td>
-        </tr>
-        <tr>
-          <td class="rank">7</td>
-          <td class="lab"><span class="lab-mark filled">K</span><span class="lab-name">Moonshot Kimi</span></td>
-          <td><span class="model-name">Kimi K2.5</span></td>
-          <td class="bench">—</td>
-          <td class="bench">—</td>
-          <td class="bench">—</td>
-          <td class="bench">—</td>
-          <td class="bench">65.8%</td>
-          <td class="bench"><strong>60.2</strong></td>
-        </tr>
-        <tr>
-          <td class="rank">8</td>
-          <td class="lab"><span class="lab-logo"><img src="images/logos/minimax.png" alt="MiniMax" class="logo-img"></span><span class="lab-name">MiniMax</span></td>
-          <td><span class="model-name">M2.5</span></td>
-          <td class="bench">—</td>
-          <td class="bench">—</td>
-          <td class="bench">—</td>
-          <td class="bench">—</td>
-          <td class="bench"><strong>80.2%</strong></td>
-          <td class="bench"><strong>59.7</strong></td>
-        </tr>
-        <tr>
-          <td class="rank">9</td>
-          <td class="lab"><span class="lab-logo"><img src="images/logos/baidu.svg" alt="Baidu" class="logo-img"></span><span class="lab-name">Baidu</span></td>
-          <td><span class="model-name">ERNIE 5.0</span></td>
-          <td class="bench">—</td>
-          <td class="bench">—</td>
-          <td class="bench">—</td>
-          <td class="bench">—</td>
-          <td class="bench">—</td>
-          <td class="bench"><strong>58.0</strong></td>
-        </tr>
-        <tr>
-          <td class="rank">10</td>
-          <td class="lab"><span class="lab-logo"><img src="images/logos/zhipu.svg" alt="Zhipu" class="logo-img"></span><span class="lab-name">Zhipu GLM</span></td>
-          <td><span class="model-name">GLM-4.6</span></td>
-          <td class="bench">—</td>
-          <td class="bench">—</td>
-          <td class="bench">—</td>
-          <td class="bench">—</td>
-          <td class="bench">—</td>
-          <td class="bench"><strong>55.4</strong></td>
-        </tr>
-        <tr>
-          <td class="rank">11</td>
-          <td class="lab"><span class="lab-logo"><img src="images/logos/mistral.svg" alt="Mistral" class="logo-img"></span><span class="lab-name">Mistral</span></td>
-          <td><span class="model-name">Mistral Large 3</span></td>
-          <td class="bench">—</td>
-          <td class="bench">—</td>
-          <td class="bench">—</td>
-          <td class="bench">—</td>
-          <td class="bench">—</td>
-          <td class="bench"><strong>52.0</strong></td>
-        </tr>
-        <tr>
-          <td class="rank">12</td>
-          <td class="lab"><span class="lab-logo"><img src="images/logos/meta.svg" alt="Meta" class="logo-img"></span><span class="lab-name">Meta</span></td>
-          <td><span class="model-name">Llama 4 Maverick</span></td>
-          <td class="bench">—</td>
-          <td class="bench">—</td>
-          <td class="bench">—</td>
-          <td class="bench">—</td>
-          <td class="bench">—</td>
-          <td class="bench"><strong>48.0</strong></td>
-        </tr>
-      </tbody>
-    </table>
+      <div class="person-card">
+        <div class="person-photo"><img src="images/people/demis-hassabis.jpg" alt="Demis Hassabis"></div>
+        <div class="person-name">Demis Hassabis</div>
+        <div class="person-role">Google DeepMind · CEO</div>
+      </div>
+      <div class="person-card">
+        <div class="person-photo"><img src="images/people/elon-musk.jpg" alt="Elon Musk"></div>
+        <div class="person-name">Elon Musk</div>
+        <div class="person-role">xAI · Founder</div>
+      </div>
+      <div class="person-card">
+        <div class="person-photo"><img src="images/people/yann-lecun.jpg" alt="Yann LeCun"></div>
+        <div class="person-name">Yann LeCun</div>
+        <div class="person-role">Meta AI · Chief AI Scientist</div>
+      </div>
+      <div class="person-card">
+        <div class="person-photo"><img src="images/people/arthur-mensch.png" alt="Arthur Mensch"></div>
+        <div class="person-name">Arthur Mensch</div>
+        <div class="person-role">Mistral · CEO</div>
+      </div>
+      <div class="person-card">
+        <div class="person-photo placeholder filled">DS</div>
+        <div class="person-name">Liang Wenfeng</div>
+        <div class="person-role">DeepSeek · Founder</div>
+      </div>
+      <div class="person-card">
+        <div class="person-photo placeholder">Q</div>
+        <div class="person-name">Junyang Lin</div>
+        <div class="person-role">Alibaba Qwen · Tech Lead</div>
+      </div>
+      <div class="person-card">
+        <div class="person-photo placeholder filled">K</div>
+        <div class="person-name">Yang Zhilin</div>
+        <div class="person-role">Moonshot Kimi · Founder</div>
+      </div>
+      <div class="person-card">
+        <div class="person-photo placeholder">Z</div>
+        <div class="person-name">Tang Jie</div>
+        <div class="person-role">Zhipu GLM · Chief Scientist</div>
+      </div>
+      <div class="person-card">
+        <div class="person-photo"><img src="images/people/zhang-yiming.jpg" alt="Zhang Yiming"></div>
+        <div class="person-name">Zhang Yiming</div>
+        <div class="person-role">ByteDance · Founder</div>
+      </div>
+      <div class="person-card">
+        <div class="person-photo placeholder filled">Mx</div>
+        <div class="person-name">Yan Junjie</div>
+        <div class="person-role">MiniMax · CEO</div>
+      </div>
+      <div class="person-card">
+        <div class="person-photo"><img src="images/people/robin-li.png" alt="Robin Li"></div>
+        <div class="person-name">Robin Li</div>
+        <div class="person-role">Baidu · CEO</div>
+      </div>
+      <div class="person-card">
+        <div class="person-photo"><img src="images/people/pony-ma.jpg" alt="Pony Ma (Ma Huateng)"></div>
+        <div class="person-name">Pony Ma</div>
+        <div class="person-role">Tencent · CEO</div>
+      </div>
     </div>
     <p class="people-note">
-      ※印は vendor claim または第三者評価で値が確定していない数値。Composite は LMArena(Elo正規化) 30% + HLE 25% + GPQA 15% + ARC-AGI-2 15% + SWE-Ver 15% の加重平均。欠損値は対応する軸の平均で補完。あくまで俯瞰用のラフな目安であり、決定的ランキングではない。LMArena / ARC-2は週次で変動。
+      写真出典: Wikimedia Commons（CC BY 2.0 / CC BY 3.0 / CC BY-SA 4.0 / CC0）。ホバーで白黒からカラーへ変化。モノグラム表示の5名は公開画像が見つからなかった人物。
     </p>
-  </div>
-
-  <!-- ═══════════ Benchmark Leaderboards ═══════════ -->
-  <div class="section-block">
-    <div class="section-header">
-      <h2>Benchmark Leaderboards</h2>
-      <span class="section-meta">As of Apr 2026</span>
-    </div>
-    <p class="section-intro">
-      同じ「SOTA」でもベンチマークごとに別の物語を語る。一般知能系（HLE、GPQA）はGoogleがリード、コーディング（SWE-Bench、LMArena Coding）はAnthropicがリード、推論スピード系（LMArena Text総合）はAnthropic・Google・xAIが週単位で入れ替わる。SWE-Bench Verifiedは汚染問題が判明したため、現在はSWE-Bench Proへ移行中。
-    </p>
-
-    <div class="chart-grid-2">
-      <div class="chart-wrap">
-        <div class="chart-header">
-          <h3>HLE Score Progression</h3>
-          <span class="chart-sub">Humanity's Last Exam · 2024 Q4 — 2026 Q1</span>
-        </div>
-        <p class="chart-caption">1年でSOTAが2.7%から44.7%へ。フロンティアモデルが「人類最後のテスト」の解答率で中盤40%台に到達した軌跡。</p>
-        <div class="chart-canvas-wrap"><canvas id="hleChart"></canvas></div>
-      </div>
-      <div class="chart-wrap">
-        <div class="chart-header">
-          <h3>Top 5 Models — Cross-Benchmark</h3>
-          <span class="chart-sub">GPQA / HLE / ARC-AGI-2 / SWE-Ver</span>
-        </div>
-        <p class="chart-caption">ベンチマークごとに強者が違う。一般知能でGoogle、コーディングでAnthropic、抽象推論でGoogleがリード。</p>
-        <div class="chart-canvas-wrap"><canvas id="crossBenchChart"></canvas></div>
-      </div>
-    </div>
-
-    <div class="bench-grid">
-      <div class="bench-card">
-        <h3>LMArena — Overall</h3>
-        <div class="bench-sub">Chatbot Arena Elo · 2026-04</div>
-        <ol>
-          <li><span class="model">Claude Opus 4.6 Thinking</span><span class="score">1504</span></li>
-          <li><span class="model">Gemini 3.1 Pro Preview</span><span class="score">1493</span></li>
-          <li><span class="model">Grok 4.20 Beta1</span><span class="score">1491</span></li>
-          <li><span class="model">GPT-5.4 High</span><span class="score">1484</span></li>
-        </ol>
-        <div class="bench-note">Coding subboardではClaude Opus 4.6が1561 Eloで独走。順位は週単位で変動する</div>
-      </div>
-      <div class="bench-card">
-        <h3>Humanity's Last Exam</h3>
-        <div class="bench-sub">HLE · 2026 Q1</div>
-        <ol>
-          <li><span class="model">Gemini 3.1 Pro Preview</span><span class="score">44.7%</span></li>
-          <li><span class="model">GPT-5.4 (xhigh)</span><span class="score">41.6%</span></li>
-          <li><span class="model">GPT-5.3 Codex (xhigh)</span><span class="score">39.9%</span></li>
-          <li><span class="model">Gemini 3 Pro Preview</span><span class="score">37.5%</span></li>
-          <li><span class="model">Claude Opus 4.6 Thinking Max</span><span class="score">34.4%</span></li>
-        </ol>
-        <div class="bench-note">2025年初頭はGPT-4o 2.7% / o1 8.0%が最高。約12ヶ月で中盤40%台まで到達</div>
-      </div>
-      <div class="bench-card">
-        <h3>ARC-AGI-2</h3>
-        <div class="bench-sub">Verified · 2026-02</div>
-        <ol>
-          <li><span class="model">Gemini 3.1 Pro</span><span class="score">77.1%</span></li>
-          <li><span class="model">Poetiq (on Gemini 3 Pro)</span><span class="score">54%</span></li>
-          <li><span class="model">Gemini 3 Pro</span><span class="score">31.1%</span></li>
-          <li><span class="model">GPT-5.1</span><span class="score">17.6%</span></li>
-          <li><span class="model">Gemini 2.5 Pro</span><span class="score">4.9%</span></li>
-        </ol>
-        <div class="bench-note">数ヶ月で5%→77%。ARC-AGI-3が後継として同時リリース（ARC Prize 2026賞金$2M+）</div>
-      </div>
-      <div class="bench-card">
-        <h3>SWE-Bench Verified / Pro</h3>
-        <div class="bench-sub">Coding · 2026 Q1</div>
-        <ol>
-          <li><span class="model">Claude Opus 4.5 (Verified)</span><span class="score">80.9%</span></li>
-          <li><span class="model">Claude Opus 4.6 (Verified)</span><span class="score">80.8%</span></li>
-          <li><span class="model">Gemini 3.1 Pro (Verified)</span><span class="score">80.6%</span></li>
-          <li><span class="model">MiniMax M2.5 (Verified)</span><span class="score">80.2%</span></li>
-          <li><span class="model">Claude Haiku 4.5 (Pro)</span><span class="score">39.5%</span></li>
-        </ol>
-        <div class="bench-note">Verifiedは汚染問題あり（Gold patchを逐語再現するケースを検出）。OpenAIは報告停止、SWE-Bench Proを推奨。Proではスコアが大幅低下</div>
-      </div>
-    </div>
   </div>
 
   <!-- ═══════════ Evaluation Agencies ═══════════ -->

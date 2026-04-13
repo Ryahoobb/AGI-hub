@@ -251,6 +251,14 @@
     color: #b23a2f;
     font-weight: 700;
   }
+  .bench-card .bench-desc {
+    font-size: 12px;
+    color: #585858;
+    line-height: 1.65;
+    margin-bottom: 18px;
+    padding-bottom: 14px;
+    border-bottom: 1px dashed #e5e5e5;
+  }
   .bench-card .bench-note {
     margin-top: 16px;
     font-size: 11px;
@@ -872,6 +880,7 @@
       <div class="bench-card">
         <h3><a href="https://lmarena.ai/leaderboard" target="_blank" rel="noopener" class="src-link">LMArena — Overall</a></h3>
         <div class="bench-sub">Chatbot Arena Elo · 2026-04</div>
+        <p class="bench-desc">実ユーザーが匿名の2モデル回答を盲検比較し、勝ち負けからEloレーティングを算出する。好みという「人間の判断」をそのまま順位化するため、ベンチマーク汚染の影響を受けにくい。Overall / Coding / Vision 等のサブボードあり。</p>
         <ol>
           <li><span class="model"><a href="https://www.anthropic.com/claude/opus" target="_blank" rel="noopener" class="model-link">Claude Opus 4.6 Thinking</a></span><span class="score">1504</span></li>
           <li><span class="model"><a href="https://deepmind.google/technologies/gemini/pro/" target="_blank" rel="noopener" class="model-link">Gemini 3.1 Pro Preview</a></span><span class="score">1493</span></li>
@@ -883,6 +892,7 @@
       <div class="bench-card">
         <h3><a href="https://agi.safe.ai/" target="_blank" rel="noopener" class="src-link">Humanity's Last Exam</a></h3>
         <div class="bench-sub">HLE · 2026 Q1</div>
+        <p class="bench-desc">数学・人文・自然科学にまたがる博士級2,500問。Scale AI × CAIS が2025年に「人類最後の閉じた学術ベンチマーク」として公開。回答は短答・多肢選択で自動採点可能。既存ベンチが天井に達したあと、LLMの限界を炙り出す役割。</p>
         <ol>
           <li><span class="model"><a href="https://deepmind.google/technologies/gemini/pro/" target="_blank" rel="noopener" class="model-link">Gemini 3.1 Pro Preview</a></span><span class="score">44.7%</span></li>
           <li><span class="model"><a href="https://openai.com/gpt-5" target="_blank" rel="noopener" class="model-link">GPT-5.4 (xhigh)</a></span><span class="score">41.6%</span></li>
@@ -895,6 +905,7 @@
       <div class="bench-card">
         <h3><a href="https://arcprize.org/leaderboard" target="_blank" rel="noopener" class="src-link">ARC-AGI-2</a></h3>
         <div class="bench-sub">Verified · 2026-04</div>
+        <p class="bench-desc">François Chollet設計の抽象推論テスト。少数の入出力例からルールを推論してグリッドを変換する。人間は直感で解けるがLLMが長年苦戦した領域。記憶ではなく「未知パターンへの一般化」を測る。後継のARC-AGI-3も併走中。</p>
         <ol>
           <li><span class="model"><a href="https://deepmind.google/technologies/gemini/pro/" target="_blank" rel="noopener" class="model-link">Gemini 3.1 Pro</a></span><span class="score">77.1%</span></li>
           <li><span class="model"><a href="https://arcprize.org/leaderboard" target="_blank" rel="noopener" class="model-link">Poetiq (on Gemini 3 Pro)</a></span><span class="score">54.0%</span></li>
@@ -907,6 +918,7 @@
       <div class="bench-card">
         <h3><a href="https://labs.scale.com/leaderboard/swe_bench_pro_public" target="_blank" rel="noopener" class="src-link">SWE-Bench Pro / Verified</a></h3>
         <div class="bench-sub">Coding · 2026-04</div>
+        <p class="bench-desc">実在する12のGitHubリポジトリから集めた未解決Issueを、モデルにパッチで修正させる。テストスイートを通れば正解。Verifiedは手動検証版だったが汚染発覚、より厳格な Pro版（Scale AI運営）へ移行中。現実のエンジニアリング能力の近似指標。</p>
         <ol>
           <li><span class="model"><a href="https://www.anthropic.com/claude/opus" target="_blank" rel="noopener" class="model-link">Opus 4.6 + WarpGrep v2 (Pro)</a></span><span class="score">57.5%</span></li>
           <li><span class="model"><a href="https://openai.com/gpt-5" target="_blank" rel="noopener" class="model-link">GPT-5.3-Codex (Pro)</a></span><span class="score">56.8%</span></li>
@@ -1489,12 +1501,12 @@
       <span class="section-meta">Who Measures What</span>
     </div>
     <p class="section-intro">
-      ベンチマークスコアを読むだけではAIの現在地は見えない。タスクの時間軸を測るMETR、deceptive alignment を検出するApollo、compute動向を定量化するEpoch AI。異なる角度から「どこまで来たか」を描くのが評価機関の役割だ。
+      ベンチマークスコアを読むだけではAIの現在地は見えない。タスクの時間軸を測る<a href="https://metr.org/" target="_blank" rel="noopener" class="src-link">METR</a>、deceptive alignment を検出する<a href="https://www.apolloresearch.ai/" target="_blank" rel="noopener" class="src-link">Apollo</a>、compute動向を定量化する<a href="https://epoch.ai/" target="_blank" rel="noopener" class="src-link">Epoch AI</a>。異なる角度から「どこまで来たか」を描くのが評価機関の役割だ。
     </p>
     <div class="agency-list">
       <div class="agency-card">
         <div class="agency-logo"><img src="images/logos/metr.svg" alt="METR logo"></div>
-        <h3>METR</h3>
+        <h3><a href="https://metr.org/" target="_blank" rel="noopener" class="src-link">METR</a></h3>
         <div class="agency-tag">Model Evaluation and Threat Research · Non-profit · Berkeley</div>
         <p>
           モデルが独立に完了できるタスクの「時間軸（Task Horizon）」を測る。50%成功率で完了できる人間換算タスク長を指標とし、その倍増時間を推定する方法論で知られる。
@@ -1514,7 +1526,7 @@
 
       <div class="agency-card">
         <div class="agency-logo"><img src="images/logos/apollo-research.svg" alt="Apollo Research logo"></div>
-        <h3>Apollo Research</h3>
+        <h3><a href="https://www.apolloresearch.ai/" target="_blank" rel="noopener" class="src-link">Apollo Research</a></h3>
         <div class="agency-tag">AI Safety · Deceptive Alignment · London</div>
         <p>
           フロンティアモデルが in-context scheming を行うかを体系的に検証する。監視を無効化しようとする、微妙な誤りを混入させる、自分の重みを外部に持ち出そうとする、といった行動を測定する。
@@ -1527,7 +1539,7 @@
 
       <div class="agency-card">
         <div class="agency-logo"><img src="images/logos/epoch-ai.svg" alt="Epoch AI logo"></div>
-        <h3>Epoch AI</h3>
+        <h3><a href="https://epoch.ai/" target="_blank" rel="noopener" class="src-link">Epoch AI</a></h3>
         <div class="agency-tag">Compute Trends · FrontierMath · GATE Model</div>
         <p>
           計算資源・データ・アルゴリズム効率の長期トレンドを定量化する研究機関。FrontierMathは現代数学者でも時間がかかる問題セット、GATEはAI自動化の経済モデル。

@@ -624,11 +624,6 @@
       <div class="picks-grid">
         <a href="articles/01-ai-alignment.html" class="pick" data-category="alignment">
           <img class="thumb" src="images/thumb-ai-alignment.jpg" alt="AI Alignment article thumbnail">
-          <div class="meta">
-            <span style="font-weight:700;">No. 01</span>
-            <span class="sep">/</span>
-            <span class="cat">Alignment</span>
-          </div>
           <h3>Yudkowskyを越えて — AIアラインメントの本来の射程</h3>
           <p class="excerpt">
             「If anyone builds it, everyone dies」と言い切ったEliezer Yudkowskyの論証を分解し、3つの論理的飛躍を検証する。防御・整合・共創の3層モデルで、破滅論の外側に広がるアラインメントの本来の射程を辿る。
@@ -637,11 +632,6 @@
 
         <a href="articles/02-agi-evolution.html" class="pick" data-category="takeoff">
           <img class="thumb" src="images/thumb-agi-evolution.jpg" alt="AGI Evolution article thumbnail">
-          <div class="meta">
-            <span style="font-weight:700;">No. 02</span>
-            <span class="sep">/</span>
-            <span class="cat">Takeoff</span>
-          </div>
           <h3>AGIを宇宙進化の次相として位置づける</h3>
           <p class="excerpt">
             138億年の宇宙史を一本の線として眺めたとき、AGIは「便利な道具」でも「人類の脅威」でもなく、知能という現象が生物学的基盤を離れる転位点として現れる。担体のバトンリレーという視点で読み直す。
@@ -820,15 +810,6 @@
                   '<a href="articles/' + a.slug + '.html" class="featured" data-category="' + a.category + '">' +
                     '<div><img class="thumb" src="' + a.thumb + '" alt="' + a.slug + ' thumbnail"></div>' +
                     '<div>' +
-                      '<div class="meta">' +
-                        '<span style="font-weight:700;">No. ' + pad(a.no) + '</span>' +
-                        '<span class="sep">/</span>' +
-                        '<span class="cat">' + catLabel(a.category) + '</span>' +
-                        '<span class="sep">/</span>' +
-                        '<span>' + a.date + '</span>' +
-                        '<span class="sep">/</span>' +
-                        '<span>' + a.slides + '</span>' +
-                      '</div>' +
                       '<h3>' + a.title + '</h3>' +
                       '<p class="excerpt">' + a.excerpt + '</p>' +
                       '<span class="read-more">Read Article \u2192</span>' +
@@ -838,15 +819,6 @@
                 grid.insertAdjacentHTML('beforeend',
                   '<a href="articles/' + a.slug + '.html" class="card" data-category="' + a.category + '">' +
                     '<img class="thumb" src="' + a.thumb + '" alt="' + a.slug + ' thumbnail">' +
-                    '<div class="meta">' +
-                      '<span>No. ' + pad(a.no) + '</span>' +
-                      '<span class="sep">/</span>' +
-                      '<span class="cat">' + catLabel(a.category) + '</span>' +
-                      '<span class="sep">/</span>' +
-                      '<span>' + a.date + '</span>' +
-                      '<span class="sep">/</span>' +
-                      '<span>' + a.slides + '</span>' +
-                    '</div>' +
                     '<h3>' + a.title + '</h3>' +
                     '<p class="excerpt">' + a.excerpt + '</p>' +
                   '</a>'

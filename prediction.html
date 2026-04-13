@@ -17,12 +17,17 @@
   --border: #e8e3d4;
   --bg: #faf8f1;
   --bg-alt: #f3f1e4;
+  --bg-dark: #0f0d2e;
   --accent: #2f2b92;
+  --accent-bright: #5a4cc7;
   --accent-soft: rgba(47, 43, 146, 0.08);
   --accent-line: rgba(47, 43, 146, 0.3);
-  --world: #a83232;
-  --world-soft: rgba(168, 50, 50, 0.08);
+  --world: #c9372c;
+  --world-soft: rgba(201, 55, 44, 0.08);
+  --amber: #d4a017;
+  --green: #1a7a3a;
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
@@ -31,634 +36,974 @@ body {
   font-feature-settings: "palt"; font-size: 16px; line-height: 1.75; color: var(--body-text); background: var(--bg);
   -webkit-font-smoothing: antialiased; overflow-x: hidden; word-wrap: break-word;
 }
-a { color: var(--accent); text-decoration: none; border-bottom: 1px solid var(--border); }
-a:hover { border-bottom-color: var(--accent); }
+a { color: var(--accent); text-decoration: none; }
 .mono { font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace; font-feature-settings: normal; letter-spacing: 0.05em; }
 
 /* ── Masthead ── */
 .masthead { background: var(--black); color: #fff; }
-.masthead-inner { max-width: 1120px; margin: 0 auto; padding: 20px 48px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+.masthead-inner { max-width: 1200px; margin: 0 auto; padding: 20px 48px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
 .logo { font-family: "SF Mono", Menlo, monospace; font-size: 18px; font-weight: 700; letter-spacing: 0.1em; color: #fff; }
-.logo a { color: #fff; border: none; }
+.logo a { color: #fff; }
 .logo-mark { display: inline-block; width: 10px; height: 10px; background: #fff; margin-right: 10px; vertical-align: 1px; }
 .nav-links { display: flex; gap: 28px; font-family: "SF Mono", Menlo, monospace; font-size: 11px; letter-spacing: 0.083em; text-transform: uppercase; }
-.nav-links a { color: var(--light-gray); border: none; transition: color 0.2s; }
+.nav-links a { color: var(--light-gray); transition: color 0.2s; }
 .nav-links a:hover { color: #fff; }
 
 /* ── Sections ── */
-.section { max-width: 1120px; margin: 0 auto; padding: 80px 48px; }
+.section { max-width: 1200px; margin: 0 auto; padding: 96px 48px; }
 .section + .section { border-top: 1px solid var(--border); }
 .section-alt { background: var(--bg-alt); }
+.section-dark { background: var(--bg-dark); color: #fff; }
+.section-dark h1, .section-dark h2, .section-dark .lead { color: #fff; }
 
-.eyebrow { font-family: "SF Mono", Menlo, monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); margin-bottom: 16px; }
-h1 { font-size: clamp(32px, 5vw, 60px); font-weight: 800; line-height: 1.1; letter-spacing: -0.02em; color: var(--black); margin-bottom: 24px; }
-h2 { font-size: clamp(24px, 3.5vw, 36px); font-weight: 800; line-height: 1.25; color: var(--black); margin-bottom: 24px; }
-.lead { max-width: 720px; font-size: 17px; line-height: 1.85; color: var(--mid); }
+.eyebrow { font-family: "SF Mono", Menlo, monospace; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); margin-bottom: 16px; }
+.eyebrow::before { content: '◆'; color: var(--accent); margin-right: 10px; font-size: 9px; }
+.section-dark .eyebrow { color: var(--accent-bright); }
+.section-dark .eyebrow::before { color: var(--accent-bright); }
+
+h1 { font-size: clamp(36px, 7vw, 80px); font-weight: 900; line-height: 1.05; letter-spacing: -0.03em; color: var(--black); margin-bottom: 24px; }
+h2 { font-size: clamp(28px, 4vw, 44px); font-weight: 800; line-height: 1.2; color: var(--black); margin-bottom: 24px; letter-spacing: -0.02em; }
+.lead { max-width: 720px; font-size: 18px; line-height: 1.75; color: var(--mid); }
+.section-dark .lead { color: rgba(255,255,255,0.75); }
 
 /* ══════════════════════════════════════
-   HERO SPECTRUM
+   HERO — BIG VISUAL TIMELINE
    ══════════════════════════════════════ */
-.hero-spectrum {
-  margin-top: 56px;
-  padding: 40px 32px;
+.hero-section { padding-top: 64px; padding-bottom: 96px; position: relative; overflow: hidden; }
+.hero-section::before {
+  content: '';
+  position: absolute;
+  top: 0; right: -200px;
+  width: 600px; height: 600px;
+  background: radial-gradient(circle, rgba(47, 43, 146, 0.08) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+.hero-section > * { position: relative; z-index: 1; }
+
+.hero-tag {
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 8px 16px; background: var(--accent); color: #fff;
+  font-family: "SF Mono", Menlo, monospace; font-size: 11px;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  margin-bottom: 32px;
+}
+.hero-tag::before {
+  content: ''; display: inline-block; width: 6px; height: 6px;
+  background: #fff; border-radius: 50%;
+  animation: pulse 2s infinite;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(1.3); }
+}
+
+.hero-headline { margin-bottom: 32px; }
+.hero-headline .highlight {
+  background: linear-gradient(180deg, transparent 60%, rgba(47, 43, 146, 0.2) 60%);
+  padding: 0 4px;
+}
+.hero-lead { max-width: 680px; font-size: 19px; color: var(--mid); }
+
+/* ── HERO TIMELINE (the big attention-grabbing viz) ── */
+.hero-timeline {
+  margin-top: 72px;
+  padding: 48px 32px 80px;
   background: #fff;
   border: 1px solid var(--border);
   position: relative;
+  overflow: visible;
 }
-.spectrum-title {
-  font-family: "SF Mono", Menlo, monospace;
-  font-size: 11px;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--meta);
-  margin-bottom: 24px;
-  text-align: center;
-}
-.spectrum-bar {
-  position: relative;
-  height: 60px;
-  margin: 0 auto;
-  background: linear-gradient(to right,
-    rgba(47, 43, 146, 0.05) 0%,
-    rgba(47, 43, 146, 0.2) 30%,
-    rgba(168, 50, 50, 0.2) 70%,
-    rgba(168, 50, 50, 0.05) 100%);
-  border-radius: 2px;
-}
-.spectrum-years {
+.hero-timeline-header {
   display: flex;
   justify-content: space-between;
-  margin-top: 12px;
+  align-items: baseline;
+  margin-bottom: 48px;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+.hero-timeline-title {
   font-family: "SF Mono", Menlo, monospace;
   font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
   color: var(--meta);
-  letter-spacing: 0.05em;
 }
-.spectrum-pin {
-  position: absolute;
-  top: -10px;
-  transform: translateX(-50%);
+.hero-timeline-title strong { color: var(--black); }
+.hero-timeline-legend {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  z-index: 2;
-}
-.spectrum-pin .pin-mark {
-  width: 2px;
-  height: 80px;
-  background: var(--accent);
-}
-.spectrum-pin.amodei .pin-mark { background: #2f2b92; }
-.spectrum-pin.altman .pin-mark { background: #5a4cc7; }
-.spectrum-pin.hassabis .pin-mark { background: #855cdc; }
-.spectrum-pin.huang .pin-mark { background: #a83232; }
-.spectrum-pin.metaculus .pin-mark { background: #1a7a3a; width: 3px; }
-.spectrum-pin .pin-label {
-  margin-top: 6px;
+  gap: 20px;
   font-family: "SF Mono", Menlo, monospace;
   font-size: 10px;
-  color: var(--black);
-  font-weight: 700;
-  text-transform: uppercase;
-  white-space: nowrap;
-  letter-spacing: 0.05em;
-}
-.spectrum-pin .pin-year {
-  font-size: 11px;
   color: var(--meta);
-  margin-top: 2px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  flex-wrap: wrap;
 }
+.legend-item { display: flex; align-items: center; gap: 6px; }
+.legend-dot { width: 8px; height: 8px; border-radius: 50%; }
 
-/* ══════════════════════════════════════
-   WORLD DATA CARDS
-   ══════════════════════════════════════ */
-.stats-row {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 24px;
-  margin-top: 32px;
-}
-.stat-card {
-  padding: 28px 24px;
-  background: #fff;
-  border-top: 3px solid var(--accent);
+/* The actual horizontal timeline */
+.timeline-wrap {
   position: relative;
+  padding: 40px 0 60px;
 }
-.stat-card .stat-tag { display: block; font-family: "SF Mono", Menlo, monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); margin-bottom: 12px; }
-.stat-card .stat-num { font-size: 56px; font-weight: 800; line-height: 1; color: var(--black); letter-spacing: -0.02em; margin-bottom: 4px; }
-.stat-card .stat-unit { font-size: 20px; color: var(--mid); font-weight: 600; }
-.stat-card .stat-desc { font-size: 13px; line-height: 1.5; color: var(--mid); margin-top: 12px; }
-.stat-card .stat-meta { font-family: "SF Mono", Menlo, monospace; font-size: 10px; color: var(--light-gray); margin-top: 8px; letter-spacing: 0.05em; }
+.timeline-axis {
+  position: relative;
+  height: 8px;
+  background: linear-gradient(to right,
+    rgba(47, 43, 146, 0.35) 0%,
+    rgba(47, 43, 146, 0.2) 40%,
+    rgba(201, 55, 44, 0.12) 80%,
+    rgba(201, 55, 44, 0.25) 100%);
+  border-radius: 4px;
+}
+.timeline-axis::before, .timeline-axis::after {
+  content: ''; position: absolute; width: 12px; height: 12px;
+  background: var(--black); border-radius: 50%; top: -2px;
+}
+.timeline-axis::before { left: -6px; }
+.timeline-axis::after { right: -6px; }
 
-/* Mini bar chart for card */
-.stat-bar {
-  margin-top: 16px;
-  height: 6px;
-  background: var(--bg-alt);
-  position: relative;
-  border-radius: 2px;
-  overflow: hidden;
-}
-.stat-bar-fill {
+.timeline-year-ticks {
   position: absolute;
-  top: 0; left: 0; height: 100%;
-  background: var(--accent);
-  transition: width 0.8s var(--ease);
-}
-
-/* ══════════════════════════════════════
-   CEO TIMELINE (HORIZONTAL VISUAL)
-   ══════════════════════════════════════ */
-.ceo-timeline {
-  margin-top: 48px;
-  position: relative;
-  padding: 32px 0 80px;
-}
-.ceo-axis {
-  position: relative;
-  height: 2px;
-  background: var(--border);
-  margin: 0 40px;
-}
-.ceo-axis::before,
-.ceo-axis::after {
-  content: '';
-  position: absolute;
-  top: -4px;
-  width: 10px;
-  height: 10px;
-  background: var(--accent);
-  border-radius: 50%;
-}
-.ceo-axis::before { left: -8px; }
-.ceo-axis::after { right: -8px; }
-.ceo-year-labels {
+  top: 20px; left: 0; right: 0;
   display: flex;
   justify-content: space-between;
-  margin: 0 40px;
-  margin-top: 8px;
   font-family: "SF Mono", Menlo, monospace;
-  font-size: 12px;
+  font-size: 11px;
   color: var(--meta);
   letter-spacing: 0.05em;
 }
-.ceo-pin {
-  position: absolute;
-  top: 0;
-  transform: translateX(-50%);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+.timeline-year-ticks span { position: relative; transform: translateX(-50%); }
+.timeline-year-ticks span::before {
+  content: ''; position: absolute;
+  top: -18px; left: 50%; transform: translateX(-50%);
+  width: 1px; height: 10px; background: var(--border);
 }
-.ceo-pin-dot {
-  width: 14px;
-  height: 14px;
-  background: var(--accent);
-  border: 3px solid #fff;
-  border-radius: 50%;
-  margin-top: -6px;
-  box-shadow: 0 0 0 1px var(--accent);
-}
-.ceo-pin-line {
-  width: 1px;
-  height: 32px;
-  background: var(--accent-line);
-  margin-top: 4px;
-}
-.ceo-pin-card {
-  margin-top: 4px;
-  padding: 12px 14px;
-  background: #fff;
-  border: 1px solid var(--border);
-  border-left: 2px solid var(--accent);
-  min-width: 180px;
-  max-width: 220px;
-  text-align: left;
-}
-.ceo-pin-card .ceo-name { font-size: 13px; font-weight: 700; color: var(--black); margin-bottom: 2px; }
-.ceo-pin-card .ceo-org { font-family: "SF Mono", Menlo, monospace; font-size: 10px; color: var(--accent); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px; }
-.ceo-pin-card .ceo-quote { font-size: 12px; line-height: 1.5; color: var(--mid); font-style: italic; }
 
-/* Alternate above/below for stacking */
-.ceo-pin.above .ceo-pin-card { margin-top: 0; margin-bottom: 4px; order: -1; }
-.ceo-pin.above .ceo-pin-line { order: 0; }
-.ceo-pin.above { flex-direction: column-reverse; top: auto; bottom: 0; }
-
-/* ══════════════════════════════════════
-   DIVIDER
-   ══════════════════════════════════════ */
-.divider-section {
-  text-align: center;
-  padding: 96px 48px;
-  position: relative;
-}
-.divider-section::before,
-.divider-section::after {
-  content: '';
-  display: block;
-  width: 60px;
-  height: 1px;
-  background: var(--accent);
-  margin: 0 auto 32px;
-}
-.divider-section::after { margin: 32px auto 0; }
-.divider-section h2 { max-width: none; text-align: center; margin: 0; border: none; padding: 0; }
-
-/* ══════════════════════════════════════
-   FORM (VISUAL SLIDERS)
-   ══════════════════════════════════════ */
-.form-wrap { max-width: 820px; margin: 0 auto; }
-.question {
-  margin-bottom: 56px;
-  padding: 32px;
-  background: #fff;
-  border: 1px solid var(--border);
-  position: relative;
-}
-.question-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 20px; gap: 16px; flex-wrap: wrap; }
-.question-title { font-size: 18px; font-weight: 700; color: var(--black); }
-.question-num { font-family: "SF Mono", Menlo, monospace; font-size: 11px; color: var(--accent); letter-spacing: 0.1em; text-transform: uppercase; font-weight: 700; }
-.question-sub { font-size: 13px; color: var(--meta); margin-bottom: 28px; line-height: 1.6; }
-
-/* Value display (big number) */
-.value-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px; }
-.value-box { padding: 16px; background: var(--accent-soft); border-left: 3px solid var(--accent); }
-.value-box.world-box { background: var(--world-soft); border-left-color: var(--world); }
-.value-box-label { font-family: "SF Mono", Menlo, monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--meta); margin-bottom: 4px; }
-.value-box .value-num { font-size: 36px; font-weight: 800; line-height: 1; color: var(--black); font-family: "SF Mono", Menlo, monospace; }
-.value-box.you .value-num { color: var(--accent); }
-.value-box.world-box .value-num { color: var(--world); }
-.value-box .value-note { font-size: 11px; color: var(--meta); margin-top: 4px; }
-
-/* Slider track with world marker */
-.slider-container {
-  position: relative;
-  padding: 40px 0 8px;
-}
-.slider-track-bg {
-  position: absolute;
-  top: 54px;
-  left: 0;
-  right: 0;
-  height: 6px;
-  background: var(--border);
-  border-radius: 3px;
-  pointer-events: none;
-}
-.slider-world-marker {
-  position: absolute;
-  top: 40px;
-  transform: translateX(-50%);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  pointer-events: none;
-  z-index: 2;
-}
-.slider-world-marker .marker-tag {
-  font-family: "SF Mono", Menlo, monospace;
-  font-size: 9px;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--world);
-  font-weight: 700;
-  margin-bottom: 2px;
-  white-space: nowrap;
-}
-.slider-world-marker .marker-line {
-  width: 2px;
-  height: 18px;
-  background: var(--world);
-}
-.slider-world-marker .marker-dot {
-  width: 10px;
-  height: 10px;
-  background: var(--world);
-  border-radius: 50%;
-  margin-top: -4px;
-  border: 2px solid var(--bg);
-}
-.slider-container input[type="range"] {
-  -webkit-appearance: none; appearance: none; width: 100%; height: 6px; border-radius: 3px;
-  background: transparent; outline: none; cursor: pointer;
-  position: relative; z-index: 3;
-  margin: 48px 0 0;
-}
-.slider-container input[type="range"]::-webkit-slider-runnable-track {
-  height: 6px; background: transparent; border-radius: 3px;
-}
-.slider-container input[type="range"]::-webkit-slider-thumb {
-  -webkit-appearance: none; appearance: none; width: 28px; height: 28px; border-radius: 50%;
-  background: var(--accent); cursor: pointer; border: 4px solid #fff;
-  box-shadow: 0 0 0 2px var(--accent), 0 2px 6px rgba(0,0,0,0.15);
-  margin-top: -11px;
-  transition: transform 0.15s;
-}
-.slider-container input[type="range"]:active::-webkit-slider-thumb { transform: scale(1.15); }
-.slider-container input[type="range"]::-moz-range-thumb {
-  width: 28px; height: 28px; border-radius: 50%; background: var(--accent); cursor: pointer;
-  border: 4px solid #fff; box-shadow: 0 0 0 2px var(--accent), 0 2px 6px rgba(0,0,0,0.15);
-}
-.slider-labels { display: flex; justify-content: space-between; font-size: 11px; color: var(--meta); margin-top: 12px; font-family: "SF Mono", Menlo, monospace; letter-spacing: 0.04em; }
-
-/* No world marker for Q3-Q5 */
-.question.no-compare .value-row { grid-template-columns: 1fr; }
-.question.no-compare .slider-world-marker { display: none; }
-.question.no-compare .value-box-label::after { content: ''; }
-
-/* Submit */
-.submit-wrap { text-align: center; margin-top: 48px; }
-.submit-btn {
-  display: inline-block; padding: 20px 64px; background: var(--accent); color: #fff;
-  font-size: 15px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; border: none; cursor: pointer;
-  transition: all 0.2s; font-family: inherit;
-}
-.submit-btn:hover { background: var(--black); transform: translateY(-2px); }
-.submit-btn:disabled { background: var(--meta); cursor: not-allowed; transform: none; }
-.submit-note { font-size: 11px; color: var(--meta); margin-top: 16px; font-family: "SF Mono", Menlo, monospace; letter-spacing: 0.05em; }
-
-/* ══════════════════════════════════════
-   RESULTS (BIG VISUAL COMPARISON)
-   ══════════════════════════════════════ */
-.results-section { display: none; }
-.results-section.visible { display: block; }
-
-/* Big headline diff */
-.diff-hero {
-  padding: 48px 32px;
-  background: #fff;
-  border: 1px solid var(--border);
-  text-align: center;
-  margin-bottom: 48px;
-}
-.diff-hero .diff-label { font-family: "SF Mono", Menlo, monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--meta); margin-bottom: 16px; }
-.diff-hero .diff-num { font-size: clamp(64px, 14vw, 140px); font-weight: 900; line-height: 1; letter-spacing: -0.04em; color: var(--accent); font-family: "SF Mono", Menlo, monospace; }
-.diff-hero .diff-num.悲観 { color: var(--world); }
-.diff-hero .diff-desc { font-size: 18px; color: var(--body-text); margin-top: 16px; font-weight: 600; }
-
-/* Horizontal compare bar */
-.compare-bar {
-  margin-top: 48px;
-  padding: 32px;
-  background: #fff;
-  border: 1px solid var(--border);
-}
-.compare-bar-title { font-size: 14px; font-weight: 700; color: var(--black); margin-bottom: 4px; }
-.compare-bar-sub { font-size: 12px; color: var(--meta); margin-bottom: 24px; font-family: "SF Mono", Menlo, monospace; letter-spacing: 0.05em; }
-.bar-axis {
-  position: relative;
-  height: 48px;
-  background: linear-gradient(to right, var(--bg-alt) 0%, var(--bg-alt) 100%);
-  border-radius: 2px;
-  margin-bottom: 16px;
-}
-.bar-axis-labels { display: flex; justify-content: space-between; font-family: "SF Mono", Menlo, monospace; font-size: 10px; color: var(--meta); letter-spacing: 0.05em; }
-.bar-marker {
+.timeline-pin {
   position: absolute;
   top: -8px;
   transform: translateX(-50%);
   z-index: 2;
 }
-.bar-marker .bar-pin {
+.timeline-pin .pin-dot {
+  width: 24px; height: 24px;
+  background: var(--accent);
+  border: 4px solid #fff;
+  border-radius: 50%;
+  box-shadow: 0 0 0 2px var(--accent), 0 4px 12px rgba(47, 43, 146, 0.3);
+  position: relative;
+  z-index: 2;
+  transition: transform 0.3s var(--ease-bounce);
+}
+.timeline-pin:hover .pin-dot { transform: scale(1.3); }
+.timeline-pin.metaculus .pin-dot { background: var(--green); box-shadow: 0 0 0 2px var(--green), 0 4px 12px rgba(26, 122, 58, 0.3); }
+.timeline-pin.metaculus .pin-dot::after {
+  content: '★'; color: #fff; position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%, -50%); font-size: 12px;
+}
+
+.timeline-pin .pin-line {
+  position: absolute;
+  top: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 1px;
+  height: 32px;
+  background: var(--accent-line);
+}
+.timeline-pin.metaculus .pin-line { background: rgba(26, 122, 58, 0.4); }
+
+.timeline-pin .pin-card {
+  position: absolute;
+  top: 60px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 10px 14px;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-top: 3px solid var(--accent);
+  min-width: 120px;
+  white-space: nowrap;
+  text-align: center;
+}
+.timeline-pin.metaculus .pin-card { border-top-color: var(--green); min-width: 160px; }
+.timeline-pin .pin-name {
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--black);
+  letter-spacing: -0.01em;
+}
+.timeline-pin .pin-year {
+  font-family: "SF Mono", Menlo, monospace;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--accent);
+  margin-top: 2px;
+  letter-spacing: -0.02em;
+}
+.timeline-pin.metaculus .pin-year { color: var(--green); }
+.timeline-pin .pin-meta {
+  font-family: "SF Mono", Menlo, monospace;
+  font-size: 9px;
+  color: var(--meta);
+  margin-top: 2px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+/* Bracket showing CEO cluster */
+.ceo-bracket {
+  position: absolute;
+  top: 140px;
+  height: 24px;
+  border: 2px solid var(--accent);
+  border-bottom: none;
+  border-radius: 0;
+}
+.ceo-bracket::after {
+  content: 'AI企業CEO';
+  position: absolute;
+  top: -28px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: "SF Mono", Menlo, monospace;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  background: #fff;
+  padding: 0 8px;
+  white-space: nowrap;
+}
+
+/* "GAP" indicator */
+.gap-indicator {
+  position: absolute;
+  top: 180px;
+  height: 24px;
+  border-bottom: 2px dashed var(--world);
+  color: var(--world);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+.gap-indicator::before, .gap-indicator::after {
+  content: '';
+  position: absolute;
+  width: 2px;
+  height: 16px;
+  background: var(--world);
+  bottom: 0;
+}
+.gap-indicator::before { left: 0; }
+.gap-indicator::after { right: 0; }
+.gap-indicator .gap-label {
+  position: absolute;
+  bottom: 4px;
+  font-family: "SF Mono", Menlo, monospace;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--world);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  background: #fff;
+  padding: 0 10px;
+}
+
+/* ══════════════════════════════════════
+   SECTION: WORLD DATA — big infographic
+   ══════════════════════════════════════ */
+.big-stat-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2px;
+  background: var(--border);
+  margin-top: 48px;
+  border: 1px solid var(--border);
+}
+.big-stat {
+  padding: 48px 32px;
+  background: #fff;
+  position: relative;
+  overflow: hidden;
+}
+.big-stat::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 4px;
+  background: var(--accent);
+}
+.big-stat.alt::before { background: var(--world); }
+.big-stat.green-accent::before { background: var(--green); }
+.big-stat.amber-accent::before { background: var(--amber); }
+
+.big-stat-tag {
+  display: inline-block;
+  font-family: "SF Mono", Menlo, monospace;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 16px;
+  padding: 4px 8px;
+  background: var(--accent-soft);
+}
+.big-stat.alt .big-stat-tag { color: var(--world); background: var(--world-soft); }
+.big-stat.green-accent .big-stat-tag { color: var(--green); background: rgba(26, 122, 58, 0.08); }
+.big-stat.amber-accent .big-stat-tag { color: #8a6710; background: rgba(212, 160, 23, 0.1); }
+
+.big-stat-num {
+  font-size: clamp(72px, 10vw, 120px);
+  font-weight: 900;
+  line-height: 0.95;
+  color: var(--black);
+  letter-spacing: -0.04em;
+  font-family: "SF Mono", Menlo, monospace;
+  margin-bottom: 8px;
+}
+.big-stat-num .unit {
+  font-size: 40%;
+  color: var(--mid);
+  font-weight: 700;
+}
+.big-stat-desc {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--body-text);
+  margin-bottom: 6px;
+}
+.big-stat-meta {
+  font-family: "SF Mono", Menlo, monospace;
+  font-size: 11px;
+  color: var(--meta);
+  letter-spacing: 0.05em;
+}
+
+/* Visual bar for probability */
+.big-stat-bar-wrap { margin-top: 20px; }
+.big-stat-bar {
+  height: 10px;
+  background: var(--bg-alt);
+  position: relative;
+  border-radius: 5px;
+  overflow: hidden;
+}
+.big-stat-bar-fill {
+  position: absolute;
+  top: 0; left: 0;
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent-bright), var(--accent));
+  border-radius: 5px;
+}
+.big-stat-bar-labels {
+  display: flex;
+  justify-content: space-between;
+  font-family: "SF Mono", Menlo, monospace;
+  font-size: 10px;
+  color: var(--meta);
+  margin-top: 6px;
+  letter-spacing: 0.05em;
+}
+
+/* Investment breakdown */
+.invest-list { margin-top: 16px; }
+.invest-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 0;
+  font-size: 12px;
+  font-family: "SF Mono", Menlo, monospace;
+  letter-spacing: 0.03em;
+  border-bottom: 1px dotted var(--border);
+}
+.invest-row:last-child { border-bottom: none; }
+.invest-row .invest-entity { flex: 1; color: var(--mid); }
+.invest-row .invest-amount { color: var(--black); font-weight: 700; }
+
+/* ══════════════════════════════════════
+   DIVIDER WITH PUNCH
+   ══════════════════════════════════════ */
+.divider-section {
+  text-align: center;
+  padding: 120px 48px;
+  background: var(--bg-dark);
+  color: #fff;
+  position: relative;
+  overflow: hidden;
+}
+.divider-section::before {
+  content: '?';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 560px;
+  font-weight: 900;
+  color: rgba(255,255,255,0.04);
+  line-height: 1;
+  font-family: "Helvetica Neue", sans-serif;
+  z-index: 0;
+}
+.divider-section > * { position: relative; z-index: 1; }
+.divider-section h2 {
+  color: #fff;
+  font-size: clamp(40px, 7vw, 88px);
+  max-width: none;
+  margin: 0 auto 24px;
+  letter-spacing: -0.04em;
+}
+.divider-section .eyebrow { color: var(--accent-bright); }
+.divider-section .eyebrow::before { color: var(--accent-bright); }
+.divider-section .lead { color: rgba(255,255,255,0.7); margin: 0 auto; }
+
+/* ══════════════════════════════════════
+   FORM (VISUAL SLIDERS)
+   ══════════════════════════════════════ */
+.form-wrap { max-width: 880px; margin: 0 auto; }
+.question {
+  margin-bottom: 48px;
+  padding: 40px;
+  background: #fff;
+  border: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+.question::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 4px;
+  background: linear-gradient(90deg, var(--accent), var(--accent-bright));
+}
+.question-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 12px; gap: 16px; flex-wrap: wrap; }
+.question-title { font-size: 22px; font-weight: 800; color: var(--black); letter-spacing: -0.01em; line-height: 1.3; }
+.question-num {
+  display: inline-block;
+  padding: 4px 10px;
+  background: var(--accent);
+  color: #fff;
+  font-family: "SF Mono", Menlo, monospace;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+.question-sub { font-size: 14px; color: var(--meta); margin-bottom: 32px; line-height: 1.6; }
+
+/* Value display side-by-side */
+.value-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px; }
+.value-box { padding: 20px; background: var(--accent-soft); border-left: 4px solid var(--accent); position: relative; overflow: hidden; }
+.value-box.you { background: linear-gradient(135deg, var(--accent-soft), rgba(90, 76, 199, 0.12)); }
+.value-box.world-box { background: linear-gradient(135deg, var(--world-soft), rgba(201, 55, 44, 0.12)); border-left-color: var(--world); }
+.value-box-label { font-family: "SF Mono", Menlo, monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--meta); margin-bottom: 6px; font-weight: 700; }
+.value-box .value-num { font-size: 44px; font-weight: 900; line-height: 1; color: var(--black); font-family: "SF Mono", Menlo, monospace; letter-spacing: -0.03em; }
+.value-box.you .value-num { color: var(--accent); }
+.value-box.world-box .value-num { color: var(--world); }
+.value-box .value-note { font-size: 11px; color: var(--meta); margin-top: 6px; font-family: "SF Mono", Menlo, monospace; letter-spacing: 0.05em; }
+
+/* SLIDER with world marker overlay */
+.slider-container { position: relative; padding: 56px 0 12px; }
+.slider-track-bg {
+  position: absolute;
+  top: 70px;
+  left: 0; right: 0;
+  height: 8px;
+  background: var(--bg-alt);
+  border-radius: 4px;
+  pointer-events: none;
+}
+.slider-world-marker {
+  position: absolute;
+  top: 36px;
+  transform: translateX(-50%);
+  pointer-events: none;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.slider-world-marker .marker-tag {
+  font-family: "SF Mono", Menlo, monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #fff;
+  background: var(--world);
+  padding: 4px 8px;
+  margin-bottom: 4px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.slider-world-marker .marker-line {
   width: 3px;
-  height: 64px;
+  height: 26px;
+  background: var(--world);
+}
+.slider-world-marker .marker-dot {
+  width: 14px;
+  height: 14px;
+  background: var(--world);
+  border-radius: 50%;
+  margin-top: -6px;
+  border: 3px solid var(--bg);
+  box-shadow: 0 0 0 1px var(--world);
+}
+.slider-container input[type="range"] {
+  -webkit-appearance: none; appearance: none; width: 100%; height: 8px; border-radius: 4px;
+  background: transparent; outline: none; cursor: pointer;
+  position: relative; z-index: 3;
+  margin: 64px 0 0;
+}
+.slider-container input[type="range"]::-webkit-slider-runnable-track {
+  height: 8px; background: transparent; border-radius: 4px;
+}
+.slider-container input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none; appearance: none;
+  width: 32px; height: 32px; border-radius: 50%;
+  background: var(--accent); cursor: pointer; border: 5px solid #fff;
+  box-shadow: 0 0 0 2px var(--accent), 0 4px 12px rgba(47, 43, 146, 0.3);
+  margin-top: -13px;
+  transition: transform 0.15s;
+}
+.slider-container input[type="range"]:active::-webkit-slider-thumb { transform: scale(1.2); }
+.slider-container input[type="range"]::-moz-range-thumb {
+  width: 32px; height: 32px; border-radius: 50%; background: var(--accent); cursor: pointer;
+  border: 5px solid #fff; box-shadow: 0 0 0 2px var(--accent), 0 4px 12px rgba(47, 43, 146, 0.3);
+}
+.slider-labels { display: flex; justify-content: space-between; font-size: 11px; color: var(--meta); margin-top: 16px; font-family: "SF Mono", Menlo, monospace; letter-spacing: 0.04em; }
+
+/* No world marker for Q3-Q5 */
+.question.no-compare .value-row { grid-template-columns: 1fr; }
+.question.no-compare .slider-world-marker { display: none; }
+
+/* Submit */
+.submit-wrap { text-align: center; margin-top: 64px; }
+.submit-btn {
+  display: inline-block; padding: 24px 72px;
+  background: var(--accent); color: #fff;
+  font-size: 16px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase;
+  border: none; cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+  box-shadow: 0 4px 0 rgba(0,0,0,0.2);
+}
+.submit-btn:hover {
+  background: var(--black);
+  transform: translateY(-3px);
+  box-shadow: 0 7px 0 rgba(0,0,0,0.3);
+}
+.submit-btn:active { transform: translateY(0); box-shadow: 0 2px 0 rgba(0,0,0,0.2); }
+.submit-btn:disabled { background: var(--meta); cursor: not-allowed; transform: none; box-shadow: none; }
+.submit-note { font-size: 11px; color: var(--meta); margin-top: 20px; font-family: "SF Mono", Menlo, monospace; letter-spacing: 0.05em; }
+
+/* ══════════════════════════════════════
+   RESULTS — BIG VISUAL IMPACT
+   ══════════════════════════════════════ */
+.results-section { display: none; }
+.results-section.visible { display: block; }
+
+/* Big diff hero — fills the viewport */
+.diff-hero {
+  padding: 80px 32px;
+  background: var(--bg-dark);
+  color: #fff;
+  text-align: center;
+  margin-bottom: 64px;
+  position: relative;
+  overflow: hidden;
+}
+.diff-hero::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: radial-gradient(circle at 50% 50%, rgba(47, 43, 146, 0.3) 0%, transparent 60%);
+}
+.diff-hero > * { position: relative; z-index: 1; }
+.diff-hero .diff-label {
+  font-family: "SF Mono", Menlo, monospace;
+  font-size: 12px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.6);
+  margin-bottom: 24px;
+}
+.diff-hero .diff-num {
+  font-size: clamp(100px, 22vw, 280px);
+  font-weight: 900;
+  line-height: 0.9;
+  letter-spacing: -0.06em;
+  color: var(--accent-bright);
+  font-family: "SF Mono", Menlo, monospace;
+  display: block;
+}
+.diff-hero .diff-num.悲観 { color: #ff6654; }
+.diff-hero .diff-num.neutral { color: rgba(255,255,255,0.7); }
+.diff-hero .diff-desc {
+  font-size: clamp(18px, 3vw, 28px);
+  color: #fff;
+  margin-top: 24px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+.diff-hero .diff-sub {
+  font-size: 14px;
+  color: rgba(255,255,255,0.5);
+  margin-top: 12px;
+  font-family: "SF Mono", Menlo, monospace;
+  letter-spacing: 0.05em;
+}
+
+/* Compare bars */
+.compare-bar {
+  margin-top: 40px;
+  padding: 40px;
+  background: #fff;
+  border: 1px solid var(--border);
+  position: relative;
+}
+.compare-bar::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 60px; height: 4px;
+  background: var(--accent);
+}
+.compare-bar-title { font-size: 16px; font-weight: 800; color: var(--black); margin-bottom: 4px; }
+.compare-bar-sub { font-size: 12px; color: var(--meta); margin-bottom: 40px; font-family: "SF Mono", Menlo, monospace; letter-spacing: 0.05em; }
+.bar-axis {
+  position: relative;
+  height: 72px;
+  background: linear-gradient(to right, var(--accent-soft) 0%, var(--bg-alt) 50%, var(--world-soft) 100%);
+  border-radius: 2px;
+  margin-bottom: 24px;
+}
+.bar-axis-labels { display: flex; justify-content: space-between; font-family: "SF Mono", Menlo, monospace; font-size: 11px; color: var(--meta); letter-spacing: 0.05em; padding-top: 48px; }
+.bar-marker {
+  position: absolute;
+  top: -12px;
+  transform: translateX(-50%);
+  z-index: 2;
+}
+.bar-marker .bar-pin {
+  width: 4px;
+  height: 96px;
   margin: 0 auto;
 }
 .bar-marker.you .bar-pin { background: var(--accent); }
 .bar-marker.world .bar-pin { background: var(--world); }
 .bar-marker .bar-tag {
   position: absolute;
-  top: 68px;
+  top: 100px;
   left: 50%;
   transform: translateX(-50%);
   font-family: "SF Mono", Menlo, monospace;
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.08em;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   white-space: nowrap;
-  padding: 3px 8px;
-  background: #fff;
+  padding: 6px 12px;
+  color: #fff;
 }
-.bar-marker.you .bar-tag { color: var(--accent); border: 1px solid var(--accent); }
-.bar-marker.world .bar-tag { color: var(--world); border: 1px solid var(--world); }
+.bar-marker.you .bar-tag { background: var(--accent); }
+.bar-marker.world .bar-tag { background: var(--world); }
 .bar-marker .bar-val {
   position: absolute;
-  top: -24px;
+  top: -36px;
   left: 50%;
   transform: translateX(-50%);
   font-family: "SF Mono", Menlo, monospace;
-  font-size: 13px;
-  font-weight: 700;
+  font-size: 18px;
+  font-weight: 800;
   color: var(--black);
+  background: #fff;
+  padding: 2px 8px;
+  border: 1px solid var(--border);
 }
 
-.verdict { margin-top: 48px; padding: 32px; background: var(--accent-soft); border-left: 4px solid var(--accent); font-size: 16px; line-height: 1.8; }
-.verdict strong { color: var(--accent); font-weight: 700; }
+.verdict {
+  margin-top: 56px;
+  padding: 40px;
+  background: linear-gradient(135deg, var(--accent-soft), rgba(90, 76, 199, 0.12));
+  border-left: 4px solid var(--accent);
+  font-size: 17px;
+  line-height: 1.85;
+}
+.verdict strong { color: var(--accent); font-weight: 800; }
 
-/* Additional results grid */
-.extras-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 48px; }
-.extra-card { padding: 24px; background: #fff; border-top: 2px solid var(--accent); text-align: center; }
-.extra-card .extra-label { font-family: "SF Mono", Menlo, monospace; font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--meta); margin-bottom: 12px; }
-.extra-card .extra-val { font-size: 40px; font-weight: 800; color: var(--accent); line-height: 1; font-family: "SF Mono", Menlo, monospace; }
-.extra-card .extra-desc { font-size: 12px; color: var(--meta); margin-top: 8px; line-height: 1.5; }
+/* Extra results — big circular gauges */
+.extras-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 64px; }
+.extra-card {
+  padding: 32px 24px;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-top: 3px solid var(--accent);
+  text-align: center;
+}
+.gauge-wrap {
+  position: relative;
+  width: 140px;
+  height: 140px;
+  margin: 0 auto 16px;
+}
+.gauge-svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+.gauge-bg { fill: none; stroke: var(--bg-alt); stroke-width: 12; }
+.gauge-fill { fill: none; stroke: var(--accent); stroke-width: 12; stroke-linecap: round; transition: stroke-dasharray 1s var(--ease); }
+.gauge-text {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: "SF Mono", Menlo, monospace;
+  font-size: 32px;
+  font-weight: 900;
+  color: var(--accent);
+  letter-spacing: -0.02em;
+}
+.extra-card .extra-label {
+  font-family: "SF Mono", Menlo, monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--meta);
+  margin-top: 12px;
+  font-weight: 700;
+}
+.extra-card .extra-desc { font-size: 12px; color: var(--mid); margin-top: 8px; line-height: 1.5; }
 
 /* ── Credits ── */
-.credits { max-width: 1120px; margin: 0 auto; padding: 48px; border-top: 1px solid var(--border); }
+.credits { max-width: 1200px; margin: 0 auto; padding: 64px 48px; border-top: 1px solid var(--border); }
 .credits p { font-family: "SF Mono", Menlo, monospace; font-size: 11px; letter-spacing: 0.05em; line-height: 2; color: var(--light-gray); }
+.credits a { color: var(--meta); border-bottom: 1px solid var(--border); }
 
 /* ── Responsive ── */
 @media (max-width: 768px) {
-  .section { padding: 48px 20px; }
+  .section { padding: 64px 20px; }
   .masthead-inner { padding: 16px 20px; }
   .nav-links { display: none; }
-  .question { padding: 24px 20px; }
+  .hero-timeline { padding: 24px 16px 40px; }
+  .hero-timeline-header { flex-direction: column; align-items: flex-start; gap: 12px; }
+  .timeline-wrap { padding: 32px 0 40px; }
+  .timeline-pin .pin-card { min-width: 70px; padding: 6px 8px; }
+  .timeline-pin.metaculus .pin-card { min-width: 110px; }
+  .timeline-pin .pin-name { font-size: 9px; }
+  .timeline-pin .pin-year { font-size: 13px; }
+  .timeline-pin .pin-meta { display: none; }
+  .big-stat-grid { grid-template-columns: 1fr; }
+  .big-stat { padding: 32px 24px; }
+  .question { padding: 28px 20px; }
   .value-row { grid-template-columns: 1fr; }
-  .ceo-pin-card { min-width: 140px; max-width: 160px; padding: 10px 12px; }
-  .ceo-pin-card .ceo-quote { font-size: 11px; }
-  .ceo-timeline { padding: 24px 0 120px; }
-  .extras-grid { grid-template-columns: 1fr; }
-  .submit-btn { padding: 18px 40px; width: 100%; }
-  .hero-spectrum { padding: 24px 16px; }
-  .spectrum-pin .pin-label { font-size: 9px; }
+  .extras-grid { grid-template-columns: 1fr; gap: 16px; }
+  .submit-btn { padding: 20px 40px; width: 100%; }
+  .diff-hero { padding: 48px 24px; }
+  .compare-bar { padding: 24px; }
+  .divider-section { padding: 64px 24px; }
+  .divider-section::before { font-size: 280px; }
 }
 
 /* ── Reveal ── */
-.reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.6s var(--ease), transform 0.6s var(--ease); }
+.reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.7s var(--ease), transform 0.7s var(--ease); }
 .reveal.visible { opacity: 1; transform: translateY(0); }
 .reveal-delay-1 { transition-delay: 0.1s; }
 .reveal-delay-2 { transition-delay: 0.2s; }
 .reveal-delay-3 { transition-delay: 0.3s; }
+.reveal-delay-4 { transition-delay: 0.4s; }
 </style>
 </head>
 <body>
 
-<!-- Masthead -->
-<header class="masthead">
-  <div class="masthead-inner">
-    <div class="logo"><a href="index.html"><span class="logo-mark"></span>AGI HUB</a></div>
-    <nav class="nav-links">
-      <a href="index.html">Articles</a>
-      <a href="taxonomy-network.html">Map</a>
-      <a href="thinkers.html">Thinkers</a>
-    </nav>
-  </div>
-</header>
+<!-- Shared Masthead -->
+<div id="site-header-mount"><header style="font:500 15px/48px Inter,sans-serif;padding:0 24px;border-bottom:1px solid #222;color:#aaa">AGI HUB</header></div>
+<script src="partials/header.js" defer></script>
 
-<!-- Hero -->
-<div class="section">
-  <div class="eyebrow">Interactive · Your Forecast</div>
-  <h1>あなたの予測は、<br>世界とどれだけ<span style="color:var(--accent);">ズレて</span>いるか</h1>
-  <p class="lead">AGIはいつ来るか。Metaculusでは数千人の予測者が金を賭けて予測している。AI企業のCEOも公に年を示した。あなたの直感は、彼らの集合知とどれだけ離れているか。</p>
+<!-- ══════════════════════════════════════════════
+     HERO
+     ══════════════════════════════════════════════ -->
+<div class="section hero-section">
+  <div class="hero-tag">Interactive Forecast</div>
+  <h1 class="hero-headline">あなたの予測は、<br>世界とどれだけ<br><span class="highlight">ズレて</span>いるか</h1>
+  <p class="hero-lead">AGIはいつ来るか。Metaculusでは数千人が金を賭けて予測している。AI企業のCEOも公に年を宣言した。あなたの直感は、彼らの集合知とどれだけ離れているか。</p>
 
-  <!-- HERO SPECTRUM: AGI予測年の一覧 -->
-  <div class="hero-spectrum">
-    <div class="spectrum-title">AGI到達年の予測スペクトラム</div>
-    <div style="position:relative;margin:0 40px;">
-      <div class="spectrum-bar"></div>
-
-      <!-- Pins positioned at years 2026-2040 -->
-      <div class="spectrum-pin amodei" style="left: 0%;">
-        <div class="pin-mark"></div>
-        <div class="pin-label">Amodei</div>
-        <div class="pin-year">2026</div>
-      </div>
-      <div class="spectrum-pin altman" style="left: 6%;">
-        <div class="pin-mark"></div>
-        <div class="pin-label">Altman</div>
-        <div class="pin-year">2027</div>
-      </div>
-      <div class="spectrum-pin hassabis" style="left: 12%;">
-        <div class="pin-mark"></div>
-        <div class="pin-label">Hassabis</div>
-        <div class="pin-year">2028</div>
-      </div>
-      <div class="spectrum-pin huang" style="left: 18%;">
-        <div class="pin-mark"></div>
-        <div class="pin-label">Huang</div>
-        <div class="pin-year">2029</div>
-      </div>
-      <div class="spectrum-pin metaculus" style="left: 36%;">
-        <div class="pin-mark"></div>
-        <div class="pin-label">Metaculus中央値</div>
-        <div class="pin-year">2032</div>
+  <!-- HERO TIMELINE -->
+  <div class="hero-timeline">
+    <div class="hero-timeline-header">
+      <div class="hero-timeline-title"><strong>AGI到達年</strong> · 予測者スペクトラム</div>
+      <div class="hero-timeline-legend">
+        <span class="legend-item"><span class="legend-dot" style="background:var(--accent);"></span>AI企業CEO</span>
+        <span class="legend-item"><span class="legend-dot" style="background:var(--green);"></span>Metaculus 3,512人</span>
       </div>
     </div>
-    <div class="spectrum-years" style="margin:100px 40px 0;">
-      <span>2026</span>
-      <span>2030</span>
-      <span>2035</span>
-      <span>2040</span>
-      <span>2045+</span>
+
+    <div class="timeline-wrap">
+      <div class="timeline-axis"></div>
+
+      <!-- Year ticks: 2026, 2028, 2030, 2032, 2034, 2036+ -->
+      <div class="timeline-year-ticks">
+        <span style="left: 0%;">2026</span>
+        <span style="left: 20%;">2028</span>
+        <span style="left: 40%;">2030</span>
+        <span style="left: 60%;">2032</span>
+        <span style="left: 80%;">2034</span>
+        <span style="left: 100%;">2036+</span>
+      </div>
+
+      <!-- CEO pins: 2026-2036 scale -->
+      <!-- 2026=0%, 2027=10%, 2028=20%, 2029=30%, 2032=60% -->
+      <div class="timeline-pin" style="left: 0%;">
+        <div class="pin-dot"></div>
+        <div class="pin-line"></div>
+        <div class="pin-card">
+          <div class="pin-name">Amodei</div>
+          <div class="pin-year">2026</div>
+          <div class="pin-meta">Anthropic</div>
+        </div>
+      </div>
+      <div class="timeline-pin" style="left: 10%;">
+        <div class="pin-dot"></div>
+        <div class="pin-line"></div>
+        <div class="pin-card">
+          <div class="pin-name">Altman</div>
+          <div class="pin-year">2027</div>
+          <div class="pin-meta">OpenAI</div>
+        </div>
+      </div>
+      <div class="timeline-pin" style="left: 20%;">
+        <div class="pin-dot"></div>
+        <div class="pin-line"></div>
+        <div class="pin-card">
+          <div class="pin-name">Hassabis</div>
+          <div class="pin-year">2028</div>
+          <div class="pin-meta">DeepMind</div>
+        </div>
+      </div>
+      <div class="timeline-pin" style="left: 30%;">
+        <div class="pin-dot"></div>
+        <div class="pin-line"></div>
+        <div class="pin-card">
+          <div class="pin-name">Huang</div>
+          <div class="pin-year">2029</div>
+          <div class="pin-meta">NVIDIA</div>
+        </div>
+      </div>
+
+      <!-- Metaculus pin (value hidden until user answers) -->
+      <div class="timeline-pin metaculus" style="left: 60%; opacity: 0.4;">
+        <div class="pin-dot" style="background: var(--meta); box-shadow: 0 0 0 2px var(--meta), 0 4px 12px rgba(117, 117, 117, 0.3);"></div>
+        <div class="pin-line" style="background: rgba(117, 117, 117, 0.4);"></div>
+        <div class="pin-card" style="border-top-color: var(--meta);">
+          <div class="pin-name">Metaculus 中央値</div>
+          <div class="pin-year" style="color: var(--meta);">?</div>
+          <div class="pin-meta">3,512 Forecasters</div>
+        </div>
+      </div>
+
+      <!-- Bracket indicating CEO cluster -->
+      <div class="ceo-bracket" style="left: 0%; right: 70%;"></div>
     </div>
+
+    <p style="text-align:center;font-size:13px;color:var(--mid);margin-top:140px;max-width:620px;margin-left:auto;margin-right:auto;line-height:1.7;">
+      <strong>業界CEOは2026-29年の範囲に集中</strong>している。<br>群衆の集合知（Metaculus）の値は、あなたが回答したあとに明かされる。
+    </p>
   </div>
 </div>
 
-<!-- World Data Section -->
+<!-- ══════════════════════════════════════════════
+     WORLD DATA — BIG INFOGRAPHIC (SPOILER, TOGGLE)
+     ══════════════════════════════════════════════ -->
 <div class="section-alt">
 <div class="section">
-  <div class="eyebrow reveal">World Forecast</div>
+  <div class="eyebrow reveal">Chapter 01 · World Forecast</div>
   <h2 class="reveal">世界が金を賭けている場所</h2>
-  <p class="lead reveal">予測市場は「当たれば儲かる」設計で、主観ではなく集合知として機能する。</p>
+  <p class="lead reveal">予測市場は「当たれば儲かる」設計で機能する。主観ではなく集合知。CEOは投資家向けの発言で年を出す。どちらも当事者の賭け金がある。</p>
 
-  <div class="stats-row">
-    <div class="stat-card reveal">
-      <span class="stat-tag">Metaculus Q5121</span>
-      <div class="stat-num">26<span class="stat-unit">%</span></div>
-      <div class="stat-bar"><div class="stat-bar-fill" style="width: 26%;"></div></div>
-      <div class="stat-desc">2030年末までにAGI達成の確率</div>
-      <div class="stat-meta">2,847 forecasters</div>
-    </div>
-    <div class="stat-card reveal reveal-delay-1">
-      <span class="stat-tag">Metaculus Q3479</span>
-      <div class="stat-num">2032</div>
-      <div class="stat-desc">AGI到達年の中央予測値</div>
-      <div class="stat-meta">3,512 forecasters</div>
-    </div>
-    <div class="stat-card reveal reveal-delay-2">
-      <span class="stat-tag">CEO Range</span>
-      <div class="stat-num">2026<span class="stat-unit">→29</span></div>
-      <div class="stat-desc">主要AI企業CEOの予測レンジ</div>
-      <div class="stat-meta">Amodei / Altman / Hassabis / Huang</div>
-    </div>
-    <div class="stat-card reveal reveal-delay-3">
-      <span class="stat-tag">Capital 2025</span>
-      <div class="stat-num">$131<span class="stat-unit">B</span></div>
-      <div class="stat-desc">AIインフラ投資（賭け金）</div>
-      <div class="stat-meta">TSMC · MSFT · xAI · Figure</div>
-    </div>
+  <div id="spoiler-toggle" style="margin-top:40px;padding:24px;background:#fff;border:1px dashed var(--accent);text-align:center;">
+    <p style="font-size:14px;color:var(--mid);margin-bottom:16px;">世界の具体的な数値は、あなたの予測にバイアスをかけます。<br><strong style="color:var(--accent);">先に自分の予測を入力することを推奨します。</strong></p>
+    <button type="button" id="reveal-world" style="padding:12px 28px;background:transparent;color:var(--accent);border:2px solid var(--accent);font-family:inherit;font-size:13px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;cursor:pointer;">
+      バイアス覚悟で先に見る ↓
+    </button>
+    <p style="font-size:11px;color:var(--meta);margin-top:12px;font-family:'SF Mono',monospace;letter-spacing:0.05em;">または ↓ Chapter 02 に進む</p>
   </div>
 
-  <!-- Horizontal CEO Timeline -->
-  <div class="ceo-timeline">
-    <div class="ceo-axis"></div>
-    <!-- Pins, positioned as % of 2026-2035 range (9 years span) -->
-    <!-- 2026 = 0%, 2027 = 11.1%, 2028 = 22.2%, 2029 = 33.3%, 2032 = 66.6% -->
-    <div class="ceo-pin" style="left: calc(40px + 0% * (100% - 80px) / 100);">
-      <div class="ceo-pin-dot"></div>
-      <div class="ceo-pin-line"></div>
-      <div class="ceo-pin-card">
-        <div class="ceo-name">Dario Amodei</div>
-        <div class="ceo-org">Anthropic · 2026</div>
-        <div class="ceo-quote">"2026年末までにAGIの可能性"</div>
+  <div class="big-stat-grid" id="world-data" style="display:none;">
+
+    <div class="big-stat reveal">
+      <span class="big-stat-tag">Metaculus Q5121</span>
+      <div class="big-stat-num">26<span class="unit">%</span></div>
+      <div class="big-stat-desc">2030年末までのAGI達成確率</div>
+      <div class="big-stat-meta">2,847 forecasters · updated 2026-04</div>
+      <div class="big-stat-bar-wrap">
+        <div class="big-stat-bar">
+          <div class="big-stat-bar-fill" style="width: 26%;"></div>
+        </div>
+        <div class="big-stat-bar-labels"><span>0%</span><span>50%</span><span>100%</span></div>
       </div>
     </div>
-    <div class="ceo-pin above" style="left: calc(40px + 11.1% * (100% - 80px) / 100);">
-      <div class="ceo-pin-dot"></div>
-      <div class="ceo-pin-line"></div>
-      <div class="ceo-pin-card">
-        <div class="ceo-name">Sam Altman</div>
-        <div class="ceo-org">OpenAI · 2027</div>
-        <div class="ceo-quote">"超知能は数千日先"</div>
+
+    <div class="big-stat green-accent reveal reveal-delay-1">
+      <span class="big-stat-tag">Metaculus Q3479</span>
+      <div class="big-stat-num">2032</div>
+      <div class="big-stat-desc">AGI到達年の中央予測値</div>
+      <div class="big-stat-meta">3,512 forecasters · 群衆の集合知</div>
+      <div style="margin-top:20px;font-family:'SF Mono',monospace;font-size:11px;color:var(--meta);letter-spacing:0.05em;">
+        <div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px dotted var(--border);">
+          <span>25%ile (楽観)</span><strong style="color:var(--black);">2028</strong>
+        </div>
+        <div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px dotted var(--border);">
+          <span>50%ile (中央)</span><strong style="color:var(--green);">2032</strong>
+        </div>
+        <div style="display:flex;justify-content:space-between;padding:4px 0;">
+          <span>75%ile (悲観)</span><strong style="color:var(--black);">2040</strong>
+        </div>
       </div>
     </div>
-    <div class="ceo-pin" style="left: calc(40px + 22.2% * (100% - 80px) / 100);">
-      <div class="ceo-pin-dot"></div>
-      <div class="ceo-pin-line"></div>
-      <div class="ceo-pin-card">
-        <div class="ceo-name">Demis Hassabis</div>
-        <div class="ceo-org">DeepMind · 2028</div>
-        <div class="ceo-quote">"AGIは3-5年以内"</div>
+
+    <div class="big-stat alt reveal reveal-delay-2">
+      <span class="big-stat-tag">CEO Consensus Range</span>
+      <div class="big-stat-num">2026<span class="unit" style="font-size:50%;"> → </span>29</div>
+      <div class="big-stat-desc">主要AI企業CEOの予測レンジ</div>
+      <div class="big-stat-meta">Amodei · Altman · Hassabis · Huang</div>
+      <div style="margin-top:20px;display:flex;gap:8px;flex-wrap:wrap;">
+        <div style="padding:8px 12px;background:var(--accent-soft);font-family:'SF Mono',monospace;font-size:11px;"><strong>Amodei</strong> 2026</div>
+        <div style="padding:8px 12px;background:var(--accent-soft);font-family:'SF Mono',monospace;font-size:11px;"><strong>Altman</strong> 2027</div>
+        <div style="padding:8px 12px;background:var(--accent-soft);font-family:'SF Mono',monospace;font-size:11px;"><strong>Hassabis</strong> 2028</div>
+        <div style="padding:8px 12px;background:var(--accent-soft);font-family:'SF Mono',monospace;font-size:11px;"><strong>Huang</strong> 2029</div>
       </div>
     </div>
-    <div class="ceo-pin above" style="left: calc(40px + 33.3% * (100% - 80px) / 100);">
-      <div class="ceo-pin-dot"></div>
-      <div class="ceo-pin-line"></div>
-      <div class="ceo-pin-card">
-        <div class="ceo-name">Jensen Huang</div>
-        <div class="ceo-org">NVIDIA · 2029</div>
-        <div class="ceo-quote">"5年以内に人間級"</div>
+
+    <div class="big-stat amber-accent reveal reveal-delay-3">
+      <span class="big-stat-tag">Capital Committed 2025</span>
+      <div class="big-stat-num">$131<span class="unit">B</span></div>
+      <div class="big-stat-desc">AIインフラへの賭け金（2025年実績）</div>
+      <div class="big-stat-meta">CEOの発言ではなく、支払われた金</div>
+      <div class="invest-list">
+        <div class="invest-row"><span class="invest-entity">Microsoft AI infra</span><span class="invest-amount">$80B</span></div>
+        <div class="invest-row"><span class="invest-entity">TSMC 2025 CAPEX</span><span class="invest-amount">$40B</span></div>
+        <div class="invest-row"><span class="invest-entity">xAI Memphis</span><span class="invest-amount">$10B</span></div>
+        <div class="invest-row"><span class="invest-entity">Figure Series C</span><span class="invest-amount">$1B</span></div>
       </div>
     </div>
-    <div class="ceo-pin" style="left: calc(40px + 66.6% * (100% - 80px) / 100);">
-      <div class="ceo-pin-dot" style="background: #1a7a3a; box-shadow: 0 0 0 1px #1a7a3a;"></div>
-      <div class="ceo-pin-line" style="background: rgba(26, 122, 58, 0.3);"></div>
-      <div class="ceo-pin-card" style="border-left-color: #1a7a3a;">
-        <div class="ceo-name">Metaculus中央値</div>
-        <div class="ceo-org" style="color: #1a7a3a;">3,512人 · 2032</div>
-        <div class="ceo-quote">群衆の集合知</div>
-      </div>
-    </div>
-    <div class="ceo-year-labels">
-      <span>2026</span>
-      <span>2028</span>
-      <span>2030</span>
-      <span>2032</span>
-      <span>2034</span>
-      <span>2035+</span>
-    </div>
+
   </div>
 </div>
 </div>
 
-<!-- Divider -->
+<!-- ══════════════════════════════════════════════
+     DIVIDER — PUNCH
+     ══════════════════════════════════════════════ -->
 <div class="divider-section">
-  <div class="eyebrow">Your Turn</div>
-  <h2>では、あなたは？</h2>
-  <p class="lead" style="margin: 20px auto 0;">5つの問いに直感で答える。スライダーを動かすと、Metaculusの位置が赤で表示される。</p>
+  <div class="eyebrow">Chapter 02 · Your Turn</div>
+  <h2>では、<br>あなたは？</h2>
+  <p class="lead" style="margin-top:24px;">5つの問いに直感で答える。スライダーを動かすと、Metaculusの位置が赤で表示される。</p>
 </div>
 
-<!-- Form Section -->
+<!-- ══════════════════════════════════════════════
+     FORM
+     ══════════════════════════════════════════════ -->
 <div class="section-alt">
 <div class="section">
   <form id="prediction-form" class="form-wrap">
@@ -666,79 +1011,53 @@ h2 { font-size: clamp(24px, 3.5vw, 36px); font-weight: 800; line-height: 1.25; c
     <!-- Q1 -->
     <div class="question reveal">
       <div class="question-header">
-        <div>
-          <div class="question-num">Question 01</div>
-          <div class="question-title">2030年末までにAGIは達成されるか？</div>
-        </div>
+        <div class="question-num">Q01 · Comparable</div>
       </div>
-      <div class="question-sub">Metaculus Q5121と同じ問い。あなたが考える確率をスライダーで入力。</div>
+      <div class="question-title">2030年末までにAGIは達成されるか？</div>
+      <div class="question-sub">あなたの直感で答える。世界の予測市場の値は、回答送信後に表示される。</div>
 
       <div class="value-row">
-        <div class="value-box you">
+        <div class="value-box you" style="grid-column: 1 / -1;">
           <div class="value-box-label">あなたの予測</div>
           <div class="value-num"><span id="q1-display">50</span>%</div>
-        </div>
-        <div class="value-box world-box">
-          <div class="value-box-label">Metaculus中央値</div>
-          <div class="value-num">26%</div>
-          <div class="value-note">2,847人の予測</div>
         </div>
       </div>
 
       <div class="slider-container">
-        <div class="slider-world-marker" style="left: 26%;">
-          <span class="marker-tag">Metaculus</span>
-          <div class="marker-line"></div>
-          <div class="marker-dot"></div>
-        </div>
         <div class="slider-track-bg"></div>
         <input type="range" id="q1" min="0" max="100" value="50" step="1">
-        <div class="slider-labels"><span>0% 無理</span><span>50%</span><span>100% 確実</span></div>
+        <div class="slider-labels"><span>0% まず無理</span><span>50%</span><span>100% 確実</span></div>
       </div>
     </div>
 
     <!-- Q2 -->
     <div class="question reveal">
       <div class="question-header">
-        <div>
-          <div class="question-num">Question 02</div>
-          <div class="question-title">AGIは何年に達成されるか？</div>
-        </div>
+        <div class="question-num">Q02 · Comparable</div>
       </div>
-      <div class="question-sub">あなたの最良の推定。Metaculus Q3479の中央予測値は2032年。</div>
+      <div class="question-title">AGIは何年に達成されるか？</div>
+      <div class="question-sub">Metaculusの中央予測値は、回答送信後に表示される。</div>
 
       <div class="value-row">
-        <div class="value-box you">
+        <div class="value-box you" style="grid-column: 1 / -1;">
           <div class="value-box-label">あなたの予測</div>
           <div class="value-num"><span id="q2-display">2032</span></div>
-        </div>
-        <div class="value-box world-box">
-          <div class="value-box-label">Metaculus中央値</div>
-          <div class="value-num">2032</div>
-          <div class="value-note">3,512人の予測</div>
         </div>
       </div>
 
       <div class="slider-container">
-        <div class="slider-world-marker" style="left: 25%;">
-          <span class="marker-tag">Metaculus</span>
-          <div class="marker-line"></div>
-          <div class="marker-dot"></div>
-        </div>
         <div class="slider-track-bg"></div>
         <input type="range" id="q2" min="2026" max="2050" value="2032" step="1">
-        <div class="slider-labels"><span>2026</span><span>2035</span><span>2050+</span></div>
+        <div class="slider-labels"><span>2026</span><span>2038</span><span>2050+</span></div>
       </div>
     </div>
 
     <!-- Q3 -->
     <div class="question no-compare reveal">
       <div class="question-header">
-        <div>
-          <div class="question-num">Question 03</div>
-          <div class="question-title">自分の職業は5年後にAIで根本的に変わるか？</div>
-        </div>
+        <div class="question-num" style="background:var(--mid);">Q03 · Personal</div>
       </div>
+      <div class="question-title">自分の職業は5年後にAIで根本的に変わるか？</div>
       <div class="question-sub">失業ではなく、求められるスキルや仕事の中身が別物になる確率。</div>
 
       <div class="value-row">
@@ -758,11 +1077,9 @@ h2 { font-size: clamp(24px, 3.5vw, 36px); font-weight: 800; line-height: 1.25; c
     <!-- Q4 -->
     <div class="question no-compare reveal">
       <div class="question-header">
-        <div>
-          <div class="question-num">Question 04</div>
-          <div class="question-title">計算量だけでAGIに到達できるか？</div>
-        </div>
+        <div class="question-num" style="background:var(--mid);">Q04 · Personal</div>
       </div>
+      <div class="question-title">計算量だけでAGIに到達できるか？</div>
       <div class="question-sub">GPUを積み続ければ十分か。それともアーキテクチャの革新が必要か。</div>
 
       <div class="value-row">
@@ -782,11 +1099,9 @@ h2 { font-size: clamp(24px, 3.5vw, 36px); font-weight: 800; line-height: 1.25; c
     <!-- Q5 -->
     <div class="question no-compare reveal">
       <div class="question-header">
-        <div>
-          <div class="question-num">Question 05</div>
-          <div class="question-title">AIによる存亡リスク (p(doom)) は？</div>
-        </div>
+        <div class="question-num" style="background:var(--world);">Q05 · p(doom)</div>
       </div>
+      <div class="question-title">AIによる存亡リスクは？</div>
       <div class="question-sub">AIが人類の存亡に関わる大惨事を引き起こす確率。</div>
 
       <div class="value-row">
@@ -811,83 +1126,109 @@ h2 { font-size: clamp(24px, 3.5vw, 36px); font-weight: 800; line-height: 1.25; c
 </div>
 </div>
 
-<!-- Results Section -->
-<div class="section results-section" id="results">
-  <div class="eyebrow">Your Position</div>
-  <h2>あなたの立ち位置</h2>
+<!-- ══════════════════════════════════════════════
+     RESULTS — BIG VISUAL PAYOFF
+     ══════════════════════════════════════════════ -->
+<div class="results-section" id="results">
 
   <!-- Big Diff Hero -->
   <div class="diff-hero">
-    <div class="diff-label">Metaculusとの差</div>
-    <div class="diff-num" id="diff-main">—</div>
+    <div class="diff-label">◆ Metaculusとの差</div>
+    <span class="diff-num" id="diff-main">—</span>
     <div class="diff-desc" id="diff-main-desc">—</div>
+    <div class="diff-sub" id="diff-main-sub">—</div>
   </div>
 
-  <!-- Q1 Bar Comparison -->
-  <div class="compare-bar">
-    <div class="compare-bar-title">Q1. 2030年末までのAGI達成確率</div>
-    <div class="compare-bar-sub">0% ──────── 50% ──────── 100%</div>
-    <div class="bar-axis">
-      <div class="bar-marker you" id="bar-q1-you" style="left: 50%;">
-        <div class="bar-val" id="bar-q1-you-val">50%</div>
-        <div class="bar-pin"></div>
-        <div class="bar-tag">You</div>
-      </div>
-      <div class="bar-marker world" style="left: 26%;">
-        <div class="bar-val">26%</div>
-        <div class="bar-pin"></div>
-        <div class="bar-tag">Metaculus</div>
-      </div>
-    </div>
-    <div style="height: 50px;"></div>
-    <div class="bar-axis-labels"><span>0%</span><span>50%</span><span>100%</span></div>
-  </div>
+  <div class="section">
+    <div class="eyebrow">Your Position</div>
+    <h2>あなたの立ち位置</h2>
 
-  <!-- Q2 Bar Comparison -->
-  <div class="compare-bar">
-    <div class="compare-bar-title">Q2. AGI到達年</div>
-    <div class="compare-bar-sub">2026 ──────── 2038 ──────── 2050+</div>
-    <div class="bar-axis">
-      <div class="bar-marker you" id="bar-q2-you" style="left: 25%;">
-        <div class="bar-val" id="bar-q2-you-val">2032</div>
-        <div class="bar-pin"></div>
-        <div class="bar-tag">You</div>
+    <!-- Q1 Bar Comparison -->
+    <div class="compare-bar">
+      <div class="compare-bar-title">Q1 · 2030年末までのAGI達成確率</div>
+      <div class="compare-bar-sub">0% ─ 50% ─ 100%</div>
+      <div class="bar-axis">
+        <div class="bar-marker you" id="bar-q1-you" style="left: 50%;">
+          <div class="bar-val" id="bar-q1-you-val">50%</div>
+          <div class="bar-pin"></div>
+          <div class="bar-tag">You</div>
+        </div>
+        <div class="bar-marker world" style="left: 26%;">
+          <div class="bar-val">26%</div>
+          <div class="bar-pin"></div>
+          <div class="bar-tag">Metaculus</div>
+        </div>
       </div>
-      <div class="bar-marker world" style="left: 25%;">
-        <div class="bar-val">2032</div>
-        <div class="bar-pin"></div>
-        <div class="bar-tag">Metaculus</div>
+      <div class="bar-axis-labels"><span>0%</span><span>50%</span><span>100%</span></div>
+    </div>
+
+    <!-- Q2 Bar Comparison -->
+    <div class="compare-bar">
+      <div class="compare-bar-title">Q2 · AGI到達年</div>
+      <div class="compare-bar-sub">2026 ─ 2038 ─ 2050+</div>
+      <div class="bar-axis">
+        <div class="bar-marker you" id="bar-q2-you" style="left: 25%;">
+          <div class="bar-val" id="bar-q2-you-val">2032</div>
+          <div class="bar-pin"></div>
+          <div class="bar-tag">You</div>
+        </div>
+        <div class="bar-marker world" style="left: 25%;">
+          <div class="bar-val">2032</div>
+          <div class="bar-pin"></div>
+          <div class="bar-tag">Metaculus</div>
+        </div>
       </div>
+      <div class="bar-axis-labels"><span>2026</span><span>2038</span><span>2050+</span></div>
     </div>
-    <div style="height: 50px;"></div>
-    <div class="bar-axis-labels"><span>2026</span><span>2038</span><span>2050+</span></div>
-  </div>
 
-  <!-- Verdict -->
-  <div class="verdict" id="verdict"></div>
+    <!-- Verdict -->
+    <div class="verdict" id="verdict"></div>
 
-  <!-- Extras -->
-  <div class="extras-grid">
-    <div class="extra-card">
-      <div class="extra-label">Q3 · 職業の変化確率</div>
-      <div class="extra-val" id="result-q3">—</div>
-      <div class="extra-desc">5年後、仕事の中身が別物になる</div>
-    </div>
-    <div class="extra-card">
-      <div class="extra-label">Q4 · 計算量だけでAGI</div>
-      <div class="extra-val" id="result-q4">—</div>
-      <div class="extra-desc">スケーリング仮説への賭け金</div>
-    </div>
-    <div class="extra-card">
-      <div class="extra-label">Q5 · p(doom)</div>
-      <div class="extra-val" id="result-q5">—</div>
-      <div class="extra-desc">AIによる存亡リスク</div>
-    </div>
-  </div>
+    <!-- Extras: circular gauges -->
+    <div class="extras-grid">
 
-  <div style="margin-top:64px;text-align:center;">
-    <p class="lead" style="max-width:none;text-align:center;">半年後、この数字を見返したとき、あなたの直感はどちらにズレているか。</p>
-    <p style="margin-top:24px;"><a href="index.html" style="font-weight:700;font-size:15px;">AGI HUBの記事を読む →</a></p>
+      <div class="extra-card">
+        <div class="gauge-wrap">
+          <svg class="gauge-svg" viewBox="0 0 120 120">
+            <circle class="gauge-bg" cx="60" cy="60" r="52"/>
+            <circle class="gauge-fill" id="gauge-q3" cx="60" cy="60" r="52" stroke-dasharray="0 326.7"/>
+          </svg>
+          <div class="gauge-text" id="gauge-q3-text">—</div>
+        </div>
+        <div class="extra-label">Q3 · 職業の変化確率</div>
+        <div class="extra-desc">5年後、仕事の中身が別物になる</div>
+      </div>
+
+      <div class="extra-card">
+        <div class="gauge-wrap">
+          <svg class="gauge-svg" viewBox="0 0 120 120">
+            <circle class="gauge-bg" cx="60" cy="60" r="52"/>
+            <circle class="gauge-fill" id="gauge-q4" cx="60" cy="60" r="52" stroke-dasharray="0 326.7"/>
+          </svg>
+          <div class="gauge-text" id="gauge-q4-text">—</div>
+        </div>
+        <div class="extra-label">Q4 · 計算量だけでAGI</div>
+        <div class="extra-desc">スケーリング仮説への賭け金</div>
+      </div>
+
+      <div class="extra-card">
+        <div class="gauge-wrap">
+          <svg class="gauge-svg" viewBox="0 0 120 120">
+            <circle class="gauge-bg" cx="60" cy="60" r="52"/>
+            <circle class="gauge-fill" id="gauge-q5" cx="60" cy="60" r="52" stroke-dasharray="0 326.7" style="stroke: var(--world);"/>
+          </svg>
+          <div class="gauge-text" id="gauge-q5-text" style="color:var(--world);">—</div>
+        </div>
+        <div class="extra-label">Q5 · p(doom)</div>
+        <div class="extra-desc">AIによる存亡リスク</div>
+      </div>
+
+    </div>
+
+    <div style="margin-top:96px;text-align:center;padding:48px;background:var(--bg-alt);">
+      <p class="lead" style="max-width:none;text-align:center;font-size:18px;color:var(--body-text);">半年後、この数字を見返したとき、<br>あなたの直感はどちらにズレているか。</p>
+      <p style="margin-top:32px;"><a href="index.html" style="font-weight:800;font-size:16px;padding:14px 28px;background:var(--accent);color:#fff;display:inline-block;letter-spacing:0.08em;">AGI HUBの記事を読む →</a></p>
+    </div>
   </div>
 </div>
 
@@ -919,6 +1260,27 @@ h2 { font-size: clamp(24px, 3.5vw, 36px); font-weight: 800; line-height: 1.25; c
     });
   });
 
+  // ── World data spoiler toggle ──
+  var revealBtn = document.getElementById('reveal-world');
+  var worldData = document.getElementById('world-data');
+  var spoilerToggle = document.getElementById('spoiler-toggle');
+  function revealWorldData() {
+    worldData.style.display = 'grid';
+    spoilerToggle.style.display = 'none';
+    // Also reveal timeline Metaculus value
+    var metaPin = document.querySelector('.timeline-pin.metaculus');
+    if (metaPin) {
+      metaPin.style.opacity = '1';
+      metaPin.querySelector('.pin-dot').style.background = 'var(--green)';
+      metaPin.querySelector('.pin-dot').style.boxShadow = '0 0 0 2px var(--green), 0 4px 12px rgba(26, 122, 58, 0.3)';
+      metaPin.querySelector('.pin-line').style.background = 'rgba(26, 122, 58, 0.4)';
+      metaPin.querySelector('.pin-card').style.borderTopColor = 'var(--green)';
+      metaPin.querySelector('.pin-year').textContent = '2032';
+      metaPin.querySelector('.pin-year').style.color = 'var(--green)';
+    }
+  }
+  revealBtn.addEventListener('click', revealWorldData);
+
   // ── Reveal on scroll ──
   var reveals = document.querySelectorAll('.reveal');
   var observer = new IntersectionObserver(function(entries) {
@@ -928,12 +1290,13 @@ h2 { font-size: clamp(24px, 3.5vw, 36px); font-weight: 800; line-height: 1.25; c
         observer.unobserve(entry.target);
       }
     });
-  }, { threshold: 0.15 });
+  }, { threshold: 0.12 });
   reveals.forEach(function(el) { observer.observe(el); });
 
   // ── Reference values ──
   var META_Q5121_PROB = 26;
   var META_Q3479_YEAR = 2032;
+  var GAUGE_CIRCUMFERENCE = 2 * Math.PI * 52; // ≈ 326.7
 
   // ── Form submission ──
   var form = document.getElementById('prediction-form');
@@ -967,51 +1330,97 @@ h2 { font-size: clamp(24px, 3.5vw, 36px); font-weight: 800; line-height: 1.25; c
     var GAS_URL = '';
     if (GAS_URL) {
       fetch(GAS_URL, {
-        method: 'POST',
-        mode: 'no-cors',
+        method: 'POST', mode: 'no-cors',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
-      }).catch(function() { /* silent */ });
+      }).catch(function() {});
     }
 
+    revealWorldData(); // reveal world forecast if still hidden
     showResults(q1, q2, q3, q4, q5);
     submitted = true;
     btn.textContent = '送信済み';
   });
+
+  function animateCounter(el, from, to, duration) {
+    var start = performance.now();
+    function step(now) {
+      var elapsed = now - start;
+      var progress = Math.min(elapsed / duration, 1);
+      var eased = 1 - Math.pow(1 - progress, 3); // ease-out cubic
+      var val = Math.round(from + (to - from) * eased);
+      el.textContent = (val >= 0 ? '+' : '') + val + 'pt';
+      if (progress < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+
+  function animateGauge(svgCircle, textEl, targetPct) {
+    var targetLen = (targetPct / 100) * GAUGE_CIRCUMFERENCE;
+    svgCircle.style.strokeDasharray = targetLen + ' ' + GAUGE_CIRCUMFERENCE;
+    var start = performance.now();
+    function step(now) {
+      var elapsed = now - start;
+      var progress = Math.min(elapsed / 1000, 1);
+      var eased = 1 - Math.pow(1 - progress, 3);
+      textEl.textContent = Math.round(targetPct * eased) + '%';
+      if (progress < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
 
   function showResults(q1, q2, q3, q4, q5) {
     // Big diff hero
     var q1diff = q1 - META_Q5121_PROB;
     var diffMain = document.getElementById('diff-main');
     var diffDesc = document.getElementById('diff-main-desc');
-    var sign = q1diff >= 0 ? '+' : '';
-    diffMain.textContent = sign + q1diff + 'pt';
+    var diffSub = document.getElementById('diff-main-sub');
+
     if (Math.abs(q1diff) <= 5) {
+      diffMain.className = 'diff-num neutral';
       diffDesc.textContent = 'Metaculusとほぼ同じ位置';
-      diffMain.style.color = 'var(--meta)';
+      diffSub.textContent = '群衆の集合知と同じ温度感';
     } else if (q1diff > 0) {
+      diffMain.className = 'diff-num';
       diffDesc.textContent = 'あなたは' + q1diff + 'ポイント楽観的';
-      diffMain.style.color = 'var(--accent)';
+      diffSub.textContent = '2030年AGIをMetaculusより高く見積もっている';
     } else {
+      diffMain.className = 'diff-num 悲観';
       diffDesc.textContent = 'あなたは' + Math.abs(q1diff) + 'ポイント悲観的';
-      diffMain.style.color = 'var(--world)';
+      diffSub.textContent = '2030年AGIをMetaculusより低く見積もっている';
     }
+
+    // Animate diff counter
+    diffMain.textContent = '0pt';
+    setTimeout(function() { animateCounter(diffMain, 0, q1diff, 1200); }, 400);
 
     // Q1 bar position
     var q1Marker = document.getElementById('bar-q1-you');
-    q1Marker.style.left = q1 + '%';
+    setTimeout(function() {
+      q1Marker.style.transition = 'left 1s var(--ease)';
+      q1Marker.style.left = q1 + '%';
+    }, 600);
     document.getElementById('bar-q1-you-val').textContent = q1 + '%';
 
-    // Q2 bar position (2026-2050 → 0-100%)
+    // Q2 bar position
     var q2pct = ((q2 - 2026) / (2050 - 2026)) * 100;
     var q2Marker = document.getElementById('bar-q2-you');
-    q2Marker.style.left = q2pct + '%';
+    setTimeout(function() {
+      q2Marker.style.transition = 'left 1s var(--ease)';
+      q2Marker.style.left = q2pct + '%';
+    }, 800);
     document.getElementById('bar-q2-you-val').textContent = q2 + '年';
 
-    // Extras
-    document.getElementById('result-q3').textContent = q3 + '%';
-    document.getElementById('result-q4').textContent = q4 + '%';
-    document.getElementById('result-q5').textContent = q5 + '%';
+    // Gauges
+    setTimeout(function() {
+      animateGauge(document.getElementById('gauge-q3'), document.getElementById('gauge-q3-text'), q3);
+    }, 1000);
+    setTimeout(function() {
+      animateGauge(document.getElementById('gauge-q4'), document.getElementById('gauge-q4-text'), q4);
+    }, 1200);
+    setTimeout(function() {
+      animateGauge(document.getElementById('gauge-q5'), document.getElementById('gauge-q5-text'), q5);
+    }, 1400);
 
     // Verdict text
     var verdictEl = document.getElementById('verdict');
@@ -1019,7 +1428,7 @@ h2 { font-size: clamp(24px, 3.5vw, 36px); font-weight: 800; line-height: 1.25; c
 
     var q2diff = q2 - META_Q3479_YEAR;
     if (q2diff === 0) {
-      lines.push('AGI到達年の予測はMetaculus中央値と<strong>一致</strong>。');
+      lines.push('AGI到達年の予測はMetaculus中央値と<strong>一致</strong>している。');
     } else if (q2diff < 0) {
       lines.push('AGI到達年について、あなたはMetaculus中央値より<strong>' + Math.abs(q2diff) + '年早い</strong>と考えている。');
     } else {
@@ -1027,7 +1436,7 @@ h2 { font-size: clamp(24px, 3.5vw, 36px); font-weight: 800; line-height: 1.25; c
     }
 
     if (q4 >= 70) {
-      lines.push('計算量だけでAGIに到達できるという立場。<strong>スケーリング仮説の強い支持者</strong>。');
+      lines.push('計算量だけでAGIに到達できるという立場。<strong>スケーリング仮説の強い支持者</strong>だ。');
     } else if (q4 <= 30) {
       lines.push('計算量だけではAGIに到達できないという立場。<strong>アーキテクチャの革新が必要</strong>と考えている。');
     }
@@ -1035,16 +1444,17 @@ h2 { font-size: clamp(24px, 3.5vw, 36px); font-weight: 800; line-height: 1.25; c
     if (q5 >= 30) {
       lines.push('p(doom) ' + q5 + '%は、AI安全性コミュニティでも<strong>高い部類</strong>。');
     } else if (q5 <= 5) {
-      lines.push('p(doom) ' + q5 + '%は、AI安全性コミュニティでは<strong>楽観的な部類</strong>。');
+      lines.push('p(doom) ' + q5 + '%は、AI安全性コミュニティでは<strong>楽観的な部類</strong>だ。');
     }
 
     verdictEl.innerHTML = lines.join('<br><br>');
 
+    // Reveal + scroll
     var resultsSection = document.getElementById('results');
     resultsSection.classList.add('visible');
     setTimeout(function() {
       resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }, 150);
+    }, 200);
   }
 })();
 </script>

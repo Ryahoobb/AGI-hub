@@ -669,6 +669,7 @@
   }
   .dash-footer p { margin-bottom: 8px; }
 
+  /* ── Tablet ── */
   @media (max-width: 900px) {
     .dashboard { padding: 24px 16px 48px; }
     .dash-title { font-size: 30px; }
@@ -677,19 +678,66 @@
     .chart-grid-2 { grid-template-columns: 1fr; }
     .chart-canvas-wrap { height: 260px; }
     .timeline-dot .label { display: none; }
-    .model-table { font-size: 12px; }
-    .model-table thead { display: none; }
-    .model-table tbody tr {
+    .finding { grid-template-columns: 1fr; gap: 6px; }
+
+    /* ranking-table: 横スクロール */
+    .ranking-table-wrap {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      margin: 0 -16px;
+      padding: 0 16px;
+    }
+    .ranking-table-wrap .model-table { min-width: 700px; }
+
+    /* model-table (非ranking): カード化 */
+    .model-table:not(.ranking-table) { font-size: 12px; }
+    .model-table:not(.ranking-table) thead { display: none; }
+    .model-table:not(.ranking-table) tbody tr {
       display: block;
       padding: 16px 0;
       border-bottom: 1px solid #1a1a1a;
     }
-    .model-table tbody td {
+    .model-table:not(.ranking-table) tbody td {
       display: block;
       padding: 4px 0;
       border: none;
     }
-    .finding { grid-template-columns: 1fr; gap: 6px; }
+
+    .agency-logo { float: none; margin: 0 0 14px; }
+  }
+
+  /* ── Mobile ── */
+  @media (max-width: 480px) {
+    .dashboard { padding: 20px 12px 40px; }
+    .dash-title { font-size: 24px; }
+    .dash-subtitle { font-size: 14px; }
+    .kpi-row { grid-template-columns: 1fr; }
+    .kpi-value { font-size: 28px; }
+    .kpi-card { padding: 16px 20px; }
+
+    .section-header { flex-direction: column; gap: 4px; }
+    .section-header h2 { font-size: 20px; }
+    .section-intro { font-size: 13px; }
+
+    .bench-card { padding: 20px 16px; }
+    .bench-card h3 { font-size: 16px; }
+
+    .chart-wrap { padding: 20px 16px; }
+    .chart-canvas-wrap { height: 220px; }
+    .chart-canvas-wrap.tall { height: 280px; }
+
+    .people-grid { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 20px 16px; }
+    .person-photo { width: 90px; height: 90px; }
+    .person-name { font-size: 13px; }
+
+    .agency-card { padding-left: 16px; }
+    .agency-card h3 { font-size: 17px; }
+    .agency-card p { font-size: 13px; }
+    .agency-card .agency-finding { padding: 12px 14px; font-size: 12px; }
+
+    .timeline-wrap { padding: 20px 12px 16px; }
+
+    .dash-footer { font-size: 11px; }
   }
 </style>
 </head>
@@ -1167,6 +1215,7 @@
     <p class="section-intro">
       LMArena Elo（正規化）、HLE、GPQA Diamond、ARC-AGI-2、SWE-Bench Verified / Pro の5軸を重み付けした総合スコア（0-100正規化）でランキング。第三者評価値と発表主張値が混在する点に注意（※マーク）。空欄は該当ベンチの公表値なし。
     </p>
+    <div class="ranking-table-wrap">
     <table class="model-table ranking-table">
       <thead>
         <tr>
@@ -1316,6 +1365,7 @@
         </tr>
       </tbody>
     </table>
+    </div>
     <p class="people-note">
       ※印は vendor claim または第三者評価で値が確定していない数値。Composite は LMArena(Elo正規化) 30% + HLE 25% + GPQA 15% + ARC-AGI-2 15% + SWE-Ver 15% の加重平均。欠損値は対応する軸の平均で補完。あくまで俯瞰用のラフな目安であり、決定的ランキングではない。LMArena / ARC-2は週次で変動。
     </p>

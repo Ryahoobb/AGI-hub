@@ -144,7 +144,7 @@
   }
   .legend-item { display: flex; align-items: center; gap: 8px; }
   .legend-dot { width: 10px; height: 10px; border-radius: 50%; }
-  .legend-dot.domain { background: #1a1a1a; }
+  .legend-dot.domain { background: #b23a2f; }
   .legend-dot.linked { background: #1a1a1a; border: 2px solid #b23a2f; }
   .legend-dot.upcoming { background: #d9d9d9; }
   .legend-line { width: 20px; height: 1px; background: #c4c4c4; }
@@ -780,17 +780,17 @@
     <div class="tab-card-title">論者ポジション</div>
     <div class="tab-card-desc">25名の研究者・実業家をAGIタイムライン×p(doom)の2軸で配置する。</div>
   </button>
-  <button class="tab-card" data-tab="pill" onclick="switchTab('pill')">
-    <div class="tab-card-arrow">→</div>
-    <div class="tab-card-eyebrow">03 — Pill Map</div>
-    <div class="tab-card-title">認知の深度測定</div>
-    <div class="tab-card-desc">7つの関門を越えるたびに次の層が開かれる。あなたはAGIの何層目にいるか。</div>
-  </button>
   <button class="tab-card" data-tab="skeptics" onclick="switchTab('skeptics')">
     <div class="tab-card-arrow">→</div>
-    <div class="tab-card-eyebrow">04 — Skeptics</div>
+    <div class="tab-card-eyebrow">03 — Skeptics</div>
     <div class="tab-card-title">懐疑の構造解剖</div>
     <div class="tab-card-desc">AGI否定論38の主張を8カテゴリに分類し、構造的弱点と経験的証拠を配置した。</div>
+  </button>
+  <button class="tab-card" data-tab="pill" onclick="switchTab('pill')">
+    <div class="tab-card-arrow">→</div>
+    <div class="tab-card-eyebrow">04 — Pill Map</div>
+    <div class="tab-card-title">認知の深度測定</div>
+    <div class="tab-card-desc">7つの関門を越えるたびに次の層が開かれる。あなたはAGIの何層目にいるか。</div>
   </button>
 </div>
 
@@ -1431,12 +1431,16 @@
 
 <!-- Tab switching -->
 <script>
-function switchTab(tabId) {
+var _switchDebounce = null;
+function switchTab(tabId, smooth) {
+  if (_switchDebounce) clearTimeout(_switchDebounce);
   document.querySelectorAll('.tab-card').forEach(function(b) { b.classList.remove('active'); });
   document.querySelectorAll('.tab-panel').forEach(function(p) { p.classList.remove('active'); });
   document.querySelector('[data-tab="' + tabId + '"]').classList.add('active');
   document.getElementById('panel-' + tabId).classList.add('active');
-  document.getElementById('panel-' + tabId).scrollIntoView({ behavior: 'smooth', block: 'start' });
+  if (smooth !== false) {
+    document.getElementById('panel-' + tabId).scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
 
   // Init canvas on first show
   if (tabId === 'articles' && !window._graphInited) {
@@ -1444,8 +1448,20 @@ function switchTab(tabId) {
     setTimeout(function() { initArticlesGraph(); }, 50);
   }
 }
-// Init on load
-window.addEventListener('DOMContentLoaded', function() { initArticlesGraph(); });
+// Hover-to-switch on tab cards (debounced 150ms to avoid flicker)
+window.addEventListener('DOMContentLoaded', function() {
+  initArticlesGraph();
+  document.querySelectorAll('.tab-card').forEach(function(card) {
+    card.addEventListener('mouseenter', function() {
+      var tabId = card.getAttribute('data-tab');
+      if (card.classList.contains('active')) return;
+      _switchDebounce = setTimeout(function() { switchTab(tabId, false); }, 150);
+    });
+    card.addEventListener('mouseleave', function() {
+      if (_switchDebounce) { clearTimeout(_switchDebounce); _switchDebounce = null; }
+    });
+  });
+});
 </script>
 
 <!-- Articles graph (Canvas) -->
@@ -1580,11 +1596,11 @@ function initArticlesGraph() {
       if (t.link) { ctx.fillStyle='#1a1a1a'; ctx.fill(); ctx.strokeStyle='#b23a2f'; ctx.lineWidth=2; ctx.stroke(); }
       else { ctx.fillStyle='#d9d9d9'; ctx.fill(); }
     });
-    var domR = isMobile ? 10 : 14;
+    var domR = isMobile ? 12 : 16;
     domains.forEach(function(d) {
-      ctx.beginPath(); ctx.arc(d.px,d.py,domR,0,Math.PI*2); ctx.fillStyle='#1a1a1a'; ctx.fill();
+      ctx.beginPath(); ctx.arc(d.px,d.py,domR,0,Math.PI*2); ctx.fillStyle='#b23a2f'; ctx.fill();
       ctx.font = isMobile ? '700 8px "SF Mono","Fira Code",Menlo,monospace' : '700 10px "SF Mono","Fira Code",Menlo,monospace';
-      ctx.fillStyle='#1a1a1a'; ctx.textAlign='center'; ctx.fillText(d.name, d.px, d.py+(isMobile?20:28));
+      ctx.fillStyle='#b23a2f'; ctx.textAlign='center'; ctx.fillText(d.name, d.px, d.py+(isMobile?22:30));
     });
     domains.forEach(function(d) {
       var num = d.id.replace('d','');
@@ -1598,7 +1614,7 @@ function initArticlesGraph() {
   canvas.addEventListener('mousemove', function(e) {
     var rect=canvas.getBoundingClientRect(), mx=e.clientX-rect.left, my=e.clientY-rect.top;
     var hit=null, hitDist=Infinity;
-    allNodes.forEach(function(n) { var dx=mx-n.px,dy=my-n.py,dist=Math.sqrt(dx*dx+dy*dy),th=n.id.startsWith('d')?14:8; if(dist<th&&dist<hitDist){hit=n;hitDist=dist;} });
+    allNodes.forEach(function(n) { var dx=mx-n.px,dy=my-n.py,dist=Math.sqrt(dx*dx+dy*dy),th=n.id.startsWith('d')?18:8; if(dist<th&&dist<hitDist){hit=n;hitDist=dist;} });
     if(hit) {
       canvas.style.cursor=hit.link?'pointer':'default';
       if(hit.id.startsWith('d')){var c=topics.filter(function(t){return t.domain===hit.id;}).length,l=topics.filter(function(t){return t.domain===hit.id&&t.link;}).length;tooltip.innerHTML='<div class="tt-label">Domain</div><div class="tt-name">'+hit.name+'</div><div class="tt-desc">'+c+' topics / '+l+' covered</div>';}

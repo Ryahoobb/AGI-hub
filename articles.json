@@ -1,13 +1,13 @@
 [
   {
     "no": 28,
-    "slug": "28-pdoom-distribution",
-    "category": "risk",
+    "slug": "28-geopolitics-phase-transition",
+    "category": "governance",
     "date": "2026.04.13",
-    "slides": "7 Slides",
-    "thumb": "",
-    "title": "p(doom)の分布 — なぜ人類は自らの破滅確率を合意できないのか",
-    "excerpt": "AI Impacts 2,778名の中央値5%、Yudkowskyの95%超、LeCunの0.01%未満。4桁にわたる散乱は、データ不足ではなく問いの構造が合意を許さないことを示す。Carlsmithの6段階分解、XPTの収束失敗、双峰分布の発見から、測定不能なリスクへの向き合い方を問う。",
+    "slides": "5 Sections",
+    "thumb": "images/thumb-geopolitics-phase-transition.jpg",
+    "title": "地政学の相転移 — AGIが書き換える争いの変数",
+    "excerpt": "全人類が億万長者並みに暮らせるとき、何のために国家は戦争するのか。computeの階級社会、技術が変数を殺す歴史パターン、資源飽和後に残る不寛容性。地政学の概念そのものが相転移を迎える構造を、5つの平和設計要件とともに描く。",
     "featured": true
   },
   {

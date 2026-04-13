@@ -1168,6 +1168,102 @@ h2 { font-size: clamp(28px, 4vw, 44px); font-weight: 800; line-height: 1.2; colo
     <div class="eyebrow">Your Position</div>
     <h2>あなたの立ち位置</h2>
 
+    <!-- ═══ FINAL TIMELINE: You + everyone ═══ -->
+    <div class="hero-timeline" style="margin-top:32px;margin-bottom:48px;">
+      <div class="hero-timeline-header">
+        <div class="hero-timeline-title"><strong>AGI到達年</strong> · あなたを含めた予測スペクトラム</div>
+        <div class="hero-timeline-legend">
+          <span class="legend-item"><span class="legend-dot" style="background:var(--accent);"></span>業界の予測者</span>
+          <span class="legend-item"><span class="legend-dot" style="background:var(--green);"></span>Metaculus</span>
+          <span class="legend-item"><span class="legend-dot" style="background:var(--world);"></span>あなた</span>
+        </div>
+      </div>
+
+      <div class="timeline-wrap">
+        <div class="timeline-axis"></div>
+        <div class="timeline-year-ticks">
+          <span style="left: 0%;">2026</span>
+          <span style="left: 20%;">2028</span>
+          <span style="left: 40%;">2030</span>
+          <span style="left: 60%;">2032</span>
+          <span style="left: 80%;">2034</span>
+          <span style="left: 100%;">2036+</span>
+        </div>
+
+        <div class="timeline-pin" style="left: 0%;">
+          <div class="pin-face" style="background-image: url('images/people/dario-amodei.jpg');"></div>
+          <div class="pin-line"></div>
+          <div class="pin-card">
+            <div class="pin-name">Amodei</div>
+            <div class="pin-year">2026</div>
+            <div class="pin-meta">Anthropic</div>
+          </div>
+        </div>
+        <div class="timeline-pin" style="left: 10%;">
+          <div class="pin-face" style="background-image: url('images/people/sam-altman.jpg');"></div>
+          <div class="pin-line"></div>
+          <div class="pin-card">
+            <div class="pin-name">Altman</div>
+            <div class="pin-year">2027</div>
+            <div class="pin-meta">OpenAI</div>
+          </div>
+        </div>
+        <div class="timeline-pin" style="left: 20%;">
+          <div class="pin-face" style="background-image: url('images/people/demis-hassabis.jpg');"></div>
+          <div class="pin-line"></div>
+          <div class="pin-card">
+            <div class="pin-name">Hassabis</div>
+            <div class="pin-year">2028</div>
+            <div class="pin-meta">DeepMind</div>
+          </div>
+        </div>
+        <div class="timeline-pin" style="left: 30%;">
+          <div class="pin-face" style="background-image: url('images/people/jensen-huang.jpg');"></div>
+          <div class="pin-line"></div>
+          <div class="pin-card">
+            <div class="pin-name">Huang</div>
+            <div class="pin-year">2029</div>
+            <div class="pin-meta">NVIDIA</div>
+          </div>
+        </div>
+        <div class="timeline-pin" style="left: 40%;">
+          <div class="pin-face" style="background-image: url('images/thinkers/bioshok3.jpg');"></div>
+          <div class="pin-line"></div>
+          <div class="pin-card">
+            <div class="pin-name">bioshok3</div>
+            <div class="pin-year">2030</div>
+            <div class="pin-meta">日本のAI解説者</div>
+          </div>
+        </div>
+
+        <!-- Metaculus pin (always shown in final) -->
+        <div class="timeline-pin metaculus" style="left: 60%;">
+          <div class="pin-face" style="background:var(--green);box-shadow:0 0 0 2px var(--green), 0 6px 16px rgba(26, 122, 58, 0.35);font-size:14px;">2032</div>
+          <div class="pin-line" style="background:rgba(26, 122, 58, 0.4);"></div>
+          <div class="pin-card" style="border-top-color:var(--green);">
+            <div class="pin-name">Metaculus 中央値</div>
+            <div class="pin-year" style="color:var(--green);">2032</div>
+            <div class="pin-meta">3,512 Forecasters</div>
+          </div>
+        </div>
+
+        <!-- YOU pin: position set by JS -->
+        <div class="timeline-pin you-pin" id="final-you-pin" style="left: 30%;">
+          <div class="pin-face" style="background:var(--world);box-shadow:0 0 0 2px var(--world), 0 6px 16px rgba(201, 55, 44, 0.4);font-size:14px;color:#fff;" id="final-you-year">2032</div>
+          <div class="pin-line" style="background:rgba(201, 55, 44, 0.5);"></div>
+          <div class="pin-card" style="border-top-color:var(--world);">
+            <div class="pin-name" style="color:var(--world);">あなたの予測</div>
+            <div class="pin-year" style="color:var(--world);" id="final-you-card-year">2032</div>
+            <div class="pin-meta">YOUR FORECAST</div>
+          </div>
+        </div>
+      </div>
+
+      <p style="text-align:center;font-size:13px;color:var(--mid);margin-top:140px;max-width:620px;margin-left:auto;margin-right:auto;line-height:1.7;">
+        <strong>赤いピンがあなたの位置</strong>。業界CEO、解説者、群衆の集合知、そしてあなた。<br>同じ問いに、6つの答えが並ぶ。
+      </p>
+    </div>
+
     <!-- Q1 Bar Comparison -->
     <div class="compare-bar">
       <div class="compare-bar-title">Q1 · 2030年末までのAGI達成確率</div>
@@ -1470,6 +1566,21 @@ h2 { font-size: clamp(28px, 4vw, 44px); font-weight: 800; line-height: 1.2; colo
     }, 800);
     document.getElementById('bar-q2-you-val').textContent = q2 + '年';
 
+    // Final timeline: position YOU pin (2026-2036 scale, 10 years span = 100%)
+    // Cap at 100% for years beyond 2036
+    var youTimelinePct = Math.min(((q2 - 2026) / 10) * 100, 100);
+    var youPin = document.getElementById('final-you-pin');
+    if (youPin) {
+      setTimeout(function() {
+        youPin.style.transition = 'left 1.2s var(--ease)';
+        youPin.style.left = youTimelinePct + '%';
+      }, 700);
+      var youYearEl = document.getElementById('final-you-year');
+      if (youYearEl) youYearEl.textContent = q2 >= 2036 ? '2036+' : String(q2);
+      var youCardYearEl = document.getElementById('final-you-card-year');
+      if (youCardYearEl) youCardYearEl.textContent = String(q2);
+    }
+
     // Gauges
     setTimeout(function() {
       animateGauge(document.getElementById('gauge-q3'), document.getElementById('gauge-q3-text'), q3);
@@ -1508,23 +1619,13 @@ h2 { font-size: clamp(28px, 4vw, 44px); font-weight: 800; line-height: 1.2; colo
 
     verdictEl.innerHTML = lines.join('<br><br>');
 
-    // Reveal results section
+    // Reveal results section + always scroll to results (which contains
+    // the final comparison timeline with everyone + you).
     var resultsSection = document.getElementById('results');
     resultsSection.classList.add('visible');
-
-    // Scroll strategy:
-    // - If user hasn't seen World Forecast yet, scroll there first so they
-    //   read it before reaching their personal results below.
-    // - Otherwise, jump directly to results.
-    if (scrollToWorldFirst) {
-      setTimeout(function() {
-        worldData.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }, 200);
-    } else {
-      setTimeout(function() {
-        resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }, 200);
-    }
+    setTimeout(function() {
+      resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 200);
   }
 })();
 </script>

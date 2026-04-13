@@ -2,6 +2,7 @@
 <html lang="ja">
   <head>
 <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+<meta name="revised" content="2026.04.14">
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <link rel="icon" type="image/svg+xml" href="../favicon.svg">
@@ -452,7 +453,7 @@
             産業爆発はロボットの自己複製が成立した後に来る。大半の議論はこの順序を前提にしている。Forethought Foundationの産業爆発モデル、<a href="08-agi-self-replication-premise.html" style="color:inherit;border-bottom:1px solid #999;transition:border-color 0.3s;">No.08で論じた閉ループの工学的困難</a>、EpochAIのGATEモデル。いずれも物理的な生産手段の自己増殖を起点に置く。
           </p>
           <p class="lead">
-            bioshokはこの前提を疑う。Charles Jonesが2023年の論文 "The A.I. Dilemma" で示した半内生的成長モデルに基づけば、劇的な成長はタスクの100%自動化を必要としない。部分的な自動化でも、AI生産性の倍率と自動化の範囲の積が十分に大きければ、成長率が非連続的に跳ねる。<strong>ホワイトカラーの完全代替（高倍率）とブルーカラーのAI支援（低倍率だが広範囲）を合算すれば、仮定が成立した場合に限りロボット閉ループなしでもJonesモデルの閾値に届き得る。</strong> ただしこの合算は粗いレンジの試算であり、タスク定義・倍率・波及速度のいずれも未検証である点を先に断っておく。以下では成立の最小条件と、それを阻む現実的なボトルネックの両方を明示する。
+            bioshokはこの前提を疑う。Charles Jonesが2023年の論文 "The A.I. Dilemma" で示した半内生的成長モデルに基づけば、劇的な成長はタスクの100%自動化を必要としない。部分的な自動化でも、AI生産性の倍率と自動化の範囲の積が十分に大きければ、成長率が非連続的に跳ねる。<strong>ホワイトカラーの完全代替（高倍率）とブルーカラーのAI支援（低倍率だが広範囲）を合算すれば、仮定が成立した場合に限りロボット閉ループなしでもJonesモデルの閾値に届き得る。</strong> ただしこの合算は粗いレンジの試算であり、タスク定義・倍率・波及速度のいずれも未検証である点を先に断っておく。成立の最小条件と、それを阻む現実的なボトルネックを順に見ていく。
           </p>
           <p class="lead">
             検証に先立ち、「タスク自動化率」を操作的に定義する。経済全体のタスクのうち、AIまたはAI支援により生産性が非連続的に向上したタスクの比率だ。2つの形態がある。第一に<strong>完全代替</strong>。AIがタスクを人間なしで遂行する。コード生成、文書ドラフト、定型データ分析。タスク限定のベンチマーク上は50-100倍級の差が観測されることがあるが、これは応答時間や処理件数など特定指標の話であり、一般労働生産性（GDP/労働時間）の倍率ではない。Klarnaのカスタマーサポート置換がこれにあたる。第二に<strong>人間拡張</strong>。AIが人間の作業をガイドし、精度と速度を向上させる。ARゴーグル、音声指示、Manufacturing Copilot。倍率は1.25-2倍。Boeingの溶接工がこれだ。倍率こそ小さいが、これまで自動化の対象外だったタスクを自動化率の分母に加える効果を持つ。ただし「完全代替」と「人間拡張」の境界は実際には曖昧で、多くのタスクが両者のグラデーション上にある。
@@ -812,10 +813,10 @@
             </div>
           </div>
           <p class="lead">
-            <strong>反論3: CEO発言やAI企業の予測はポジショントーク。</strong> bioshok自身が留保カテゴリで指摘している通り、「CEO発言はfrontier labsの内部期待と戦略姿勢の強い証拠だが独立した科学的証明ではない」。Anthropic Economic Indexも利害関係のある当事者の報告。本記事ではこれらを「証拠」ではなく「参考指標」として扱う。
+            <strong>反論3: CEO発言やAI企業の予測はポジショントーク。</strong> bioshok自身が留保カテゴリで指摘している通り、「CEO発言はfrontier labsの内部期待と戦略姿勢の強い証拠だが独立した科学的証明ではない」。Anthropic Economic Indexも利害関係のある当事者の報告だ。これらは「証拠」ではなく「参考指標」として扱う。
           </p>
           <p class="lead">
-            <strong>反論4: bioshokのJonesモデル解釈と人間拡張論の接続は自明ではない。</strong> bioshokの「AIが頭脳、人間が手足」構想は、Jonesモデルの労働代替とは異なるメカニズムかもしれない。Jonesモデルは「AIが労働を代替する」ことを前提にしており、「AIが人間を拡張する」こととは区別される。本記事ではこの2つを「タスク自動化率」の拡張定義で接続したが、この接続が経済学的に正当かどうかは、Jones自身やマクロ経済学者の検証を要する。
+            <strong>反論4: bioshokのJonesモデル解釈と人間拡張論の接続は自明ではない。</strong> bioshokの「AIが頭脳、人間が手足」構想は、Jonesモデルの労働代替とは異なるメカニズムかもしれない。Jonesモデルは「AIが労働を代替する」ことを前提にしており、「AIが人間を拡張する」こととは区別される。この記事は両者を「タスク自動化率」の拡張定義で接続したが、この接続が経済学的に正当かどうかは、Jones自身やマクロ経済学者の検証を要する。
           </p>
         </div>
         <div class="footer reveal reveal-delay-3">

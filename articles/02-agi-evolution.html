@@ -5,7 +5,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <link rel="icon" type="image/svg+xml" href="../favicon.svg">
-    <meta name="revised" content="2026.04.11" />
+    <meta name="revised" content="2026.04.12" />
     <title>AGIを宇宙進化の次相として位置づける</title>
     <link rel="stylesheet" href="../design-system/palette.css">
     <style>
@@ -485,110 +485,109 @@
           </p>
           <figure class="chart chart-wide">
             <div class="chart-title">担い手の交代は、指数関数的に加速している</div>
-            <div class="chart-subtitle">各段階で「次の担い手が現れるまで」に要した時間。縦軸は対数スケール（年）。対数軸上で直線が下へ傾くほど、加速が幾何級数的であることを意味する</div>
-            <svg class="chart-svg" viewBox="0 0 720 360" role="img" aria-label="担い手の交代に要した時間の指数関数的短縮を示す折れ線グラフ">
-              <!-- Plot area: x=80..680 (width 600), y=40..300 (height 260) -->
-              <!-- Y axis: log scale, 10^10 (10 billion) at top to 10^0 (1) at bottom -->
-              <!-- 10 decades over 260px → 26px per decade -->
+            <div class="chart-subtitle">各段階の「進化速度」を対数スケールで比較。右へ行くほど新しい段階。棒が高いほど速い。直近の交代速度は初期の1億倍以上</div>
+            <svg class="chart-svg" viewBox="0 0 720 400" role="img" aria-label="担い手の交代速度が指数関数的に加速していることを示す棒グラフ">
+              <!-- Plot area: x=80..680 (width 600), y=40..340 (height 300) -->
+              <!-- Y axis: log scale speed = 1/(duration in years), shown as relative multiplier -->
+              <!-- Base speed = 1 (slowest: 生命→脳, ~3e9 years) -->
+              <!-- Speed multiplier = 3e9 / duration -->
+              <!--   原子→分子:   3e9/1e9 = 3         → log10=0.48  → h=0.48*30=14  -->
+              <!--   分子→生命:   3e9/5e8 = 6         → log10=0.78  → h=0.78*30=23  -->
+              <!--   生命→脳:     3e9/3e9 = 1 (base)  → log10=0     → h=0           -->
+              <!--   脳→言語:     3e9/1e5 = 30000     → log10=4.48  → h=4.48*30=134 -->
+              <!--   言語→計算機: 3e9/1e5 = 30000     → log10=4.48  → h=134         -->
+              <!--   計算機→AI:   3e9/70  = 4.3e7     → log10=7.63  → h=7.63*30=229 -->
+              <!--   AI→AGI:      3e9/5   = 6e8       → log10=8.78  → h=8.78*30=263 -->
 
-              <!-- Horizontal grid lines (one per decade) -->
+              <!-- Horizontal grid lines -->
               <g stroke="#e5e5e5" stroke-width="1">
-                <line class="grid-line" x1="80" y1="40"  x2="680" y2="40"/>
-                <line class="grid-line" x1="80" y1="66"  x2="680" y2="66"/>
-                <line class="grid-line" x1="80" y1="92"  x2="680" y2="92"/>
-                <line class="grid-line" x1="80" y1="118" x2="680" y2="118"/>
-                <line class="grid-line" x1="80" y1="144" x2="680" y2="144"/>
-                <line class="grid-line" x1="80" y1="170" x2="680" y2="170"/>
-                <line class="grid-line" x1="80" y1="196" x2="680" y2="196"/>
-                <line class="grid-line" x1="80" y1="222" x2="680" y2="222"/>
-                <line class="grid-line" x1="80" y1="248" x2="680" y2="248"/>
-                <line class="grid-line" x1="80" y1="274" x2="680" y2="274"/>
-                <line class="grid-line" x1="80" y1="300" x2="680" y2="300"/>
+                <line class="grid-line" x1="80" y1="340" x2="680" y2="340"/>
+                <line class="grid-line" x1="80" y1="310" x2="680" y2="310"/>
+                <line class="grid-line" x1="80" y1="280" x2="680" y2="280"/>
+                <line class="grid-line" x1="80" y1="250" x2="680" y2="250"/>
+                <line class="grid-line" x1="80" y1="220" x2="680" y2="220"/>
+                <line class="grid-line" x1="80" y1="190" x2="680" y2="190"/>
+                <line class="grid-line" x1="80" y1="160" x2="680" y2="160"/>
+                <line class="grid-line" x1="80" y1="130" x2="680" y2="130"/>
+                <line class="grid-line" x1="80" y1="100" x2="680" y2="100"/>
+                <line class="grid-line" x1="80" y1="70"  x2="680" y2="70"/>
               </g>
 
-              <!-- Y-axis labels (log scale) -->
+              <!-- Y-axis labels -->
               <g font-family="SF Mono, Menlo, monospace" font-size="10" fill="#757575" text-anchor="end">
-                <text x="74" y="44">100億年</text>
-                <text x="74" y="70">10億年</text>
-                <text x="74" y="96">1億年</text>
-                <text x="74" y="122">1000万年</text>
-                <text x="74" y="148">100万年</text>
-                <text x="74" y="174">10万年</text>
-                <text x="74" y="200">1万年</text>
-                <text x="74" y="226">1000年</text>
-                <text x="74" y="252">100年</text>
-                <text x="74" y="278">10年</text>
-                <text x="74" y="304">1年</text>
+                <text x="74" y="344">1x</text>
+                <text x="74" y="314">10x</text>
+                <text x="74" y="284">100x</text>
+                <text x="74" y="254">1,000x</text>
+                <text x="74" y="224">1万x</text>
+                <text x="74" y="194">10万x</text>
+                <text x="74" y="164">100万x</text>
+                <text x="74" y="134">1000万x</text>
+                <text x="74" y="104">1億x</text>
+                <text x="74" y="74">10億x</text>
               </g>
 
               <!-- Y axis line -->
-              <line class="axis-line" x1="80" y1="40" x2="80" y2="300" stroke="#999" stroke-width="1"/>
+              <line class="axis-line" x1="80" y1="40" x2="80" y2="340" stroke="#999" stroke-width="1"/>
               <!-- X axis line -->
-              <line class="axis-line" x1="80" y1="300" x2="680" y2="300" stroke="#999" stroke-width="1"/>
+              <line class="axis-line" x1="80" y1="340" x2="680" y2="340" stroke="#999" stroke-width="1"/>
 
-              <!-- Data points:
-                   x positions (7 points equally spaced across 600px, step=100, starting at 130)
-                   p1: 物質→原子 (約38万年 = 3.8e5) → log10=5.58 → y = 300 - 5.58*26 = 300 - 145 = 155
-                   p2: 原子→分子 (約10億年 = 1e9)   → log10=9.00 → y = 300 - 234 = 66
-                   p3: 分子→生命DNA (約5億年 = 5e8) → log10=8.70 → y = 300 - 226 = 74
-                   p4: 生命→脳    (約30億年 = 3e9)  → log10=9.48 → y = 300 - 246 = 54
-                   p5: 脳→言語    (約10万年 = 1e5)  → log10=5.00 → y = 300 - 130 = 170
-                   p6: 言語→計算機(約10万年 = 1e5)  → log10=5.00 → y = 170
-                   p7: 計算機→AI  (約70年 = 7e1)    → log10=1.85 → y = 300 - 48 = 252
-              -->
+              <!-- Bars (width=48, centered on x positions) -->
+              <!-- Bar positions: 7 bars across x=110..650, step ~77 -->
+              <!-- p1: 原子→分子  x=130, speed ~3x,      h=14,  y=340-14=326  -->
+              <rect x="106" y="326" width="48" height="14" fill="#bbb" rx="2"/>
+              <!-- p2: 分子→生命  x=207, speed ~6x,      h=23,  y=340-23=317  -->
+              <rect x="183" y="317" width="48" height="23" fill="#aaa" rx="2"/>
+              <!-- p3: 生命→脳    x=284, speed 1x(base), h=4(min visible), y=336  -->
+              <rect x="260" y="336" width="48" height="4" fill="#999" rx="2"/>
+              <!-- p4: 脳→言語    x=361, speed 30000x,   h=134, y=340-134=206  -->
+              <rect x="337" y="206" width="48" height="134" fill="#666" rx="2"/>
+              <!-- p5: 言語→計算機 x=438, speed 30000x,  h=134, y=206  -->
+              <rect x="414" y="206" width="48" height="134" fill="#444" rx="2"/>
+              <!-- p6: 計算機→AI   x=515, speed 4.3e7x,  h=229, y=340-229=111  -->
+              <rect x="491" y="111" width="48" height="229" fill="#222" rx="2"/>
+              <!-- p7: AI→AGI (projected)  x=592, speed 6e8x, h=263, y=340-263=77  -->
+              <rect x="568" y="77" width="48" height="263" fill="none" stroke="#111" stroke-width="2" stroke-dasharray="4 4" rx="2"/>
 
-              <!-- Connecting line -->
-              <polyline
-                class="line-path"
-                fill="none"
-                stroke="#111"
-                stroke-width="2.5"
-                stroke-linejoin="round"
-                stroke-linecap="round"
-                points="130,155 200,66 270,74 340,54 410,170 480,170 550,252"
-              />
-
-              <!-- Projected segment to AGI (dashed) -->
-              <line
-                x1="550" y1="252" x2="620" y2="295"
-                stroke="#111"
-                stroke-width="2"
-                stroke-dasharray="4 4"
-                stroke-linecap="round"
-              />
-
-              <!-- Data points -->
-              <g fill="#111">
-                <circle cx="130" cy="155" r="4"/>
-                <circle cx="200" cy="66"  r="4"/>
-                <circle cx="270" cy="74"  r="4"/>
-                <circle cx="340" cy="54"  r="4"/>
-                <circle cx="410" cy="170" r="4"/>
-                <circle cx="480" cy="170" r="4"/>
-                <circle cx="550" cy="252" r="5"/>
+              <!-- Speed annotations on bars -->
+              <g font-family="SF Mono, Menlo, monospace" font-size="10" fill="#111" text-anchor="middle" font-weight="700">
+                <text x="130" y="320">3x</text>
+                <text x="207" y="311">6x</text>
+                <text x="284" y="330" font-size="9" fill="#757575">1x</text>
+                <text x="361" y="200">3万x</text>
+                <text x="438" y="200">3万x</text>
+                <text x="515" y="105">4300万x</text>
+                <text x="592" y="71" fill="#757575" font-style="italic">6億x?</text>
               </g>
-              <!-- AGI point (open circle = prediction) -->
-              <circle cx="620" cy="295" r="5" fill="#fff" stroke="#111" stroke-width="2"/>
 
-              <!-- X-axis labels (two-line) -->
+              <!-- Duration labels below bars -->
+              <g font-family="HelveticaNeue, sans-serif" font-size="9" fill="#757575" text-anchor="middle">
+                <text x="130" y="356">10億年</text>
+                <text x="207" y="356">5億年</text>
+                <text x="284" y="356">30億年</text>
+                <text x="361" y="356">10万年</text>
+                <text x="438" y="356">10万年</text>
+                <text x="515" y="356">70年</text>
+                <text x="592" y="356" font-style="italic">~5年?</text>
+              </g>
+
+              <!-- X-axis labels -->
               <g font-family="HelveticaNeue, sans-serif" font-size="11" fill="#1a1a1a" text-anchor="middle">
-                <text x="130" y="320">物質</text><text x="130" y="334" fill="#757575">→原子</text>
-                <text x="200" y="320">原子</text><text x="200" y="334" fill="#757575">→分子</text>
-                <text x="270" y="320">分子</text><text x="270" y="334" fill="#757575">→生命</text>
-                <text x="340" y="320">生命</text><text x="340" y="334" fill="#757575">→脳</text>
-                <text x="410" y="320">脳</text><text x="410" y="334" fill="#757575">→言語</text>
-                <text x="480" y="320">言語</text><text x="480" y="334" fill="#757575">→計算機</text>
-                <text x="550" y="320">計算機</text><text x="550" y="334" fill="#757575">→AI</text>
-                <text x="620" y="320" font-style="italic">AI</text><text x="620" y="334" fill="#757575" font-style="italic">→AGI?</text>
+                <text x="130" y="374">原子→分子</text>
+                <text x="207" y="374">分子→生命</text>
+                <text x="284" y="374">生命→脳</text>
+                <text x="361" y="374">脳→言語</text>
+                <text x="438" y="374">言語→計算機</text>
+                <text x="515" y="374">計算機→AI</text>
+                <text x="592" y="374" font-style="italic">AI→AGI?</text>
               </g>
 
-              <!-- Annotations -->
-              <text x="340" y="44" font-family="HelveticaNeue, sans-serif" font-size="11" fill="#757575" font-style="italic" text-anchor="middle">数億〜数十億年の停滞域</text>
-              <text x="550" y="240" font-family="HelveticaNeue, sans-serif" font-size="11" fill="#111" font-weight="700" text-anchor="end">70年</text>
-              <text x="620" y="283" font-family="HelveticaNeue, sans-serif" font-size="10" fill="#757575" font-style="italic" text-anchor="middle">予測</text>
+              <!-- Arrow annotation showing acceleration trend -->
+              <path d="M 110 300 Q 350 280 600 90" fill="none" stroke="#111" stroke-width="1.5" stroke-dasharray="6 3" opacity="0.4"/>
+              <text x="620" y="85" font-family="HelveticaNeue, sans-serif" font-size="10" fill="#111" font-style="italic" text-anchor="start" opacity="0.6">加速トレンド</text>
             </svg>
             <figcaption class="chart-footer">
-              <p class="chart-caption">対数軸上で点が急角度に落ちていることに注目してほしい。同じ距離の下降が毎回10倍の短縮を意味する。生命から脳までの30億年と、計算機からAIまでの70年は、線形では比較できない桁違いの速度差だが、対数軸ではひとつのトレンドとして連続している。</p>
+              <p class="chart-caption">「生命→脳」を基準速度1xとしたとき、「計算機→AI」は4300万倍の速度で達成された。棒の高さが右に向かって急激に伸びていく視覚的パターンが、進化の加速構造を示している。破線の最後の棒はAI→AGIの予測値。</p>
               <p class="chart-source">AGI HUB composite. 宇宙論・進化生物学・計算機史の概算値</p>
             </figcaption>
           </figure>
@@ -669,27 +668,17 @@
           <p class="lead">
             このループが安定して回り始めた瞬間、進化の速度は生物学的な世代交代から切り離される。これが「再帰的知能」と呼ばれる概念の核心だ。自己を改良できる知能が、改良された自分を使ってさらに効率的に自分を改良する。改善が改善を加速する複利構造である。
           </p>
-          <div class="grid-2">
-            <div class="card">
-              <p><strong>従来の進化回路</strong></p>
-              <div class="bullets" style="margin-top: 16px">
-                <p class="point"><strong>生物進化</strong> 遺伝子のランダムな変異と自然選択。1世代あたり25年。改善の方向は偶然に依存し、意図的な設計が入る余地はない。</p>
-                <p class="point"><strong>文化進化</strong> 学習、伝達、制度化を通じた改良。1世代で大幅に加速したが、知識の伝達に教育コスト（15〜25年）がかかる。</p>
-                <p class="point"><strong>共通の制約</strong> どちらの回路でも、知能は進化の結果として受動的に生まれるものであり、自分自身を設計し直す主語にはなれなかった。</p>
-              </div>
-            </div>
-            <div class="card">
-              <p><strong>再帰的知能が成立する条件</strong></p>
-              <div class="bullets" style="margin-top: 16px">
-                <p class="point"><strong>自己観測</strong> 自身の推論過程を監視し、どこで失敗するかを定量的に計測できる。人間にとっての内省に相当するが、精度と速度が桁違い。</p>
-                <p class="point"><strong>自己修正</strong> 観測結果に基づいてアーキテクチャ、学習データ、ツール連携を改善できる。設計者が外にいなくても改善サイクルが回る。</p>
-                <p class="point"><strong>継承の自動化</strong> 改良結果が失われず、次のサイクルの出発点になる。改良が改良を加速する複利構造。教育の25年がデプロイの数分に置き換わる。</p>
-              </div>
+          <div class="card" style="max-width: 780px;">
+            <p><strong>従来の進化回路とその限界</strong></p>
+            <div class="bullets" style="margin-top: 16px">
+              <p class="point"><strong>生物進化</strong> 遺伝子のランダムな変異と自然選択。1世代あたり25年。改善の方向は偶然に依存し、意図的な設計が入る余地はない。</p>
+              <p class="point"><strong>文化進化</strong> 学習、伝達、制度化を通じた改良。1世代で大幅に加速したが、知識の伝達に教育コスト（15〜25年）がかかる。</p>
+              <p class="point"><strong>共通の制約</strong> どちらの回路でも、知能は進化の結果として受動的に生まれるものであり、自分自身を設計し直す主語にはなれなかった。</p>
             </div>
           </div>
           <figure class="info info-wide">
-            <p class="info-title">再帰的知能が成立する3条件は順序依存で連鎖する</p>
-            <p class="info-subtitle">本文で挙げた自己観測 → 自己修正 → 継承自動化の因果プロセス</p>
+            <p class="info-title">再帰的知能が成立する3条件 — 順序依存で連鎖する</p>
+            <p class="info-subtitle">この3条件が揃った瞬間、知能は進化の「結果」から進化の「主語」に変わる</p>
             <div class="process">
               <div class="step">
                 <div class="n">Step 01</div>
@@ -735,7 +724,7 @@
             理由は明快で、<strong>「知能」と「生命」は同じ概念ではない</strong>からだ。AGIは知能の人工化であって、生命の人工化ではない。チェスの最善手を計算する能力と、自分の存続を欲する意志は、論理的にまったく独立した性質である。前者を極限まで高めても、後者が自動的に生まれるわけではない。生命と呼ぶには、エネルギーを自力で調達する自己維持、外部設計者なしで改良を続ける自己改善、新しいインスタンスを自律的に生成する自己複製、他の知能システムと相互依存ネットワークを形成する生態系形成が必要になる。いまのAIはそのいずれも単独では満たしていない。
           </p>
           <p class="lead">
-            より蓋然性が高いのは、人間と電子知性が役割を分担するハイブリッド相だ。「何をやるか」「なぜやるか」の判断は人間が担い、「どうやるか」の探索と実行は電子知性が担う。飛行機のパイロットとオートパイロットの関係に近い。ただし、<strong>オートパイロットが自分自身の飛行アルゴリズムを改良できる</strong>という一点が質的に違う。パイロットは目的地を決め、天候を見て最終判断を下す。オートパイロットは最適経路を毎秒再計算し、前回のフライトから学んだことを即座に反映する。この協働構造が企業、政府、研究機関のすべてに浸透する過渡期が、おそらく数十年続く。
+            より蓋然性が高いのは、人間と電子知性が役割を分担するハイブリッド相だ。「何をやるか」「なぜやるか」の判断は人間が担い、「どうやるか」の探索と実行は電子知性が担う。飛行機のパイロットとオートパイロットの関係に近い。ただし、<strong>オートパイロットが自分自身の飛行アルゴリズムを改良できる</strong>という一点が質的に違う。パイロットは目的地を決め、天候を見て最終判断を下す。オートパイロットは最適経路を毎秒再計算し、前回のフライトから学んだことを即座に反映する。この協働構造が企業、政府、研究機関のすべてに浸透する速度は、再帰的知能の加速構造を考えれば、従来の技術普及とは桁が違う。年単位で社会全体の構造が書き換わっていく。
           </p>
           <div class="grid-3">
             <div class="card">
@@ -744,7 +733,7 @@
             </div>
             <div class="card">
               <span class="tag">B</span>
-              <p><strong>次に来る蓋然性が最も高い相</strong><br>人間が「何をやるか」「なぜやるか」を決め、電子知性が「どうやるか」を高速に探索・実行するハイブリッド体制。企業、政府、研究機関のすべてがこの構造へ移行する過渡期が、おそらく数十年続く。</p>
+              <p><strong>次に来る蓋然性が最も高い相</strong><br>人間が「何をやるか」「なぜやるか」を決め、電子知性が「どうやるか」を高速に探索・実行するハイブリッド体制。再帰的知能の加速を踏まえれば、このハイブリッド相への移行は数年で社会の基本構造を書き換えうる。</p>
             </div>
             <div class="card">
               <span class="tag">C</span>
@@ -758,7 +747,7 @@
             この区別は実用的にも重要だ。AGIを「やがて人間から独立する電子生命」と捉えれば、対策は封じ込めと制限になる。AGIを「人間と協働するハイブリッド知能の入口」と捉えれば、設計方針は共生のインタフェースへ向かう。同じ技術に対して、進化史の読み方ひとつで、開発の方向性がまったく変わる。
           </p>
           <div class="note">
-            宇宙は物質を生み、物質は生命を生み、生命は精神を生み、精神は技術を生み、いま技術が新しい知性の担体を生みつつある。AGIはその連鎖の次の相として理解できる。この視座を持つ実用的な価値は、AIを「賢い道具」として管理する発想から、「進化のパートナー」として共同設計する発想へ移れることにある。<strong>道具は壊れたら捨てる。パートナーとは、関係を設計する</strong>。
+            宇宙は物質を生み、物質は生命を生み、生命は精神を生み、精神は技術を生み、いま技術が新しい知性の担体を生みつつある。138億年かけて積み上がった加速構造は、再帰的知能の成立とともに臨界点を超える。この相転移は数十年の猶予を与えない。再帰ループが回り始めた瞬間から、変化は年単位ではなく月単位で社会構造を書き換えていく。だからこそ、AIを「賢い道具」として管理する発想では間に合わない。<strong>進化のパートナーとして、いま関係を設計し始める必要がある</strong>。
           </div>
         </div>
         <div class="footer reveal reveal-delay-3">

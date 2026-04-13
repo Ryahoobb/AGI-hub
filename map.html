@@ -42,36 +42,55 @@
     color: #999; margin-bottom: 32px;
   }
 
-  /* ══ Tabs ══ */
-  .tab-bar {
+  /* ══ Tab Cards ══ */
+  .tab-cards {
     max-width: 1200px; margin: 0 auto;
-    padding: 0 48px;
-    display: flex; gap: 0;
-    border-bottom: 2px solid #1a1a1a;
+    padding: 0 48px 48px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: #e5e5e5;
+    border: 1px solid #e5e5e5;
   }
-  .tab-btn {
-    padding: 14px 32px;
+  .tab-card {
+    background: #fff;
+    padding: 28px 24px;
+    cursor: pointer;
+    transition: background 0.2s ease;
+    border: none;
+    text-align: left;
+    font-family: inherit;
+    position: relative;
+  }
+  .tab-card:hover { background: #f7f7f7; }
+  .tab-card.active {
+    background: #1a1a1a;
+    color: #fff;
+  }
+  .tab-card-eyebrow {
     font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
-    font-size: 12px; font-weight: 700;
-    letter-spacing: 0.08em; text-transform: uppercase;
-    color: #999;
-    background: none; border: none; cursor: pointer;
-    border-bottom: 3px solid transparent;
-    margin-bottom: -2px;
-    transition: color 0.2s, border-color 0.2s;
+    font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: #999; margin-bottom: 10px;
   }
-  .tab-btn:hover { color: #1a1a1a; }
-  .tab-btn.active {
-    color: #1a1a1a;
-    border-bottom-color: #1a1a1a;
+  .tab-card.active .tab-card-eyebrow { color: rgba(255,255,255,0.4); }
+  .tab-card-title {
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 20px; font-weight: 700; line-height: 1.2;
+    margin-bottom: 8px; color: #1a1a1a;
   }
-  .tab-btn .tab-count {
-    display: inline-block;
-    margin-left: 6px;
-    font-size: 10px;
-    color: #999;
-    font-weight: 400;
+  .tab-card.active .tab-card-title { color: #fff; }
+  .tab-card-desc {
+    font-size: 13px; line-height: 1.55; color: #757575;
   }
+  .tab-card.active .tab-card-desc { color: rgba(255,255,255,0.6); }
+  .tab-card-arrow {
+    position: absolute; right: 24px; top: 28px;
+    font-family: "SF Mono", Menlo, monospace;
+    font-size: 14px; color: #e5e5e5;
+    transition: color 0.2s;
+  }
+  .tab-card:hover .tab-card-arrow { color: #1a1a1a; }
+  .tab-card.active .tab-card-arrow { color: rgba(255,255,255,0.3); }
 
   .tab-panel { display: none; }
   .tab-panel.active { display: block; }
@@ -580,8 +599,10 @@
   @media (max-width: 900px) {
     .map-header { padding: 32px 24px 0; }
     .map-title { font-size: 28px; }
-    .tab-bar { padding: 0 24px; }
-    .tab-btn { padding: 12px 16px; font-size: 11px; }
+    .tab-cards { padding: 0 24px 32px; }
+    .tab-card { padding: 20px 16px; }
+    .tab-card-title { font-size: 17px; }
+    .tab-card-desc { font-size: 12px; }
     .legend { padding: 16px 24px; gap: 16px; }
     .info-panel { padding: 0 24px 48px; }
     .grid-section { padding: 0 24px 64px; }
@@ -608,8 +629,10 @@
   @media (max-width: 480px) {
     .map-header { padding: 24px 16px 0; }
     .map-title { font-size: 24px; }
-    .tab-bar { padding: 0 16px; overflow-x: auto; }
-    .tab-btn { padding: 10px 12px; font-size: 10px; white-space: nowrap; }
+    .tab-cards { padding: 0 16px 24px; grid-template-columns: 1fr; }
+    .tab-card { padding: 16px; }
+    .tab-card-title { font-size: 16px; }
+    .tab-card-eyebrow { font-size: 9px; margin-bottom: 6px; }
     .legend { padding: 12px 16px; gap: 12px; flex-wrap: wrap; }
     .info-panel { padding: 0 16px 36px; }
     .grid-section { padding: 0 16px 48px; }
@@ -642,11 +665,26 @@
   <div class="map-date">3 Maps · Living Document</div>
 </div>
 
-<!-- ══ Tab Bar ══ -->
-<div class="tab-bar">
-  <button class="tab-btn active" data-tab="articles" onclick="switchTab('articles')">Articles<span class="tab-count">11 domains</span></button>
-  <button class="tab-btn" data-tab="thinkers" onclick="switchTab('thinkers')">Thinkers<span class="tab-count">25 people</span></button>
-  <button class="tab-btn" data-tab="pill" onclick="switchTab('pill')">Pill Map<span class="tab-count">7 levels</span></button>
+<!-- ══ Tab Cards ══ -->
+<div class="tab-cards">
+  <button class="tab-card active" data-tab="articles" onclick="switchTab('articles')">
+    <div class="tab-card-arrow">→</div>
+    <div class="tab-card-eyebrow">01 — Article Map</div>
+    <div class="tab-card-title">AGI議論の体系</div>
+    <div class="tab-card-desc">11ドメイン×58トピック。ネットワークグラフと全トピック一覧で論点の地形を俯瞰する。</div>
+  </button>
+  <button class="tab-card" data-tab="thinkers" onclick="switchTab('thinkers')">
+    <div class="tab-card-arrow">→</div>
+    <div class="tab-card-eyebrow">02 — Thinkers Map</div>
+    <div class="tab-card-title">論者ポジション</div>
+    <div class="tab-card-desc">25名の研究者・実業家をAGIタイムライン×p(doom)の2軸で配置する。</div>
+  </button>
+  <button class="tab-card" data-tab="pill" onclick="switchTab('pill')">
+    <div class="tab-card-arrow">→</div>
+    <div class="tab-card-eyebrow">03 — Pill Map</div>
+    <div class="tab-card-title">認知の深度測定</div>
+    <div class="tab-card-desc">7つの関門を越えるたびに次の層が開かれる。あなたはAGIの何層目にいるか。</div>
+  </button>
 </div>
 
 <!-- ══════════════════════════════════════
@@ -1191,10 +1229,11 @@
 <!-- Tab switching -->
 <script>
 function switchTab(tabId) {
-  document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
+  document.querySelectorAll('.tab-card').forEach(function(b) { b.classList.remove('active'); });
   document.querySelectorAll('.tab-panel').forEach(function(p) { p.classList.remove('active'); });
   document.querySelector('[data-tab="' + tabId + '"]').classList.add('active');
   document.getElementById('panel-' + tabId).classList.add('active');
+  document.getElementById('panel-' + tabId).scrollIntoView({ behavior: 'smooth', block: 'start' });
 
   // Init canvas on first show
   if (tabId === 'articles' && !window._graphInited) {

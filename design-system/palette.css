@@ -1499,3 +1499,103 @@ body.has-site-header { padding-top: 48px; }
 /* Monolith: .slideのtop位置は変えず、progressバーだけずらす */
 .has-site-header .progress { top: 48px; }
 .has-site-header .nav { top: calc(50% + 24px); }
+
+/* ═════════════════════════════════════════════════════
+   Mobile Responsive — Article / Dashboard Common
+   全ページ共通のスマホ対応。個別CSSより後に読み込まれるため
+   palette.css に置くことで一括適用できる。
+   ═════════════════════════════════════════════════════ */
+
+/* ── 480px: スマートフォン ── */
+@media (max-width: 480px) {
+  /* Article slides */
+  .slide {
+    padding: 40px 16px 32px !important;
+    gap: 20px !important;
+    min-height: auto;
+  }
+
+  /* Navigation dots — 非表示（スマホではスクロールが自然） */
+  .nav { display: none; }
+
+  /* Grid collapse */
+  .grid-2,
+  .grid-3,
+  .timeline,
+  .portraits,
+  .portrait-grid { grid-template-columns: 1fr !important; }
+
+  /* Compare tables — 横スクロール */
+  .compare {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .compare th,
+  .compare td { padding: 12px 10px; font-size: 13px; }
+
+  /* Hero images */
+  .hero { aspect-ratio: 16 / 9; }
+  .hero.img-fullbleed,
+  .hero.img-wide {
+    width: 100% !important;
+    margin: 0 !important;
+    left: 0 !important;
+    transform: none !important;
+    position: static !important;
+  }
+  .hero.img-side-by-side { grid-template-columns: 1fr !important; }
+
+  /* Typography scale-down */
+  .eyebrow { font-size: 9px; }
+  h2, .slide h2 { font-size: 20px !important; }
+
+  /* Inline grid in articles (style属性のgrid) */
+  [style*="grid-template-columns: repeat("] {
+    grid-template-columns: 1fr !important;
+  }
+  [style*="grid-template-columns:repeat("] {
+    grid-template-columns: 1fr !important;
+  }
+  [style*="grid-template-columns: 1fr 1fr"] {
+    grid-template-columns: 1fr !important;
+  }
+  [style*="grid-template-columns:1fr 1fr"] {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Float解除 */
+  [style*="float: right"],
+  [style*="float:right"],
+  [style*="float: left"],
+  [style*="float:left"] {
+    float: none !important;
+    width: 100% !important;
+    margin: 12px 0 !important;
+  }
+
+  /* Credits / footer */
+  .credits { padding: 24px 16px 48px; }
+
+  /* Feedback section */
+  .feedback-section { padding: 24px 16px !important; }
+
+  /* People grid (thinkers etc) */
+  .people-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 16px !important; }
+  .person-photo { width: 80px; height: 80px; }
+  .person-name { font-size: 13px; }
+}
+
+/* ── 768px: タブレット（articles共通の安全ネット） ── */
+@media (max-width: 768px) {
+  /* Compare tables — タブレットでも横スクロール準備 */
+  .compare {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Side-by-side images */
+  .hero.img-side-by-side { grid-template-columns: 1fr !important; }
+}

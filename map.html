@@ -589,17 +589,7 @@
   /* ══════════════════════════════════════
      TAB 4: Skeptics Field Guide
      ══════════════════════════════════════ */
-  .sk-hero { position: relative; min-height: 56vh; display: flex; align-items: center; justify-content: center; overflow: hidden; background: #0a0a0a; }
-  .sk-hero-bg { position: absolute; inset: 0; background: url('https://images.unsplash.com/photo-1505664194779-8beaceb93744?w=1400&h=800&fit=crop&q=80') center/cover; filter: grayscale(1) contrast(0.7) brightness(0.18); opacity: 0.7; }
-  .sk-hero-content { position: relative; z-index: 1; text-align: center; color: #fff; max-width: 760px; padding: 56px 48px; }
-  .sk-hero-eyebrow { font-family: "SF Mono", Menlo, monospace; font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(255,255,255,0.3); margin-bottom: 24px; }
-  .sk-hero-title { font-family: Georgia, "Times New Roman", serif; font-size: clamp(30px, 5vw, 50px); font-weight: 700; line-height: 1.08; letter-spacing: -0.5px; margin-bottom: 20px; }
-  .sk-hero-sub { font-size: 16px; line-height: 1.8; color: rgba(255,255,255,0.5); max-width: 540px; margin: 0 auto 32px; }
-  .sk-hero-counts { display: inline-flex; gap: 40px; font-family: "SF Mono", Menlo, monospace; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(255,255,255,0.25); }
-  .sk-hero-counts strong { display: block; font-size: 28px; letter-spacing: -1px; color: #fff; font-family: Georgia, serif; margin-bottom: 2px; }
   .sk-page { max-width: 1120px; margin: 0 auto; padding: 0 40px; }
-  .sk-intro { padding: 56px 0 40px; max-width: 680px; }
-  .sk-intro p { font-size: 16px; line-height: 1.85; color: #585858; margin-bottom: 16px; }
   /* Summary table */
   .sk-summary { margin-bottom: 64px; }
   .sk-summary-title { font-family: "SF Mono", Menlo, monospace; font-size: 12px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 2px solid #1a1a1a; }
@@ -708,7 +698,6 @@
     .pill-hero { min-height: 400px; }
     .pill-hero-content { padding: 0 24px; }
     .sk-page { padding: 0 24px; }
-    .sk-hero-content { padding: 44px 24px; }
     .sk-card-sections { grid-template-columns: 1fr; }
     .sk-sources-list { columns: 1; }
     .align-gap { grid-template-columns: 1fr; }
@@ -739,9 +728,6 @@
     .section-header { flex-direction: column; gap: 4px; }
     .section-header h2 { font-size: 20px; }
     .sk-page { padding: 0 16px; }
-    .sk-hero-content { padding: 32px 16px; }
-    .sk-hero-counts { gap: 20px; }
-    .sk-hero-counts strong { font-size: 22px; }
     .sk-card { grid-template-columns: 36px 1fr; }
     .sk-card-body { padding: 18px 16px 20px; }
     .sk-card-claim { font-size: 16px; padding-left: 12px; }
@@ -1328,29 +1314,9 @@
      TAB 4: Skeptics Field Guide
      ══════════════════════════════════════ -->
 <div class="tab-panel" id="panel-skeptics">
-
-<section class="sk-hero">
-  <div class="sk-hero-bg"></div>
-  <div class="sk-hero-content">
-    <div class="sk-hero-eyebrow">AGI HUB Special Feature</div>
-    <h1 class="sk-hero-title">懐疑の構造解剖</h1>
-    <p class="sk-hero-sub">AGIは来ない。産業爆発は起きない。制御できる。<br>それぞれの否定には、それぞれの構造的弱点がある。</p>
-    <div class="sk-hero-counts">
-      <div><strong>8</strong>カテゴリ</div>
-      <div><strong>38</strong>否定主張</div>
-      <div><strong>28</strong>関連記事</div>
-    </div>
-  </div>
-</section>
-
-<div class="sk-page">
-
-<div class="sk-intro">
-  <p>AGI否定論38の主張を構造的に可視化し、各主張に対応する事実と証拠を配置した。ニック・ボストロムが<em>Superintelligence</em>（2014）で体系化した論点を土台に、2024-2026年の経験的証拠で更新した。</p>
-</div>
+<div class="sk-page" style="padding-top:32px;">
 
 <div class="sk-summary">
-  <div class="sk-summary-title">38 Claims at a Glance</div>
   <table class="stbl">
     <thead><tr><th>#</th><th>否定主張</th><th>事実</th><th>記事</th></tr></thead>
     <tbody>

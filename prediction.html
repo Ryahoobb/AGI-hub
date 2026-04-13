@@ -7,6 +7,7 @@
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <title>あなたの予測は、世界とどれだけズレているか — AGI HUB</title>
 <meta name="description" content="AGIはいつ来るか。あなたの予測を入力し、世界の予測市場と比較する。">
+<link rel="stylesheet" href="design-system/palette.css">
 <style>
 :root {
   --black: #000;
@@ -188,37 +189,49 @@ h2 { font-size: clamp(28px, 4vw, 44px); font-weight: 800; line-height: 1.2; colo
   transform: translateX(-50%);
   z-index: 2;
 }
-.timeline-pin .pin-dot {
-  width: 24px; height: 24px;
-  background: var(--accent);
-  border: 4px solid #fff;
+.timeline-pin .pin-face {
+  width: 56px; height: 56px;
   border-radius: 50%;
-  box-shadow: 0 0 0 2px var(--accent), 0 4px 12px rgba(47, 43, 146, 0.3);
+  border: 3px solid #fff;
+  box-shadow: 0 0 0 2px var(--accent), 0 6px 16px rgba(47, 43, 146, 0.35);
+  background-color: var(--accent);
+  background-size: cover;
+  background-position: center top;
   position: relative;
   z-index: 2;
+  margin-top: -28px;
   transition: transform 0.3s var(--ease-bounce);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-family: "SF Mono", Menlo, monospace;
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 0.05em;
 }
-.timeline-pin:hover .pin-dot { transform: scale(1.3); }
-.timeline-pin.metaculus .pin-dot { background: var(--green); box-shadow: 0 0 0 2px var(--green), 0 4px 12px rgba(26, 122, 58, 0.3); }
-.timeline-pin.metaculus .pin-dot::after {
-  content: '★'; color: #fff; position: absolute; top: 50%; left: 50%;
-  transform: translate(-50%, -50%); font-size: 12px;
+.timeline-pin:hover .pin-face { transform: scale(1.15); z-index: 5; }
+.timeline-pin.metaculus .pin-face {
+  background: var(--green);
+  box-shadow: 0 0 0 2px var(--green), 0 6px 16px rgba(26, 122, 58, 0.35);
+  font-size: 22px;
 }
 
 .timeline-pin .pin-line {
   position: absolute;
-  top: 24px;
+  top: 28px;
   left: 50%;
   transform: translateX(-50%);
   width: 1px;
-  height: 32px;
+  height: 16px;
   background: var(--accent-line);
 }
 .timeline-pin.metaculus .pin-line { background: rgba(26, 122, 58, 0.4); }
 
 .timeline-pin .pin-card {
   position: absolute;
-  top: 60px;
+  top: 90px;
   left: 50%;
   transform: translateX(-50%);
   padding: 10px 14px;
@@ -852,10 +865,10 @@ h2 { font-size: clamp(28px, 4vw, 44px); font-weight: 800; line-height: 1.2; colo
         <span style="left: 100%;">2036+</span>
       </div>
 
-      <!-- CEO pins: 2026-2036 scale -->
-      <!-- 2026=0%, 2027=10%, 2028=20%, 2029=30%, 2032=60% -->
+      <!-- Forecaster pins: 2026-2036 scale -->
+      <!-- 2026=0%, 2027=10%, 2028=20%, 2029=30%, 2030=40%, 2032=60% -->
       <div class="timeline-pin" style="left: 0%;">
-        <div class="pin-dot"></div>
+        <div class="pin-face" style="background-image: url('images/people/dario-amodei.jpg');"></div>
         <div class="pin-line"></div>
         <div class="pin-card">
           <div class="pin-name">Amodei</div>
@@ -864,7 +877,7 @@ h2 { font-size: clamp(28px, 4vw, 44px); font-weight: 800; line-height: 1.2; colo
         </div>
       </div>
       <div class="timeline-pin" style="left: 10%;">
-        <div class="pin-dot"></div>
+        <div class="pin-face" style="background-image: url('images/people/sam-altman.jpg');"></div>
         <div class="pin-line"></div>
         <div class="pin-card">
           <div class="pin-name">Altman</div>
@@ -873,7 +886,7 @@ h2 { font-size: clamp(28px, 4vw, 44px); font-weight: 800; line-height: 1.2; colo
         </div>
       </div>
       <div class="timeline-pin" style="left: 20%;">
-        <div class="pin-dot"></div>
+        <div class="pin-face" style="background-image: url('images/people/demis-hassabis.jpg');"></div>
         <div class="pin-line"></div>
         <div class="pin-card">
           <div class="pin-name">Hassabis</div>
@@ -882,7 +895,7 @@ h2 { font-size: clamp(28px, 4vw, 44px); font-weight: 800; line-height: 1.2; colo
         </div>
       </div>
       <div class="timeline-pin" style="left: 30%;">
-        <div class="pin-dot"></div>
+        <div class="pin-face">JH</div>
         <div class="pin-line"></div>
         <div class="pin-card">
           <div class="pin-name">Huang</div>
@@ -890,10 +903,19 @@ h2 { font-size: clamp(28px, 4vw, 44px); font-weight: 800; line-height: 1.2; colo
           <div class="pin-meta">NVIDIA</div>
         </div>
       </div>
+      <div class="timeline-pin" style="left: 40%;">
+        <div class="pin-face" style="background-image: url('images/thinkers/bioshok3.jpg');"></div>
+        <div class="pin-line"></div>
+        <div class="pin-card">
+          <div class="pin-name">bioshok3</div>
+          <div class="pin-year">2030</div>
+          <div class="pin-meta">日本のAI解説者</div>
+        </div>
+      </div>
 
       <!-- Metaculus pin (value hidden until user answers) -->
-      <div class="timeline-pin metaculus" style="left: 60%; opacity: 0.4;">
-        <div class="pin-dot" style="background: var(--meta); box-shadow: 0 0 0 2px var(--meta), 0 4px 12px rgba(117, 117, 117, 0.3);"></div>
+      <div class="timeline-pin metaculus" style="left: 60%; opacity: 0.45;">
+        <div class="pin-face" style="background: var(--meta); box-shadow: 0 0 0 2px var(--meta), 0 6px 16px rgba(117, 117, 117, 0.3);">?</div>
         <div class="pin-line" style="background: rgba(117, 117, 117, 0.4);"></div>
         <div class="pin-card" style="border-top-color: var(--meta);">
           <div class="pin-name">Metaculus 中央値</div>
@@ -903,7 +925,7 @@ h2 { font-size: clamp(28px, 4vw, 44px); font-weight: 800; line-height: 1.2; colo
       </div>
 
       <!-- Bracket indicating CEO cluster -->
-      <div class="ceo-bracket" style="left: 0%; right: 70%;"></div>
+      <div class="ceo-bracket" style="left: 0%; right: 60%;"></div>
     </div>
 
     <p style="text-align:center;font-size:13px;color:var(--mid);margin-top:140px;max-width:620px;margin-left:auto;margin-right:auto;line-height:1.7;">
@@ -931,21 +953,8 @@ h2 { font-size: clamp(28px, 4vw, 44px); font-weight: 800; line-height: 1.2; colo
 
   <div class="big-stat-grid" id="world-data" style="display:none;">
 
-    <div class="big-stat reveal">
-      <span class="big-stat-tag">Metaculus Q5121</span>
-      <div class="big-stat-num">26<span class="unit">%</span></div>
-      <div class="big-stat-desc">2030年末までのAGI達成確率</div>
-      <div class="big-stat-meta">2,847 forecasters · updated 2026-04</div>
-      <div class="big-stat-bar-wrap">
-        <div class="big-stat-bar">
-          <div class="big-stat-bar-fill" style="width: 26%;"></div>
-        </div>
-        <div class="big-stat-bar-labels"><span>0%</span><span>50%</span><span>100%</span></div>
-      </div>
-    </div>
-
-    <div class="big-stat green-accent reveal reveal-delay-1">
-      <span class="big-stat-tag">Metaculus Q3479</span>
+    <div class="big-stat green-accent reveal">
+      <span class="big-stat-tag">Metaculus Q3479 · 中央値</span>
       <div class="big-stat-num">2032</div>
       <div class="big-stat-desc">AGI到達年の中央予測値</div>
       <div class="big-stat-meta">3,512 forecasters · 群衆の集合知</div>
@@ -962,7 +971,7 @@ h2 { font-size: clamp(28px, 4vw, 44px); font-weight: 800; line-height: 1.2; colo
       </div>
     </div>
 
-    <div class="big-stat alt reveal reveal-delay-2">
+    <div class="big-stat alt reveal reveal-delay-1">
       <span class="big-stat-tag">CEO Consensus Range</span>
       <div class="big-stat-num">2026<span class="unit" style="font-size:50%;"> → </span>29</div>
       <div class="big-stat-desc">主要AI企業CEOの予測レンジ</div>
@@ -975,7 +984,7 @@ h2 { font-size: clamp(28px, 4vw, 44px); font-weight: 800; line-height: 1.2; colo
       </div>
     </div>
 
-    <div class="big-stat amber-accent reveal reveal-delay-3">
+    <div class="big-stat amber-accent reveal reveal-delay-2">
       <span class="big-stat-tag">Capital Committed 2025</span>
       <div class="big-stat-num">$131<span class="unit">B</span></div>
       <div class="big-stat-desc">AIインフラへの賭け金（2025年実績）</div>
@@ -986,6 +995,22 @@ h2 { font-size: clamp(28px, 4vw, 44px); font-weight: 800; line-height: 1.2; colo
         <div class="invest-row"><span class="invest-entity">xAI Memphis</span><span class="invest-amount">$10B</span></div>
         <div class="invest-row"><span class="invest-entity">Figure Series C</span><span class="invest-amount">$1B</span></div>
       </div>
+    </div>
+
+    <div class="big-stat reveal reveal-delay-3">
+      <span class="big-stat-tag">Metaculus Q5121 · 確率</span>
+      <div class="big-stat-num">26<span class="unit">%</span></div>
+      <div class="big-stat-desc">2030年末までのAGI達成確率</div>
+      <div class="big-stat-meta">2,847 forecasters · 集合知の冷ややかな視線</div>
+      <div class="big-stat-bar-wrap">
+        <div class="big-stat-bar">
+          <div class="big-stat-bar-fill" style="width: 26%;"></div>
+        </div>
+        <div class="big-stat-bar-labels"><span>0%</span><span>50%</span><span>100%</span></div>
+      </div>
+      <p style="margin-top:14px;font-size:12px;line-height:1.6;color:var(--mid);">
+        中央値が2032年なら、2030年までは「ありうるが多数派ではない」位置づけ。CEOが2026-29を口にするほど、群衆との距離は広がる。
+      </p>
     </div>
 
   </div>
@@ -1264,12 +1289,17 @@ h2 { font-size: clamp(28px, 4vw, 44px); font-weight: 800; line-height: 1.2; colo
   var revealBtn = document.getElementById('reveal-world');
   var worldData = document.getElementById('world-data');
   var spoilerToggle = document.getElementById('spoiler-toggle');
+  var worldRevealedByUser = false;
   function revealWorldData() {
+    if (worldData.style.display === 'grid') return; // already revealed
     worldData.style.display = 'grid';
     spoilerToggle.style.display = 'none';
+    // Trigger reveal animations for big-stat cards inside (if not already)
+    worldData.querySelectorAll('.reveal').forEach(function(el) { el.classList.add('visible'); });
     // Also reveal timeline Metaculus value
     var metaPin = document.querySelector('.timeline-pin.metaculus');
     if (metaPin) {
+      metaPin.style.transition = 'opacity 0.6s var(--ease)';
       metaPin.style.opacity = '1';
       metaPin.querySelector('.pin-dot').style.background = 'var(--green)';
       metaPin.querySelector('.pin-dot').style.boxShadow = '0 0 0 2px var(--green), 0 4px 12px rgba(26, 122, 58, 0.3)';
@@ -1279,7 +1309,14 @@ h2 { font-size: clamp(28px, 4vw, 44px); font-weight: 800; line-height: 1.2; colo
       metaPin.querySelector('.pin-year').style.color = 'var(--green)';
     }
   }
-  revealBtn.addEventListener('click', revealWorldData);
+  revealBtn.addEventListener('click', function() {
+    worldRevealedByUser = true;
+    revealWorldData();
+    // Smooth scroll to world data so user sees what they revealed
+    setTimeout(function() {
+      worldData.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 100);
+  });
 
   // ── Reveal on scroll ──
   var reveals = document.querySelectorAll('.reveal');
@@ -1336,8 +1373,9 @@ h2 { font-size: clamp(28px, 4vw, 44px); font-weight: 800; line-height: 1.2; colo
       }).catch(function() {});
     }
 
+    var needsWorldReveal = !worldRevealedByUser;
     revealWorldData(); // reveal world forecast if still hidden
-    showResults(q1, q2, q3, q4, q5);
+    showResults(q1, q2, q3, q4, q5, needsWorldReveal);
     submitted = true;
     btn.textContent = '送信済み';
   });
@@ -1369,7 +1407,7 @@ h2 { font-size: clamp(28px, 4vw, 44px); font-weight: 800; line-height: 1.2; colo
     requestAnimationFrame(step);
   }
 
-  function showResults(q1, q2, q3, q4, q5) {
+  function showResults(q1, q2, q3, q4, q5, scrollToWorldFirst) {
     // Big diff hero
     var q1diff = q1 - META_Q5121_PROB;
     var diffMain = document.getElementById('diff-main');
@@ -1449,12 +1487,23 @@ h2 { font-size: clamp(28px, 4vw, 44px); font-weight: 800; line-height: 1.2; colo
 
     verdictEl.innerHTML = lines.join('<br><br>');
 
-    // Reveal + scroll
+    // Reveal results section
     var resultsSection = document.getElementById('results');
     resultsSection.classList.add('visible');
-    setTimeout(function() {
-      resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }, 200);
+
+    // Scroll strategy:
+    // - If user hasn't seen World Forecast yet, scroll there first so they
+    //   read it before reaching their personal results below.
+    // - Otherwise, jump directly to results.
+    if (scrollToWorldFirst) {
+      setTimeout(function() {
+        worldData.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 200);
+    } else {
+      setTimeout(function() {
+        resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 200);
+    }
   }
 })();
 </script>

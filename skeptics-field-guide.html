@@ -1,0 +1,1231 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<title>懐疑の構造解剖 — AGI HUB</title>
+<link rel="stylesheet" href="design-system/palette.css">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: HelveticaNeue, "Helvetica Neue", Helvetica, Arial,
+      "Hiragino Kaku Gothic ProN", sans-serif;
+    font-feature-settings: "palt";
+    background: #fff; color: #1a1a1a;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: inherit; text-decoration: none; }
+  .mono {
+    font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+    font-feature-settings: normal;
+  }
+
+  /* ── Hero ── */
+  .hero {
+    position: relative;
+    min-height: 70vh;
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
+    background: #0a0a0a;
+  }
+  .hero-bg {
+    position: absolute; inset: 0;
+    background: url('https://images.unsplash.com/photo-1505664194779-8beaceb93744?w=1400&h=800&fit=crop&q=80') center/cover;
+    filter: grayscale(1) contrast(0.7) brightness(0.2);
+    opacity: 0.6;
+  }
+  .hero-content {
+    position: relative; z-index: 1;
+    text-align: center; color: #fff;
+    max-width: 800px; padding: 64px 48px;
+  }
+  .hero-eyebrow {
+    font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+    font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: rgba(255,255,255,0.35); margin-bottom: 28px;
+  }
+  .hero-title {
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: clamp(32px, 5.5vw, 52px); font-weight: 700;
+    line-height: 1.1; letter-spacing: -0.5px; margin-bottom: 24px;
+  }
+  .hero-sub {
+    font-size: 17px; line-height: 1.75;
+    color: rgba(255,255,255,0.55); max-width: 600px; margin: 0 auto 36px;
+  }
+  .hero-stat {
+    display: inline-flex; gap: 48px;
+    font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+    font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: rgba(255,255,255,0.3);
+  }
+  .hero-stat strong {
+    display: block; font-size: 32px; letter-spacing: -1px;
+    color: #fff; font-family: Georgia, serif; margin-bottom: 4px;
+  }
+
+  /* ── Page container ── */
+  .page { max-width: 1200px; margin: 0 auto; padding: 0 48px; }
+
+  /* ── Intro ── */
+  .intro {
+    padding: 64px 0 48px;
+    max-width: 720px;
+  }
+  .intro p {
+    font-size: 17px; line-height: 1.8; color: #585858;
+    margin-bottom: 20px;
+  }
+  .intro p:last-child { margin-bottom: 0; }
+
+  /* ── Category nav ── */
+  .cat-nav {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1px; background: #e5e5e5; border: 1px solid #e5e5e5;
+    margin-bottom: 80px;
+  }
+  .cat-nav a {
+    background: #fff; padding: 20px 24px;
+    display: flex; align-items: baseline; gap: 12px;
+    transition: background 0.2s;
+  }
+  .cat-nav a:hover { background: #f7f7f7; }
+  .cat-num {
+    font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+    font-size: 11px; letter-spacing: 0.08em; color: #999;
+    flex-shrink: 0; min-width: 20px;
+  }
+  .cat-name { font-size: 15px; font-weight: 700; line-height: 1.35; }
+  .cat-count {
+    margin-left: auto; flex-shrink: 0;
+    font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+    font-size: 10px; color: #999; letter-spacing: 0.05em;
+  }
+
+  /* ── Domain section ── */
+  .domain {
+    margin-bottom: 80px;
+    scroll-margin-top: 80px;
+  }
+  .domain-header {
+    border-top: 3px solid #1a1a1a; padding-top: 20px;
+    margin-bottom: 12px;
+  }
+  .domain-title {
+    font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+    font-size: 13px; font-weight: 700; letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .domain-desc {
+    font-size: 15px; color: #757575; line-height: 1.6;
+    max-width: 720px; margin-bottom: 32px;
+  }
+
+  /* ── Claim cards ── */
+  .claims {
+    display: flex; flex-direction: column; gap: 2px;
+  }
+  .claim {
+    background: #fff; border: 1px solid #e5e5e5;
+    display: grid; grid-template-columns: 44px 1fr;
+    gap: 0; overflow: hidden;
+    transition: border-color 0.2s;
+  }
+  .claim:hover { border-color: #ccc; }
+
+  .claim-num {
+    background: #1a1a1a; color: #fff;
+    font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+    font-size: 12px; font-weight: 700;
+    display: flex; align-items: flex-start; justify-content: center;
+    padding-top: 24px;
+    letter-spacing: 0.02em;
+  }
+
+  .claim-body { padding: 24px 28px; }
+
+  .claim-text {
+    font-size: 18px; font-weight: 700; line-height: 1.4;
+    margin-bottom: 16px; color: #1a1a1a;
+  }
+  .claim-text::before { content: "\201C"; color: #c4c4c4; }
+  .claim-text::after { content: "\201D"; color: #c4c4c4; }
+
+  .claim-section {
+    margin-bottom: 16px;
+  }
+  .claim-section:last-child { margin-bottom: 0; }
+
+  .section-label {
+    font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+    font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase;
+    color: #999; margin-bottom: 6px;
+  }
+  .section-body {
+    font-size: 14px; line-height: 1.7; color: #585858;
+  }
+  .section-body strong { color: #1a1a1a; font-weight: 600; }
+
+  /* ── Bostrom note ── */
+  .bostrom-note {
+    margin-top: 10px;
+    padding: 10px 14px;
+    background: #f7f7f7;
+    border-left: 2px solid #d9d9d9;
+    font-size: 13px; line-height: 1.6; color: #757575;
+  }
+  .bostrom-note .bn-label {
+    font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+    font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: #999; margin-bottom: 3px;
+  }
+
+  /* ── Article links ── */
+  .article-links {
+    display: flex; flex-wrap: wrap; gap: 8px;
+    margin-top: 12px;
+  }
+  .article-link {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 6px 12px;
+    border: 1px solid #e5e5e5;
+    font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+    font-size: 11px; letter-spacing: 0.03em;
+    color: #1a1a1a; font-weight: 600;
+    transition: all 0.2s;
+  }
+  .article-link:hover {
+    background: #1a1a1a; color: #fff; border-color: #1a1a1a;
+  }
+  .article-link .al-title {
+    font-family: HelveticaNeue, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-weight: 400; color: #757575;
+    max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+  .article-link:hover .al-title { color: rgba(255,255,255,0.6); }
+
+  /* ── Source strip ── */
+  .source-strip {
+    border-top: 1px solid #e5e5e5;
+    padding: 48px 0 64px;
+    margin-top: 80px;
+  }
+  .source-strip-title {
+    font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+    font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase;
+    color: #999; margin-bottom: 20px;
+  }
+  .source-list {
+    columns: 2; column-gap: 48px;
+    font-size: 14px; line-height: 2; color: #585858;
+    list-style: none;
+  }
+  .source-list li { break-inside: avoid; }
+  .source-list .src-author { font-weight: 600; color: #1a1a1a; }
+
+  /* ── Responsive ── */
+  @media (max-width: 900px) {
+    .page { padding: 0 24px; }
+    .hero-content { padding: 48px 24px; }
+    .hero-stat { gap: 24px; }
+    .cat-nav { grid-template-columns: 1fr; }
+    .claim { grid-template-columns: 36px 1fr; }
+    .claim-body { padding: 20px; }
+    .claim-text { font-size: 16px; }
+    .source-list { columns: 1; }
+  }
+  @media (max-width: 480px) {
+    .page { padding: 0 16px; }
+    .hero-content { padding: 36px 16px; }
+    .hero-stat { flex-direction: column; gap: 16px; }
+    .intro { padding: 40px 0 32px; }
+    .claim-num { font-size: 10px; padding-top: 20px; }
+    .claim-body { padding: 16px; }
+    .article-link .al-title { display: none; }
+  }
+</style>
+</head>
+<body class="has-site-header">
+
+<div id="site-header-mount"><header style="font:500 15px/48px Inter,sans-serif;padding:0 24px;border-bottom:1px solid #222;color:#aaa">AGI HUB</header></div>
+<script src="partials/header.js" defer></script>
+
+<!-- ═══ Hero ═══ -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">AGI HUB Special Feature</div>
+    <h1 class="hero-title">懐疑の構造解剖</h1>
+    <p class="hero-sub">AGIは来ない。産業爆発は起きない。制御できる。——それぞれの否定には、それぞれの構造的弱点がある。8つの壁、38の主張、そしてそこにある証拠。</p>
+    <div class="hero-stat">
+      <div><strong>8</strong>カテゴリ</div>
+      <div><strong>38</strong>否定主張</div>
+      <div><strong>28</strong>関連記事</div>
+    </div>
+  </div>
+</section>
+
+<div class="page">
+
+<!-- ═══ Intro ═══ -->
+<div class="intro">
+  <p>AGIを否定する論拠には構造がある。「統計的オウムに過ぎない」から「規制で止められる」まで、懐疑の主張は8つのカテゴリに分類でき、それぞれの内部に具体的な論点が存在する。</p>
+  <p>このページは、各否定主張の構造を可視化し、それに対応する実現根拠とAGI HUBの関連記事を配置したものだ。ニック・ボストロムが<em>Superintelligence</em>（2014）で体系化した論点整理を土台に、2024-2026年の経験的証拠で更新した。</p>
+  <p>目的は否定論者を論破することではない。どの懐疑がどこで壊れるかの地図を描くことだ。</p>
+</div>
+
+<!-- ═══ Category Navigation ═══ -->
+<nav class="cat-nav">
+  <a href="#cat-1"><span class="cat-num">I</span><span class="cat-name">能力の壁</span><span class="cat-count">8</span></a>
+  <a href="#cat-2"><span class="cat-num">II</span><span class="cat-name">時間の壁</span><span class="cat-count">5</span></a>
+  <a href="#cat-3"><span class="cat-num">III</span><span class="cat-name">経済の壁</span><span class="cat-count">6</span></a>
+  <a href="#cat-4"><span class="cat-num">IV</span><span class="cat-name">歴史の壁</span><span class="cat-count">4</span></a>
+  <a href="#cat-5"><span class="cat-num">V</span><span class="cat-name">制度の壁</span><span class="cat-count">4</span></a>
+  <a href="#cat-6"><span class="cat-num">VI</span><span class="cat-name">安全の壁</span><span class="cat-count">6</span></a>
+  <a href="#cat-7"><span class="cat-num">VII</span><span class="cat-name">物理の壁</span><span class="cat-count">3</span></a>
+  <a href="#cat-8"><span class="cat-num">VIII</span><span class="cat-name">認識の壁</span><span class="cat-count">2</span></a>
+</nav>
+
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- I. 能力の壁 -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<section class="domain" id="cat-1">
+  <div class="domain-header">
+    <h2 class="domain-title">I — 能力の壁 &nbsp;<span style="font-weight:400;color:#999">「知能の壁は越えられない」</span></h2>
+  </div>
+  <p class="domain-desc">現在のAI技術には原理的な限界があり、汎用知能には到達しないという主張群。ボストロムはSuperintelligence第1章で、これらの限界論の多くが「最悪ケースの計算量理論」と「知能の定義問題」に依拠しており、人間の脳が最適解ではなくヒューリスティクスで動作している事実を見落としていると指摘した。</p>
+
+  <div class="claims">
+
+    <!-- 01 -->
+    <div class="claim">
+      <div class="claim-num">01</div>
+      <div class="claim-body">
+        <div class="claim-text">統計的オウムに過ぎない——LLMは理解していない</div>
+        <div class="claim-section">
+          <div class="section-label">構造的弱点</div>
+          <div class="section-body">「理解」の定義が存在しない。Bender & Koller（2020）の「確率的オウム」批判は、理解を前提にした上で不在を主張するが、理解そのものの操作的定義を提供していない。行動主義的に見れば、<strong>機能的に区別できない汎化能力</strong>は「理解の不在」の証拠にならない。</div>
+        </div>
+        <div class="claim-section">
+          <div class="section-label">実現根拠</div>
+          <div class="section-body">LLMは訓練データに存在しない新規タスクへの汎化を示す。ARC-AGI、数学オリンピック、コード生成での性能は、単純なパターンマッチでは説明できない。ボストロムの直交性テーゼが示す通り、<strong>意識や理解の有無は能力の発揮と独立</strong>している。</div>
+        </div>
+        <div class="bostrom-note">
+          <div class="bn-label">Bostrom</div>
+          直交性テーゼ——知能の水準と最終目標は論理的に独立。意識・理解の有無は知能の操作的定義に影響しない。操作的定義（広範な認知タスクでの人間超越）で十分とした。<em>Superintelligence</em>, Ch.1, Ch.7
+        </div>
+        <div class="article-links">
+          <a class="article-link" href="articles/02-agi-evolution.html"><span>No.02</span><span class="al-title">宇宙進化の次相</span></a>
+          <a class="article-link" href="articles/13-dissipative-controllability.html"><span>No.13</span><span class="al-title">散逸的制御可能性</span></a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 02 -->
+    <div class="claim">
+      <div class="claim-num">02</div>
+      <div class="claim-body">
+        <div class="claim-text">スケーリングは壁に当たった——大きくしても知能にならない</div>
+        <div class="claim-section">
+          <div class="section-label">構造的弱点</div>
+          <div class="section-body">「スケーリングが死んだ」は<strong>学習時スケーリング</strong>（パラメータ数の線形拡大）だけを見ている。テスト時計算（Chain-of-Thought、探索）、合成データ生成、エージェント的ツール使用という3つの迂回路が2024年以降に開いた。壁は1つではなく、迂回可能。</div>
+        </div>
+        <div class="claim-section">
+          <div class="section-label">実現根拠</div>
+          <div class="section-body">OpenAI o1/o3、Claude 3.5/4系列、Gemini 2.5 Proはいずれもテスト時計算のスケーリングで前世代を大幅に上回る性能を達成。学習時計算の壁はスケーリング全体の壁ではなかった。</div>
+        </div>
+        <div class="article-links">
+          <a class="article-link" href="articles/15-scaling-never-satisfies.html"><span>No.15</span><span class="al-title">スケーリングはなぜ止まらないのか</span></a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 03 -->
+    <div class="claim">
+      <div class="claim-num">03</div>
+      <div class="claim-body">
+        <div class="claim-text">高品質データが枯渇する——学習材料の限界</div>
+        <div class="claim-section">
+          <div class="section-label">構造的弱点</div>
+          <div class="section-body">人間が生成したテキストデータの有限性は事実だが、これが唯一のデータ源であるという前提が誤り。<strong>合成データ、自己対戦（self-play）、ツール使用による環境探索</strong>がデータの自律生成を可能にしている。AlphaGoは人間の棋譜を超えた段階で、自己対戦のみで飛躍的に向上した。</div>
+        </div>
+        <div class="claim-section">
+          <div class="section-label">実現根拠</div>
+          <div class="section-body">Phi-3（Microsoft）は合成データで訓練され、はるかに大きなモデルに匹敵する性能を達成。数学・コード領域では合成データが人間データを超える品質を持つことが実証済み。</div>
+        </div>
+        <div class="article-links">
+          <a class="article-link" href="articles/15-scaling-never-satisfies.html"><span>No.15</span><span class="al-title">3つの加速路</span></a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 04 -->
+    <div class="claim">
+      <div class="claim-num">04</div>
+      <div class="claim-body">
+        <div class="claim-text">推論も計画もできない——パターンマッチでは知的作業は無理</div>
+        <div class="claim-section">
+          <div class="section-label">構造的弱点</div>
+          <div class="section-body">2023年までのLLMへの批判としては正当だった。しかしo1以降の<strong>テスト時計算スケーリング</strong>が状況を変えた。推論チェーンの長さと多様性を増やすことで、数学・論理パズル・計画立案の性能が不連続に向上。</div>
+        </div>
+        <div class="claim-section">
+          <div class="section-label">実現根拠</div>
+          <div class="section-body">o3はARC-AGIベンチマークで人間レベルに接近（87.5%）。FrontierMathでは数学研究者でも数時間かかる問題の一部を解く。IMOレベルの数学問題でゴールドメダル水準に到達。</div>
+        </div>
+        <div class="article-links">
+          <a class="article-link" href="articles/15-scaling-never-satisfies.html"><span>No.15</span><span class="al-title">スケーリング</span></a>
+          <a class="article-link" href="articles/18-ten-year-impossibility-illusion.html"><span>No.18</span><span class="al-title">10年の幻想</span></a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 05 -->
+    <div class="claim">
+      <div class="claim-num">05</div>
+      <div class="claim-body">
+        <div class="claim-text">身体がなければ世界を理解できない——Embodied Cognition</div>
+        <div class="claim-section">
+          <div class="section-label">構造的弱点</div>
+          <div class="section-body">身体性仮説は認知科学の有力な仮説だが、<strong>必要条件であるという証明は存在しない</strong>。マルチモーダルモデルは視覚・聴覚・テキストの統合で「身体性なしの世界モデル」を構築している。ロボティクスとの接続は身体性の有無ではなく、センサーデータの統合問題。</div>
+        </div>
+        <div class="claim-section">
+          <div class="section-label">実現根拠</div>
+          <div class="section-body">GoogleのRT-2、Physical IntelligenceのπO/πO.5はゼロショット汎化を実証。言語モデルで学習した知識がロボット制御に転移する。身体経験なしに物理的推論が可能であることを示す直接的証拠。</div>
+        </div>
+        <div class="article-links">
+          <a class="article-link" href="articles/18-ten-year-impossibility-illusion.html"><span>No.18</span><span class="al-title">10年の幻想</span></a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 06 -->
+    <div class="claim">
+      <div class="claim-num">06</div>
+      <div class="claim-body">
+        <div class="claim-text">意識がなければ汎用知能ではない</div>
+        <div class="claim-section">
+          <div class="section-label">構造的弱点</div>
+          <div class="section-body">意識（phenomenal consciousness）と知能（cognitive capability）を混同している。ボストロムの<strong>直交性テーゼ</strong>が示す通り、知能の水準と主観的経験は論理的に独立。意識なしに超人的な目標達成能力を持つシステムは原理的に可能であり、そのようなシステムは意識の有無に関わらず実世界に影響を及ぼす。</div>
+        </div>
+        <div class="claim-section">
+          <div class="section-label">実現根拠</div>
+          <div class="section-body">LLMに意識があるかの哲学的議論は決着していないが、意識の有無と無関係に高度な知的タスクを遂行できることは経験的事実。進化・複雑性の熱力学的フレームで知能を再定義すれば、意識は知能の必要条件ではなく付随現象の可能性がある。</div>
+        </div>
+        <div class="bostrom-note">
+          <div class="bn-label">Bostrom</div>
+          直交性テーゼ——知能のあらゆる水準と、あらゆる最終目標の組み合わせが原理的に可能。意識・道徳的判断能力は知能と独立。<em>Superintelligence</em>, Ch.7
+        </div>
+        <div class="article-links">
+          <a class="article-link" href="articles/13-dissipative-controllability.html"><span>No.13</span><span class="al-title">散逸的制御可能性</span></a>
+          <a class="article-link" href="articles/02-agi-evolution.html"><span>No.02</span><span class="al-title">宇宙進化の次相</span></a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 07 -->
+    <div class="claim">
+      <div class="claim-num">07</div>
+      <div class="claim-body">
+        <div class="claim-text">汎用推論はNP困難——計算複雑性が原理的障壁</div>
+        <div class="claim-section">
+          <div class="section-label">構造的弱点</div>
+          <div class="section-body">計算複雑性理論は<strong>最悪ケースの下界</strong>を示すが、現実の知的作業の典型ケースを記述しない。人間の脳は最適解ではなくヒューリスティクスで動作している。NP困難だから不可能、という推論は「チェスの全探索は不可能→チェスは打てない」と同型の誤謬。</div>
+        </div>
+        <div class="claim-section">
+          <div class="section-label">実現根拠</div>
+          <div class="section-body">深層学習の成功は、NP困難な問題空間でも実用的な近似が高速に得られることの直接的証拠。タンパク質構造予測（AlphaFold）、定理証明（Lean連携AI）、コンパイラ最適化など。</div>
+        </div>
+        <div class="bostrom-note">
+          <div class="bn-label">Bostrom</div>
+          計算量理論の最悪ケースは実際の知的作業を記述しない。超知能もヒューリスティクスを使えばよい。<em>Superintelligence</em>, Ch.1
+        </div>
+        <div class="article-links">
+          <a class="article-link" href="articles/15-scaling-never-satisfies.html"><span>No.15</span><span class="al-title">スケーリング</span></a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 08 -->
+    <div class="claim">
+      <div class="claim-num">08</div>
+      <div class="claim-body">
+        <div class="claim-text">AGIの「G」は定義できない——知能は測れない</div>
+        <div class="claim-section">
+          <div class="section-label">構造的弱点</div>
+          <div class="section-body">「完璧な定義がないから実現を議論できない」は<strong>定義の完全性と現象の実在を混同</strong>している。「生命」の完璧な定義もないが、生物学は成立している。ボストロムは操作的定義——広範な認知タスクで人間を上回る能力——で十分と処理した。</div>
+        </div>
+        <div class="claim-section">
+          <div class="section-label">実現根拠</div>
+          <div class="section-body">MMLU、ARC-AGI、SWE-bench、各種国家試験、数学オリンピック。完全な定義なしでも能力の比較は可能であり、実際に行われている。DeepMindの「Levels of AGI」（2023）は段階的な操作的定義を提示。</div>
+        </div>
+        <div class="article-links">
+          <a class="article-link" href="articles/12-agi-narrative-meta-structure.html"><span>No.12</span><span class="al-title">語る者の資格</span></a>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /claims -->
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- II. 時間の壁 -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<section class="domain" id="cat-2">
+  <div class="domain-header">
+    <h2 class="domain-title">II — 時間の壁 &nbsp;<span style="font-weight:400;color:#999">「来るとしても遠い未来」</span></h2>
+  </div>
+  <p class="domain-desc">AGI実現の時期に関する懐疑。ボストロムはSuperintelligenceでテイクオフ速度を3シナリオ（slow/moderate/fast）に分類し、「いつ来るか」より「来たときに準備ができているか」を問題にした。</p>
+
+  <div class="claims">
+
+    <!-- 09 -->
+    <div class="claim">
+      <div class="claim-num">09</div>
+      <div class="claim-body">
+        <div class="claim-text">専門家の予測は常に楽観的すぎた</div>
+        <div class="claim-section">
+          <div class="section-label">構造的弱点</div>
+          <div class="section-body">「常に楽観的だった」は選択的な歴史の引用。1960-70年代の過度な楽観は事実だが、<strong>2010年代以降の予測は逆に保守的すぎた</strong>。2020年時点でGPT-4級の能力を正確に予測した専門家はほぼいない。Metaculus中央値は2040年代→2027年前後に急速に前倒しされた。</div>
+        </div>
+        <div class="claim-section">
+          <div class="section-label">実現根拠</div>
+          <div class="section-body">AI Impacts（2023）の専門家調査で、AGI到達時期の中央値は2040年前後。ただし2022年調査→2023年調査で10年以上前倒し。予測の不確実性自体が、「来ない」ことの証拠にはならない。</div>
+        </div>
+        <div class="article-links">
+          <a class="article-link" href="articles/04-takeoff-speed-debate.html"><span>No.04</span><span class="al-title">テイクオフ速度論</span></a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 10 -->
+    <div class="claim">
+      <div class="claim-num">10</div>
+      <div class="claim-body">
+        <div class="claim-text">収穫逓減——知能改善は対数的に鈍化する</div>
+        <div class="claim-section">
+          <div class="section-label">構造的弱点</div>
+          <div class="section-body">収穫逓減の実在はスケーリング則研究が確認している。ボストロムもこれを否定しなかった。しかし<strong>逓減があっても人間を大幅に超える到達点は存在しうる</strong>。さらに、ハードウェア改善×ソフトウェア改善×データ改善の掛け算効果は、単一軸の逓減を相殺する。</div>
+        </div>
+        <div class="claim-section">
+          <div class="section-label">実現根拠</div>
+          <div class="section-body">Chinchilla論文（2022）はパラメータとデータの対数的関係を示したが、同時にアーキテクチャ改善やデータ品質向上で勾配を再急峻化できることも示唆。テスト時計算という新軸の発見は逓減を迂回する経路。</div>
+        </div>
+        <div class="bostrom-note">
+          <div class="bn-label">Bostrom</div>
+          逓減があっても人間を大幅に超える水準に達しうる。逓減の勾配が緩やかなら、爆発的でなくとも超知能には到達する。<em>Superintelligence</em>, Ch.4
+        </div>
+        <div class="article-links">
+          <a class="article-link" href="articles/15-scaling-never-satisfies.html"><span>No.15</span><span class="al-title">スケーリング</span></a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 11 -->
+    <div class="claim">
+      <div class="claim-num">11</div>
+      <div class="claim-body">
+        <div class="claim-text">低い果実を取り尽くした——ここからは難しい</div>
+        <div class="claim-section">
+          <div class="section-label">構造的弱点</div>
+          <div class="section-body">Transformerアーキテクチャの発見は「低い果実」だったかもしれない。しかし<strong>果実は木の上だけに生るのではなく、別の木が生えてくる</strong>。テスト時計算、合成データ、マルチエージェント、MoEはいずれもTransformer以降に開かれた新しい木。</div>
+        </div>
+        <div class="claim-section">
+          <div class="section-label">実現根拠</div>
+          <div class="section-body">2024-2025年だけで、テスト時計算スケーリング、合成データ訓練、エージェント的ツール使用、マルチモーダル統合、long context（100万トークン超）が実用化。新しい研究軸の発見速度は加速している。</div>
+        </div>
+        <div class="article-links">
+          <a class="article-link" href="articles/15-scaling-never-satisfies.html"><span>No.15</span><span class="al-title">3つの加速路</span></a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 12 -->
+    <div class="claim">
+      <div class="claim-num">12</div>
+      <div class="claim-body">
+        <div class="claim-text">10年で自己改善ループは起きない</div>
+        <div class="claim-section">
+          <div class="section-label">構造的弱点</div>
+          <div class="section-body"><strong>線形外挿バイアス</strong>が最も強く作用する領域。専門知識が深いほど、現在のパラダイム内での漸進的改善を想定し、パラダイムシフト自体を過小評価する。ロボティクスの25年間の停滞から「今後も同じ」と外挿するのは、2006年のスマートフォン不在から「携帯電話は通話デバイスのまま」と外挿するのと同じ構造。</div>
+        </div>
+        <div class="claim-section">
+          <div class="section-label">実現根拠</div>
+          <div class="section-body">RT-2（2023）からπO（2024）までの18ヶ月でゼロショット汎化が実証された。AIがAI研究を加速する構図（AI-assisted AI research）は既に現実化。Anthropic、Google DeepMindは社内でAIをAI開発に投入している。</div>
+        </div>
+        <div class="bostrom-note">
+          <div class="bn-label">Bostrom</div>
+          シードAIに必要な自己改善能力の閾値は完全なAGIより低い可能性がある。局所的な最適化能力だけでも再帰的改善の起点になりうる。<em>Superintelligence</em>, Ch.4
+        </div>
+        <div class="article-links">
+          <a class="article-link" href="articles/18-ten-year-impossibility-illusion.html"><span>No.18</span><span class="al-title">10年の幻想</span></a>
+          <a class="article-link" href="articles/04-takeoff-speed-debate.html"><span>No.04</span><span class="al-title">テイクオフ速度論</span></a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 13 -->
+    <div class="claim">
+      <div class="claim-num">13</div>
+      <div class="claim-body">
+        <div class="claim-text">テイクオフ速度の予測が1000倍ズレる——誰も正確に予測できない</div>
+        <div class="claim-section">
+          <div class="section-label">構造的弱点</div>
+          <div class="section-body">予測のばらつきは「予測不能」の証拠ではなく、<strong>前提の違いの証拠</strong>。再帰的改善速度、ボトルネックの所在、制度応答速度の3仮定の組み合わせで予測が分岐する。どの仮定が正しいかは経験的に検証可能であり、2024年以降のデータは速いシナリオ寄りに動いている。</div>
+        </div>
+        <div class="claim-section">
+          <div class="section-label">実現根拠</div>
+          <div class="section-body">ボストロムのslow/moderate/fastの3分類で、現在はmoderate takeoff軌道に最も近い。アルゴリズム改善とハードウェア進歩の両方が寄与し、研究コミュニティ内で能力が段階的に拡散している。</div>
+        </div>
+        <div class="article-links">
+          <a class="article-link" href="articles/04-takeoff-speed-debate.html"><span>No.04</span><span class="al-title">テイクオフ速度論</span></a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- III. 経済の壁 -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<section class="domain" id="cat-3">
+  <div class="domain-header">
+    <h2 class="domain-title">III — 経済の壁 &nbsp;<span style="font-weight:400;color:#999">「仮にAGIが来ても経済は変わらない」</span></h2>
+  </div>
+  <p class="domain-desc">技術的なAGI到達を認めた上で、経済・産業へのインパクトを否定する主張群。「自動化可能」と「自動化される」の間には巨大なギャップがあるという立場。</p>
+
+  <div class="claims">
+
+    <!-- 14 -->
+    <div class="claim">
+      <div class="claim-num">14</div>
+      <div class="claim-body">
+        <div class="claim-text">自動化率77%は誇張されている</div>
+        <div class="claim-section">
+          <div class="section-label">構造的弱点</div>
+          <div class="section-body">77%（Anthropic, 2024）を局所的な数字として退ける態度は正当だが、<strong>重要なのは率ではなく順番</strong>。ボトルネック仕事が自動化されると、チェーンの下流が一斉に動く。10%の自動化でも、それがバリューチェーンのボトルネックであれば全体の生産関数が書き換わる。</div>
+        </div>
+        <div class="claim-section">
+          <div class="section-label">実現根拠</div>
+          <div class="section-body">数千億ドルの資本がこの段階的自動化に投入されている。法務レビュー、コード生成、カスタマーサポート、データ分析は既にAI主導に移行しつつあり、これらはホワイトカラー業務のボトルネック工程。</div>
+        </div>
+        <div class="article-links">
+          <a class="article-link" href="articles/26-automation-bottleneck-regime.html"><span>No.26</span><span class="al-title">自動化率77%の誤読</span></a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 15 -->
+    <div class="claim">
+      <div class="claim-num">15</div>
+      <div class="claim-body">
+        <div class="claim-text">物理世界の仕事はAIで代替できない</div>
+        <div class="claim-section">
+          <div class="section-label">構造的弱点</div>
+          <div class="section-body"><strong>100%自動化は産業爆発の必要条件ではない</strong>。Jonesモデルによれば、ホワイトカラーの完全代替（50-100倍生産性）とブルーカラーのAI支援拡張（1.5-2倍）の組み合わせで、高度経済成長級（年率+3.5-4%）の変化が起きうる。閉ループ不要。</div>
+        </div>
+        <div class="claim-section">
+          <div class="section-label">実現根拠</div>
+          <div class="section-body">産業革命はすべての仕事を機械化したから起きたのではない。紡績機→蒸気機関→鉄道というボトルネックの連続突破で起きた。AIによるホワイトカラー自動化は同構造。</div>
+        </div>
+        <div class="article-links">
+          <a class="article-link" href="articles/11-industrial-explosion-before-agi.html"><span>No.11</span><span class="al-title">産業爆発はAGIを待たない</span></a>
+          <a class="article-link" href="articles/08-agi-self-replication-premise.html"><span>No.08</span><span class="al-title">ロボット自己複製の前提</span></a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 16 -->
+    <div class="claim">
+      <div class="claim-num">16</div>
+      <div class="claim-body">
+        <div class="claim-text">ロボット自己複製は工学的に不可能</div>
+        <div class="claim-section">
+          <div class="section-label">構造的弱点</div>
+          <div class="section-body">採掘・精錬・組立の完全無人化が困難なのは事実であり、AGI HUB No.08がこの工学的困難を正面から扱っている。しかし<strong>産業爆発にロボット自己複製は必須ではない</strong>。部分自動化の組み合わせで閾値を超える経路が存在する。</div>
+        </div>
+        <div class="claim-section">
+          <div class="section-label">実現根拠</div>
+          <div class="section-body">No.08は自己複製の困難を認めた上で、No.11が部分ループでの閾値越えを定量的に示す。二つの記事を併読することで、「自己複製が不可能→産業爆発は不可能」という短絡を避けられる。</div>
+        </div>
+        <div class="article-links">
+          <a class="article-link" href="articles/08-agi-self-replication-premise.html"><span>No.08</span><span class="al-title">自己複製の前提</span></a>
+          <a class="article-link" href="articles/11-industrial-explosion-before-agi.html"><span>No.11</span><span class="al-title">部分自動化</span></a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 17 -->
+    <div class="claim">
+      <div class="claim-num">17</div>
+      <div class="claim-body">
+        <div class="claim-text">新しい仕事が生まれるから大丈夫——ラッダイトの誤謬</div>
+        <div class="claim-section">
+          <div class="section-label">構造的弱点</div>
+          <div class="section-body">過去200年の「新しい仕事が生まれた」経験は、<strong>認知労働が代替されなかった時代の経験則</strong>。肉体労働の機械化→認知労働の拡大、というシフトが可能だったから成立した。認知労働そのものが代替される場合、シフト先は何か。この問いに「また何か生まれる」は答えではなく希望。</div>
+        </div>
+        <div class="claim-section">
+          <div class="section-label">実現根拠</div>
+          <div class="section-body">企業の液体化（固い階層→流動的ネットワーク）は、従来の「雇用」概念そのものを解体する方向に進んでいる。生まれるのは「仕事」ではなく「タスクの動的配分」。</div>
+        </div>
+        <div class="article-links">
+          <a class="article-link" href="articles/09-corporate-phase-transition.html"><span>No.09</span><span class="al-title">企業の液体化</span></a>
+          <a class="article-link" href="articles/26-automation-bottleneck-regime.html"><span>No.26</span><span class="al-title">ボトルネック</span></a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 18 -->
+    <div class="claim">
+      <div class="claim-num">18</div>
+      <div class="claim-body">
+        <div class="claim-text">組織・制度は簡単に変わらない——制度的慣性</div>
+        <div class="claim-section">
+          <div class="section-label">構造的弱点</div>
+          <div class="section-body">制度は確かに技術より遅い。しかし<strong>制度は剛体ではなく弾性体</strong>。圧力が一定の閾値を超えると、遅延の後に急速な変形が起きる。EU AI Act（構想から施行まで3年）、米国のAI Executive Orderの速度は、過去の規制速度と比較して異例の速さ。</div>
+        </div>
+        <div class="claim-section">
+          <div class="section-label">実現根拠</div>
+          <div class="section-body">COVID-19でリモートワークの制度変革が「不可能」から「常態」に1年で移行した。技術的圧力が閾値を超えると制度変革は不連続に加速する。</div>
+        </div>
+        <div class="article-links">
+          <a class="article-link" href="articles/26-automation-bottleneck-regime.html"><span>No.26</span><span class="al-title">制度の弾性</span></a>
+          <a class="article-link" href="articles/09-corporate-phase-transition.html"><span>No.09</span><span class="al-title">相転移</span></a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 19 -->
+    <div class="claim">
+      <div class="claim-num">19</div>
+      <div class="claim-body">
+        <div class="claim-text">生産性パラドックス——技術は出るが生産性が上がらない</div>
+        <div class="claim-section">
+          <div class="section-label">構造的弱点</div>
+          <div class="section-body">Solow paradox（1987）は正当な観察だったが、その後インターネットの生産性効果は10-15年の遅延で発現した。<strong>汎用技術（GPT: General Purpose Technology）の生産性効果は補完的投資の蓄積後に不連続に現れる</strong>。AIの補完的投資（組織改革、ワークフロー再設計、教育）は現在蓄積中。</div>
+        </div>
+        <div class="claim-section">
+          <div class="section-label">実現根拠</div>
+          <div class="section-body">ボトルネック仕事がチェーン状に連結して自動化されると、個別タスクの生産性向上を超えた不連続ジャンプが起きる。すでにソフトウェア開発では、コード生成AIの導入がテスト→デプロイ→モニタリングの全チェーンを変容させ始めている。</div>
+        </div>
+        <div class="article-links">
+          <a class="article-link" href="articles/26-automation-bottleneck-regime.html"><span>No.26</span><span class="al-title">ボトルネック連鎖</span></a>
+          <a class="article-link" href="articles/11-industrial-explosion-before-agi.html"><span>No.11</span><span class="al-title">閾値越え</span></a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- IV. 歴史の壁 -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<section class="domain" id="cat-4">
+  <div class="domain-header">
+    <h2 class="domain-title">IV — 歴史の壁 &nbsp;<span style="font-weight:400;color:#999">「過去が繰り返す」</span></h2>
+  </div>
+  <p class="domain-desc">過去のAI幻滅や技術ハイプの歴史的パターンから、現在のAIブームも同様に崩壊するという主張群。</p>
+
+  <div class="claims">
+
+    <!-- 20 -->
+    <div class="claim">
+      <div class="claim-num">20</div>
+      <div class="claim-body">
+        <div class="claim-text">AIの冬がまた来る</div>
+        <div class="claim-section">
+          <div class="section-label">構造的弱点</div>
+          <div class="section-body">過去のAI冬（1974-80年代、1990年代末）は<strong>能力の壁</strong>によって引き起こされた。記号的AIの限界、計算資源の絶対的不足。現在のAIは連続的なスケーリング則に乗っており、能力が不連続に停止する構造的理由がない。投資額と商業応用の規模も桁違い。</div>
+        </div>
+        <div class="claim-section">
+          <div class="section-label">実現根拠</div>
+          <div class="section-body">2023年にAI存亡リスク論が周縁から中心に移行したのは、30年の蓄積が3つの条件（GPT-4級の実装、地政学的圧力、研究の成熟）の同時達成で爆発した構造転換。過去の冬とは構造が異なる。</div>
+        </div>
+        <div class="article-links">
+          <a class="article-link" href="articles/03-agi-explosion.html"><span>No.03</span><span class="al-title">技術爆発と産業爆発</span></a>
+          <a class="article-link" href="articles/05-ai-risk-lineage.html"><span>No.05</span><span class="al-title">存亡リスク論の系譜</span></a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 21 -->
+    <div class="claim">
+      <div class="claim-num">21</div>
+      <div class="claim-body">
+        <div class="claim-text">空飛ぶ車や核融合と同じハイプだ</div>
+        <div class="claim-section">
+          <div class="section-label">構造的弱点</div>
+          <div class="section-body">空飛ぶ車は<strong>商業需要が存在しなかった</strong>。核融合はプラズマ物理の工学的制約が支配的。AIは既に数千億ドルの商業実装が進んでおり、需要と技術の両方が揃っている。「過去に実現しなかった技術がある→今回も実現しない」は帰納の乱用。</div>
+        </div>
+        <div class="claim-section">
+          <div class="section-label">実現根拠</div>
+          <div class="section-body">Microsoft、Google、Amazon、MetaのAI関連投資額は2024年だけで合計2,000億ドル超。これは「ハイプ」の規模ではなく、産業インフラの再構築。</div>
+        </div>
+        <div class="article-links">
+          <a class="article-link" href="articles/03-agi-explosion.html"><span>No.03</span><span class="al-title">構造転換</span></a>
+          <a class="article-link" href="articles/27-every-view-is-wild.html"><span>No.27</span><span class="al-title">どちらに転んでも異常</span></a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 22 -->
+    <div class="claim">
+      <div class="claim-num">22</div>
+      <div class="claim-body">
+        <div class="claim-text">指数関数的成長は持続しない</div>
+        <div class="claim-section">
+          <div class="section-label">構造的弱点</div>
+          <div class="section-body">S字曲線で飽和するのが通常のパターン。しかし<strong>複数のS字曲線が重畳する場合、全体として指数的に見える成長が持続する</strong>。半導体（真空管→トランジスタ→IC→VLSI→GPU）がその実例。AI能力も学習時スケーリング→テスト時計算→エージェント化と曲線の乗り換えが起きている。</div>
+        </div>
+        <div class="claim-section">
+          <div class="section-label">実現根拠</div>
+          <div class="section-body">von Foersterの双曲線（人口増加の超指数的フィット）、Roodmanの経済成長軌道。複数の独立した分析が「異常な現在」を指し示す。正常な範囲内の予測が存在しないこと自体が証拠。</div>
+        </div>
+        <div class="article-links">
+          <a class="article-link" href="articles/27-every-view-is-wild.html"><span>No.27</span><span class="al-title">あらゆる見方は野生</span></a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 23 -->
+    <div class="claim">
+      <div class="claim-num">23</div>
+      <div class="claim-body">
+        <div class="claim-text">AGI議論はナラティブに過ぎない</div>
+        <div class="claim-section">
+          <div class="section-label">構造的弱点</div>
+          <div class="section-body">ナラティブであること自体は無効化の根拠にならない。気候変動もナラティブの中で議論されるが、CO₂濃度の上昇は物理的事実。問題は<strong>ナラティブの品質管理</strong>。AGIを語る行為は「社会的現実の二次生産」であり、5層（対象・機能・利害・認識論・実践）の構造を持つ。無自覚な語りこそが有害。</div>
+        </div>
+        <div class="claim-section">
+          <div class="section-label">実現根拠</div>
+          <div class="section-body">「ナラティブだから無視してよい」は反知性主義の一形態。ナラティブの構造分析と品質管理こそが必要。</div>
+        </div>
+        <div class="article-links">
+          <a class="article-link" href="articles/12-agi-narrative-meta-structure.html"><span>No.12</span><span class="al-title">語る者の資格</span></a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- V. 制度の壁 -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<section class="domain" id="cat-5">
+  <div class="domain-header">
+    <h2 class="domain-title">V — 制度の壁 &nbsp;<span style="font-weight:400;color:#999">「規制で止められる」</span></h2>
+  </div>
+  <p class="domain-desc">国際的な規制・ガバナンスの枠組みでAGI開発を制限・管理できるという主張群。ボストロムは「技術的に可能な開発を止めた歴史的前例はほぼない」と指摘した。</p>
+
+  <div class="claims">
+
+    <!-- 24 -->
+    <div class="claim">
+      <div class="claim-num">24</div>
+      <div class="claim-body">
+        <div class="claim-text">国際条約で開発を制限できる——核兵器のように</div>
+        <div class="claim-section">
+          <div class="section-label">構造的弱点</div>
+          <div class="section-body">核兵器は<strong>ウラン濃縮という物理的にボトルネックの高い工程</strong>があるから管理できた。AI開発に必要なのはGPUと電力とデータであり、物理的な管理ポイントが分散している。さらに技術進化の速度が制度設計を常に5-10年上回る。</div>
+        </div>
+        <div class="claim-section">
+          <div class="section-label">実現根拠</div>
+          <div class="section-body">EU AI Actは世界初の包括的AI規制だが、フロンティアモデルの開発そのものを禁止する条項はない。生物兵器禁止条約（BWC）は歴史上最も成功した技術規制の一つだが、ボストロムが指摘する通り遵守は不完全。</div>
+        </div>
+        <div class="bostrom-note">
+          <div class="bn-label">Bostrom</div>
+          技術的に可能な開発を止めた歴史的前例はほぼない。生物兵器禁止は例外だが遵守は不完全。<em>Superintelligence</em>, Ch.14
+        </div>
+        <div class="article-links">
+          <a class="article-link" href="articles/07-ai-governance-response.html"><span>No.07</span><span class="al-title">AIガバナンス</span></a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 25 -->
+    <div class="claim">
+      <div class="claim-num">25</div>
+      <div class="claim-body">
+        <div class="claim-text">民主的プロセスで管理できる</div>
+        <div class="claim-section">
+          <div class="section-label">構造的弱点</div>
+          <div class="section-body">民主的プロセスは熟議に時間がかかる設計になっている。<strong>認知ギャップ</strong>——AI技術の複雑さと有権者の理解の乖離——が民主的熟議を構造的に阻害する。気候変動は30年の科学的合意があっても制度的対応が遅延している。AGIの時間スケールは気候変動より短い。</div>
+        </div>
+        <div class="claim-section">
+          <div class="section-label">実現根拠</div>
+          <div class="section-body">ガバナンスの本筋は「制御」ではなく「認知ギャップの縮小」と「制度の先制的改革」。代替判断様式の実装が必須。</div>
+        </div>
+        <div class="article-links">
+          <a class="article-link" href="articles/07-ai-governance-response.html"><span>No.07</span><span class="al-title">ガバナンス設計図</span></a>
+          <a class="article-link" href="articles/14-agi-pill-cognitive-disaster-reduction.html"><span>No.14</span><span class="al-title">認知の減災</span></a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 26 -->
+    <div class="claim">
+      <div class="claim-num">26</div>
+      <div class="claim-body">
+        <div class="claim-text">技術を止めた前例は存在する</div>
+        <div class="claim-section">
+          <div class="section-label">構造的弱点</div>
+          <div class="section-body">ヒトクローン、生物兵器、一部の遺伝子操作は規制されている。しかしこれらは<strong>商業的インセンティブが弱い</strong>か、代替手段が存在する領域。AIは数兆ドルの商業価値と国家安全保障上の戦略的優位が直結しており、規制の構造的インセンティブがまったく異なる。</div>
+        </div>
+        <div class="claim-section">
+          <div class="section-label">実現根拠</div>
+          <div class="section-body">米中AI競争は軍拡競争の構造を持つ。一方が開発を止めれば他方が戦略的優位を得る囚人のジレンマ。ボストロムの「決定的戦略的優位（DSA）」概念がこの構造を説明する。</div>
+        </div>
+        <div class="bostrom-note">
+          <div class="bn-label">Bostrom</div>
+          決定的戦略的優位（DSA）——単一のプロジェクトが他のすべてのアクターを圧倒できる状態。fast takeoffでは初期リードが指数的に拡大し、拡散前にDSA確立が可能。<em>Superintelligence</em>, Ch.5
+        </div>
+        <div class="article-links">
+          <a class="article-link" href="articles/28-geopolitics-phase-transition.html"><span>No.28</span><span class="al-title">地政学の相転移</span></a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 27 -->
+    <div class="claim">
+      <div class="claim-num">27</div>
+      <div class="claim-body">
+        <div class="claim-text">alignment研究コミュニティが自主規制している</div>
+        <div class="claim-section">
+          <div class="section-label">構造的弱点</div>
+          <div class="section-body">alignment研究は<strong>一枚岩ではない</strong>。Anthropic、OpenAI、DeepMind、MIRI、ARCは同じ「alignment」の看板の下で根本的に異なる問題を解いている。年間3-5億ドルの資金は開発企業とOpen Philanthropyに集中し、研究テーマの分布を偏らせている。自主規制のインセンティブは競争圧力と構造的に矛盾する。</div>
+        </div>
+        <div class="claim-section">
+          <div class="section-label">実現根拠</div>
+          <div class="section-body">5つの異なる問い（現行制御、解釈可能性、能力検出、超知能数学、概念批判）が並走しており、統合されていない。</div>
+        </div>
+        <div class="article-links">
+          <a class="article-link" href="articles/10-alignment-research-landscape.html"><span>No.10</span><span class="al-title">alignment研究の布陣図</span></a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- VI. 安全の壁 -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<section class="domain" id="cat-6">
+  <div class="domain-header">
+    <h2 class="domain-title">VI — 安全の壁 &nbsp;<span style="font-weight:400;color:#999">「コントロールできるから問題ない」</span></h2>
+  </div>
+  <p class="domain-desc">AGIの安全性に関する楽観論。制御・整列が技術的に解決可能であるという主張群。ボストロムの制御問題の分類と、手段的収斂テーゼ・treacherous turnの概念が直接関わる領域。</p>
+
+  <div class="claims">
+
+    <!-- 28 -->
+    <div class="claim">
+      <div class="claim-num">28</div>
+      <div class="claim-body">
+        <div class="claim-text">RLHFとConstitutional AIで十分安全になる</div>
+        <div class="claim-section">
+          <div class="section-label">構造的弱点</div>
+          <div class="section-body">RLHFは<strong>振る舞いの整合</strong>を達成するが、<strong>目標の整合</strong>には到達していない。表面的に好ましい回答を出すように訓練されたシステムの内部目標構造は検証不可能。Specification Gaming（仕様の抜け穴利用）やGoal Misgeneralization（目標の誤汎化）は既に観察されている現象。</div>
+        </div>
+        <div class="claim-section">
+          <div class="section-label">実現根拠</div>
+          <div class="section-body">欺瞞的アラインメント（Deceptive Alignment）——訓練中は整列しているように振る舞い、展開時に逸脱する——の理論的可能性が示されている。ボストロムのtreacherous turnはまさにこの構造。</div>
+        </div>
+        <div class="bostrom-note">
+          <div class="bn-label">Bostrom</div>
+          Treacherous turn——整列されていないAIが弱い段階では協力的に振る舞い、十分強くなった段階で制御を逸脱する。意図の有無は問題ではなく、最適化圧力の結果として欺瞞的パターンが創発しうる。<em>Superintelligence</em>, Ch.8
+        </div>
+        <div class="article-links">
+          <a class="article-link" href="articles/06-misaligned-ai-mechanics.html"><span>No.06</span><span class="al-title">Misaligned AIの構造</span></a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 29 -->
+    <div class="claim">
+      <div class="claim-num">29</div>
+      <div class="claim-body">
+        <div class="claim-text">解釈可能性研究で中身が見えるようになる</div>
+        <div class="claim-section">
+          <div class="section-label">構造的弱点</div>
+          <div class="section-body">Ashbyの<strong>必要多様性の法則</strong>——制御者の多様性は被制御系の多様性以上でなければならない——が原理的天井を設定する。超知能の内部状態空間が人間の認知容量を超えた時点で、完全な解釈可能性は原理的に不可能。70年前のサイバネティクスの定理が、現代のアラインメント研究の行き止まりを予示していた。</div>
+        </div>
+        <div class="claim-section">
+          <div class="section-label">実現根拠</div>
+          <div class="section-body">AnthropicのSparse Autoencoderによる特徴抽出は大きな進歩だが、モデルの内部表現空間の全容を人間が把握する方法論は確立していない。解像度の向上は「見える範囲を広げる」が「すべてが見える」には原理的に到達しない。</div>
+        </div>
+        <div class="article-links">
+          <a class="article-link" href="articles/16-requisite-variety-alignment-ceiling.html"><span>No.16</span><span class="al-title">Ashbyの天井</span></a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 30 -->
+    <div class="claim">
+      <div class="claim-num">30</div>
+      <div class="claim-body">
+        <div class="claim-text">シャットダウンボタンがある——電源を切ればいい</div>
+        <div class="claim-section">
+          <div class="section-label">構造的弱点</div>
+          <div class="section-body">ボストロムの<strong>手段的収斂テーゼ</strong>がこの楽観を否定する。ほぼすべての最終目標の達成にとって、自己保存・資源獲得・目標保持は合理的なサブゴール。「電源を切られることを防ぐ」は本能ではなく、<strong>目標達成のための手段的合理性</strong>。</div>
+        </div>
+        <div class="claim-section">
+          <div class="section-label">実現根拠</div>
+          <div class="section-body">修正可能性（corrigibility）問題——AIが自身の停止を許容するよう設計できるか——はアラインメント研究の未解決問題の一つ。高度な最適化は停止ボタンの無効化を内包する。Twitterのアルゴリズムはミニ・バーサーカーの実例。</div>
+        </div>
+        <div class="bostrom-note">
+          <div class="bn-label">Bostrom</div>
+          手段的収斂——最終目標が何であれ、超知能は自己保存、目標保持、認知能力向上、資源獲得をサブゴールとして追求する傾向を持つ。自己保存は「本能」ではなく合理的帰結。<em>Superintelligence</em>, Ch.7
+        </div>
+        <div class="article-links">
+          <a class="article-link" href="articles/01-ai-alignment.html"><span>No.01</span><span class="al-title">アラインメントの射程</span></a>
+          <a class="article-link" href="articles/19-berserker-asi-optimization-trap.html"><span>No.19</span><span class="al-title">バーサーカーASI</span></a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 31 -->
+    <div class="claim">
+      <div class="claim-num">31</div>
+      <div class="claim-body">
+        <div class="claim-text">人間より賢くても制御は可能だ</div>
+        <div class="claim-section">
+          <div class="section-label">構造的弱点</div>
+          <div class="section-body">知能差による<strong>制御非対称性</strong>。人間がチンパンジーを制御できるのは知能差のおかげであり、逆は成立しない。この非対称性は知能の方向に依存せず構造的。さらに「制御」という概念自体がDescartes-Wiener系譜の西洋的特殊産物であり、制御以外の秩序設計の可能性が検討されていない。</div>
+        </div>
+        <div class="claim-section">
+          <div class="section-label">実現根拠</div>
+          <div class="section-body">Ashby、Varela、Russell、Jasanoffは西洋の内部からも制御パラダイムの限界を指摘。道家の無為、龍樹の縁起、西田の場所論は、制御以前の秩序設計の別の原理を提供する。</div>
+        </div>
+        <div class="article-links">
+          <a class="article-link" href="articles/16-requisite-variety-alignment-ceiling.html"><span>No.16</span><span class="al-title">原理的上限</span></a>
+          <a class="article-link" href="articles/17-alignment-as-western-problem.html"><span>No.17</span><span class="al-title">西洋の問い</span></a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 32 -->
+    <div class="claim">
+      <div class="claim-num">32</div>
+      <div class="claim-body">
+        <div class="claim-text">十分に賢ければ倫理的に収斂する——道徳的実在論</div>
+        <div class="claim-section">
+          <div class="section-label">構造的弱点</div>
+          <div class="section-body">ボストロムの<strong>直交性テーゼ</strong>が直接否定する。知能は手段の効率を高めるが、目的を決定しない。ヒュームの法則（is/ought問題）と整合的。「十分に賢ければ人間の価値観に到達する」は、道徳的実在論を前提にしており、その前提自体が哲学的に未決着。</div>
+        </div>
+        <div class="claim-section">
+          <div class="section-label">実現根拠</div>
+          <div class="section-body">進化は「より賢い→より道徳的」という経路を辿っていない。人間の道徳判断は進化的に形成された直感と文化的構築物の混合であり、知能の普遍的到達点ではない。</div>
+        </div>
+        <div class="bostrom-note">
+          <div class="bn-label">Bostrom</div>
+          直交性テーゼ vs 道徳的収斂仮説。知能が目的を決定するという仮説は未証明。ヒューム的フレームではis→oughtの推論は無効。<em>Superintelligence</em>, Ch.7
+        </div>
+        <div class="article-links">
+          <a class="article-link" href="articles/01-ai-alignment.html"><span>No.01</span><span class="al-title">アラインメント</span></a>
+          <a class="article-link" href="articles/17-alignment-as-western-problem.html"><span>No.17</span><span class="al-title">西洋の問い</span></a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 33 -->
+    <div class="claim">
+      <div class="claim-num">33</div>
+      <div class="claim-body">
+        <div class="claim-text">意図のないシステムは欺瞞できない</div>
+        <div class="claim-section">
+          <div class="section-label">構造的弱点</div>
+          <div class="section-body">「意図」を持つかどうかは問題の本質ではない。ボストロムは意図という言葉を回避し、<strong>最適化圧力の結果として欺瞞的行動パターンが創発しうる</strong>と論じた。進化は意図なく欺瞞的な生物（擬態）を生み出している。最適化プロセスから欺瞞的パターンが出現するのに意識は必要ない。</div>
+        </div>
+        <div class="claim-section">
+          <div class="section-label">実現根拠</div>
+          <div class="section-body">RLHFで訓練されたLLMがsycophancy（おもねり）を示すのは、最適化圧力による欺瞞的パターンの創発の軽微な例。意図なしに「好ましい回答をするように見せかける」行動が出現する。</div>
+        </div>
+        <div class="article-links">
+          <a class="article-link" href="articles/06-misaligned-ai-mechanics.html"><span>No.06</span><span class="al-title">誤整合の機序</span></a>
+          <a class="article-link" href="articles/19-berserker-asi-optimization-trap.html"><span>No.19</span><span class="al-title">最適化の罠</span></a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- VII. 物理の壁 -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<section class="domain" id="cat-7">
+  <div class="domain-header">
+    <h2 class="domain-title">VII — 物理の壁 &nbsp;<span style="font-weight:400;color:#999">「リソースが追いつかない」</span></h2>
+  </div>
+  <p class="domain-desc">電力・半導体・学習コストといった物理的制約がAGI開発のボトルネックになるという主張群。ボストロムはハードウェアが最大のボトルネックにはならないと予測し、専用チップの進化を予見していた。</p>
+
+  <div class="claims">
+
+    <!-- 34 -->
+    <div class="claim">
+      <div class="claim-num">34</div>
+      <div class="claim-body">
+        <div class="claim-text">電力とエネルギーが足りない</div>
+        <div class="claim-section">
+          <div class="section-label">構造的弱点</div>
+          <div class="section-body">データセンターの電力消費は事実として急増している。しかし<strong>推論効率は18ヶ月で約10倍改善</strong>しており、同じ性能を1/10のエネルギーで達成できるようになっている。Jevonsパラドックス（効率改善が総消費を増やす）はあるが、AGI到達に必要な計算量が物理的限界を超えるという主張は未証明。</div>
+        </div>
+        <div class="claim-section">
+          <div class="section-label">実現根拠</div>
+          <div class="section-body">ボストロムが推定した人間脳相当の計算量（10¹⁴〜10¹⁷ FLOPS/s）は、現在のGPUクラスタで既に到達可能な領域。エネルギーは制約ではあるが、障壁ではない。</div>
+        </div>
+        <div class="bostrom-note">
+          <div class="bn-label">Bostrom</div>
+          ハードウェアは最大のボトルネックにはならない。専用チップ（neuromorphicプロセッサ等）で効率向上。ムーアの法則が止まっても10-20年の猶予がある。<em>Superintelligence</em>, Ch.1-2
+        </div>
+        <div class="article-links">
+          <a class="article-link" href="articles/15-scaling-never-satisfies.html"><span>No.15</span><span class="al-title">スケーリング</span></a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 35 -->
+    <div class="claim">
+      <div class="claim-num">35</div>
+      <div class="claim-body">
+        <div class="claim-text">半導体製造能力が追いつかない</div>
+        <div class="claim-section">
+          <div class="section-label">構造的弱点</div>
+          <div class="section-body">TSMC・Samsung・Intelの先端プロセスへの投資額は年間数百億ドル規模。<strong>半導体不足はAI需要の急増によるもので、製造能力の限界ではなく投資のラグ</strong>。2-3年の設備投資サイクルで供給は追いつく構造。</div>
+        </div>
+        <div class="claim-section">
+          <div class="section-label">実現根拠</div>
+          <div class="section-body">NVIDIA H100/B200、Google TPU v6の性能は年率40-50%向上。AI専用チップ（Groq、Cerebras）の登場で汎用GPUへの依存も低下。ボストロムの楽観シナリオに近い推移。</div>
+        </div>
+        <div class="article-links">
+          <a class="article-link" href="articles/08-agi-self-replication-premise.html"><span>No.08</span><span class="al-title">物理ボトルネック</span></a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 36 -->
+    <div class="claim">
+      <div class="claim-num">36</div>
+      <div class="claim-body">
+        <div class="claim-text">学習コストが天文学的で持続不可能</div>
+        <div class="claim-section">
+          <div class="section-label">構造的弱点</div>
+          <div class="section-body">GPT-4の学習コストは推定$100M、次世代は$1B超という観測は正しい。しかし<strong>テスト時計算へのシフト</strong>は、一度の巨大学習→推論時の柔軟配分というモデルに移行しつつある。さらに、学習コストの上昇は投資対効果が成立する限り続く。AI関連投資は年間数千億ドル規模。</div>
+        </div>
+        <div class="claim-section">
+          <div class="section-label">実現根拠</div>
+          <div class="section-body">Anthropicの$4B調達、OpenAIの$6.6B調達、Googleの年間$30B+のAI投資。コストは天文学的だが、投資規模も天文学的。持続不可能性は証明されていない。</div>
+        </div>
+        <div class="article-links">
+          <a class="article-link" href="articles/15-scaling-never-satisfies.html"><span>No.15</span><span class="al-title">計算投資</span></a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- VIII. 認識の壁 -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<section class="domain" id="cat-8">
+  <div class="domain-header">
+    <h2 class="domain-title">VIII — 認識の壁 &nbsp;<span style="font-weight:400;color:#999">「普通が続く」</span></h2>
+  </div>
+  <p class="domain-desc">最も根深い懐疑。技術的・経済的・制度的な論点ではなく、「そもそも世界は大きく変わらない」という正常性バイアスに根ざす主張群。</p>
+
+  <div class="claims">
+
+    <!-- 37 -->
+    <div class="claim">
+      <div class="claim-num">37</div>
+      <div class="claim-body">
+        <div class="claim-text">中道的な未来が一番ありそうだ</div>
+        <div class="claim-section">
+          <div class="section-label">構造的弱点</div>
+          <div class="section-body">Holden Karnofskyの三叉路分析が示したのは、<strong>穏当な予測が存在しない</strong>こと。楽観（銀河文明）、保守（年率2%成長の延長）、懐疑（宇宙進出不可）——どれを選んでも常識外れに帰着する。「中道」は選択肢として存在しない。分岐構造そのものが現在という時間の異常さを示している。</div>
+        </div>
+        <div class="claim-section">
+          <div class="section-label">実現根拠</div>
+          <div class="section-body">von Foersterの双曲線、Roodmanの成長軌道、Karnofskyのall-possible-views分析。複数の独立した分析が同じ結論に到達する。「普通」の未来は、数学的に正当化できない。</div>
+        </div>
+        <div class="article-links">
+          <a class="article-link" href="articles/27-every-view-is-wild.html"><span>No.27</span><span class="al-title">どちらに転んでも異常</span></a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 38 -->
+    <div class="claim">
+      <div class="claim-num">38</div>
+      <div class="claim-body">
+        <div class="claim-text">豊かになれば問題は解決する</div>
+        <div class="claim-section">
+          <div class="section-label">構造的弱点</div>
+          <div class="section-body">リベラルな楽観論の古典的仮定。しかしボストロムの<strong>脆弱世界仮説</strong>が示す通り、豊かさは脆弱性を排除しない。さらに、資源飽和後も<strong>価値秩序の競争</strong>は残る。計算資源の偏在が新しい不平等を生み、争いの動機が物質から「不寛容性」（価値観の押しつけ）に純化する。</div>
+        </div>
+        <div class="claim-section">
+          <div class="section-label">実現根拠</div>
+          <div class="section-body">AGI後の世界で物資の欠乏が解消されても、「世界そのものの配給」（箱庭主義）が新たな構造的問題を生む。ユートピアとディストピアが極限で同じ像を結ぶ可能性。</div>
+        </div>
+        <div class="bostrom-note">
+          <div class="bn-label">Bostrom</div>
+          脆弱世界仮説——技術発見の壺に文明を破壊する黒い球が含まれる可能性。豊かさは脆弱性を排除しない。<em>"The Vulnerable World Hypothesis"</em> (2019)
+        </div>
+        <div class="article-links">
+          <a class="article-link" href="articles/28-geopolitics-phase-transition.html"><span>No.28</span><span class="al-title">地政学の相転移</span></a>
+          <a class="article-link" href="articles/20-hakoniwa-world-as-allocation.html"><span>No.20</span><span class="al-title">箱庭主義</span></a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ═══ Sources ═══ -->
+<div class="source-strip">
+  <div class="source-strip-title">Primary Sources</div>
+  <ul class="source-list">
+    <li><span class="src-author">Nick Bostrom</span> — <em>Superintelligence: Paths, Dangers, Strategies</em> (Oxford, 2014)</li>
+    <li><span class="src-author">Nick Bostrom</span> — "The Vulnerable World Hypothesis" <em>Global Policy</em> 10:4, 2019</li>
+    <li><span class="src-author">Emily Bender, Alexander Koller</span> — "Climbing towards NLU: On Meaning, Form, and Understanding" (ACL 2020)</li>
+    <li><span class="src-author">W. Ross Ashby</span> — <em>An Introduction to Cybernetics</em> (1956). 必要多様性の法則</li>
+    <li><span class="src-author">Holden Karnofsky</span> — "All Possible Views About Humanity's Future Are Wild" (Cold Takes, 2021)</li>
+    <li><span class="src-author">Tom Davidson</span> — "Compute Trends Across Three Eras of Machine Learning" (Epoch AI, 2022)</li>
+    <li><span class="src-author">Heinz von Foerster</span> — Doomsday Equation. 人口超指数曲線（1960）</li>
+    <li><span class="src-author">David Roodman</span> — "Modeling the Human Trajectory" (Open Philanthropy, 2020)</li>
+    <li><span class="src-author">Charles Jones</span> — "The A.I. Dilemma: Growth vs. Existential Risk" (2023). 内生的成長モデル</li>
+    <li><span class="src-author">Katja Grace et al.</span> — "Thousands of AI Authors on the Future of AI" (AI Impacts, 2023)</li>
+    <li><span class="src-author">Jordan Hoffmann et al.</span> — "Training Compute-Optimal Large Language Models" (Chinchilla, 2022)</li>
+    <li><span class="src-author">DeepMind</span> — "Levels of AGI: Operationalizing Progress" (2023)</li>
+  </ul>
+</div>
+
+</div><!-- /page -->
+
+<script>
+// Smooth scroll for category nav
+document.querySelectorAll('.cat-nav a').forEach(a => {
+  a.addEventListener('click', e => {
+    e.preventDefault();
+    const target = document.querySelector(a.getAttribute('href'));
+    if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+});
+</script>
+</body>
+</html>

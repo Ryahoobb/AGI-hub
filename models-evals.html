@@ -753,7 +753,7 @@
   <p class="dash-subtitle">
     米中フロンティアモデルの実力差をベンチマーク横断で比較し、競争の構図を可視化する。30以上のモデルを統一ランキングで並べ、METR・Apollo・Epoch AIの評価も一覧する。
   </p>
-  <div class="dash-date">Updated: 2026-04-11 · Data as of early-to-mid April 2026</div>
+  <div class="dash-date">Updated: 2026-04-13 · Data as of early-to-mid April 2026</div>
 
   <!-- ═══════════ KPI ═══════════ -->
   <div class="kpi-row">
@@ -863,27 +863,27 @@
       </div>
       <div class="bench-card">
         <h3>ARC-AGI-2</h3>
-        <div class="bench-sub">Verified · 2026-02</div>
+        <div class="bench-sub">Verified · 2026-04</div>
         <ol>
           <li><span class="model">Gemini 3.1 Pro</span><span class="score">77.1%</span></li>
-          <li><span class="model">Poetiq (on Gemini 3 Pro)</span><span class="score">54%</span></li>
+          <li><span class="model">Poetiq (on Gemini 3 Pro)</span><span class="score">54.0%</span></li>
+          <li><span class="model">Claude Opus 4.6 Thinking</span><span class="score">31.0%</span></li>
           <li><span class="model">Gemini 3 Pro</span><span class="score">31.1%</span></li>
-          <li><span class="model">GPT-5.1</span><span class="score">17.6%</span></li>
-          <li><span class="model">Gemini 2.5 Pro</span><span class="score">4.9%</span></li>
+          <li><span class="model">GPT-5.4 Pro</span><span class="score">28.0%</span></li>
         </ol>
-        <div class="bench-note">数ヶ月で5%→77%。ARC-AGI-3が後継として同時リリース（ARC Prize 2026賞金$2M+）</div>
+        <div class="bench-note">数ヶ月で5%→77%。ARC-AGI-3が後継として同時リリース（ARC Prize 2026賞金$2M+）。Grok 4.20は約16%、DeepSeek V3.2は約14%</div>
       </div>
       <div class="bench-card">
-        <h3>SWE-Bench Verified / Pro</h3>
-        <div class="bench-sub">Coding · 2026 Q1</div>
+        <h3>SWE-Bench Pro / Verified</h3>
+        <div class="bench-sub">Coding · 2026-04</div>
         <ol>
-          <li><span class="model">Claude Opus 4.5 (Verified)</span><span class="score">80.9%</span></li>
+          <li><span class="model">Opus 4.6 + WarpGrep v2 (Pro)</span><span class="score">57.5%</span></li>
+          <li><span class="model">GPT-5.3-Codex (Pro)</span><span class="score">56.8%</span></li>
+          <li><span class="model">GPT-5.2-Codex (Pro)</span><span class="score">56.4%</span></li>
+          <li><span class="model">Claude Opus 4.5 (Pro, SEAL)</span><span class="score">45.9%</span></li>
           <li><span class="model">Claude Opus 4.6 (Verified)</span><span class="score">80.8%</span></li>
-          <li><span class="model">Gemini 3.1 Pro (Verified)</span><span class="score">80.6%</span></li>
-          <li><span class="model">MiniMax M2.5 (Verified)</span><span class="score">80.2%</span></li>
-          <li><span class="model">Claude Haiku 4.5 (Pro)</span><span class="score">39.5%</span></li>
         </ol>
-        <div class="bench-note">Verifiedは汚染問題あり（Gold patchを逐語再現するケースを検出）。OpenAIは報告停止、SWE-Bench Proを推奨。Proではスコアが大幅低下</div>
+        <div class="bench-note">Verifiedは汚染問題あり（Gold patchを逐語再現するケースを検出）、Pro推奨。Verified上位はOpus 4.5/4.6とGemini 3.1 Proがいずれも80%台で拮抗</div>
       </div>
     </div>
   </div>
@@ -1550,6 +1550,13 @@
     </p>
     <div class="findings">
       <div class="finding">
+        <div class="date">2026-04</div>
+        <div class="body">
+          <p><strong>SWE-Bench ProのTOPがVerifiedの約7割。</strong>Verifiedで80%台だったフロンティアモデルも、汚染を除去したProでは46〜57%に落ちる。GPT-5.3-CodexがPro 56.8%で首位。Anthropicの Opus 4.6 に WarpGrep v2 を組み合わせると57.5%に到達。Verifiedベースの「コーディング解決済み」言説は現場の難易度を2割ほど過小評価していた。</p>
+          <p class="src"><a href="https://labs.scale.com/leaderboard/swe_bench_pro_public" target="_blank" rel="noopener">labs.scale.com · SWE-Bench Pro Public</a></p>
+        </div>
+      </div>
+      <div class="finding">
         <div class="date">2026-02</div>
         <div class="body">
           <p><strong>Gemini 3.1 ProがGPQA Diamondで94.3%、ARC-AGI-2で77.1%に到達。</strong>数ヶ月前まで5%だったARC-AGI-2が77%に跳ね上がり、ARC Prizeは後継のARC-AGI-3を同時リリースした。Chollet型抽象推論ベンチが「更新速度が追いつかない」フェーズに入った。</p>
@@ -1611,7 +1618,7 @@
   <!-- ═══════════ Footer ═══════════ -->
   <div class="dash-footer">
     <p><strong>Data Quality Note:</strong> 米欧モデルの日付は主要ベンダーの公式ブログまたは信頼できるリーダーボードから取得。中華系はベンダーのHuggingFaceカード、公式ブログ、英語メディア（VentureBeat / SCMP / TechCrunch 等）を優先。ベンダー主張のみの数値は "claim" と明示。</p>
-    <p><strong>Evolution:</strong> LMArena Eloと ARC-AGI-2は週単位で変動するため、表示スコアは2026-04-11時点のスナップショット。SWE-Bench Verified 汚染問題のため、コーディング系SOTAは慎重に扱う（上記Findings参照）。</p>
+    <p><strong>Evolution:</strong> LMArena Eloと ARC-AGI-2は週単位で変動するため、表示スコアは2026-04-13時点のスナップショット。SWE-Bench Verified 汚染問題のため、コーディング系SOTAは慎重に扱う（上記Findings参照）。</p>
     <p><strong>Sources:</strong> OpenAI, Anthropic, Google DeepMind, xAI, Meta AI, Mistral, DeepSeek, Alibaba Qwen, Moonshot, Zhipu, ByteDance, MiniMax, Baidu, Tencent の公式発表 / METR / Apollo Research / Epoch AI / Scale SEAL / Artificial Analysis / LMArena / ARC Prize Foundation / HuggingFace model cards.</p>
     <p><strong>Photo Credits:</strong> All portraits from Wikimedia Commons.
       Sam Altman (Steve Jennings / TechCrunch, CC BY 2.0) ·

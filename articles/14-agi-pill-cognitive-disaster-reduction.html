@@ -281,6 +281,18 @@
       }
       .inline-link:hover { border-color: var(--accent); }
 
+      /* ── SVG Diagram ── */
+      .svg-diagram {
+        max-width: none;
+        width: min(960px, calc(100vw - 48px));
+        margin: 32px auto;
+      }
+      .svg-diagram svg {
+        width: 100%;
+        height: auto;
+        min-height: 240px;
+      }
+
       @media (max-width: 768px) {
         .slide { padding: 64px 24px 48px; }
         .grid-2, .grid-3 { grid-template-columns: 1fr; }
@@ -447,6 +459,72 @@
           <p class="lead">
             認知の減災が意味するのは、AGIの到来を予言することではない。<strong>前提の有限性を意識に上げる</strong>ことだ。35年ローンが悪いのではない。35年ローンの前提を検証せずに組むことが損失の震源になる。教育が無駄なのではない。18歳時点の教育で一生を賄えるという前提が検証されていないことが問題だ。減災の核心は、前提を破壊することではなく、前提を可視化することにある。
           </p>
+          <!-- SVG: Cognitive Disaster Reduction Flow -->
+          <div class="svg-diagram">
+            <svg viewBox="0 0 680 300" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <marker id="arrowB" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+                  <path d="M0,0 L8,3 L0,6" fill="#0066ff"/>
+                </marker>
+                <marker id="arrowG" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+                  <path d="M0,0 L8,3 L0,6" fill="#757575"/>
+                </marker>
+              </defs>
+
+              <!-- Phase 1: Hidden assumptions -->
+              <rect x="30" y="50" width="160" height="70" rx="4" fill="none" stroke="#0066ff" stroke-width="2"/>
+              <text x="110" y="72" text-anchor="middle" font-family="'SF Mono',monospace" font-size="10" fill="#0066ff" letter-spacing="0.06em">PHASE 1</text>
+              <text x="110" y="92" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="700" fill="#1a1a1a">暗黙の前提</text>
+              <text x="110" y="108" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#757575">35年ローン / 終身雇用</text>
+
+              <!-- Arrow 1->2 -->
+              <line x1="190" y1="85" x2="248" y2="85" stroke="#0066ff" stroke-width="1.5" marker-end="url(#arrowB)"/>
+
+              <!-- Phase 2: Visibility -->
+              <rect x="250" y="50" width="160" height="70" rx="4" fill="rgba(0,102,255,0.06)" stroke="#0066ff" stroke-width="2"/>
+              <text x="330" y="72" text-anchor="middle" font-family="'SF Mono',monospace" font-size="10" fill="#0066ff" letter-spacing="0.06em">PHASE 2</text>
+              <text x="330" y="92" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="700" fill="#1a1a1a">前提の可視化</text>
+              <text x="330" y="108" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#757575">依存条件の明示</text>
+
+              <!-- Arrow 2->3 -->
+              <line x1="410" y1="85" x2="468" y2="85" stroke="#0066ff" stroke-width="1.5" marker-end="url(#arrowB)"/>
+
+              <!-- Phase 3: Alternative paths -->
+              <rect x="470" y="50" width="180" height="70" rx="4" fill="rgba(0,102,255,0.12)" stroke="#0066ff" stroke-width="2"/>
+              <text x="560" y="72" text-anchor="middle" font-family="'SF Mono',monospace" font-size="10" fill="#0066ff" letter-spacing="0.06em">PHASE 3</text>
+              <text x="560" y="92" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="700" fill="#1a1a1a">段階的適応の設計</text>
+              <text x="560" y="108" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#757575">代替経路の事前構築</text>
+
+              <!-- Downward: concrete examples -->
+              <line x1="110" y1="120" x2="110" y2="158" stroke="#757575" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#arrowG)"/>
+              <line x1="330" y1="120" x2="330" y2="158" stroke="#757575" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#arrowG)"/>
+              <line x1="560" y1="120" x2="560" y2="158" stroke="#757575" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#arrowG)"/>
+
+              <!-- Example boxes -->
+              <rect x="20" y="160" width="180" height="80" rx="3" fill="none" stroke="#e5e5e5" stroke-width="1"/>
+              <text x="110" y="180" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#1a1a1a">収入安定</text>
+              <text x="110" y="196" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#1a1a1a">知識の耐用年数</text>
+              <text x="110" y="212" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#1a1a1a">労働人口比率</text>
+              <text x="110" y="228" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#757575">制度が依存する前提群</text>
+
+              <rect x="240" y="160" width="180" height="80" rx="3" fill="none" stroke="#e5e5e5" stroke-width="1"/>
+              <text x="330" y="180" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#1a1a1a">TAI到達: ~2036</text>
+              <text x="330" y="196" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#1a1a1a">制度改訂リード: 5年</text>
+              <text x="330" y="212" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#1a1a1a">逆算 → 2031着手</text>
+              <text x="330" y="228" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#757575">時間感覚の校正</text>
+
+              <rect x="460" y="160" width="200" height="80" rx="3" fill="none" stroke="#e5e5e5" stroke-width="1"/>
+              <text x="560" y="180" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#1a1a1a">変動ローンへの切替</text>
+              <text x="560" y="196" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#1a1a1a">リカレント教育の拡充</text>
+              <text x="560" y="212" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#1a1a1a">積立方式への段階移行</text>
+              <text x="560" y="228" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#757575">全か無かではない適応</text>
+
+              <!-- Bottom note -->
+              <text x="340" y="275" text-anchor="middle" font-family="sans-serif" font-size="13" font-weight="700" fill="#1a1a1a">減災 = 前提を破壊するのではなく、可視化する</text>
+              <text x="340" y="293" text-anchor="middle" font-family="'SF Mono',monospace" font-size="10" fill="#757575">AGI Pill: Cognitive Disaster Reduction</text>
+            </svg>
+          </div>
+
           <div class="bullets">
             <div class="point">
               <strong>前提の可視化</strong> — 現行制度がどの前提に依存しているかを明示する。35年ローンは「収入安定」前提、年金は「労働人口比」前提、教育は「知識の耐用年数」前提。前提が可視化されれば、破綻時の代替経路を事前に設計できる。

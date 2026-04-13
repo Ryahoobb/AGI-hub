@@ -90,6 +90,17 @@
         .credits { padding: 32px 24px 64px; }
         .slide .hero.img-fullbleed, .slide .hero.img-wide, .slide .hero.img-content { width: 100%; max-width: 100%; aspect-ratio: 16/9; margin: 0; transform: none; left: 0; }
       }
+      /* SVG diagram styles */
+      .svg-diagram {
+        max-width: none;
+        width: min(960px, calc(100vw - 48px));
+        margin: 32px auto;
+      }
+      .svg-diagram svg {
+        width: 100%;
+        height: auto;
+        min-height: 240px;
+      }
       @media print { .slide { min-height: auto; page-break-after: always; padding: 24px 0; } .nav, .progress { display: none; } .reveal { opacity: 1; transform: none; } }
     </style>
   </head>
@@ -180,6 +191,59 @@
             </tbody>
           </table>
           <p class="lead">Philip TrammellとAnton Korinekが2023年のNBER論文「Economic Growth under Transformative AI」で示したのは、<strong>完全な生産自動化だけで成長率は大きく跳ね上がり、R&D自動化はそれをさらに加速する追加要因</strong>だということだ。Benjamin Jonesは2025年10月のNBER論文「Artificial Intelligence in Research and Development」で、研究分野ごとの加速幅を決める3変数を特定した。AIが担うタスクの比率、そのタスクでのAIの生産性、そしてボトルネックの強さ。3番目が決定的で、ボトルネックが物理実験や臨床試験のように現実世界の時定数に縛られている分野では、AIがどれだけ速くなっても加速幅に上限がある。</p>
+          <!-- SVG: Automation Staircase to Regime Change -->
+          <div class="svg-diagram">
+            <svg viewBox="0 0 680 320" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <marker id="arrowR26" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+                  <path d="M0,0 L8,3 L0,6" fill="var(--accent, #2f2b92)"/>
+                </marker>
+                <marker id="arrowUp26" markerWidth="6" markerHeight="8" refX="3" refY="0" orient="auto">
+                  <path d="M0,8 L3,0 L6,8" fill="var(--accent, #2f2b92)"/>
+                </marker>
+              </defs>
+              <!-- Axes -->
+              <line x1="60" y1="280" x2="640" y2="280" stroke="#1a1a1a" stroke-width="1.5"/>
+              <line x1="60" y1="280" x2="60" y2="20" stroke="#1a1a1a" stroke-width="1.5" marker-end="url(#arrowUp26)"/>
+              <text x="340" y="308" text-anchor="middle" font-family="'SF Mono',monospace" font-size="10" fill="#757575" letter-spacing="0.06em">AUTOMATION SEQUENCE</text>
+              <text x="28" y="150" text-anchor="middle" font-family="'SF Mono',monospace" font-size="10" fill="#757575" letter-spacing="0.06em" transform="rotate(-90,28,150)">ECONOMIC IMPACT</text>
+              <!-- Stage 1: Scattered -->
+              <rect x="80" y="220" width="120" height="50" rx="2" fill="none" stroke="#1a1a1a" stroke-width="1.5"/>
+              <text x="140" y="242" text-anchor="middle" font-family="'SF Mono',monospace" font-size="10" fill="var(--accent, #2f2b92)" letter-spacing="0.04em">STAGE 1</text>
+              <text x="140" y="260" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#1a1a1a">局所的な自動化</text>
+              <!-- Step up -->
+              <line x1="200" y1="245" x2="230" y2="245" stroke="var(--accent, #2f2b92)" stroke-width="1.5" marker-end="url(#arrowR26)"/>
+              <!-- Stage 2: Chain -->
+              <rect x="240" y="170" width="120" height="50" rx="2" fill="none" stroke="#1a1a1a" stroke-width="1.5"/>
+              <text x="300" y="192" text-anchor="middle" font-family="'SF Mono',monospace" font-size="10" fill="var(--accent, #2f2b92)" letter-spacing="0.04em">STAGE 2</text>
+              <text x="300" y="210" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#1a1a1a">チェーン形成</text>
+              <!-- Vertical step line -->
+              <line x1="240" y1="220" x2="240" y2="270" stroke="#757575" stroke-width="1" stroke-dasharray="3,3"/>
+              <!-- Step up -->
+              <line x1="360" y1="195" x2="390" y2="195" stroke="var(--accent, #2f2b92)" stroke-width="1.5" marker-end="url(#arrowR26)"/>
+              <!-- Stage 3: Bottleneck -->
+              <rect x="400" y="110" width="120" height="60" rx="2" fill="none" stroke="var(--accent, #2f2b92)" stroke-width="2"/>
+              <text x="460" y="130" text-anchor="middle" font-family="'SF Mono',monospace" font-size="10" fill="var(--accent, #2f2b92)" letter-spacing="0.04em">STAGE 3</text>
+              <text x="460" y="148" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#1a1a1a">ボトルネック仕事</text>
+              <text x="460" y="163" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#1a1a1a">の自動化</text>
+              <!-- Vertical step line -->
+              <line x1="400" y1="170" x2="400" y2="220" stroke="#757575" stroke-width="1" stroke-dasharray="3,3"/>
+              <!-- Step up (dramatic) -->
+              <line x1="520" y1="140" x2="550" y2="140" stroke="var(--accent, #2f2b92)" stroke-width="1.5" marker-end="url(#arrowR26)"/>
+              <!-- Stage 4: Regime -->
+              <rect x="560" y="40" width="80" height="60" rx="2" fill="var(--accent, #2f2b92)" fill-opacity="0.08" stroke="var(--accent, #2f2b92)" stroke-width="2"/>
+              <text x="600" y="62" text-anchor="middle" font-family="'SF Mono',monospace" font-size="10" fill="var(--accent, #2f2b92)" letter-spacing="0.04em" font-weight="700">STAGE 4</text>
+              <text x="600" y="80" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#1a1a1a">レジーム</text>
+              <text x="600" y="94" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#1a1a1a">転換</text>
+              <!-- Vertical step line -->
+              <line x1="560" y1="100" x2="560" y2="170" stroke="#757575" stroke-width="1" stroke-dasharray="3,3"/>
+              <!-- Bottleneck annotation -->
+              <text x="460" y="88" text-anchor="middle" font-family="sans-serif" font-size="10" fill="var(--accent, #2f2b92)">R&amp;D, 創薬, 新材料</text>
+              <!-- Supplementary annotation -->
+              <text x="140" y="210" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#757575">文書処理, ルーティン</text>
+            </svg>
+          </div>
+
           <p class="lead">ここまでの論理を束ねると、産業爆発の条件が明確になる。局所的な自動化、チェーン形成、ボトルネック仕事への到達、レジーム転換。この階段を上るスピードは、何パーセント自動化されたかではなく、<strong>どの仕事が、どの配置で、どの順番で自動化されるか</strong>に依存する。</p>
         </div>
         <div class="footer reveal reveal-delay-3">

@@ -400,6 +400,18 @@
         .site-nav-hide-mobile { display: none; }
       }
 
+      /* SVG diagram styles */
+      .svg-diagram {
+        max-width: none;
+        width: min(960px, calc(100vw - 48px));
+        margin: 32px auto;
+      }
+      .svg-diagram svg {
+        width: 100%;
+        height: auto;
+        min-height: 240px;
+      }
+
       @media print {
         .slide { min-height: auto; page-break-after: always; padding: 24px 0; }
         .nav, .progress { display: none; }
@@ -548,6 +560,55 @@
               </tr>
             </tbody>
           </table>
+
+          <!-- SVG: Dissipative Structure — Three Stages -->
+          <div class="svg-diagram">
+            <svg viewBox="0 0 680 340" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <marker id="arr13" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+                  <path d="M0,0 L8,3 L0,6" fill="var(--accent, #2f2b92)"/>
+                </marker>
+                <marker id="arr13g" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+                  <path d="M0,0 L8,3 L0,6" fill="#757575"/>
+                </marker>
+              </defs>
+              <!-- Top: Free energy input -->
+              <text x="340" y="22" text-anchor="middle" font-family="'SF Mono',monospace" font-size="10" fill="#757575" letter-spacing="0.08em">FREE ENERGY INPUT (LOW ENTROPY)</text>
+              <line x1="340" y1="30" x2="340" y2="58" stroke="#757575" stroke-width="1.5" marker-end="url(#arr13g)"/>
+              <!-- Three stage boxes -->
+              <rect x="40" y="70" width="180" height="80" rx="3" fill="none" stroke="#1a1a1a" stroke-width="1.5"/>
+              <rect x="250" y="70" width="180" height="80" rx="3" fill="none" stroke="#1a1a1a" stroke-width="1.5"/>
+              <rect x="460" y="70" width="180" height="80" rx="3" fill="none" stroke="var(--accent, #2f2b92)" stroke-width="2"/>
+              <!-- Stage labels -->
+              <text x="130" y="93" text-anchor="middle" font-family="'SF Mono',monospace" font-size="10" fill="var(--accent, #2f2b92)" letter-spacing="0.06em">STAGE 1</text>
+              <text x="130" y="113" text-anchor="middle" font-family="sans-serif" font-size="13" fill="#1a1a1a" font-weight="700">生命</text>
+              <text x="130" y="132" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#757575">化学ポテンシャル勾配</text>
+              <text x="340" y="93" text-anchor="middle" font-family="'SF Mono',monospace" font-size="10" fill="var(--accent, #2f2b92)" letter-spacing="0.06em">STAGE 2</text>
+              <text x="340" y="113" text-anchor="middle" font-family="sans-serif" font-size="13" fill="#1a1a1a" font-weight="700">文明</text>
+              <text x="340" y="132" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#757575">制度的エネルギー動員</text>
+              <text x="550" y="93" text-anchor="middle" font-family="'SF Mono',monospace" font-size="10" fill="var(--accent, #2f2b92)" letter-spacing="0.06em">STAGE 3</text>
+              <text x="550" y="113" text-anchor="middle" font-family="sans-serif" font-size="13" fill="#1a1a1a" font-weight="700">AGI</text>
+              <text x="550" y="132" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#757575">勾配の探索・再設計</text>
+              <!-- Arrows between stages -->
+              <line x1="220" y1="110" x2="250" y2="110" stroke="var(--accent, #2f2b92)" stroke-width="1.5" marker-end="url(#arr13)"/>
+              <line x1="430" y1="110" x2="460" y2="110" stroke="var(--accent, #2f2b92)" stroke-width="1.5" marker-end="url(#arr13)"/>
+              <!-- Bottom axis label -->
+              <line x1="60" y1="180" x2="620" y2="180" stroke="#1a1a1a" stroke-width="1"/>
+              <text x="40" y="205" font-family="sans-serif" font-size="10" fill="#757575">局所</text>
+              <text x="340" y="205" text-anchor="middle" font-family="'SF Mono',monospace" font-size="9" fill="#757575" letter-spacing="0.06em">SPATIOTEMPORAL SCALE</text>
+              <text x="620" y="205" text-anchor="end" font-family="sans-serif" font-size="10" fill="#757575">惑星 ~ 恒星系</text>
+              <!-- Ticks -->
+              <line x1="130" y1="176" x2="130" y2="184" stroke="#1a1a1a" stroke-width="1"/>
+              <line x1="340" y1="176" x2="340" y2="184" stroke="#1a1a1a" stroke-width="1"/>
+              <line x1="550" y1="176" x2="550" y2="184" stroke="#1a1a1a" stroke-width="1"/>
+              <!-- Abstraction axis -->
+              <text x="340" y="240" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#757575">束ね方の抽象度: 遺伝子 → 言語・法・貨幣 → 統一的世界モデル</text>
+              <!-- Entropy output -->
+              <text x="340" y="280" text-anchor="middle" font-family="'SF Mono',monospace" font-size="10" fill="#757575" letter-spacing="0.08em">ENTROPY OUTPUT (HIGH ENTROPY WASTE)</text>
+              <line x1="340" y1="285" x2="340" y2="310" stroke="#757575" stroke-width="1.5" marker-end="url(#arr13g)"/>
+              <text x="340" y="328" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#757575">熱赤外 → 宇宙空間へ放射</text>
+            </svg>
+          </div>
 
           <p class="lead">
             注目すべきは、この三段階が「複雑さの増加」として記述しきれない点だ。植物は太陽光をその場で熱にせず化学結合として束ねる。生物はそれを代謝と行動に変える。文明は燃料・電力・物流・計算・資本として蓄える。AGIはその全体を横断して、どこに勾配があり、どう接続すれば作用範囲が最大化するかを探る。<strong>束ねる、遅延する、再配線する、より広い範囲で放出する</strong>。この連鎖は複雑さの増加と言うより、散逸の時間的・空間的アービトラージの深化と言ったほうが正確だ。

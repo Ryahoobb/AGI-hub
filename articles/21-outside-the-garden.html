@@ -282,6 +282,18 @@
       @media (max-width: 900px) {
         .timeline { grid-template-columns: repeat(2, 1fr); }
       }
+      /* SVG diagram styles */
+      .svg-diagram {
+        max-width: none;
+        width: min(960px, calc(100vw - 48px));
+        margin: 32px auto;
+      }
+      .svg-diagram svg {
+        width: 100%;
+        height: auto;
+        min-height: 240px;
+      }
+
       @media (max-width: 768px) {
         .slide { padding: 64px 24px 48px; }
         .grid-2, .grid-3 { grid-template-columns: 1fr; }
@@ -419,6 +431,45 @@
               </tr>
             </tbody>
           </table>
+          <!-- SVG: Inside/Outside Two-Layer Structure -->
+          <div class="svg-diagram">
+            <svg viewBox="0 0 680 320" xmlns="http://www.w3.org/2000/svg">
+              <!-- Outer: Exterior (the outside) -->
+              <rect x="30" y="20" width="620" height="280" rx="6" fill="none" stroke="#1a1a1a" stroke-width="1.5" stroke-dasharray="6,4"/>
+              <text x="56" y="42" font-family="'SF Mono',monospace" font-size="9" fill="#757575" letter-spacing="0.08em">EXTERIOR — INVISIBLE</text>
+              <!-- Inner: Hakoniwa interior -->
+              <rect x="160" y="70" width="360" height="160" rx="4" fill="none" stroke="#2f2b92" stroke-width="2"/>
+              <text x="340" y="95" text-anchor="middle" font-family="'SF Mono',monospace" font-size="11" fill="#2f2b92" letter-spacing="0.08em">INTERIOR</text>
+              <text x="340" y="112" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#757575">配給された箱庭の住民</text>
+              <!-- Interior boxes -->
+              <rect x="200" y="130" width="80" height="36" rx="3" fill="rgba(47,43,146,0.08)" stroke="#2f2b92" stroke-width="1"/>
+              <text x="240" y="152" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#2f2b92">箱庭 A</text>
+              <rect x="300" y="130" width="80" height="36" rx="3" fill="rgba(47,43,146,0.08)" stroke="#2f2b92" stroke-width="1"/>
+              <text x="340" y="152" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#2f2b92">箱庭 B</text>
+              <rect x="400" y="130" width="80" height="36" rx="3" fill="rgba(47,43,146,0.08)" stroke="#2f2b92" stroke-width="1"/>
+              <text x="440" y="152" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#2f2b92">箱庭 C</text>
+              <text x="340" y="200" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#757575">互いを認知しない</text>
+              <!-- Type I: Cost-selected (outside left) -->
+              <rect x="42" y="80" width="100" height="50" rx="3" fill="none" stroke="#1a1a1a" stroke-width="1"/>
+              <text x="92" y="100" text-anchor="middle" font-family="'SF Mono',monospace" font-size="8" fill="#1a1a1a" letter-spacing="0.04em">TYPE I</text>
+              <text x="92" y="115" text-anchor="middle" font-family="sans-serif" font-size="8" fill="#757575">コスト選別</text>
+              <text x="92" y="127" text-anchor="middle" font-family="sans-serif" font-size="7" fill="#757575">FLOPS不足</text>
+              <!-- Type II: Refuser (outside right) -->
+              <rect x="538" y="80" width="100" height="50" rx="3" fill="none" stroke="#1a1a1a" stroke-width="1"/>
+              <text x="588" y="100" text-anchor="middle" font-family="'SF Mono',monospace" font-size="8" fill="#1a1a1a" letter-spacing="0.04em">TYPE II</text>
+              <text x="588" y="115" text-anchor="middle" font-family="sans-serif" font-size="8" fill="#757575">拒否者</text>
+              <text x="588" y="127" text-anchor="middle" font-family="sans-serif" font-size="7" fill="#757575">現実に留まる</text>
+              <!-- Type III: No subject (outside bottom) -->
+              <rect x="240" y="250" width="200" height="40" rx="3" fill="none" stroke="#1a1a1a" stroke-width="1"/>
+              <text x="340" y="268" text-anchor="middle" font-family="'SF Mono',monospace" font-size="8" fill="#1a1a1a" letter-spacing="0.04em">TYPE III</text>
+              <text x="340" y="282" text-anchor="middle" font-family="sans-serif" font-size="8" fill="#757575">主語を持たない者 — 資格審査の外</text>
+              <!-- Visibility markers -->
+              <line x1="142" y1="100" x2="160" y2="100" stroke="#1a1a1a" stroke-width="1" stroke-dasharray="3,2"/>
+              <text x="152" y="92" font-family="sans-serif" font-size="7" fill="#757575" transform="rotate(-90,152,92)">不可視</text>
+              <line x1="520" y1="100" x2="538" y2="100" stroke="#1a1a1a" stroke-width="1" stroke-dasharray="3,2"/>
+            </svg>
+          </div>
+
           <p class="lead">
             型Ⅰは最も素直に見える問題だ。ニコライ・カルダシェフが1964年に示したスケールから導かれる通り、太陽系規模の計算資源にも物理的上限がある。住民数と一人あたり解像度の積が上限を超えた瞬間、優先順位の決定が始まる。アマルティア・センが『Inequality Reexamined』（1992年）で批判した福祉測定の盲点——効用ではなく潜在能力で測るべきだという主張——は、箱庭経済では<strong>「どのプロセスに何FLOPS与えるかが潜在能力の分配そのものになる」</strong>という形で再出現する。マーサ・ヌスバウムが『Creating Capabilities』（2011年）で提示した十項目のcentral capabilitiesは、計算資源の言語に翻訳されない。翻訳を誰がやるかの議論が空白なまま、配分だけが進む。
           </p>
@@ -501,6 +552,32 @@
           <div class="note">
             もう一つ身近な例を挟む。現代のレコメンデーション・アルゴリズムは、すでに<strong>「見えない外部」を小規模に実装している</strong>。フィルターバブルに閉じ込められた利用者は、自分のタイムラインに表示されない情報の存在を認知できない。表示されなかった者の抗議は、表示されている者には届かない。これはまだ情報レベルの話だが、箱庭主義は同じ構造を経験のレイヤー全体に拡張する。見えない外部の原型は、すでに私たちのポケットのなかで動いている。
           </p>
+          <!-- SVG: Visibility Inversion -->
+          <div class="svg-diagram">
+            <svg viewBox="0 0 680 200" xmlns="http://www.w3.org/2000/svg">
+              <!-- Left: Historical utopias -->
+              <text x="150" y="20" text-anchor="middle" font-family="'SF Mono',monospace" font-size="9" fill="#757575" letter-spacing="0.08em">HISTORICAL UTOPIAS</text>
+              <rect x="70" y="35" width="160" height="40" rx="3" fill="none" stroke="#2f2b92" stroke-width="1.5"/>
+              <text x="150" y="60" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#2f2b92">内部</text>
+              <rect x="70" y="95" width="160" height="40" rx="3" fill="none" stroke="#1a1a1a" stroke-width="1.5"/>
+              <text x="150" y="120" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#1a1a1a">外部（可視）</text>
+              <line x1="150" y1="75" x2="150" y2="95" stroke="#1a1a1a" stroke-width="1" stroke-dasharray="4,3"/>
+              <text x="190" y="88" font-family="sans-serif" font-size="8" fill="#757575">見える</text>
+              <!-- Right: Hakoniwa -->
+              <text x="510" y="20" text-anchor="middle" font-family="'SF Mono',monospace" font-size="9" fill="#2f2b92" letter-spacing="0.08em">HAKONIWA</text>
+              <rect x="430" y="35" width="160" height="40" rx="3" fill="none" stroke="#2f2b92" stroke-width="1.5"/>
+              <text x="510" y="60" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#2f2b92">内部</text>
+              <rect x="430" y="95" width="160" height="40" rx="3" fill="none" stroke="#1a1a1a" stroke-width="1" stroke-dasharray="5,3"/>
+              <text x="510" y="116" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#757575">外部（不可視）</text>
+              <text x="510" y="88" text-anchor="middle" font-family="sans-serif" font-size="8" fill="#757575">見えない</text>
+              <!-- Center arrow -->
+              <line x1="260" y1="75" x2="410" y2="75" stroke="#1a1a1a" stroke-width="1" stroke-dasharray="6,4"/>
+              <text x="335" y="68" text-anchor="middle" font-family="'SF Mono',monospace" font-size="8" fill="#757575">visibility inversion</text>
+              <!-- Bottom -->
+              <text x="340" y="175" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#757575">抗議の伝達路が、設計上存在しない</text>
+            </svg>
+          </div>
+
           <p class="lead">
             ここで静かに起こる転倒を名指しする必要がある。歴史上のユートピアは、外部を見せることで内部の正当性を語ってきた。「我々はあの外部と違う」というコントラストがユートピアの自己認識を支えていた。箱庭主義はコントラストを必要としない。内部の住民はそれぞれの世界のなかに閉じて完結しているため、外部と自分を比較する契機がない。<strong>比較の契機そのものが内部設計から除去されている</strong>。比較しないから、正当性を問う必要もない。
           </p>

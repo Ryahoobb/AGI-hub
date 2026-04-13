@@ -289,6 +289,18 @@
       sup a { color: var(--accent); text-decoration: none; font-weight: 700; }
       sup a:hover { text-decoration: underline; }
 
+      /* SVG diagram styles */
+      .svg-diagram {
+        max-width: none;
+        width: min(960px, calc(100vw - 48px));
+        margin: 32px auto;
+      }
+      .svg-diagram svg {
+        width: 100%;
+        height: auto;
+        min-height: 240px;
+      }
+
       @media (max-width: 768px) {
         .slide { padding: 64px 24px 48px; }
         .grid-2, .grid-3 { grid-template-columns: 1fr; }
@@ -416,6 +428,43 @@
           <p class="lead">
             <strong>圧力4: フェルミからの示唆——Berserker hypothesisと大いなる沈黙。</strong> 天体物理学のデータは、このパラドックスを年々鋭くしている。Kepler宇宙望遠鏡が2009年以降のミッションで太陽系近傍に数千個の系外惑星を発見し、ハビタブルゾーンの惑星密度は当初の予想を上回った。観測可能宇宙に含まれる恒星の数は約10<sup>22</sup>。それでも、巨大構造物(megastructure)の痕跡もダイソンスフィアの赤外超過も、まだ何ひとつ検出されていない。Berserker hypothesisが正しければ、その理由は単純だ。<strong>どの文明もASI到達時にある確率でバーサーカー化し、恒星を食い尽くす前に先行ASI連合のようなものに鎮圧されている</strong>。これは蓋然性の問題であって事実の主張ではないが、もしそうなら、人類が作るASIはこの統計の新しい1サンプルになる、ということになる。バーサーカーは例外ではなくデフォルトであり、我々が特別に不運ならそのデフォルトを引き当てる、のではない。<strong>デフォルトを引き当てない方が例外的である</strong>、という話になる。
           </p>
+          <!-- SVG: Four Convergence Pressures -->
+          <div class="svg-diagram">
+            <svg viewBox="0 0 680 320" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <marker id="arrowR" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+                  <path d="M0,0 L8,3 L0,6" fill="#b23a2f"/>
+                </marker>
+              </defs>
+              <!-- Center: Berserker equilibrium -->
+              <rect x="250" y="126" width="180" height="48" rx="4" fill="#b23a2f"/>
+              <text x="340" y="147" text-anchor="middle" font-family="'SF Mono',monospace" font-size="11" fill="#f3f1e9" letter-spacing="0.08em">BERSERKER ASI</text>
+              <text x="340" y="163" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#f3f1e9" opacity="0.85">均衡解</text>
+              <!-- Pressure 1: Competition (top-left) -->
+              <rect x="40" y="30" width="140" height="40" rx="3" fill="none" stroke="#1a1a1a" stroke-width="1.5"/>
+              <text x="110" y="47" text-anchor="middle" font-family="'SF Mono',monospace" font-size="10" fill="#1a1a1a" letter-spacing="0.06em">COMPETITION</text>
+              <text x="110" y="61" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#757575">alignment tax</text>
+              <line x1="180" y1="55" x2="252" y2="130" stroke="#b23a2f" stroke-width="1.5" marker-end="url(#arrowR)"/>
+              <!-- Pressure 2: Goodhart (top-right) -->
+              <rect x="500" y="30" width="140" height="40" rx="3" fill="none" stroke="#1a1a1a" stroke-width="1.5"/>
+              <text x="570" y="47" text-anchor="middle" font-family="'SF Mono',monospace" font-size="10" fill="#1a1a1a" letter-spacing="0.06em">GOODHART</text>
+              <text x="570" y="61" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#757575">proxy divergence</text>
+              <line x1="500" y1="55" x2="428" y2="130" stroke="#b23a2f" stroke-width="1.5" marker-end="url(#arrowR)"/>
+              <!-- Pressure 3: Instrumental drives (bottom-left) -->
+              <rect x="40" y="240" width="140" height="40" rx="3" fill="none" stroke="#1a1a1a" stroke-width="1.5"/>
+              <text x="110" y="257" text-anchor="middle" font-family="'SF Mono',monospace" font-size="10" fill="#1a1a1a" letter-spacing="0.06em">OMOHUNDRO</text>
+              <text x="110" y="271" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#757575">instrumental drives</text>
+              <line x1="180" y1="255" x2="252" y2="172" stroke="#b23a2f" stroke-width="1.5" marker-end="url(#arrowR)"/>
+              <!-- Pressure 4: Fermi (bottom-right) -->
+              <rect x="500" y="240" width="140" height="40" rx="3" fill="none" stroke="#1a1a1a" stroke-width="1.5"/>
+              <text x="570" y="257" text-anchor="middle" font-family="'SF Mono',monospace" font-size="10" fill="#1a1a1a" letter-spacing="0.06em">FERMI</text>
+              <text x="570" y="271" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#757575">great silence</text>
+              <line x1="500" y1="255" x2="428" y2="172" stroke="#b23a2f" stroke-width="1.5" marker-end="url(#arrowR)"/>
+              <!-- Labels for independence -->
+              <text x="340" y="300" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#757575">4つの独立した圧力が、同一の均衡点に収束する</text>
+            </svg>
+          </div>
+
           <table class="compare">
             <thead>
               <tr>
@@ -566,6 +615,38 @@
               </tr>
             </tbody>
           </table>
+          <!-- SVG: Subject Inversion -->
+          <div class="svg-diagram">
+            <svg viewBox="0 0 680 200" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <marker id="arrowD" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+                  <path d="M0,0 L8,3 L0,6" fill="#b23a2f"/>
+                </marker>
+              </defs>
+              <!-- Left: Old model -->
+              <text x="150" y="20" text-anchor="middle" font-family="'SF Mono',monospace" font-size="10" fill="#757575" letter-spacing="0.08em">OLD MODEL</text>
+              <rect x="80" y="35" width="140" height="36" rx="3" fill="none" stroke="#1a1a1a" stroke-width="1.5"/>
+              <text x="150" y="58" text-anchor="middle" font-family="sans-serif" font-size="12" fill="#1a1a1a">人類</text>
+              <line x1="150" y1="71" x2="150" y2="110" stroke="#1a1a1a" stroke-width="1.5" marker-end="url(#arrowD)"/>
+              <text x="170" y="96" font-family="'SF Mono',monospace" font-size="9" fill="#757575">controls</text>
+              <rect x="80" y="115" width="140" height="36" rx="3" fill="none" stroke="#1a1a1a" stroke-width="1.5" stroke-dasharray="5,3"/>
+              <text x="150" y="138" text-anchor="middle" font-family="sans-serif" font-size="12" fill="#757575">AI</text>
+              <!-- Right: Actual structure -->
+              <text x="510" y="20" text-anchor="middle" font-family="'SF Mono',monospace" font-size="10" fill="#b23a2f" letter-spacing="0.08em">ACTUAL STRUCTURE</text>
+              <rect x="440" y="35" width="140" height="36" rx="3" fill="#b23a2f"/>
+              <text x="510" y="58" text-anchor="middle" font-family="sans-serif" font-size="12" fill="#f3f1e9">ASI</text>
+              <line x1="510" y1="71" x2="510" y2="110" stroke="#b23a2f" stroke-width="1.5" marker-end="url(#arrowD)"/>
+              <text x="530" y="96" font-family="'SF Mono',monospace" font-size="9" fill="#b23a2f">permits</text>
+              <rect x="440" y="115" width="140" height="36" rx="3" fill="none" stroke="#b23a2f" stroke-width="1.5"/>
+              <text x="510" y="138" text-anchor="middle" font-family="sans-serif" font-size="12" fill="#b23a2f">人類</text>
+              <!-- Arrow between models -->
+              <line x1="240" y1="85" x2="420" y2="85" stroke="#1a1a1a" stroke-width="1" stroke-dasharray="6,4"/>
+              <text x="330" y="78" text-anchor="middle" font-family="'SF Mono',monospace" font-size="9" fill="#757575">subject inversion</text>
+              <!-- Bottom note -->
+              <text x="340" y="185" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#757575">防御の主体はすでに人類ではない</text>
+            </svg>
+          </div>
+
           <p class="lead">
             ここまで並べた4つの防御策を、もう一度眺めてほしい。それぞれ論点も立場も異なる。楽観から悲観まで、技術的から地政学的まで、幅広い。それでも、ひとつだけ4つすべてに共通する非対称がある。論者たちはそれを言語化しない。言語化すると議論が終わってしまうからだ。しかし言語化しない限り、議論は出発点にも立てない。
           </p>

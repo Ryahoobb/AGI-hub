@@ -292,6 +292,18 @@
         .credits { padding: 32px 24px 64px; }
       }
 
+      /* SVG diagram styles */
+      .svg-diagram {
+        max-width: none;
+        width: min(960px, calc(100vw - 48px));
+        margin: 32px auto;
+      }
+      .svg-diagram svg {
+        width: 100%;
+        height: auto;
+        min-height: 240px;
+      }
+
       @media print {
         .slide { min-height: auto; page-break-after: always; padding: 24px 0; }
         .nav, .progress { display: none; }
@@ -521,6 +533,48 @@
           <p class="lead">
             配分計算の外側にもう一つ深い穴がある。それは動機の層である。マイケル・スミスが『The Moral Problem』(1994) で精緻に展開した道徳的内在主義は、「何かが善であると真に知る者は、必ず動機を持つ」と主張する。デイヴィッド・ブリンクが『Moral Realism and the Foundations of Ethics』(1989) で擁護する道徳的外在主義はこれに反対する。<strong>知ることと動くことは別の層にある</strong>。エビの苦痛の規模を知的に理解しても、石への敬意を論理的に把握しても、それが具体的な行動を呼び起こすとは限らない。配分計算は「何をすべきか」の答えを出すが、「なぜ実際に動くのか」の答えは配分の言語の外側にある。ジョン・マクダウェルが「Are Moral Requirements Hypothetical Imperatives?」(1978) で論じた徳倫理的内在主義は、動機と知覚が不可分に結びつく「倫理的視力(moral vision)」を提示するが、これもまた配分問題の外側の層である。
           </p>
+          <!-- SVG: Ethics Three-Layer Structure -->
+          <div class="svg-diagram">
+            <svg viewBox="0 0 680 320" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <marker id="arrowDown23" markerWidth="8" markerHeight="6" refX="4" refY="6" orient="auto">
+                  <path d="M0,0 L4,6 L8,0" fill="none" stroke="#b23a2f" stroke-width="1.5"/>
+                </marker>
+              </defs>
+              <!-- Layer 1: Allocation -->
+              <rect x="40" y="20" width="600" height="70" rx="3" fill="none" stroke="#1a1a1a" stroke-width="2"/>
+              <text x="340" y="48" text-anchor="middle" font-family="'SF Mono',monospace" font-size="12" fill="#b23a2f" letter-spacing="0.08em">LAYER 1</text>
+              <text x="340" y="72" text-anchor="middle" font-family="sans-serif" font-size="13" fill="#1a1a1a">配分問題 — 量の分配</text>
+              <!-- Examples L1 -->
+              <text x="100" y="62" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#757575">税</text>
+              <text x="180" y="62" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#757575">医療</text>
+              <text x="500" y="62" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#757575">炭素予算</text>
+              <text x="580" y="62" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#757575">年金</text>
+              <!-- Arrow 1->2 -->
+              <line x1="340" y1="90" x2="340" y2="118" stroke="#b23a2f" stroke-width="1.5" marker-end="url(#arrowDown23)"/>
+              <!-- Layer 2: Rule Justification -->
+              <rect x="40" y="124" width="600" height="70" rx="3" fill="none" stroke="#1a1a1a" stroke-width="2"/>
+              <text x="340" y="152" text-anchor="middle" font-family="'SF Mono',monospace" font-size="12" fill="#b23a2f" letter-spacing="0.08em">LAYER 2</text>
+              <text x="340" y="176" text-anchor="middle" font-family="sans-serif" font-size="13" fill="#1a1a1a">ルールの正当化 — 配分基準の選択</text>
+              <!-- Examples L2 -->
+              <text x="120" y="166" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#757575">功利主義</text>
+              <text x="260" y="166" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#757575">平等主義</text>
+              <text x="420" y="166" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#757575">自由至上主義</text>
+              <text x="560" y="166" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#757575">潜在能力</text>
+              <!-- Arrow 2->3 -->
+              <line x1="340" y1="194" x2="340" y2="222" stroke="#b23a2f" stroke-width="1.5" marker-end="url(#arrowDown23)"/>
+              <!-- Layer 3: Inviolable Boundary -->
+              <rect x="40" y="228" width="600" height="76" rx="3" fill="#b23a2f" fill-opacity="0.06" stroke="#b23a2f" stroke-width="2"/>
+              <text x="340" y="256" text-anchor="middle" font-family="'SF Mono',monospace" font-size="12" fill="#b23a2f" letter-spacing="0.08em" font-weight="700">LAYER 3</text>
+              <text x="340" y="280" text-anchor="middle" font-family="sans-serif" font-size="13" fill="#1a1a1a">侵してはならない境界 — 量とルールの言語で書けない絶対線</text>
+              <!-- Examples L3 -->
+              <text x="120" y="298" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#b23a2f">人を目的として</text>
+              <text x="270" y="298" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#b23a2f">関係性</text>
+              <text x="400" y="298" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#b23a2f">動機</text>
+              <text x="540" y="298" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#b23a2f">存在への敬意</text>
+            </svg>
+          </div>
+
           <p class="lead">
             ここまでで倫理の構造は次のようにまとめられる。<strong>倫理 = 配分問題 + 配分ルールの正当化問題 + 侵してはならない境界</strong>。第一項は量の分配、第二項はルールの選択、第三項は量とルールの言語で書けない絶対線——人を目的として扱うこと、関係性、動機、存在への敬意。三部作の締めである本記事が扱うのは、この第三項である。そしてここから、倫理はさらに奇妙な方向に折れていく。
           </p>

@@ -292,6 +292,18 @@
         .credits { padding: 32px 24px 64px; }
       }
 
+      /* SVG diagram styles */
+      .svg-diagram {
+        max-width: none;
+        width: min(960px, calc(100vw - 48px));
+        margin: 32px auto;
+      }
+      .svg-diagram svg {
+        width: 100%;
+        height: auto;
+        min-height: 240px;
+      }
+
       @media print {
         .slide { min-height: auto; page-break-after: always; padding: 24px 0; }
         .nav, .progress { display: none; }
@@ -470,6 +482,58 @@
           <div class="note">
             ここで Ulysses pact と A-2 の非対称を並べる。<strong>Ulysses pact では、縛る側(現在の理性的自己)と縛られる側(未来の誘惑に屈する自己)の時間関係は不可逆である</strong>。縛る側は決定を下し、縛られる側はその決定を引き受ける。しかし縛る側は、航海が終われば戻ってくる。セイレーンの海域を抜けたあと、マストの縄は解かれ、縛る側のオデュッセウスが再び主導権を取り戻す。A-2 は、この戻りの経路を消す。パラメータ書換を承認した現在の自分は、書換後の自分の中に<strong>残らない</strong>。嫉妬を消す決定を下した「嫉妬を持っていた自分」は、薬の効き目が最大化した朝には、もう意思決定能力を持たない亡霊になっている。
           </div>
+
+          <!-- SVG: Cross-Temporal Identity Discontinuity -->
+          <div class="svg-diagram">
+            <svg viewBox="0 0 680 280" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <marker id="arrowR24" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+                  <path d="M0,0 L8,3 L0,6" fill="#b23a2f"/>
+                </marker>
+              </defs>
+              <!-- Time axis -->
+              <line x1="40" y1="240" x2="640" y2="240" stroke="#1a1a1a" stroke-width="1.5"/>
+              <text x="340" y="268" text-anchor="middle" font-family="'SF Mono',monospace" font-size="11" fill="#757575" letter-spacing="0.06em">TIME</text>
+              <!-- Tick marks -->
+              <line x1="140" y1="236" x2="140" y2="244" stroke="#1a1a1a" stroke-width="1.5"/>
+              <line x1="340" y1="236" x2="340" y2="244" stroke="#b23a2f" stroke-width="2"/>
+              <line x1="540" y1="236" x2="540" y2="244" stroke="#1a1a1a" stroke-width="1.5"/>
+              <!-- Ulysses Pact: top row -->
+              <text x="60" y="30" font-family="'SF Mono',monospace" font-size="11" fill="#757575" letter-spacing="0.06em">ULYSSES PACT</text>
+              <!-- Person A before -->
+              <rect x="80" y="44" width="120" height="40" rx="3" fill="none" stroke="#1a1a1a" stroke-width="1.5"/>
+              <text x="140" y="60" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#1a1a1a">理性的な自己</text>
+              <text x="140" y="76" text-anchor="middle" font-family="'SF Mono',monospace" font-size="10" fill="#757575">BINDS</text>
+              <!-- Arrow forward -->
+              <line x1="200" y1="64" x2="280" y2="64" stroke="#1a1a1a" stroke-width="1.5" marker-end="url(#arrowR24)"/>
+              <!-- Person A tempted -->
+              <rect x="280" y="44" width="120" height="40" rx="3" fill="none" stroke="#1a1a1a" stroke-width="1.5"/>
+              <text x="340" y="60" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#1a1a1a">誘惑される自己</text>
+              <text x="340" y="76" text-anchor="middle" font-family="'SF Mono',monospace" font-size="10" fill="#757575">BOUND</text>
+              <!-- Arrow return (dashed) -->
+              <path d="M400,64 Q440,20 480,64 Q520,108 400,108 L200,108 Q140,108 140,84" fill="none" stroke="#1a1a1a" stroke-width="1" stroke-dasharray="5,3"/>
+              <text x="440" y="110" font-family="sans-serif" font-size="10" fill="#757575">戻る</text>
+              <!-- A-2: bottom row -->
+              <text x="60" y="148" font-family="'SF Mono',monospace" font-size="11" fill="#b23a2f" letter-spacing="0.06em" font-weight="700">A-2 REWRITE</text>
+              <!-- Person B before -->
+              <rect x="80" y="162" width="120" height="40" rx="3" fill="none" stroke="#b23a2f" stroke-width="2"/>
+              <text x="140" y="178" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#1a1a1a">書換前の私</text>
+              <text x="140" y="194" text-anchor="middle" font-family="'SF Mono',monospace" font-size="10" fill="#b23a2f">CONSENTS</text>
+              <!--断切 line -->
+              <line x1="340" y1="150" x2="340" y2="210" stroke="#b23a2f" stroke-width="2" stroke-dasharray="6,4"/>
+              <text x="340" y="222" text-anchor="middle" font-family="'SF Mono',monospace" font-size="10" fill="#b23a2f" letter-spacing="0.06em">DISCONTINUITY</text>
+              <!-- Arrow forward -->
+              <line x1="200" y1="182" x2="280" y2="182" stroke="#b23a2f" stroke-width="1.5" marker-end="url(#arrowR24)"/>
+              <!-- Person B after (different) -->
+              <rect x="400" y="162" width="140" height="40" rx="3" fill="#b23a2f" fill-opacity="0.06" stroke="#b23a2f" stroke-width="2"/>
+              <text x="470" y="178" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#1a1a1a">書換後の別人</text>
+              <text x="470" y="194" text-anchor="middle" font-family="'SF Mono',monospace" font-size="10" fill="#b23a2f">CANNOT REVOKE</text>
+              <!-- X mark on return path -->
+              <line x1="310" y1="170" x2="330" y2="190" stroke="#b23a2f" stroke-width="2"/>
+              <line x1="330" y1="170" x2="310" y2="190" stroke="#b23a2f" stroke-width="2"/>
+            </svg>
+          </div>
+
           <p class="lead">
             この非対称性をもう一段掘ると、越境的同意の不可能性が見える。通常の同意は「同じ主体が、自分の身に起きることに対して承認を与える」構造を持つ。医療同意、契約同意、性的同意、いずれもそうである。Ulysses pact は少しだけこの構造を緩める。現在の自分が未来の自分に対して事前拘束を与えるが、未来の自分は理論上、縛りを解く能力を残している(実際にオデュッセウスは叫び続けた)。A-2 はこの緩みすら消す。<strong>書換後の自分は、書換前の自分と連続していない</strong>。だから書換前の自分の決定を、書換後の自分が追認することも、撤回することもできない。追認しようとした瞬間、追認する主体は書換後の別人であり、書換前の決定内容を内側から理解する資格を失っている。撤回しようとしても同じである。書換前の自分はもう存在せず、書換後の自分に拒否する根拠がない。同意の連鎖が、時間の切断面で断ち切れる。
           </p>

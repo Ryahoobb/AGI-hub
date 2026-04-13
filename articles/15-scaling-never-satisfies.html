@@ -370,6 +370,18 @@
         .infographic-bignum { grid-template-columns: 1fr; }
       }
 
+      /* SVG diagram styles */
+      .svg-diagram {
+        max-width: none;
+        width: min(960px, calc(100vw - 48px));
+        margin: 32px auto;
+      }
+      .svg-diagram svg {
+        width: 100%;
+        height: auto;
+        min-height: 240px;
+      }
+
       @media print {
         .slide { min-height: auto; page-break-after: always; padding: 24px 0; }
         .nav, .progress { display: none; }
@@ -660,6 +672,59 @@
               <span class="tag">Loop 3</span>
               <p><strong>エージェント &rarr; 推論</strong><br>エージェントは外部ツールで推論の限界を迂回する。ツール使用の成功パターンがモデルの推論能力自体を改善する。</p>
             </div>
+          </div>
+
+          <!-- SVG: Three Accelerators Convergence -->
+          <div class="svg-diagram">
+            <svg viewBox="0 0 680 360" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <marker id="arr15" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+                  <path d="M0,0 L8,3 L0,6" fill="#1a1a1a"/>
+                </marker>
+                <marker id="arr15a" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+                  <path d="M0,0 L8,3 L0,6" fill="#757575"/>
+                </marker>
+              </defs>
+              <!-- Three source nodes -->
+              <rect x="20" y="40" width="170" height="60" rx="3" fill="none" stroke="#1a1a1a" stroke-width="2"/>
+              <text x="105" y="65" text-anchor="middle" font-family="'SF Mono',monospace" font-size="10" fill="#757575" letter-spacing="0.06em">ACCELERATOR 1</text>
+              <text x="105" y="84" text-anchor="middle" font-family="sans-serif" font-size="12" fill="#1a1a1a" font-weight="700">テスト時計算</text>
+
+              <rect x="255" y="40" width="170" height="60" rx="3" fill="none" stroke="#1a1a1a" stroke-width="2"/>
+              <text x="340" y="65" text-anchor="middle" font-family="'SF Mono',monospace" font-size="10" fill="#757575" letter-spacing="0.06em">ACCELERATOR 2</text>
+              <text x="340" y="84" text-anchor="middle" font-family="sans-serif" font-size="12" fill="#1a1a1a" font-weight="700">合成データ</text>
+
+              <rect x="490" y="40" width="170" height="60" rx="3" fill="none" stroke="#1a1a1a" stroke-width="2"/>
+              <text x="575" y="65" text-anchor="middle" font-family="'SF Mono',monospace" font-size="10" fill="#757575" letter-spacing="0.06em">ACCELERATOR 3</text>
+              <text x="575" y="84" text-anchor="middle" font-family="sans-serif" font-size="12" fill="#1a1a1a" font-weight="700">エージェント</text>
+
+              <!-- Circular feedback loops between the three -->
+              <!-- Loop 1: Test-time -> Synthetic (top arc) -->
+              <path d="M190,60 Q 225,20 255,60" fill="none" stroke="#757575" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arr15a)"/>
+              <text x="222" y="16" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#757575">推論チェーン → 学習データ</text>
+
+              <!-- Loop 2: Synthetic -> Agent (top arc) -->
+              <path d="M425,60 Q 460,20 490,60" fill="none" stroke="#757575" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arr15a)"/>
+              <text x="457" y="16" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#757575">合成モデル → 地力向上</text>
+
+              <!-- Loop 3: Agent -> Test-time (bottom arc) -->
+              <path d="M490,100 Q 340,160 190,100" fill="none" stroke="#757575" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arr15a)"/>
+              <text x="340" y="152" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#757575">ツール使用パターン → 推論改善</text>
+
+              <!-- Convergence arrows down -->
+              <line x1="105" y1="100" x2="340" y2="230" stroke="#1a1a1a" stroke-width="1.5" marker-end="url(#arr15)"/>
+              <line x1="340" y1="100" x2="340" y2="230" stroke="#1a1a1a" stroke-width="1.5" marker-end="url(#arr15)"/>
+              <line x1="575" y1="100" x2="340" y2="230" stroke="#1a1a1a" stroke-width="1.5" marker-end="url(#arr15)"/>
+
+              <!-- Convergence point -->
+              <circle cx="340" cy="250" r="32" fill="none" stroke="#1a1a1a" stroke-width="2"/>
+              <text x="340" y="246" text-anchor="middle" font-family="'SF Mono',monospace" font-size="10" fill="#1a1a1a" letter-spacing="0.06em">COMPOUND</text>
+              <text x="340" y="260" text-anchor="middle" font-family="'SF Mono',monospace" font-size="10" fill="#1a1a1a" letter-spacing="0.06em">SCALING</text>
+
+              <!-- Output arrow -->
+              <line x1="340" y1="282" x2="340" y2="320" stroke="#1a1a1a" stroke-width="2" marker-end="url(#arr15)"/>
+              <text x="340" y="345" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#1a1a1a" font-weight="700">多次元スケーリング</text>
+            </svg>
           </div>
 
           <p class="lead">予測市場はこの合流をどう見ているか。Metaculusの中央予測値は、AGI到達を2028-2030年に置いている。Sam Altmanは2024年9月に「超知能は数千日先」と書いた。Dario Amodeiは「2026年末までにAGIの可能性」と述べた。予測のばらつきは大きいが、方向は収束している。年ではなく、数千日の単位で語られるようになった。</p>

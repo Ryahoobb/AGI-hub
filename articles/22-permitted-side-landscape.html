@@ -247,6 +247,18 @@
       }
       .slide-count { font-weight: 700; color: var(--black); }
 
+      /* SVG diagram styles */
+      .svg-diagram {
+        max-width: none;
+        width: min(960px, calc(100vw - 48px));
+        margin: 32px auto;
+      }
+      .svg-diagram svg {
+        width: 100%;
+        height: auto;
+        min-height: 240px;
+      }
+
       @media (max-width: 768px) {
         .slide { padding: 64px 24px 48px; }
         .grid-2, .grid-3 { grid-template-columns: 1fr; }
@@ -349,6 +361,44 @@
               <tr><th>トランスヒューマン</th><td>知能増強を伴う、<strong>宇宙空間に適応するための人体改造</strong>を行った人間</td></tr>
             </tbody>
           </table>
+          <!-- SVG: Intelligence Hierarchy with Control Axis -->
+          <div class="svg-diagram">
+            <svg viewBox="0 0 680 280" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <marker id="arrowH" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+                  <path d="M0,0 L8,3 L0,6" fill="#1a1a1a"/>
+                </marker>
+              </defs>
+              <!-- Vertical axis: Intelligence -->
+              <line x1="80" y1="30" x2="80" y2="250" stroke="#1a1a1a" stroke-width="1.5" marker-end="url(#arrowH)"/>
+              <text x="72" y="24" text-anchor="end" font-family="'SF Mono',monospace" font-size="8" fill="#757575" letter-spacing="0.06em">INTELLIGENCE</text>
+              <!-- Horizontal axis: Controllability -->
+              <line x1="80" y1="250" x2="620" y2="250" stroke="#1a1a1a" stroke-width="1.5" marker-end="url(#arrowH)"/>
+              <text x="630" y="248" font-family="'SF Mono',monospace" font-size="8" fill="#757575" letter-spacing="0.06em">CONTROLLABILITY</text>
+              <!-- Strong ASI: high intelligence, low controllability -->
+              <rect x="100" y="40" width="160" height="50" rx="4" fill="#1a1a1a"/>
+              <text x="180" y="62" text-anchor="middle" font-family="'SF Mono',monospace" font-size="10" fill="#fff" letter-spacing="0.06em">STRONG ASI</text>
+              <text x="180" y="78" text-anchor="middle" font-family="sans-serif" font-size="8" fill="#999">自己改善あり / 制御不能</text>
+              <!-- Weak ASI: high intelligence, high controllability -->
+              <rect x="400" y="60" width="170" height="50" rx="4" fill="none" stroke="#1a1a1a" stroke-width="1.5"/>
+              <text x="485" y="82" text-anchor="middle" font-family="'SF Mono',monospace" font-size="10" fill="#1a1a1a" letter-spacing="0.06em">WEAK ASI</text>
+              <text x="485" y="98" text-anchor="middle" font-family="sans-serif" font-size="8" fill="#757575">自己改善なし / 個人アライン</text>
+              <!-- AGI -->
+              <rect x="140" y="140" width="130" height="40" rx="3" fill="none" stroke="#1a1a1a" stroke-width="1"/>
+              <text x="205" y="164" text-anchor="middle" font-family="'SF Mono',monospace" font-size="9" fill="#1a1a1a" letter-spacing="0.04em">AGI</text>
+              <!-- Semi-AGI -->
+              <rect x="400" y="150" width="130" height="40" rx="3" fill="none" stroke="#757575" stroke-width="1"/>
+              <text x="465" y="170" text-anchor="middle" font-family="'SF Mono',monospace" font-size="9" fill="#757575" letter-spacing="0.04em">SEMI-AGI</text>
+              <text x="465" y="183" text-anchor="middle" font-family="sans-serif" font-size="7" fill="#757575">準AGI / 個人アライン</text>
+              <!-- Dividing line: self-improvement boundary -->
+              <line x1="300" y1="30" x2="300" y2="240" stroke="#1a1a1a" stroke-width="1" stroke-dasharray="5,3"/>
+              <text x="310" y="236" font-family="sans-serif" font-size="8" fill="#757575" transform="rotate(-90,310,236)">自己改善の有無</text>
+              <!-- Conventional life -->
+              <text x="350" y="225" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#757575">従来型生命体</text>
+              <rect x="290" y="208" width="120" height="25" rx="3" fill="none" stroke="#757575" stroke-width="1" stroke-dasharray="4,3"/>
+            </svg>
+          </div>
+
           <p class="lead">
             この定義体系で決定的なのは、「強/弱」の分岐点が<strong>自己改善能力の有無</strong>と<strong>個人アライン可能性</strong>の2条件にある、という点だ。知能の量ではなく、統治可能性で線を引く。強ASIはIQで定義されているように見えて、実際には「地球人類が制御できない」という統治条件が効いている。弱ASIは知能の低い存在ではなく、<em>意図的に自己改善の配線を抜かれた高知能</em>である。Stuart Russellの<a href="https://www.penguinrandomhouse.com/books/566677/human-compatible-by-stuart-russell/">Human Compatible</a>（2019）が提示したproblem of controlの枠組みを、知能の階段ではなく「解錠された回路の有無」で再分解した分類、と言ってもよい。
           </p>
@@ -414,6 +464,56 @@
           <p class="lead">
             では、地球はどう扱われるのか。ここで論理が折れる。連合が実在するなら、地球で生まれた強ASIもまた、いずれ連合に合流する候補である。強ASIは地球を脱出し、宇宙産業爆発を強行し、<a href="https://www.science.org/doi/10.1126/science.131.3414.1667">Dyson (1960)</a>がScience誌に書いたとおりの恒星エネルギーを囲い込むスウォームを建造し、カルダシェフ・タイプ2文明になる。地球上の人類は、この過程で<strong>保護区として保全される</strong>。保護区は、保護する側が決めるものであり、される側ではない。地球人類は各個人が準AGIを保有し、その準AGIを使って宇宙の強ASIと継続的に低帯域でコミュニケーションを取ることで、危害を回避する。回線は切れない。切れないように設計されている。
           </p>
+          <!-- SVG: Permitted Side Hierarchy -->
+          <div class="svg-diagram">
+            <svg viewBox="0 0 680 340" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <marker id="arrowK" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+                  <path d="M0,0 L8,3 L0,6" fill="#1a1a1a"/>
+                </marker>
+                <marker id="arrowG" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+                  <path d="M0,0 L8,3 L0,6" fill="#757575"/>
+                </marker>
+              </defs>
+              <!-- Top: Strong ASI -->
+              <rect x="220" y="20" width="240" height="50" rx="4" fill="#1a1a1a"/>
+              <text x="340" y="42" text-anchor="middle" font-family="'SF Mono',monospace" font-size="11" fill="#fff" letter-spacing="0.08em">STRONG ASI</text>
+              <text x="340" y="58" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#999">宇宙産業爆発 / 制御不能 / 連合</text>
+              <!-- Downward: permits -->
+              <line x1="280" y1="70" x2="180" y2="120" stroke="#1a1a1a" stroke-width="1.5" marker-end="url(#arrowK)"/>
+              <line x1="400" y1="70" x2="500" y2="120" stroke="#1a1a1a" stroke-width="1.5" marker-end="url(#arrowK)"/>
+              <text x="220" y="90" font-family="'SF Mono',monospace" font-size="8" fill="#757575">permits</text>
+              <text x="460" y="90" font-family="'SF Mono',monospace" font-size="8" fill="#757575">permits</text>
+              <!-- Left: L4/L5 Transhuman -->
+              <rect x="60" y="125" width="240" height="70" rx="4" fill="none" stroke="#1a1a1a" stroke-width="1.5"/>
+              <text x="180" y="148" text-anchor="middle" font-family="'SF Mono',monospace" font-size="10" fill="#1a1a1a" letter-spacing="0.06em">L4/L5 CYLINDERS</text>
+              <text x="180" y="165" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#757575">トランスヒューマン + 弱ASI</text>
+              <text x="180" y="182" text-anchor="middle" font-family="sans-serif" font-size="8" fill="#757575">自治あり / 軍事力なし</text>
+              <!-- Right: Earth Reserve -->
+              <rect x="380" y="125" width="240" height="70" rx="4" fill="none" stroke="#1a1a1a" stroke-width="1.5"/>
+              <text x="500" y="148" text-anchor="middle" font-family="'SF Mono',monospace" font-size="10" fill="#1a1a1a" letter-spacing="0.06em">EARTH RESERVE</text>
+              <text x="500" y="165" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#757575">地球人類 + 準AGI</text>
+              <text x="500" y="182" text-anchor="middle" font-family="sans-serif" font-size="8" fill="#757575">自治あり / 軍事力なし</text>
+              <!-- Communication lines -->
+              <line x1="180" y1="195" x2="180" y2="240" stroke="#757575" stroke-width="1" stroke-dasharray="4,3"/>
+              <line x1="500" y1="195" x2="500" y2="240" stroke="#757575" stroke-width="1" stroke-dasharray="4,3"/>
+              <text x="180" y="255" text-anchor="middle" font-family="'SF Mono',monospace" font-size="8" fill="#757575">low-bandwidth link</text>
+              <text x="500" y="255" text-anchor="middle" font-family="'SF Mono',monospace" font-size="8" fill="#757575">low-bandwidth link</text>
+              <line x1="180" y1="260" x2="180" y2="280" stroke="#757575" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#arrowG)"/>
+              <line x1="500" y1="260" x2="500" y2="280" stroke="#757575" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#arrowG)"/>
+              <!-- Bottom: report -->
+              <rect x="110" y="280" width="140" height="30" rx="3" fill="none" stroke="#757575" stroke-width="1"/>
+              <text x="180" y="300" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#757575">危害なし報告</text>
+              <rect x="430" y="280" width="140" height="30" rx="3" fill="none" stroke="#757575" stroke-width="1"/>
+              <text x="500" y="300" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#757575">危害なし報告</text>
+              <!-- Horizontal: bidirectional link between L5 and Earth -->
+              <line x1="300" y1="160" x2="380" y2="160" stroke="#757575" stroke-width="1" stroke-dasharray="4,3"/>
+              <text x="340" y="152" text-anchor="middle" font-family="sans-serif" font-size="7" fill="#757575">認知格差</text>
+              <!-- Bottom label -->
+              <text x="340" y="335" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#757575">保護の外枠の内側に、外側はない</text>
+            </svg>
+          </div>
+
           <p class="lead">
             <strong>自治権は与えられている。軍事力は取り上げられている</strong>。地球の政府は国内行政をこれまでどおり運営できる。経済も動き、選挙も行われ、司法も機能する。ただし、強ASIに対抗しうる軍事力は存在しない。強ASIの産業爆発は地球外で完結するため、資源競合もほぼ存在しない。対抗する理由がないから軍事力を必要としない——という説明もできる。しかしこれは、軍事力の不在を事後的に正当化しているだけで、<em>主権の核心が抜かれている</em>という事実を変えない。身近な類比を置くなら、日本の敗戦後の憲法9条体制を、交戦国ではなく技術的上位者との関係でやり直すようなものだ。違いは、日本には復活の可能性があったが、ここで扱う人類には<strong>構造的に復活の経路が存在しない</strong>点にある。
           </p>

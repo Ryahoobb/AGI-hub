@@ -326,6 +326,18 @@
       }
       .inline-link:hover { border-bottom-color: var(--accent); }
 
+      /* ── SVG Diagram ── */
+      .svg-diagram {
+        max-width: none;
+        width: min(960px, calc(100vw - 48px));
+        margin: 32px auto;
+      }
+      .svg-diagram svg {
+        width: 100%;
+        height: auto;
+        min-height: 240px;
+      }
+
       @media (max-width: 768px) {
         .slide { padding: 48px 20px 40px; gap: 20px; }
         .grid-2, .grid-3 { grid-template-columns: 1fr; }
@@ -439,6 +451,54 @@
             </tbody>
           </table>
 
+          <!-- SVG: Five Layers of AGI Narrative -->
+          <div class="svg-diagram">
+            <svg viewBox="0 0 680 360" xmlns="http://www.w3.org/2000/svg">
+              <!-- Layer blocks (bottom to top = deep to surface) -->
+              <!-- Layer 5: Practice -->
+              <rect x="90" y="280" width="500" height="48" rx="3" fill="#b23a2f" opacity="0.12" stroke="#b23a2f" stroke-width="1"/>
+              <text x="120" y="300" font-family="'SF Mono',monospace" font-size="10" fill="#b23a2f" letter-spacing="0.06em">L5</text>
+              <text x="150" y="300" font-family="sans-serif" font-size="13" font-weight="700" fill="#1a1a1a">実践</text>
+              <text x="150" y="318" font-family="sans-serif" font-size="11" fill="#757575">聞いた人に何をさせるのか — 投資、規制支持、キャリア転換</text>
+
+              <!-- Layer 4: Epistemology -->
+              <rect x="90" y="224" width="500" height="48" rx="3" fill="#b23a2f" opacity="0.08" stroke="#b23a2f" stroke-width="1"/>
+              <text x="120" y="244" font-family="'SF Mono',monospace" font-size="10" fill="#b23a2f" letter-spacing="0.06em">L4</text>
+              <text x="150" y="244" font-family="sans-serif" font-size="13" font-weight="700" fill="#1a1a1a">認識論</text>
+              <text x="150" y="262" font-family="sans-serif" font-size="11" fill="#757575">何を証拠として採用し、何を切り捨てているか</text>
+
+              <!-- Layer 3: Interests -->
+              <rect x="90" y="168" width="500" height="48" rx="3" fill="#1a1a1a" opacity="0.06" stroke="#1a1a1a" stroke-width="1"/>
+              <text x="120" y="188" font-family="'SF Mono',monospace" font-size="10" fill="#b23a2f" letter-spacing="0.06em">L3</text>
+              <text x="150" y="188" font-family="sans-serif" font-size="13" font-weight="700" fill="#1a1a1a">利害</text>
+              <text x="150" y="206" font-family="sans-serif" font-size="11" fill="#757575">誰が得をし、誰が損をする物語か</text>
+
+              <!-- Layer 2: Function -->
+              <rect x="90" y="112" width="500" height="48" rx="3" fill="#1a1a1a" opacity="0.06" stroke="#1a1a1a" stroke-width="1"/>
+              <text x="120" y="132" font-family="'SF Mono',monospace" font-size="10" fill="#b23a2f" letter-spacing="0.06em">L2</text>
+              <text x="150" y="132" font-family="sans-serif" font-size="13" font-weight="700" fill="#1a1a1a">機能</text>
+              <text x="150" y="150" font-family="sans-serif" font-size="11" fill="#757575">その物語は何のために語られているか — 警告、動員、正当化</text>
+
+              <!-- Layer 1: Object (surface) -->
+              <rect x="90" y="56" width="500" height="48" rx="3" fill="#1a1a1a" opacity="0.06" stroke="#1a1a1a" stroke-width="1.5"/>
+              <text x="120" y="76" font-family="'SF Mono',monospace" font-size="10" fill="#b23a2f" letter-spacing="0.06em">L1</text>
+              <text x="150" y="76" font-family="sans-serif" font-size="13" font-weight="700" fill="#1a1a1a">対象</text>
+              <text x="150" y="94" font-family="sans-serif" font-size="11" fill="#757575">AGIはどう来るか、社会はどう変わるか</text>
+
+              <!-- Depth arrow -->
+              <line x1="60" y1="60" x2="60" y2="324" stroke="#757575" stroke-width="1"/>
+              <polygon points="60,330 55,320 65,320" fill="#757575"/>
+              <text x="48" y="195" text-anchor="middle" font-family="'SF Mono',monospace" font-size="9" fill="#757575" transform="rotate(-90, 48, 195)" letter-spacing="0.06em">DEPTH</text>
+
+              <!-- Surface label -->
+              <text x="60" y="48" text-anchor="middle" font-family="'SF Mono',monospace" font-size="9" fill="#757575">表層</text>
+              <text x="60" y="348" text-anchor="middle" font-family="'SF Mono',monospace" font-size="9" fill="#757575">深層</text>
+
+              <!-- Title -->
+              <text x="340" y="24" text-anchor="middle" font-family="sans-serif" font-size="13" font-weight="700" fill="#1a1a1a">AGIナラティブの5層構造</text>
+            </svg>
+          </div>
+
           <p class="lead">Jens Beckertはマックス・プランク社会研究所で「fictional expectations」の概念を展開した（Beckert, 2016, <em>Imagined Futures</em>, Harvard University Press）。資本主義経済において、行為者は不確実な未来についての「虚構の期待」に基づいて意思決定する。期待が虚構であることは問題ではない。問題は、その虚構がどのような行動を組織し、誰の利益に奉仕するかだ。</p>
           <p class="lead">AGI HUBの既存記事をこの5層で読み直すと、各記事がどの層を主に扱い、どの層を暗黙の前提として残していたかが見える。<a href="05-ai-risk-lineage.html" class="inline-link">AI存亡リスク論の系譜（No. 05）</a>は第1層と第3層の交差を扱った。30年にわたるリスク言説の系譜を辿ったが、その系譜を辿ること自体が「リスク言説の正統性を歴史的に証明する」という第2層の機能を帯びている。記事を書いた時点では、その自己言及的な構造を明示していなかった。</p>
 
@@ -493,6 +553,69 @@
               </tr>
             </tbody>
           </table>
+
+          <!-- SVG: Four Roles × Five Layers Matrix -->
+          <div class="svg-diagram">
+            <svg viewBox="0 0 680 280" xmlns="http://www.w3.org/2000/svg">
+              <!-- Column headers (Roles) -->
+              <text x="220" y="28" text-anchor="middle" font-family="'SF Mono',monospace" font-size="10" fill="#b23a2f" letter-spacing="0.06em">予報者</text>
+              <text x="340" y="28" text-anchor="middle" font-family="'SF Mono',monospace" font-size="10" fill="#b23a2f" letter-spacing="0.06em">翻訳者</text>
+              <text x="460" y="28" text-anchor="middle" font-family="'SF Mono',monospace" font-size="10" fill="#b23a2f" letter-spacing="0.06em">設計者</text>
+              <text x="580" y="28" text-anchor="middle" font-family="'SF Mono',monospace" font-size="10" fill="#b23a2f" letter-spacing="0.06em">批評家</text>
+
+              <!-- Row headers (Layers) -->
+              <text x="100" y="68" text-anchor="end" font-family="sans-serif" font-size="11" fill="#1a1a1a">L1 対象</text>
+              <text x="100" y="112" text-anchor="end" font-family="sans-serif" font-size="11" fill="#1a1a1a">L2 機能</text>
+              <text x="100" y="156" text-anchor="end" font-family="sans-serif" font-size="11" fill="#1a1a1a">L3 利害</text>
+              <text x="100" y="200" text-anchor="end" font-family="sans-serif" font-size="11" fill="#1a1a1a">L4 認識論</text>
+              <text x="100" y="244" text-anchor="end" font-family="sans-serif" font-size="11" fill="#1a1a1a">L5 実践</text>
+
+              <!-- Grid lines -->
+              <line x1="120" y1="40" x2="640" y2="40" stroke="#e5e5e5" stroke-width="1"/>
+              <line x1="120" y1="84" x2="640" y2="84" stroke="#e5e5e5" stroke-width="1"/>
+              <line x1="120" y1="128" x2="640" y2="128" stroke="#e5e5e5" stroke-width="1"/>
+              <line x1="120" y1="172" x2="640" y2="172" stroke="#e5e5e5" stroke-width="1"/>
+              <line x1="120" y1="216" x2="640" y2="216" stroke="#e5e5e5" stroke-width="1"/>
+              <line x1="120" y1="260" x2="640" y2="260" stroke="#e5e5e5" stroke-width="1"/>
+
+              <!-- Strength indicators: filled circles = strong, open circles = weak -->
+              <!-- Forecaster: strong L1, L4 -->
+              <circle cx="220" cy="64" r="8" fill="#b23a2f" opacity="0.8"/>
+              <circle cx="220" cy="108" r="8" fill="none" stroke="#757575" stroke-width="1"/>
+              <circle cx="220" cy="152" r="8" fill="none" stroke="#757575" stroke-width="1"/>
+              <circle cx="220" cy="196" r="8" fill="#b23a2f" opacity="0.5"/>
+              <circle cx="220" cy="240" r="8" fill="none" stroke="#757575" stroke-width="1"/>
+
+              <!-- Translator: strong L1, L2 -->
+              <circle cx="340" cy="64" r="8" fill="#b23a2f" opacity="0.5"/>
+              <circle cx="340" cy="108" r="8" fill="#b23a2f" opacity="0.8"/>
+              <circle cx="340" cy="152" r="8" fill="none" stroke="#757575" stroke-width="1"/>
+              <circle cx="340" cy="196" r="8" fill="none" stroke="#757575" stroke-width="1"/>
+              <circle cx="340" cy="240" r="8" fill="#b23a2f" opacity="0.5"/>
+
+              <!-- Designer: strong L5, L2 -->
+              <circle cx="460" cy="64" r="8" fill="none" stroke="#757575" stroke-width="1"/>
+              <circle cx="460" cy="108" r="8" fill="#b23a2f" opacity="0.5"/>
+              <circle cx="460" cy="152" r="8" fill="#b23a2f" opacity="0.5"/>
+              <circle cx="460" cy="196" r="8" fill="none" stroke="#757575" stroke-width="1"/>
+              <circle cx="460" cy="240" r="8" fill="#b23a2f" opacity="0.8"/>
+
+              <!-- Critic: strong L3, L4 -->
+              <circle cx="580" cy="64" r="8" fill="none" stroke="#757575" stroke-width="1"/>
+              <circle cx="580" cy="108" r="8" fill="#b23a2f" opacity="0.5"/>
+              <circle cx="580" cy="152" r="8" fill="#b23a2f" opacity="0.8"/>
+              <circle cx="580" cy="196" r="8" fill="#b23a2f" opacity="0.8"/>
+              <circle cx="580" cy="240" r="8" fill="none" stroke="#757575" stroke-width="1"/>
+
+              <!-- Legend -->
+              <circle cx="180" cy="275" r="6" fill="#b23a2f" opacity="0.8"/>
+              <text x="192" y="279" font-family="'SF Mono',monospace" font-size="9" fill="#757575">= 強い作用</text>
+              <circle cx="300" cy="275" r="6" fill="#b23a2f" opacity="0.5"/>
+              <text x="312" y="279" font-family="'SF Mono',monospace" font-size="9" fill="#757575">= 中程度</text>
+              <circle cx="410" cy="275" r="6" fill="none" stroke="#757575" stroke-width="1"/>
+              <text x="422" y="279" font-family="'SF Mono',monospace" font-size="9" fill="#757575">= 弱い / 盲点</text>
+            </svg>
+          </div>
 
           <p class="lead">この4役割は排他的ではない。1本の記事が予報者と翻訳者を兼ねることは頻繁にある。問題は、自分がどの役割を演じているかを自覚しないまま語ることだ。予報者のつもりで書いた文章が、読者には正当性の競争として受け取られる。翻訳者のつもりの解説が、立法前の設計図として引用される。</p>
           <p class="lead">Hannah Arendtは『人間の条件』（1958年）で、人間の固有性は生産性（making）ではなく、新しい始まりを作る行為（action）と複数性（plurality）にあると論じた。AGIナラティブの語り手は、AGIを「作る」ことはできない。だが「新しい始まりを作る行為」としてのナラティブ構築は、Arendt的な意味での行為そのものだ。その行為に伴う責任を、役割の自覚なしに引き受けることはできない。</p>

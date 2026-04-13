@@ -348,6 +348,18 @@
         .credits { padding: 32px 24px 64px; }
       }
 
+      /* SVG diagram styles */
+      .svg-diagram {
+        max-width: none;
+        width: min(960px, calc(100vw - 48px));
+        margin: 32px auto;
+      }
+      .svg-diagram svg {
+        width: 100%;
+        height: auto;
+        min-height: 240px;
+      }
+
       @media print {
         .slide { min-height: auto; page-break-after: always; padding: 24px 0; }
         .nav, .progress { display: none; }
@@ -571,6 +583,75 @@
           <p class="lead">
             ここで当然の反論が出る。「それは責任の所在を曖昧にするだけではないか」。鋭い問いだ。だがこの問いに対する答えは逆である。<strong>責任の所在を曖昧にするのは、実は近代西洋の個人-主体モデルの方だ</strong>。なぜか。「制御する主体」を措定すると、制御に失敗した時の責任が単一の個人に過剰集中する。過剰集中の予感が、当事者の責任回避行動を生む。誰も決定せず、誰も責任を取らず、全員が「システムの失敗」と呼んで済ます。これは2008年の金融危機、Deepwater Horizon事故、Boeing 737 MAX問題で何度も見た構造だ。縁起的な分散責任モデルは、責任を溶解させるのではなく、<strong>関係に責任を埋め込む</strong>。設計者、運用者、利用者、規制者、評価者の全員が、関係の場の中で連続的な責任を持つ。これは責任を曖昧にする方向ではなく、責任を分散的に具体化する方向の話である。
           </p>
+          <!-- SVG: Western Control Model vs Enactive Mutual Arising -->
+          <div class="svg-diagram">
+            <svg viewBox="0 0 680 320" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <marker id="arr17" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+                  <path d="M0,0 L8,3 L0,6" fill="var(--accent, #b23a2f)"/>
+                </marker>
+                <marker id="arr17b" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+                  <path d="M0,0 L8,3 L0,6" fill="#1a1a1a"/>
+                </marker>
+              </defs>
+              <!-- Left: Western model -->
+              <text x="170" y="22" text-anchor="middle" font-family="'SF Mono',monospace" font-size="10" fill="var(--accent, #b23a2f)" letter-spacing="0.08em" font-weight="700">WESTERN: CONTROL</text>
+              <text x="170" y="38" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#757575">主体-客体の非対称</text>
+
+              <!-- Subject box -->
+              <rect x="80" y="55" width="120" height="50" rx="3" fill="none" stroke="var(--accent, #b23a2f)" stroke-width="2"/>
+              <text x="140" y="76" text-anchor="middle" font-family="sans-serif" font-size="12" fill="#1a1a1a" font-weight="700">主体</text>
+              <text x="140" y="93" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#757575">設計者 / 人間</text>
+
+              <!-- One-way arrow down -->
+              <line x1="140" y1="105" x2="140" y2="148" stroke="var(--accent, #b23a2f)" stroke-width="2" marker-end="url(#arr17)"/>
+              <text x="156" y="132" font-family="'SF Mono',monospace" font-size="9" fill="var(--accent, #b23a2f)" letter-spacing="0.04em">CONTROL</text>
+
+              <!-- Object box -->
+              <rect x="80" y="155" width="120" height="50" rx="3" fill="none" stroke="#1a1a1a" stroke-width="1.5"/>
+              <text x="140" y="176" text-anchor="middle" font-family="sans-serif" font-size="12" fill="#1a1a1a" font-weight="700">客体</text>
+              <text x="140" y="193" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#757575">AI / 機械</text>
+
+              <!-- X mark: breaks when V(AI) > V(H) -->
+              <text x="140" y="240" text-anchor="middle" font-family="'SF Mono',monospace" font-size="10" fill="var(--accent, #b23a2f)" letter-spacing="0.04em">V(AI) &gt; V(Human)</text>
+              <text x="140" y="258" text-anchor="middle" font-family="sans-serif" font-size="10" fill="var(--accent, #b23a2f)">制御は論理的に破綻</text>
+              <line x1="95" y1="270" x2="185" y2="270" stroke="var(--accent, #b23a2f)" stroke-width="2"/>
+
+              <!-- Divider -->
+              <line x1="310" y1="20" x2="310" y2="290" stroke="#757575" stroke-width="1" stroke-dasharray="6,4"/>
+              <text x="340" y="310" text-anchor="middle" font-family="'SF Mono',monospace" font-size="9" fill="#757575" letter-spacing="0.06em">VS</text>
+
+              <!-- Right: Enactive model -->
+              <text x="500" y="22" text-anchor="middle" font-family="'SF Mono',monospace" font-size="10" fill="#1a1a1a" letter-spacing="0.08em" font-weight="700">ENACTIVE: MUTUAL ARISING</text>
+              <text x="500" y="38" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#757575">縁起 / 場所 / 無為</text>
+
+              <!-- Basho (Place) circle -->
+              <ellipse cx="500" cy="150" rx="130" ry="90" fill="none" stroke="#1a1a1a" stroke-width="1.5" stroke-dasharray="4,3"/>
+              <text x="500" y="68" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#757575">場所 (basho)</text>
+
+              <!-- Two nodes inside, connected bidirectionally -->
+              <circle cx="450" cy="130" r="28" fill="none" stroke="#1a1a1a" stroke-width="1.5"/>
+              <text x="450" y="126" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#1a1a1a" font-weight="700">人間</text>
+              <text x="450" y="140" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#757575">差分</text>
+
+              <circle cx="550" cy="130" r="28" fill="none" stroke="#1a1a1a" stroke-width="1.5"/>
+              <text x="550" y="126" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#1a1a1a" font-weight="700">AI</text>
+              <text x="550" y="140" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#757575">差分</text>
+
+              <!-- Bidirectional arrows -->
+              <line x1="478" y1="122" x2="522" y2="122" stroke="#1a1a1a" stroke-width="1.5" marker-end="url(#arr17b)"/>
+              <line x1="522" y1="138" x2="478" y2="138" stroke="#1a1a1a" stroke-width="1.5" marker-end="url(#arr17b)"/>
+
+              <!-- Norms node (embedded in the field) -->
+              <rect x="460" y="180" width="80" height="32" rx="3" fill="none" stroke="#1a1a1a" stroke-width="1"/>
+              <text x="500" y="200" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#1a1a1a">規範 (場に内在)</text>
+
+              <!-- Bottom label -->
+              <text x="500" y="262" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#1a1a1a">独立した主体は存在しない</text>
+              <text x="500" y="278" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#1a1a1a" font-weight="700">相互規定の中で共起する</text>
+            </svg>
+          </div>
+
           <div class="grid-2">
             <div class="card">
               <p><strong>西洋近代の設計原理</strong></p>

@@ -310,6 +310,18 @@
       }
       .slide-count { font-weight: 700; color: var(--accent); }
 
+      /* SVG diagram styles */
+      .svg-diagram {
+        max-width: none;
+        width: min(960px, calc(100vw - 48px));
+        margin: 32px auto;
+      }
+      .svg-diagram svg {
+        width: 100%;
+        height: auto;
+        min-height: 240px;
+      }
+
       @media (max-width: 900px) {
         .timeline { grid-template-columns: repeat(2, 1fr); }
       }
@@ -458,6 +470,44 @@
           <p class="lead">
             一つ手前の段階として、ノージックが『アナーキー・国家・ユートピア』（1974年）で提唱した<strong>「可能世界のユートピア」</strong>を思い出してほしい。ノージックは万人が同じ理想を共有する単一ユートピアは不可能だとし、代わりに「人々がそれぞれのユートピアを選び合流する枠組み」としてのメタ・ユートピアを提示した。箱庭主義はこの枠組みの技術的実装に近い。ただしノージックは現実世界の中に複数のコミュニティを並列させることを想定したのに対し、箱庭主義は<strong>現実世界を捨てる</strong>。各人に一つずつ、物理現実の外側にある世界を渡す。
           </p>
+          <!-- SVG: Hakoniwa Three-Layer Architecture -->
+          <div class="svg-diagram">
+            <svg viewBox="0 0 680 300" xmlns="http://www.w3.org/2000/svg">
+              <!-- Layer 3: OS (bottom) -->
+              <rect x="60" y="220" width="560" height="50" rx="4" fill="#2f2b92"/>
+              <text x="340" y="241" text-anchor="middle" font-family="'SF Mono',monospace" font-size="11" fill="#faf8f1" letter-spacing="0.08em">LAYER 3: OS</text>
+              <text x="340" y="258" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#faf8f1" opacity="0.8">配分・生成・整合性 — 国家でも市場でもない基盤</text>
+              <!-- Layer 2: Shared servers (middle) -->
+              <rect x="140" y="140" width="400" height="50" rx="4" fill="none" stroke="#2f2b92" stroke-width="1.5"/>
+              <text x="340" y="162" text-anchor="middle" font-family="'SF Mono',monospace" font-size="11" fill="#2f2b92" letter-spacing="0.08em">LAYER 2: SHARED</text>
+              <text x="340" y="178" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#757575">任意参加・任意退出の共通空間</text>
+              <!-- Connectors L2 to L3 -->
+              <line x1="240" y1="190" x2="240" y2="220" stroke="#2f2b92" stroke-width="1" stroke-dasharray="4,3"/>
+              <line x1="440" y1="190" x2="440" y2="220" stroke="#2f2b92" stroke-width="1" stroke-dasharray="4,3"/>
+              <!-- Layer 1: Individual hakoniwa (top) -->
+              <rect x="60" y="40" width="120" height="70" rx="4" fill="none" stroke="#1a1a1a" stroke-width="1.5"/>
+              <text x="120" y="66" text-anchor="middle" font-family="'SF Mono',monospace" font-size="9" fill="#1a1a1a" letter-spacing="0.06em">HAKONIWA A</text>
+              <text x="120" y="82" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#757575">住民a</text>
+              <text x="120" y="98" text-anchor="middle" font-family="sans-serif" font-size="8" fill="#757575">嗜好に合わせた世界</text>
+              <rect x="210" y="40" width="120" height="70" rx="4" fill="none" stroke="#1a1a1a" stroke-width="1.5"/>
+              <text x="270" y="66" text-anchor="middle" font-family="'SF Mono',monospace" font-size="9" fill="#1a1a1a" letter-spacing="0.06em">HAKONIWA B</text>
+              <text x="270" y="82" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#757575">住民b</text>
+              <text x="270" y="98" text-anchor="middle" font-family="sans-serif" font-size="8" fill="#757575">嗜好に合わせた世界</text>
+              <rect x="360" y="40" width="120" height="70" rx="4" fill="none" stroke="#1a1a1a" stroke-width="1.5"/>
+              <text x="420" y="66" text-anchor="middle" font-family="'SF Mono',monospace" font-size="9" fill="#1a1a1a" letter-spacing="0.06em">HAKONIWA C</text>
+              <text x="420" y="82" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#757575">住民c</text>
+              <text x="420" y="98" text-anchor="middle" font-family="sans-serif" font-size="8" fill="#757575">嗜好に合わせた世界</text>
+              <rect x="510" y="40" width="110" height="70" rx="4" fill="none" stroke="#1a1a1a" stroke-width="1" stroke-dasharray="4,3"/>
+              <text x="565" y="78" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#757575">...</text>
+              <!-- Connectors L1 to L2 -->
+              <line x1="120" y1="110" x2="200" y2="140" stroke="#1a1a1a" stroke-width="1" stroke-dasharray="4,3"/>
+              <line x1="270" y1="110" x2="300" y2="140" stroke="#1a1a1a" stroke-width="1" stroke-dasharray="4,3"/>
+              <line x1="420" y1="110" x2="380" y2="140" stroke="#1a1a1a" stroke-width="1" stroke-dasharray="4,3"/>
+              <!-- Label -->
+              <text x="60" y="18" font-family="'SF Mono',monospace" font-size="9" fill="#2f2b92" letter-spacing="0.08em">LAYER 1: INDIVIDUAL HAKONIWA</text>
+            </svg>
+          </div>
+
           <div class="grid-3">
             <div class="card">
               <span class="tag">Layer 1</span>
@@ -553,6 +603,36 @@
           <div class="note">
             さらに深い問いがある。箱庭の中で完璧に幸福な一兆のプロセスが走っている世界と、現実に苦しみながら生きる一万人の人間の世界。<strong>どちらがユートピアかという問いは、そもそも「人間にとって」という視点が成立しなければ答えられない</strong>。だが箱庭主義が成熟する頃には、その視点を持つ主体自体が技術の配給対象になっている。ユートピアかディストピアかを評価する審級が、評価される対象の内部に溶け込む。
           </div>
+          <!-- SVG: Convergence of Utopia and Dystopia -->
+          <div class="svg-diagram">
+            <svg viewBox="0 0 680 220" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <marker id="arrowB" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+                  <path d="M0,0 L8,3 L0,6" fill="#2f2b92"/>
+                </marker>
+              </defs>
+              <!-- Utopia branch -->
+              <text x="60" y="60" font-family="'SF Mono',monospace" font-size="11" fill="#1a1a1a" letter-spacing="0.06em">UTOPIA</text>
+              <text x="60" y="76" font-family="sans-serif" font-size="9" fill="#757575">欠乏の消滅</text>
+              <line x1="140" y1="65" x2="310" y2="105" stroke="#2f2b92" stroke-width="1.5" marker-end="url(#arrowB)"/>
+              <!-- Dystopia branch -->
+              <text x="60" y="160" font-family="'SF Mono',monospace" font-size="11" fill="#1a1a1a" letter-spacing="0.06em">DYSTOPIA</text>
+              <text x="60" y="176" font-family="sans-serif" font-size="9" fill="#757575">自由の消滅</text>
+              <line x1="140" y1="165" x2="310" y2="125" stroke="#2f2b92" stroke-width="1.5" marker-end="url(#arrowB)"/>
+              <!-- Convergence point -->
+              <circle cx="340" cy="115" r="28" fill="none" stroke="#2f2b92" stroke-width="2"/>
+              <text x="340" y="112" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#2f2b92">主語の</text>
+              <text x="340" y="125" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#2f2b92">消失</text>
+              <!-- Result -->
+              <line x1="368" y1="115" x2="440" y2="115" stroke="#2f2b92" stroke-width="1.5" marker-end="url(#arrowB)"/>
+              <rect x="450" y="92" width="190" height="46" rx="4" fill="#2f2b92"/>
+              <text x="545" y="112" text-anchor="middle" font-family="'SF Mono',monospace" font-size="10" fill="#faf8f1" letter-spacing="0.06em">NO SUBJECT</text>
+              <text x="545" y="127" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#faf8f1" opacity="0.85">問う者のいない世界</text>
+              <!-- Bottom label -->
+              <text x="340" y="205" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#757575">評価する主体が消えると、両極の区別も消える</text>
+            </svg>
+          </div>
+
           <p class="lead">
             記事の冒頭で、ユートピアとディストピアは極限で同じ像を結ぶと書いた。いま、その同じ像が何を意味していたかが見える。像が重なるのは、<strong>評価する主体そのものが消えるから</strong>である。良い世界でも悪い世界でもなく、良し悪しを問える誰かがいなくなった世界。問う者がいなければ、問いは答えを持たない。
           </p>

@@ -292,6 +292,18 @@
         .credits { padding: 32px 24px 64px; }
       }
 
+      /* SVG diagram styles */
+      .svg-diagram {
+        max-width: none;
+        width: min(960px, calc(100vw - 48px));
+        margin: 32px auto;
+      }
+      .svg-diagram svg {
+        width: 100%;
+        height: auto;
+        min-height: 240px;
+      }
+
       @media print {
         .slide { min-height: auto; page-break-after: always; padding: 24px 0; }
         .nav, .progress { display: none; }
@@ -465,6 +477,57 @@
           <div class="note">
             倫理の向こう側と倫理以前の差を、一つの対比で言い換える。<strong>倫理の向こう側は「適用できない」ことが答えになる場所</strong>である。たとえば非常事態における正戦論の適用不能、文化相対主義の極端な事例における義務論の失効。倫理のルールが状況に合わないと結論が出せる。<strong>倫理以前は「適用できないという結論すら出せない」場所</strong>である。ルールを適用しようとすると、ルールが前提にしている主体が存在しない。存在しない主体に対してルールが不適合だと言うことは、存在しない机に向かって椅子が合わないと言うのに似ている。言葉は文として成立するが、指示する先が空白である。B-2 の住民は、倫理の語彙にとって椅子が合わない主体ではなく、椅子の置き場がない場所である。
           </div>
+          <!-- SVG: Ethical Applicability Zones -->
+          <div class="svg-diagram">
+            <svg viewBox="0 0 680 300" xmlns="http://www.w3.org/2000/svg">
+              <!-- Background zones -->
+              <!-- Zone 1: Ethics applies -->
+              <rect x="40" y="40" width="260" height="200" rx="3" fill="none" stroke="#1a1a1a" stroke-width="2"/>
+              <!-- Zone 2: Beyond ethics -->
+              <rect x="320" y="40" width="150" height="200" rx="3" fill="none" stroke="#757575" stroke-width="1.5" stroke-dasharray="6,4"/>
+              <!-- Zone 3: Pre-ethical -->
+              <rect x="490" y="40" width="150" height="200" rx="3" fill="#b23a2f" fill-opacity="0.06" stroke="#b23a2f" stroke-width="2"/>
+              <!-- Zone labels -->
+              <text x="170" y="30" text-anchor="middle" font-family="'SF Mono',monospace" font-size="11" fill="#1a1a1a" letter-spacing="0.06em">ETHICS APPLIES</text>
+              <text x="395" y="30" text-anchor="middle" font-family="'SF Mono',monospace" font-size="11" fill="#757575" letter-spacing="0.06em">BEYOND ETHICS</text>
+              <text x="565" y="30" text-anchor="middle" font-family="'SF Mono',monospace" font-size="11" fill="#b23a2f" letter-spacing="0.06em" font-weight="700">PRE-ETHICAL</text>
+              <!-- Four prerequisites inside zone 1 -->
+              <text x="170" y="70" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#1a1a1a">倫理の四前提</text>
+              <text x="80" y="100" font-family="sans-serif" font-size="11" fill="#1a1a1a">(a) 主体が存在する</text>
+              <text x="80" y="125" font-family="sans-serif" font-size="11" fill="#1a1a1a">(b) 時間的連続性</text>
+              <text x="80" y="150" font-family="sans-serif" font-size="11" fill="#1a1a1a">(c) 相互認識可能</text>
+              <text x="80" y="175" font-family="sans-serif" font-size="11" fill="#1a1a1a">(d) 共通通貨としての価値</text>
+              <!-- Checkmarks in zone 1 -->
+              <text x="60" y="101" font-family="sans-serif" font-size="12" fill="#1a1a1a">+</text>
+              <text x="60" y="126" font-family="sans-serif" font-size="12" fill="#1a1a1a">+</text>
+              <text x="60" y="151" font-family="sans-serif" font-size="12" fill="#1a1a1a">+</text>
+              <text x="60" y="176" font-family="sans-serif" font-size="12" fill="#1a1a1a">+</text>
+              <!-- Zone 2 description -->
+              <text x="395" y="80" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#757575">ルールが状況に</text>
+              <text x="395" y="96" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#757575">合わない</text>
+              <text x="395" y="130" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#757575">前提は存在する</text>
+              <text x="395" y="148" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#757575">「適用できない」</text>
+              <text x="395" y="166" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#757575">と結論が出せる</text>
+              <!-- Zone 3 description -->
+              <text x="565" y="80" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#b23a2f">前提そのものが</text>
+              <text x="565" y="96" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#b23a2f">立ち上がらない</text>
+              <text x="565" y="130" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#b23a2f">(a) 主体が不在</text>
+              <text x="565" y="148" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#b23a2f">(b) 連続性が消滅</text>
+              <text x="565" y="175" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#b23a2f">「問いの形が</text>
+              <text x="565" y="191" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#b23a2f">立たない」</text>
+              <!-- Examples row -->
+              <text x="170" y="220" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#757575">人間・動物・未来世代</text>
+              <text x="395" y="220" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#757575">非常事態・極端な文化差</text>
+              <text x="565" y="220" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#b23a2f">B-2 の住民</text>
+              <!-- Bottom annotation -->
+              <line x1="40" y1="260" x2="300" y2="260" stroke="#1a1a1a" stroke-width="1"/>
+              <line x1="320" y1="260" x2="470" y2="260" stroke="#757575" stroke-width="1" stroke-dasharray="4,3"/>
+              <line x1="490" y1="260" x2="640" y2="260" stroke="#b23a2f" stroke-width="1.5"/>
+              <text x="170" y="280" text-anchor="middle" font-family="'SF Mono',monospace" font-size="10" fill="#757575">CONCLUSION POSSIBLE</text>
+              <text x="565" y="280" text-anchor="middle" font-family="'SF Mono',monospace" font-size="10" fill="#b23a2f">NO QUESTION TO ASK</text>
+            </svg>
+          </div>
+
           <p class="lead">
             Derek Parfit の心理的連続性論(No.24 で扱った)を B-2 の文脈に再投入すると、同じ構造が別の角度から見える。Parfit は人格同一性を身体の単一性でも魂の単一性でもなく、記憶・性格・意図の連続的な糸に還元した。この還元は A-2 の議論では両刃だった。連続性が切れた場所には二人の別人がいる。B-2 ではこの還元がさらに進んで、糸そのものが消える。連続的な糸を前提にしない主体が、連続的な糸の有無で同一性を語る議論の対象にならないのは当然である。Parfit の枠組みは、糸が存在する空間の内側でしか機能しない。B-2 はその空間を離れる。
           </p>

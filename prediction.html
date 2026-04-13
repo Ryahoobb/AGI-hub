@@ -895,7 +895,7 @@ h2 { font-size: clamp(28px, 4vw, 44px); font-weight: 800; line-height: 1.2; colo
         </div>
       </div>
       <div class="timeline-pin" style="left: 30%;">
-        <div class="pin-face">JH</div>
+        <div class="pin-face" style="background-image: url('images/people/jensen-huang.jpg');"></div>
         <div class="pin-line"></div>
         <div class="pin-card">
           <div class="pin-name">Huang</div>
@@ -1299,14 +1299,29 @@ h2 { font-size: clamp(28px, 4vw, 44px); font-weight: 800; line-height: 1.2; colo
     // Also reveal timeline Metaculus value
     var metaPin = document.querySelector('.timeline-pin.metaculus');
     if (metaPin) {
-      metaPin.style.transition = 'opacity 0.6s var(--ease)';
-      metaPin.style.opacity = '1';
-      metaPin.querySelector('.pin-dot').style.background = 'var(--green)';
-      metaPin.querySelector('.pin-dot').style.boxShadow = '0 0 0 2px var(--green), 0 4px 12px rgba(26, 122, 58, 0.3)';
-      metaPin.querySelector('.pin-line').style.background = 'rgba(26, 122, 58, 0.4)';
-      metaPin.querySelector('.pin-card').style.borderTopColor = 'var(--green)';
-      metaPin.querySelector('.pin-year').textContent = '2032';
-      metaPin.querySelector('.pin-year').style.color = 'var(--green)';
+      try {
+        metaPin.style.transition = 'opacity 0.6s var(--ease)';
+        metaPin.style.opacity = '1';
+        var face = metaPin.querySelector('.pin-face');
+        if (face) {
+          face.style.background = 'var(--green)';
+          face.style.boxShadow = '0 0 0 2px var(--green), 0 6px 16px rgba(26, 122, 58, 0.35)';
+          face.textContent = '2032';
+          face.style.fontSize = '14px';
+        }
+        var line = metaPin.querySelector('.pin-line');
+        if (line) line.style.background = 'rgba(26, 122, 58, 0.4)';
+        var card = metaPin.querySelector('.pin-card');
+        if (card) card.style.borderTopColor = 'var(--green)';
+        var pinYear = metaPin.querySelector('.pin-year');
+        if (pinYear) {
+          pinYear.textContent = '2032';
+          pinYear.style.color = 'var(--green)';
+        }
+      } catch (err) {
+        // Non-fatal: timeline reveal styling failed but results should still show
+        console.warn('Metaculus pin reveal failed:', err);
+      }
     }
   }
   revealBtn.addEventListener('click', function() {
@@ -1348,36 +1363,42 @@ h2 { font-size: clamp(28px, 4vw, 44px); font-weight: 800; line-height: 1.2; colo
     btn.disabled = true;
     btn.textContent = '送信中…';
 
-    var q1 = parseInt(document.getElementById('q1').value);
-    var q2 = parseInt(document.getElementById('q2').value);
-    var q3 = parseInt(document.getElementById('q3').value);
-    var q4 = parseInt(document.getElementById('q4').value);
-    var q5 = parseInt(document.getElementById('q5').value);
+    try {
+      var q1 = parseInt(document.getElementById('q1').value);
+      var q2 = parseInt(document.getElementById('q2').value);
+      var q3 = parseInt(document.getElementById('q3').value);
+      var q4 = parseInt(document.getElementById('q4').value);
+      var q5 = parseInt(document.getElementById('q5').value);
 
-    var payload = {
-      q1_agi_2030_pct: q1,
-      q2_agi_year: q2,
-      q3_job_change_pct: q3,
-      q4_compute_only_pct: q4,
-      q5_pdoom_pct: q5,
-      session_id: sessionId,
-      timestamp: new Date().toISOString()
-    };
+      var payload = {
+        q1_agi_2030_pct: q1,
+        q2_agi_year: q2,
+        q3_job_change_pct: q3,
+        q4_compute_only_pct: q4,
+        q5_pdoom_pct: q5,
+        session_id: sessionId,
+        timestamp: new Date().toISOString()
+      };
 
-    var GAS_URL = '';
-    if (GAS_URL) {
-      fetch(GAS_URL, {
-        method: 'POST', mode: 'no-cors',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      }).catch(function() {});
+      var GAS_URL = '';
+      if (GAS_URL) {
+        fetch(GAS_URL, {
+          method: 'POST', mode: 'no-cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        }).catch(function() {});
+      }
+
+      var needsWorldReveal = !worldRevealedByUser;
+      revealWorldData();
+      showResults(q1, q2, q3, q4, q5, needsWorldReveal);
+      submitted = true;
+      btn.textContent = '送信済み';
+    } catch (err) {
+      console.error('Submit failed:', err);
+      btn.textContent = 'エラーが発生 (再読込)';
+      btn.disabled = false;
     }
-
-    var needsWorldReveal = !worldRevealedByUser;
-    revealWorldData(); // reveal world forecast if still hidden
-    showResults(q1, q2, q3, q4, q5, needsWorldReveal);
-    submitted = true;
-    btn.textContent = '送信済み';
   });
 
   function animateCounter(el, from, to, duration) {

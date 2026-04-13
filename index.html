@@ -550,6 +550,21 @@
         .explore-grid { grid-template-columns: repeat(2, 1fr); }
       }
 
+      /* Interstitial tile living inside the article-grid */
+      .card-interstitial {
+        min-height: 0;
+        padding: 28px 24px;
+        border: 1px solid var(--border);
+        justify-content: flex-start;
+      }
+      .card-interstitial:hover { background: #f7f7f7; }
+      .card-interstitial.dark { border-color: #111; }
+      .card-interstitial.cream { border-color: #e8e3d4; }
+      .card-interstitial .explore-stat { font-size: 28px; margin: 2px 0 4px; }
+      .card-interstitial h3 { font-size: 18px; max-width: 20ch; }
+      .card-interstitial p { font-size: 13px; margin-bottom: 4px; }
+      .card-interstitial .explore-cta { margin-top: 12px; }
+
       /* ══════════════════════════════════════
          Data Ticker (dark band)
          ══════════════════════════════════════ */
@@ -753,52 +768,6 @@
       </div>
     </section>
 
-    <!-- ── Explore — Interactive & Data (consolidated sub-content) ── -->
-    <section class="section" id="explore" style="padding-top: 32px;">
-      <div class="section-title">
-        <h2>Explore — Interactive &amp; Data</h2>
-        <span class="count">5 Tools</span>
-      </div>
-      <div class="explore-grid">
-        <a href="displacement-map.html" class="explore-tile">
-          <div class="explore-eyebrow">Live Tracker</div>
-          <div class="explore-stat"><span class="accent">1.3M+</span></div>
-          <h3>雇用代替トラッカー</h3>
-          <p>企業公表の人員削減を追う。182件 / 20か国 / 11業種。</p>
-          <span class="explore-cta">ダッシュボードへ →</span>
-        </a>
-        <a href="models-evals.html" class="explore-tile">
-          <div class="explore-eyebrow">Reference</div>
-          <div class="explore-stat">30+</div>
-          <h3>フロンティアモデル比較</h3>
-          <p>米欧・中華の最前線30本と評価機関20。MLArena Elo一望。</p>
-          <span class="explore-cta">モデル比較へ →</span>
-        </a>
-        <a href="taxonomy-network.html" class="explore-tile">
-          <div class="explore-eyebrow">Discussion Map</div>
-          <div class="explore-stat">11 / 58</div>
-          <h3>議論の全体地図</h3>
-          <p>11ドメイン58トピックで論点を俯瞰。32トピック執筆済み。</p>
-          <span class="explore-cta">全体地図へ →</span>
-        </a>
-        <a href="pill-map.html" class="explore-tile dark">
-          <div class="explore-eyebrow">Depth Map</div>
-          <div class="explore-stat">0.0 → ???</div>
-          <h3>あなたはAGIの何層目か</h3>
-          <p>7つの関門があなたの深度を可視化する。</p>
-          <span class="explore-cta">深度を測る →</span>
-        </a>
-        <a href="prediction.html" class="explore-tile cream">
-          <div class="explore-eyebrow">Your Forecast</div>
-          <div class="explore-stat">5 Q</div>
-          <h3>予測のズレを測る</h3>
-          <p>Metaculus数千人の集合知と、あなたの直感を照らし合わせる。</p>
-          <span class="explore-cta">立ち位置を知る →</span>
-        </a>
-      </div>
-    </section>
-
-
     <!-- ── About ── -->
     <section class="section" id="about">
       <div class="section-title">
@@ -830,6 +799,30 @@
             };
             var pad = function (n) { return n < 10 ? '0' + n : '' + n; };
 
+            // Interactive tiles to interleave every N cards
+            var exploreTiles = [
+              { href: 'displacement-map.html', cls: '', eyebrow: 'Live Tracker', stat: '<span class="accent">1.3M+</span>', title: '雇用代替トラッカー', desc: '企業公表の人員削減を追う。182件 / 20か国 / 11業種。', cta: 'ダッシュボードへ →' },
+              { href: 'models-evals.html', cls: '', eyebrow: 'Reference', stat: '30+', title: 'フロンティアモデル比較', desc: '米欧・中華の最前線30本と評価機関20。MLArena Elo一望。', cta: 'モデル比較へ →' },
+              { href: 'taxonomy-network.html', cls: '', eyebrow: 'Discussion Map', stat: '11 / 58', title: '議論の全体地図', desc: '11ドメイン58トピックで論点を俯瞰。32トピック執筆済み。', cta: '全体地図へ →' },
+              { href: 'pill-map.html', cls: 'dark', eyebrow: 'Depth Map', stat: '0.0 → ???', title: 'あなたはAGIの何層目か', desc: '7つの関門があなたの深度を可視化する。', cta: '深度を測る →' },
+              { href: 'prediction.html', cls: 'cream', eyebrow: 'Your Forecast', stat: '5 Q', title: '予測のズレを測る', desc: 'Metaculus数千人の集合知と、あなたの直感を照らし合わせる。', cta: '立ち位置を知る →' }
+            ];
+
+            var renderTile = function (t) {
+              return '<a href="' + t.href + '" class="explore-tile ' + t.cls + ' card-interstitial">' +
+                       '<div class="explore-eyebrow">' + t.eyebrow + '</div>' +
+                       '<div class="explore-stat">' + t.stat + '</div>' +
+                       '<h3>' + t.title + '</h3>' +
+                       '<p>' + t.desc + '</p>' +
+                       '<span class="explore-cta">' + t.cta + '</span>' +
+                     '</a>';
+            };
+
+            // Insert an interstitial every N article cards (3 = end of each row)
+            var INTERVAL = 3;
+            var cardIdx = 0;
+            var tileIdx = 0;
+
             articles.forEach(function (a) {
               if (a.featured) {
                 featuredSlot.innerHTML =
@@ -849,8 +842,19 @@
                     '<p class="excerpt">' + a.excerpt + '</p>' +
                   '</a>'
                 );
+                cardIdx++;
+                if (cardIdx % INTERVAL === 0 && tileIdx < exploreTiles.length) {
+                  grid.insertAdjacentHTML('beforeend', renderTile(exploreTiles[tileIdx]));
+                  tileIdx++;
+                }
               }
             });
+
+            // Append any remaining interstitials at the end
+            while (tileIdx < exploreTiles.length) {
+              grid.insertAdjacentHTML('beforeend', renderTile(exploreTiles[tileIdx]));
+              tileIdx++;
+            }
 
             // Initialize category filter after cards are rendered
             initFilter();

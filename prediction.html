@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<title>あなたの予測は、世界とどれだけずれているか — AGI HUB</title>
+<meta name="description" content="AGIはいつ来るか。あなたの予測を入力し、世界の予測市場と比較する。">
+<style>
+:root {
+  --black: #000;
+  --body-text: #1a1a1a;
+  --mid: #585858;
+  --meta: #757575;
+  --light-gray: #999;
+  --border: #e8e3d4;
+  --bg: #faf8f1;
+  --bg-alt: #f3f1e4;
+  --accent: #2f2b92;
+  --accent-soft: rgba(47, 43, 146, 0.08);
+  --green: #1a7a3a;
+  --red: #a83232;
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: HelveticaNeue, "Helvetica Neue", Helvetica, Arial, 游ゴシック体, YuGothic, "游ゴシック Medium", "Yu Gothic Medium", 游ゴシック, "Yu Gothic", "ヒラギノ角ゴ ProN W3", "Hiragino Kaku Gothic ProN", sans-serif;
+  font-feature-settings: "palt"; font-size: 16px; line-height: 1.75; color: var(--body-text); background: var(--bg);
+  -webkit-font-smoothing: antialiased; overflow-x: hidden; word-wrap: break-word;
+}
+a { color: var(--accent); text-decoration: none; border-bottom: 1px solid var(--border); }
+a:hover { border-bottom-color: var(--accent); }
+
+/* ── Masthead ── */
+.masthead { background: var(--black); color: #fff; }
+.masthead-inner { max-width: 1120px; margin: 0 auto; padding: 20px 48px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+.logo { font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace; font-size: 18px; font-weight: 700; letter-spacing: 0.1em; color: #fff; }
+.logo a { color: #fff; border: none; }
+.logo-mark { display: inline-block; width: 10px; height: 10px; background: #fff; margin-right: 10px; vertical-align: 1px; }
+.nav-links { display: flex; gap: 28px; font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace; font-size: 11px; letter-spacing: 0.083em; text-transform: uppercase; }
+.nav-links a { color: var(--light-gray); border: none; transition: color 0.2s; }
+.nav-links a:hover { color: #fff; }
+
+/* ── Sections ── */
+.section { max-width: 1120px; margin: 0 auto; padding: 80px 48px; }
+.section + .section { border-top: 1px solid var(--border); }
+.section-alt { background: var(--bg-alt); }
+
+.eyebrow { font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace; font-size: 11px; font-weight: 400; letter-spacing: 0.083em; text-transform: uppercase; color: var(--accent); margin-bottom: 16px; }
+h1 { font-size: clamp(32px, 5vw, 52px); font-weight: 800; line-height: 1.15; letter-spacing: -0.02em; color: var(--black); margin-bottom: 24px; }
+h2 { font-size: clamp(24px, 3.5vw, 32px); font-weight: 700; line-height: 1.3; color: var(--black); margin-bottom: 20px; padding-bottom: 14px; border-bottom: 1px solid var(--accent); max-width: 26ch; }
+.lead { max-width: 780px; font-size: 16px; line-height: 1.85; color: var(--body-text); }
+
+/* ── Cards ── */
+.card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 24px; margin-top: 32px; }
+.card { padding: 24px 0; border-top: 2px solid var(--accent); }
+.card .tag { display: block; font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace; font-size: 11px; letter-spacing: 0.083em; text-transform: uppercase; color: var(--accent); margin-bottom: 8px; }
+.card .big-num { font-size: 48px; font-weight: 800; line-height: 1.1; color: var(--black); margin-bottom: 8px; }
+.card .desc { font-size: 14px; line-height: 1.6; color: var(--mid); }
+
+/* ── Timeline ── */
+.timeline { display: grid; gap: 16px; margin-top: 32px; }
+.timeline-item { display: grid; grid-template-columns: 80px 1fr; gap: 16px; padding: 16px 0; border-top: 1px solid var(--border); }
+.timeline-year { font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace; font-size: 13px; color: var(--accent); font-weight: 700; padding-top: 2px; }
+.timeline-content { font-size: 15px; line-height: 1.7; }
+.timeline-content strong { color: var(--black); }
+.timeline-content .quote { color: var(--mid); font-style: italic; }
+
+/* ── Form ── */
+.form-section { max-width: 780px; }
+.question { margin-bottom: 48px; }
+.question-label { font-size: 18px; font-weight: 700; color: var(--black); margin-bottom: 4px; }
+.question-sub { font-size: 13px; color: var(--meta); margin-bottom: 16px; }
+.slider-wrap { position: relative; padding: 8px 0; }
+.slider-wrap input[type="range"] {
+  -webkit-appearance: none; appearance: none; width: 100%; height: 6px; border-radius: 3px;
+  background: var(--border); outline: none; cursor: pointer;
+}
+.slider-wrap input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none; appearance: none; width: 24px; height: 24px; border-radius: 50%;
+  background: var(--accent); cursor: pointer; border: 3px solid var(--bg);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+}
+.slider-wrap input[type="range"]::-moz-range-thumb {
+  width: 24px; height: 24px; border-radius: 50%; background: var(--accent); cursor: pointer;
+  border: 3px solid var(--bg); box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+}
+.slider-labels { display: flex; justify-content: space-between; font-size: 12px; color: var(--meta); margin-top: 4px; font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace; letter-spacing: 0.04em; }
+.slider-value { font-size: 32px; font-weight: 800; color: var(--accent); text-align: center; margin-top: 8px; font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace; }
+
+.submit-btn {
+  display: inline-block; padding: 16px 48px; background: var(--accent); color: #fff;
+  font-size: 15px; font-weight: 700; letter-spacing: 0.05em; border: none; border-radius: 0; cursor: pointer;
+  transition: background 0.2s; font-family: inherit;
+}
+.submit-btn:hover { background: var(--black); }
+.submit-btn:disabled { background: var(--meta); cursor: not-allowed; }
+
+/* ── Results ── */
+.results-section { display: none; }
+.results-section.visible { display: block; }
+.compare-grid { display: grid; grid-template-columns: 1fr auto 1fr; gap: 0; margin-top: 32px; align-items: start; }
+.compare-card { padding: 24px; text-align: center; }
+.compare-card.yours { background: var(--accent-soft); border-top: 3px solid var(--accent); }
+.compare-card.world { background: transparent; border-top: 3px solid var(--meta); }
+.compare-vs { font-size: 24px; font-weight: 800; color: var(--meta); align-self: center; padding: 24px 16px; }
+.compare-card .compare-label { font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace; font-size: 11px; letter-spacing: 0.083em; text-transform: uppercase; color: var(--meta); margin-bottom: 8px; }
+.compare-card .compare-value { font-size: 36px; font-weight: 800; line-height: 1.2; color: var(--black); margin-bottom: 4px; }
+.compare-card .compare-desc { font-size: 13px; color: var(--mid); }
+
+.verdict { margin-top: 32px; padding: 24px; border-left: 3px solid var(--accent); background: var(--accent-soft); font-size: 16px; line-height: 1.7; }
+.verdict strong { color: var(--accent); }
+
+.result-item { margin-top: 24px; padding: 20px 0; border-top: 1px solid var(--border); }
+.result-item .result-q { font-size: 14px; color: var(--meta); margin-bottom: 4px; }
+.result-item .result-val { font-size: 24px; font-weight: 700; color: var(--black); }
+
+/* ── Credits ── */
+.credits { max-width: 1120px; margin: 0 auto; padding: 48px 48px 80px; border-top: 1px solid var(--border); }
+.credits p { font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace; font-size: 11px; letter-spacing: 0.047em; line-height: 2; color: var(--light-gray); }
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .section { padding: 48px 24px; }
+  .masthead-inner { padding: 16px 24px; }
+  .nav-links { display: none; }
+  .card-grid { grid-template-columns: 1fr; }
+  .compare-grid { grid-template-columns: 1fr; gap: 0; }
+  .compare-vs { padding: 8px 0; text-align: center; }
+  .timeline-item { grid-template-columns: 1fr; gap: 4px; }
+  h1 { font-size: 28px; }
+  .card .big-num { font-size: 36px; }
+}
+
+/* ── Reveal animation ── */
+.reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.5s var(--ease), transform 0.5s var(--ease); }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+</style>
+</head>
+<body>
+
+<!-- Masthead -->
+<header class="masthead">
+  <div class="masthead-inner">
+    <div class="logo"><a href="index.html"><span class="logo-mark"></span>AGI HUB</a></div>
+    <nav class="nav-links">
+      <a href="index.html">Articles</a>
+      <a href="taxonomy-network.html">Map</a>
+      <a href="thinkers.html">Thinkers</a>
+    </nav>
+  </div>
+</header>
+
+<!-- Hero -->
+<div class="section">
+  <div class="eyebrow">Interactive</div>
+  <h1>あなたの予測は、<br>世界とどれだけずれているか</h1>
+  <p class="lead">AGIはいつ来るか。産業は変わるか。自分の仕事はどうなるか。予測市場では数千人が金を賭けて予測している。あなたの直感は、彼らとどれだけ離れているか。5つの問いに答えて、自分の立ち位置を知る。</p>
+</div>
+
+<!-- World Data Section -->
+<div class="section-alt">
+<div class="section">
+  <div class="eyebrow reveal">World Forecast</div>
+  <h2 class="reveal">世界はこう予測している</h2>
+
+  <div class="card-grid">
+    <div class="card reveal">
+      <span class="tag">Metaculus Q5121</span>
+      <div class="big-num" id="card-q5121-prob">26%</div>
+      <div class="desc">2030年末までにAGI達成の確率<br><span style="font-size:12px;color:var(--light-gray)">予測者 2,847人</span></div>
+    </div>
+    <div class="card reveal">
+      <span class="tag">Metaculus Q3479</span>
+      <div class="big-num" id="card-q3479-year">2032</div>
+      <div class="desc">AGI到達年の中央予測値<br><span style="font-size:12px;color:var(--light-gray)">予測者 3,512人</span></div>
+    </div>
+    <div class="card reveal">
+      <span class="tag">AI CEO Consensus</span>
+      <div class="big-num">2026-29</div>
+      <div class="desc">主要AI企業CEOの予測レンジ<br><span style="font-size:12px;color:var(--light-gray)">Amodei, Altman, Hassabis, Huang</span></div>
+    </div>
+    <div class="card reveal">
+      <span class="tag">Capital Committed</span>
+      <div class="big-num">$131B+</div>
+      <div class="desc">2025年のAIインフラ投資額<br><span style="font-size:12px;color:var(--light-gray)">TSMC + Microsoft + xAI + Figure</span></div>
+    </div>
+  </div>
+
+  <!-- CEO Timeline -->
+  <div style="margin-top:48px;">
+    <h2 class="reveal" style="font-size:20px;">CEOたちの予測タイムライン</h2>
+    <div class="timeline" id="ceo-timeline">
+      <div class="timeline-item reveal">
+        <div class="timeline-year">2026</div>
+        <div class="timeline-content"><strong>Dario Amodei</strong> (Anthropic)<br><span class="quote">"2026年末までにAGIの可能性"</span></div>
+      </div>
+      <div class="timeline-item reveal">
+        <div class="timeline-year">2027</div>
+        <div class="timeline-content"><strong>Sam Altman</strong> (OpenAI)<br><span class="quote">"超知能は数千日先にある"</span></div>
+      </div>
+      <div class="timeline-item reveal">
+        <div class="timeline-year">2028</div>
+        <div class="timeline-content"><strong>Demis Hassabis</strong> (Google DeepMind)<br><span class="quote">"AGIは3-5年以内に到達しうる"</span></div>
+      </div>
+      <div class="timeline-item reveal">
+        <div class="timeline-year">2029</div>
+        <div class="timeline-content"><strong>Jensen Huang</strong> (NVIDIA)<br><span class="quote">"AIは5年以内にあらゆるテストで人間に匹敵する"</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- Divider -->
+<div class="section" style="padding-top:64px;padding-bottom:64px;text-align:center;">
+  <div class="eyebrow">Your Turn</div>
+  <h2 style="max-width:none;border:none;padding:0;text-align:center;">では、あなたは？</h2>
+  <p class="lead" style="max-width:none;text-align:center;">5つの問いに直感で答えてください。正解はありません。あなたがどこに立っているかを知ることが目的です。</p>
+</div>
+
+<!-- Form Section -->
+<div class="section-alt">
+<div class="section">
+  <form id="prediction-form" class="form-section">
+
+    <!-- Q1: AGI by 2030 -->
+    <div class="question reveal">
+      <div class="question-label">Q1. 2030年末までにAGIは達成されるか？</div>
+      <div class="question-sub">Metaculus Q5121と同じ問い。あなたの確率を入力してください。</div>
+      <div class="slider-value" id="q1-display">50%</div>
+      <div class="slider-wrap">
+        <input type="range" id="q1" min="0" max="100" value="50" step="1">
+        <div class="slider-labels"><span>0% まず無理</span><span>50%</span><span>100% 確実</span></div>
+      </div>
+    </div>
+
+    <!-- Q2: AGI Year -->
+    <div class="question reveal">
+      <div class="question-label">Q2. AGIは何年に達成されるか？</div>
+      <div class="question-sub">あなたの最良の推定。Metaculus Q3479の中央予測値と比較します。</div>
+      <div class="slider-value" id="q2-display">2032</div>
+      <div class="slider-wrap">
+        <input type="range" id="q2" min="2026" max="2050" value="2032" step="1">
+        <div class="slider-labels"><span>2026</span><span>2035</span><span>2050+</span></div>
+      </div>
+    </div>
+
+    <!-- Q3: Your job -->
+    <div class="question reveal">
+      <div class="question-label">Q3. 自分の職業は5年後にAIで根本的に変わるか？</div>
+      <div class="question-sub">仕事の中身が別物になる確率。失業ではなく、求められるスキルが変わること。</div>
+      <div class="slider-value" id="q3-display">50%</div>
+      <div class="slider-wrap">
+        <input type="range" id="q3" min="0" max="100" value="50" step="1">
+        <div class="slider-labels"><span>0% 変わらない</span><span>50%</span><span>100% 完全に変わる</span></div>
+      </div>
+    </div>
+
+    <!-- Q4: Compute alone -->
+    <div class="question reveal">
+      <div class="question-label">Q4. 計算量の増加だけでAGIに到達できるか？</div>
+      <div class="question-sub">GPUを積み続ければ十分か。アーキテクチャの革新が必要か。</div>
+      <div class="slider-value" id="q4-display">50%</div>
+      <div class="slider-wrap">
+        <input type="range" id="q4" min="0" max="100" value="50" step="1">
+        <div class="slider-labels"><span>0% 不可能</span><span>50%</span><span>100% 十分</span></div>
+      </div>
+    </div>
+
+    <!-- Q5: p(doom) -->
+    <div class="question reveal">
+      <div class="question-label">Q5. AIによる存亡リスク (p(doom)) は？</div>
+      <div class="question-sub">AIが人類の存亡に関わる大惨事を引き起こす確率。</div>
+      <div class="slider-value" id="q5-display">10%</div>
+      <div class="slider-wrap">
+        <input type="range" id="q5" min="0" max="100" value="10" step="1">
+        <div class="slider-labels"><span>0% リスクなし</span><span>50%</span><span>100% 確実に破滅</span></div>
+      </div>
+    </div>
+
+    <div style="text-align:center;margin-top:32px;">
+      <button type="submit" class="submit-btn" id="submit-btn">予測を送信して比較する</button>
+      <p style="font-size:12px;color:var(--meta);margin-top:12px;">個人情報は一切取得しません。回答は匿名で記録されます。</p>
+    </div>
+  </form>
+</div>
+</div>
+
+<!-- Results Section -->
+<div class="section results-section" id="results">
+  <div class="eyebrow">Your Position</div>
+  <h2>あなたの立ち位置</h2>
+
+  <!-- Q1 Comparison -->
+  <div style="margin-top:16px;">
+    <p style="font-size:14px;color:var(--meta);margin-bottom:8px;">Q1. 2030年末までにAGI達成の確率</p>
+    <div class="compare-grid">
+      <div class="compare-card yours">
+        <div class="compare-label">あなた</div>
+        <div class="compare-value" id="result-q1-you">—</div>
+      </div>
+      <div class="compare-vs">vs</div>
+      <div class="compare-card world">
+        <div class="compare-label">Metaculus</div>
+        <div class="compare-value" id="result-q1-world">26%</div>
+        <div class="compare-desc">2,847人の予測者</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q2 Comparison -->
+  <div style="margin-top:40px;">
+    <p style="font-size:14px;color:var(--meta);margin-bottom:8px;">Q2. AGI到達年</p>
+    <div class="compare-grid">
+      <div class="compare-card yours">
+        <div class="compare-label">あなた</div>
+        <div class="compare-value" id="result-q2-you">—</div>
+      </div>
+      <div class="compare-vs">vs</div>
+      <div class="compare-card world">
+        <div class="compare-label">Metaculus</div>
+        <div class="compare-value" id="result-q2-world">2032</div>
+        <div class="compare-desc">3,512人の中央予測値</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Verdict -->
+  <div class="verdict" id="verdict"></div>
+
+  <!-- Q3-Q5 (no comparison) -->
+  <div id="result-extras">
+    <div class="result-item">
+      <div class="result-q">Q3. 自分の職業が5年後にAIで根本的に変わる確率</div>
+      <div class="result-val" id="result-q3">—</div>
+    </div>
+    <div class="result-item">
+      <div class="result-q">Q4. 計算量の増加だけでAGIに到達できる確率</div>
+      <div class="result-val" id="result-q4">—</div>
+    </div>
+    <div class="result-item">
+      <div class="result-q">Q5. p(doom)</div>
+      <div class="result-val" id="result-q5">—</div>
+    </div>
+  </div>
+
+  <div style="margin-top:48px;text-align:center;">
+    <p class="lead" style="max-width:none;text-align:center;">予測は記録した。半年後、この数字を見返したとき、あなたの直感はどちらにずれているか。</p>
+    <p style="margin-top:24px;"><a href="index.html" style="font-weight:700;">記事を読む &rarr;</a></p>
+  </div>
+</div>
+
+<!-- Credits -->
+<div class="credits">
+  <p>AGI HUB &mdash; Intelligence, Alignment, and The Next Phase</p>
+  <p>Prediction data: <a href="https://www.metaculus.com/questions/5121/" target="_blank" rel="noopener">Metaculus Q5121</a> &middot; <a href="https://www.metaculus.com/questions/3479/" target="_blank" rel="noopener">Metaculus Q3479</a></p>
+  <p>Last updated: <span id="last-updated">2026-04-13</span></p>
+</div>
+
+<script>
+(function() {
+  'use strict';
+
+  // ── Slider live update ──
+  const sliders = [
+    { id: 'q1', display: 'q1-display', suffix: '%' },
+    { id: 'q2', display: 'q2-display', suffix: '' },
+    { id: 'q3', display: 'q3-display', suffix: '%' },
+    { id: 'q4', display: 'q4-display', suffix: '%' },
+    { id: 'q5', display: 'q5-display', suffix: '%' },
+  ];
+
+  sliders.forEach(function(s) {
+    var el = document.getElementById(s.id);
+    var disp = document.getElementById(s.display);
+    el.addEventListener('input', function() {
+      disp.textContent = el.value + s.suffix;
+    });
+  });
+
+  // ── Reveal on scroll ──
+  var reveals = document.querySelectorAll('.reveal');
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+  reveals.forEach(function(el) { observer.observe(el); });
+
+  // ── Metaculus reference values ──
+  var META_Q5121_PROB = 26;
+  var META_Q3479_YEAR = 2032;
+
+  // ── Form submission ──
+  var form = document.getElementById('prediction-form');
+  var submitted = false;
+  var sessionId = Math.random().toString(36).substring(2, 15);
+
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+    if (submitted) return;
+
+    var btn = document.getElementById('submit-btn');
+    btn.disabled = true;
+    btn.textContent = '送信中...';
+
+    var q1 = parseInt(document.getElementById('q1').value);
+    var q2 = parseInt(document.getElementById('q2').value);
+    var q3 = parseInt(document.getElementById('q3').value);
+    var q4 = parseInt(document.getElementById('q4').value);
+    var q5 = parseInt(document.getElementById('q5').value);
+
+    var payload = {
+      q1_agi_2030_pct: q1,
+      q2_agi_year: q2,
+      q3_job_change_pct: q3,
+      q4_compute_only_pct: q4,
+      q5_pdoom_pct: q5,
+      session_id: sessionId,
+      timestamp: new Date().toISOString()
+    };
+
+    // Send to Apps Script (fire-and-forget for v1)
+    var GAS_URL = ''; // Apps Script Web App URL (to be deployed)
+    if (GAS_URL) {
+      fetch(GAS_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      }).catch(function() { /* silent fail for v1 */ });
+    }
+
+    // Show results immediately (no backend dependency)
+    showResults(q1, q2, q3, q4, q5);
+    submitted = true;
+    btn.textContent = '送信済み';
+  });
+
+  function showResults(q1, q2, q3, q4, q5) {
+    // Fill values
+    document.getElementById('result-q1-you').textContent = q1 + '%';
+    document.getElementById('result-q2-you').textContent = q2 + '年';
+    document.getElementById('result-q3').textContent = q3 + '%';
+    document.getElementById('result-q4').textContent = q4 + '%';
+    document.getElementById('result-q5').textContent = q5 + '%';
+
+    // Generate verdict
+    var verdictEl = document.getElementById('verdict');
+    var lines = [];
+
+    // Q1 comparison
+    var q1diff = q1 - META_Q5121_PROB;
+    if (Math.abs(q1diff) <= 5) {
+      lines.push('AGI 2030の確率について、あなたはMetaculusの予測者とほぼ同じ位置にいる。');
+    } else if (q1diff > 0) {
+      lines.push('あなたはMetaculusの予測者より<strong>' + q1diff + 'ポイント楽観的</strong>だ。2030年までのAGI達成を、世界の予測者集団より高く見積もっている。');
+    } else {
+      lines.push('あなたはMetaculusの予測者より<strong>' + Math.abs(q1diff) + 'ポイント悲観的</strong>だ。2030年までのAGI達成を、世界の予測者集団より低く見積もっている。');
+    }
+
+    // Q2 comparison
+    var q2diff = q2 - META_Q3479_YEAR;
+    if (q2diff === 0) {
+      lines.push('AGI到達年の予測は、Metaculusの中央値と一致している。');
+    } else if (q2diff < 0) {
+      lines.push('AGI到達年について、あなたはMetaculusの中央値より<strong>' + Math.abs(q2diff) + '年早い</strong>と考えている。');
+    } else {
+      lines.push('AGI到達年について、あなたはMetaculusの中央値より<strong>' + q2diff + '年遅い</strong>と考えている。');
+    }
+
+    // Q4 observation
+    if (q4 >= 70) {
+      lines.push('計算量だけでAGIに到達できると考えている。スケーリング仮説の強い支持者だ。');
+    } else if (q4 <= 30) {
+      lines.push('計算量だけではAGIに到達できないと考えている。アーキテクチャの革新が必要だという立場。');
+    }
+
+    // p(doom) observation
+    if (q5 >= 30) {
+      lines.push('p(doom) ' + q5 + '%は、AI安全性コミュニティの中でも高い部類に入る。');
+    } else if (q5 <= 5) {
+      lines.push('p(doom) ' + q5 + '%は、AI安全性コミュニティの中では楽観的な部類だ。');
+    }
+
+    verdictEl.innerHTML = lines.join('<br><br>');
+
+    // Show section and scroll
+    var resultsSection = document.getElementById('results');
+    resultsSection.classList.add('visible');
+    setTimeout(function() {
+      resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 100);
+  }
+})();
+</script>
+
+</body>
+</html>

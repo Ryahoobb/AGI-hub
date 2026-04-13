@@ -173,10 +173,15 @@
   .bias-legend-item { display: inline-flex; align-items: center; gap: 4px; }
   .bias-legend-swatch { width: 12px; height: 12px; border-radius: 2px; display: inline-block; }
   .bias-tag { display: inline-block; font-family: var(--ff-mono); font-size: 9px; padding: 2px 6px; border-radius: 3px; margin-left: 6px; vertical-align: middle; line-height: 1; letter-spacing: 0.02em; }
-  .bias-tag-linear { color: #1a1a1a; background: rgba(26,26,26,0.08); }
-  .bias-tag-anchor { color: #555; background: rgba(85,85,85,0.08); }
-  .bias-tag-category { color: #888; background: rgba(136,136,136,0.1); }
-  .bias-tag-control { color: #aaa; background: rgba(170,170,170,0.12); }
+  .bias-tag-linear { color: #1a56db; background: rgba(37,99,235,0.10); }
+  .bias-tag-anchor { color: #b45309; background: rgba(180,83,9,0.10); }
+  .bias-tag-category { color: #7c3aed; background: rgba(124,58,237,0.10); }
+  .bias-tag-control { color: #c62828; background: rgba(198,40,40,0.10); }
+  /* Heatmap row colors */
+  .bias-heat tr:nth-child(1) .bh-3{background:#1a56db} .bias-heat tr:nth-child(1) .bh-2{background:rgba(37,99,235,.45)} .bias-heat tr:nth-child(1) .bh-1{background:rgba(37,99,235,.15)}
+  .bias-heat tr:nth-child(2) .bh-3{background:#b45309} .bias-heat tr:nth-child(2) .bh-2{background:rgba(180,83,9,.45)} .bias-heat tr:nth-child(2) .bh-1{background:rgba(180,83,9,.15)}
+  .bias-heat tr:nth-child(3) .bh-3{background:#7c3aed} .bias-heat tr:nth-child(3) .bh-2{background:rgba(124,58,237,.45)} .bias-heat tr:nth-child(3) .bh-1{background:rgba(124,58,237,.15)}
+  .bias-heat tr:nth-child(4) .bh-3{background:#c62828} .bias-heat tr:nth-child(4) .bh-2{background:rgba(198,40,40,.45)} .bias-heat tr:nth-child(4) .bh-1{background:rgba(198,40,40,.15)}
   @media (max-width: 900px) { .bias-groups { grid-template-columns: 1fr; } .bias-heat th, .bias-heat td { padding: 4px 3px; font-size: 8px; } }
 </style>
 </head>
@@ -215,7 +220,7 @@
   <div class="bias-groups">
     <div class="bias-group">
       <div class="bias-group-head">
-        <div class="bias-group-icon" style="background:#1a1a1a;">直</div>
+        <div class="bias-group-icon" style="background:#1a56db;">直</div>
         <div class="bias-group-name">線形思考の罠</div>
         <div class="bias-group-count">12 claims</div>
       </div>
@@ -232,7 +237,7 @@
 
     <div class="bias-group">
       <div class="bias-group-head">
-        <div class="bias-group-icon" style="background:#555;">錨</div>
+        <div class="bias-group-icon" style="background:#b45309;">錨</div>
         <div class="bias-group-name">過去への固着</div>
         <div class="bias-group-count">12 claims</div>
       </div>
@@ -250,7 +255,7 @@
 
     <div class="bias-group">
       <div class="bias-group-head">
-        <div class="bias-group-icon" style="background:#888;">混</div>
+        <div class="bias-group-icon" style="background:#7c3aed;">混</div>
         <div class="bias-group-name">概念の混同</div>
         <div class="bias-group-count">9 claims</div>
       </div>
@@ -268,7 +273,7 @@
 
     <div class="bias-group">
       <div class="bias-group-head">
-        <div class="bias-group-icon" style="background:#aaa;">幻</div>
+        <div class="bias-group-icon" style="background:#c62828;">幻</div>
         <div class="bias-group-name">制御の幻想</div>
         <div class="bias-group-count">11 claims</div>
       </div>
@@ -299,9 +304,9 @@
     </table>
     <div class="bias-legend">
       <span>濃度 =</span>
-      <span class="bias-legend-item"><span class="bias-legend-swatch bh-3"></span> 支配的</span>
-      <span class="bias-legend-item"><span class="bias-legend-swatch bh-2"></span> 顕著</span>
-      <span class="bias-legend-item"><span class="bias-legend-swatch bh-1"></span> 存在</span>
+      <span class="bias-legend-item"><span class="bias-legend-swatch" style="background:#1a1a1a;"></span> 支配的</span>
+      <span class="bias-legend-item"><span class="bias-legend-swatch" style="background:rgba(0,0,0,.45);"></span> 顕著</span>
+      <span class="bias-legend-item"><span class="bias-legend-swatch" style="background:rgba(0,0,0,.15);"></span> 存在</span>
       <span class="bias-legend-item"><span class="bias-legend-swatch bh-0"></span> 不在</span>
     </div>
   </div>

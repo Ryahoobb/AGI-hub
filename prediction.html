@@ -323,13 +323,13 @@ h2 { font-size: clamp(28px, 4vw, 44px); font-weight: 800; line-height: 1.2; colo
   top: 140px;
   height: 24px;
   border: 2px solid var(--accent);
-  border-bottom: none;
+  border-top: none;
   border-radius: 0;
 }
 .ceo-bracket::after {
   content: '業界の予測者';
   position: absolute;
-  top: -28px;
+  top: calc(100% + 6px);
   left: 50%;
   transform: translateX(-50%);
   font-family: "SF Mono", Menlo, monospace;

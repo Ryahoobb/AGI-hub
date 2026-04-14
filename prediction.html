@@ -606,7 +606,8 @@ h2 { font-size: clamp(28px, 4vw, 44px); font-weight: 800; line-height: 1.2; colo
   width: 32px; height: 32px; border-radius: 50%; background: var(--accent); cursor: pointer;
   border: 5px solid #fff; box-shadow: 0 0 0 2px var(--accent), 0 4px 12px rgba(47, 43, 146, 0.3);
 }
-.slider-labels { display: flex; justify-content: space-between; font-size: 11px; color: var(--meta); margin-top: 16px; font-family: "SF Mono", Menlo, monospace; letter-spacing: 0.04em; }
+.slider-labels { display: flex; justify-content: space-between; font-size: 11px; color: var(--meta); margin-top: 16px; font-family: "SF Mono", Menlo, monospace; letter-spacing: 0.04em; padding: 0 16px; }
+.slider-container .slider-track-bg { left: 16px; right: 16px; }
 
 /* No world marker for Q3-Q5 */
 .question.no-compare .value-row { grid-template-columns: 1fr; }
@@ -759,13 +760,18 @@ h2 { font-size: clamp(28px, 4vw, 44px); font-weight: 800; line-height: 1.2; colo
 
 .verdict {
   margin-top: 56px;
-  padding: 40px;
-  background: linear-gradient(135deg, var(--accent-soft), rgba(90, 76, 199, 0.12));
-  border-left: 4px solid var(--accent);
-  font-size: 17px;
-  line-height: 1.85;
+  padding: 48px 56px;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-top: 3px solid var(--accent);
+  font-family: 游ゴシック体, YuGothic, "游ゴシック Medium", "Yu Gothic Medium", "ヒラギノ角ゴ ProN W3", "Hiragino Kaku Gothic ProN", sans-serif;
+  font-size: 18px;
+  line-height: 2;
+  color: var(--body-text);
+  letter-spacing: 0.01em;
 }
-.verdict strong { color: var(--accent); font-weight: 800; }
+.verdict strong { color: var(--accent); font-weight: 700; border-bottom: 2px solid var(--accent-line); padding-bottom: 1px; }
+@media (max-width: 768px) { .verdict { padding: 32px 24px; font-size: 16px; line-height: 1.9; } }
 
 /* Extra results — big circular gauges */
 .extras-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 64px; }
@@ -865,7 +871,7 @@ h2 { font-size: clamp(28px, 4vw, 44px); font-weight: 800; line-height: 1.2; colo
       <div class="hero-timeline-title"><strong>AGI到達年</strong> · 予測者スペクトラム</div>
       <div class="hero-timeline-legend">
         <span class="legend-item"><span class="legend-dot" style="background:var(--accent);"></span>業界の予測者</span>
-        <span class="legend-item"><span class="legend-dot" style="background:var(--green);"></span>Metaculus 3,512人</span>
+        <span class="legend-item"><span class="legend-dot" style="background:var(--green);"></span>Metaculus <span data-meta="q3479.forecasters_fmt">3,512</span>人</span>
       </div>
     </div>
 
@@ -957,7 +963,7 @@ h2 { font-size: clamp(28px, 4vw, 44px); font-weight: 800; line-height: 1.2; colo
         <div class="pin-card" style="border-top-color: var(--meta);">
           <div class="pin-name">Metaculus 中央値</div>
           <div class="pin-year" style="color: var(--meta);">?</div>
-          <div class="pin-meta">3,512 Forecasters</div>
+          <div class="pin-meta"><span data-meta="q3479.forecasters_fmt">3,512</span> Forecasters</div>
         </div>
         <div class="pin-quote" style="border-top-color: var(--meta);">
           <div class="quote-text">3,512人が金を賭けた中央値。回答後に開示。</div>
@@ -1005,18 +1011,18 @@ h2 { font-size: clamp(28px, 4vw, 44px); font-weight: 800; line-height: 1.2; colo
 
     <div class="big-stat green-accent reveal">
       <span class="big-stat-tag">Metaculus Q3479 · 中央値</span>
-      <div class="big-stat-num">2032</div>
+      <div class="big-stat-num"><span data-meta="q3479.median_year">2032</span></div>
       <div class="big-stat-desc">AGI到達年の中央予測</div>
-      <div class="big-stat-meta">3,512人の予測者</div>
+      <div class="big-stat-meta"><span data-meta="q3479.forecasters_fmt">3,512</span>人の予測者</div>
       <div style="margin-top:20px;font-family:'SF Mono',monospace;font-size:11px;color:var(--meta);letter-spacing:0.05em;">
         <div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px dotted var(--border);">
-          <span>25%ile (楽観)</span><strong style="color:var(--black);">2028</strong>
+          <span>25%ile (楽観)</span><strong style="color:var(--black);" data-meta="q3479.p25_year">2028</strong>
         </div>
         <div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px dotted var(--border);">
-          <span>50%ile (中央)</span><strong style="color:var(--green);">2032</strong>
+          <span>50%ile (中央)</span><strong style="color:var(--green);" data-meta="q3479.median_year">2032</strong>
         </div>
         <div style="display:flex;justify-content:space-between;padding:4px 0;">
-          <span>75%ile (悲観)</span><strong style="color:var(--black);">2040</strong>
+          <span>75%ile (悲観)</span><strong style="color:var(--black);" data-meta="q3479.p75_year">2040</strong>
         </div>
       </div>
     </div>
@@ -1053,12 +1059,12 @@ h2 { font-size: clamp(28px, 4vw, 44px); font-weight: 800; line-height: 1.2; colo
 
     <div class="big-stat reveal reveal-delay-3">
       <span class="big-stat-tag">Metaculus Q5121 · 確率</span>
-      <div class="big-stat-num">26<span class="unit">%</span></div>
+      <div class="big-stat-num"><span data-meta="q5121.probability_pct">26</span><span class="unit">%</span></div>
       <div class="big-stat-desc">2030年末までのAGI達成確率</div>
-      <div class="big-stat-meta">2,847人の予測者</div>
+      <div class="big-stat-meta"><span data-meta="q5121.forecasters_fmt">2,847</span>人の予測者</div>
       <div class="big-stat-bar-wrap">
         <div class="big-stat-bar">
-          <div class="big-stat-bar-fill" style="width: 26%;"></div>
+          <div class="big-stat-bar-fill" data-meta-style="q5121.probability_pct:width:%" style="width: 26%;"></div>
         </div>
         <div class="big-stat-bar-labels"><span>0%</span><span>50%</span><span>100%</span></div>
       </div>
@@ -1317,7 +1323,7 @@ h2 { font-size: clamp(28px, 4vw, 44px); font-weight: 800; line-height: 1.2; colo
           <div class="pin-card" style="border-top-color:var(--green);">
             <div class="pin-name">Metaculus 中央値</div>
             <div class="pin-year" style="color:var(--green);">2032</div>
-            <div class="pin-meta">3,512 Forecasters</div>
+            <div class="pin-meta"><span data-meta="q3479.forecasters_fmt">3,512</span> Forecasters</div>
           </div>
           <div class="pin-quote" style="border-top-color: var(--green);">
             <div class="quote-text">3,512人が金を賭けた中央値。当たれば儲かる仕組みが精度を担保する。</div>
@@ -1439,7 +1445,7 @@ h2 { font-size: clamp(28px, 4vw, 44px); font-weight: 800; line-height: 1.2; colo
 <div class="credits">
   <p>AGI HUB — Intelligence, Alignment, and The Next Phase</p>
   <p>Data: <a href="https://www.metaculus.com/questions/5121/" target="_blank" rel="noopener">Metaculus Q5121</a> · <a href="https://www.metaculus.com/questions/3479/" target="_blank" rel="noopener">Metaculus Q3479</a></p>
-  <p>Last updated: 2026-04-13</p>
+  <p>Last updated: <span data-meta="last_updated">2026-04-13</span></p>
 </div>
 
 <script>
@@ -1523,10 +1529,48 @@ h2 { font-size: clamp(28px, 4vw, 44px); font-weight: 800; line-height: 1.2; colo
   }, { threshold: 0.12 });
   reveals.forEach(function(el) { observer.observe(el); });
 
-  // ── Reference values ──
+  // ── Reference values (overridden by prediction-data.json fetch below) ──
   var META_Q5121_PROB = 26;
   var META_Q3479_YEAR = 2032;
   var GAUGE_CIRCUMFERENCE = 2 * Math.PI * 52; // ≈ 326.7
+
+  // ── Fetch latest data from prediction-data.json and patch the DOM ──
+  fetch('prediction-data.json', { cache: 'no-cache' }).then(function(r) {
+    if (!r.ok) throw new Error('fetch failed');
+    return r.json();
+  }).then(function(data) {
+    function lookup(path) {
+      var keys = path.split('.');
+      var v = data;
+      for (var i = 0; i < keys.length; i++) {
+        if (v == null) return null;
+        var k = keys[i];
+        if (k === 'forecasters_fmt' && typeof v.forecasters === 'number') {
+          return v.forecasters.toLocaleString('en-US');
+        }
+        v = v[k];
+      }
+      return v;
+    }
+    document.querySelectorAll('[data-meta]').forEach(function(el) {
+      var v = lookup(el.dataset.meta);
+      if (v != null) el.textContent = v;
+    });
+    document.querySelectorAll('[data-meta-style]').forEach(function(el) {
+      var parts = el.dataset.metaStyle.split(':');
+      var v = lookup(parts[0]);
+      if (v != null) el.style[parts[1]] = v + (parts[2] || '');
+    });
+    // Update reference values used by submit handler
+    if (data.metaculus && data.metaculus.q5121 && typeof data.metaculus.q5121.probability_pct === 'number') {
+      META_Q5121_PROB = data.metaculus.q5121.probability_pct;
+    }
+    if (data.metaculus && data.metaculus.q3479 && typeof data.metaculus.q3479.median_year === 'number') {
+      META_Q3479_YEAR = data.metaculus.q3479.median_year;
+    }
+  }).catch(function(err) {
+    console.warn('prediction-data.json fetch failed, using fallback values:', err);
+  });
 
   // ── Form submission ──
   var form = document.getElementById('prediction-form');

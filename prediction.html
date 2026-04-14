@@ -201,6 +201,8 @@ h2 { font-size: clamp(28px, 4vw, 44px); font-weight: 800; line-height: 1.2; colo
   font-weight: 800;
   letter-spacing: 0.05em;
 }
+.timeline-pin:hover,
+.timeline-pin:focus-within { z-index: 100; }
 .timeline-pin:hover .pin-face { transform: scale(1.25); z-index: 5; }
 .timeline-pin.metaculus .pin-face {
   background: var(--green);
@@ -1061,23 +1063,6 @@ h2 { font-size: clamp(28px, 4vw, 44px); font-weight: 800; line-height: 1.2; colo
         </div>
       </div>
       <p style="margin-top:14px;font-size:11px;line-height:1.6;color:var(--meta);">3,512人の予測者の分布。25%が2028年まで、中央値2032年、75%が2040年までに到達と見ている。</p>
-    </div>
-
-    <div class="big-stat alt reveal reveal-delay-1">
-      <span class="big-stat-tag">業界の予測者レンジ</span>
-      <div class="big-stat-num">到達済<span class="unit" style="font-size:50%;"> → </span>31</div>
-      <div class="big-stat-desc">CEO・元OpenAI研究者の予測レンジ</div>
-      <div class="big-stat-meta">Amodei · Aschenbrenner · Huang · Hassabis · Altman</div>
-      <div style="margin-top:20px;display:flex;gap:8px;flex-wrap:wrap;">
-        <div style="padding:8px 12px;background:var(--accent-soft);font-family:'SF Mono',monospace;font-size:11px;"><strong>Huang</strong> 到達済</div>
-        <div style="padding:8px 12px;background:var(--accent-soft);font-family:'SF Mono',monospace;font-size:11px;"><strong>Amodei</strong> 2026</div>
-        <div style="padding:8px 12px;background:var(--accent-soft);font-family:'SF Mono',monospace;font-size:11px;"><strong>Aschenbrenner</strong> 2027</div>
-        <div style="padding:8px 12px;background:var(--accent-soft);font-family:'SF Mono',monospace;font-size:11px;"><strong>Hassabis</strong> 2030</div>
-        <div style="padding:8px 12px;background:var(--accent-soft);font-family:'SF Mono',monospace;font-size:11px;"><strong>Altman</strong> 2031</div>
-      </div>
-      <p style="margin-top:14px;font-size:11px;line-height:1.6;color:var(--meta);">
-        各人の出典は冒頭タイムラインの顔ピンをホバー。発言の正確な引用と一次URLを表示。
-      </p>
     </div>
 
     <div class="big-stat reveal reveal-delay-3">

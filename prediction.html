@@ -263,26 +263,17 @@ h2 { font-size: clamp(28px, 4vw, 44px); font-weight: 800; line-height: 1.2; colo
 /* Tier-below: pin sits under the axis (below upper cards) */
 .timeline-pin.tier-below { top: 110px; }
 .timeline-pin.tier-below .pin-face { margin-top: 0; }
-.timeline-pin.tier-below .pin-line { top: -102px; height: 102px; }
+.timeline-pin.tier-below .pin-line { display: none; }
 .timeline-pin.tier-below .pin-card { top: 56px; }
-/* Tier-below quote: opens DOWNWARD (no room above) */
-.timeline-pin.tier-below .pin-quote {
-  top: 56px;
-  bottom: auto;
-  transform: translateX(-50%) translateY(-12px);
-}
-.timeline-pin.tier-below:hover .pin-quote,
-.timeline-pin.tier-below:focus-within .pin-quote {
-  transform: translateX(-50%) translateY(0);
-}
+/* Tier-below quote: opens UPWARD (covers upper area on hover via z-index) */
+.timeline-pin.tier-below .pin-quote { bottom: calc(100% + 24px); top: auto; }
 
-/* Edge pins: shift quote to avoid overflow */
+/* Edge-left pins: shift quote rightward */
 .timeline-pin.edge-left .pin-quote {
   left: calc(50% + 28px);
   right: auto;
+  transform: translateY(12px);
 }
-.timeline-pin.edge-left:not(.tier-below) .pin-quote { transform: translateY(12px); }
-.timeline-pin.edge-left.tier-below .pin-quote { transform: translateY(-12px); }
 .timeline-pin.edge-left:hover .pin-quote,
 .timeline-pin.edge-left:focus-within .pin-quote { transform: translateY(0); }
 
@@ -325,6 +316,8 @@ h2 { font-size: clamp(28px, 4vw, 44px); font-weight: 800; line-height: 1.2; colo
   font-weight: 800;
   color: var(--black);
   letter-spacing: -0.01em;
+  white-space: normal;
+  line-height: 1.2;
 }
 .timeline-pin .pin-year {
   font-family: "SF Mono", Menlo, monospace;
@@ -926,7 +919,7 @@ h2 { font-size: clamp(28px, 4vw, 44px); font-weight: 800; line-height: 1.2; colo
         <div class="pin-face" style="background-image: url('images/people/dario-amodei.jpg');"></div>
         <div class="pin-line"></div>
         <div class="pin-card">
-          <div class="pin-name">Amodei</div>
+          <div class="pin-name">Dario Amodei</div>
           <div class="pin-year">2026</div>
           <div class="pin-meta">Anthropic</div>
         </div>
@@ -939,7 +932,7 @@ h2 { font-size: clamp(28px, 4vw, 44px); font-weight: 800; line-height: 1.2; colo
         <div class="pin-face" style="background-image: url('images/thinkers/aschenbrenner.jpg');"></div>
         <div class="pin-line"></div>
         <div class="pin-card">
-          <div class="pin-name">Aschenbrenner</div>
+          <div class="pin-name">Leopold Aschenbrenner</div>
           <div class="pin-year">2027</div>
           <div class="pin-meta">元OpenAI</div>
         </div>
@@ -952,7 +945,7 @@ h2 { font-size: clamp(28px, 4vw, 44px); font-weight: 800; line-height: 1.2; colo
         <div class="pin-face" style="background-image: url('images/people/jensen-huang.jpg');"></div>
         <div class="pin-line"></div>
         <div class="pin-card">
-          <div class="pin-name">Huang</div>
+          <div class="pin-name">Jensen Huang</div>
           <div class="pin-year">到達済</div>
           <div class="pin-meta">NVIDIA</div>
         </div>
@@ -978,7 +971,7 @@ h2 { font-size: clamp(28px, 4vw, 44px); font-weight: 800; line-height: 1.2; colo
         <div class="pin-face" style="background-image: url('images/people/demis-hassabis.jpg');"></div>
         <div class="pin-line"></div>
         <div class="pin-card">
-          <div class="pin-name">Hassabis</div>
+          <div class="pin-name">Demis Hassabis</div>
           <div class="pin-year">2030</div>
           <div class="pin-meta">DeepMind</div>
         </div>
@@ -991,7 +984,7 @@ h2 { font-size: clamp(28px, 4vw, 44px); font-weight: 800; line-height: 1.2; colo
         <div class="pin-face" style="background-image: url('images/people/sam-altman.jpg');"></div>
         <div class="pin-line"></div>
         <div class="pin-card">
-          <div class="pin-name">Altman</div>
+          <div class="pin-name">Sam Altman</div>
           <div class="pin-year">2031</div>
           <div class="pin-meta">OpenAI</div>
         </div>
@@ -1301,7 +1294,7 @@ h2 { font-size: clamp(28px, 4vw, 44px); font-weight: 800; line-height: 1.2; colo
           <div class="pin-face" style="background-image: url('images/people/dario-amodei.jpg');"></div>
           <div class="pin-line"></div>
           <div class="pin-card">
-            <div class="pin-name">Amodei</div>
+            <div class="pin-name">Dario Amodei</div>
             <div class="pin-year">2026</div>
             <div class="pin-meta">Anthropic</div>
           </div>
@@ -1314,7 +1307,7 @@ h2 { font-size: clamp(28px, 4vw, 44px); font-weight: 800; line-height: 1.2; colo
           <div class="pin-face" style="background-image: url('images/thinkers/aschenbrenner.jpg');"></div>
           <div class="pin-line"></div>
           <div class="pin-card">
-            <div class="pin-name">Aschenbrenner</div>
+            <div class="pin-name">Leopold Aschenbrenner</div>
             <div class="pin-year">2027</div>
             <div class="pin-meta">元OpenAI</div>
           </div>
@@ -1327,7 +1320,7 @@ h2 { font-size: clamp(28px, 4vw, 44px); font-weight: 800; line-height: 1.2; colo
           <div class="pin-face" style="background-image: url('images/people/jensen-huang.jpg');"></div>
           <div class="pin-line"></div>
           <div class="pin-card">
-            <div class="pin-name">Huang</div>
+            <div class="pin-name">Jensen Huang</div>
             <div class="pin-year">到達済</div>
             <div class="pin-meta">NVIDIA</div>
           </div>
@@ -1353,7 +1346,7 @@ h2 { font-size: clamp(28px, 4vw, 44px); font-weight: 800; line-height: 1.2; colo
           <div class="pin-face" style="background-image: url('images/people/demis-hassabis.jpg');"></div>
           <div class="pin-line"></div>
           <div class="pin-card">
-            <div class="pin-name">Hassabis</div>
+            <div class="pin-name">Demis Hassabis</div>
             <div class="pin-year">2030</div>
             <div class="pin-meta">DeepMind</div>
           </div>
@@ -1366,7 +1359,7 @@ h2 { font-size: clamp(28px, 4vw, 44px); font-weight: 800; line-height: 1.2; colo
           <div class="pin-face" style="background-image: url('images/people/sam-altman.jpg');"></div>
           <div class="pin-line"></div>
           <div class="pin-card">
-            <div class="pin-name">Altman</div>
+            <div class="pin-name">Sam Altman</div>
             <div class="pin-year">2031</div>
             <div class="pin-meta">OpenAI</div>
           </div>

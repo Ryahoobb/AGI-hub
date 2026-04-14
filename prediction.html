@@ -261,6 +261,13 @@ h2 { font-size: clamp(28px, 4vw, 44px); font-weight: 800; line-height: 1.2; colo
   transform: translateX(-50%) translateY(0);
   pointer-events: auto;
 }
+/* Tier-below: pin sits under the axis, line points up, card below face */
+.timeline-pin.tier-below { top: 48px; }
+.timeline-pin.tier-below .pin-face { margin-top: 0; }
+.timeline-pin.tier-below .pin-line { top: -40px; height: 40px; }
+.timeline-pin.tier-below .pin-card,
+.timeline-pin.tier-below .pin-quote { top: 76px; }
+
 .timeline-pin.metaculus .pin-quote { border-top-color: var(--green); left: calc(50% + 28px); right: auto; transform: translateY(-12px); }
 .timeline-pin.metaculus:hover .pin-quote,
 .timeline-pin.metaculus:focus-within .pin-quote { transform: translateY(0); }
@@ -322,8 +329,8 @@ h2 { font-size: clamp(28px, 4vw, 44px); font-weight: 800; line-height: 1.2; colo
 /* Bracket showing CEO cluster */
 .ceo-bracket {
   position: absolute;
-  top: 140px;
-  height: 24px;
+  top: 108px;
+  height: 20px;
   border: 2px solid var(--accent);
   border-top: none;
   border-radius: 0;
@@ -923,7 +930,7 @@ h2 { font-size: clamp(28px, 4vw, 44px); font-weight: 800; line-height: 1.2; colo
           <div class="quote-source">Leopold Aschenbrenner · <a href="https://situational-awareness.ai/" target="_blank" rel="noopener">Situational Awareness</a> · Jun 2024</div>
         </div>
       </div>
-      <div class="timeline-pin" style="left: 5%;" tabindex="0">
+      <div class="timeline-pin tier-below" style="left: -5%;" tabindex="0">
         <div class="pin-face" style="background-image: url('images/people/jensen-huang.jpg');"></div>
         <div class="pin-line"></div>
         <div class="pin-card">
@@ -1295,7 +1302,7 @@ h2 { font-size: clamp(28px, 4vw, 44px); font-weight: 800; line-height: 1.2; colo
             <div class="quote-source">Leopold Aschenbrenner · <a href="https://situational-awareness.ai/" target="_blank" rel="noopener">Situational Awareness</a> · Jun 2024</div>
           </div>
         </div>
-        <div class="timeline-pin" style="left: 5%;" tabindex="0">
+        <div class="timeline-pin tier-below" style="left: -5%;" tabindex="0">
           <div class="pin-face" style="background-image: url('images/people/jensen-huang.jpg');"></div>
           <div class="pin-line"></div>
           <div class="pin-card">

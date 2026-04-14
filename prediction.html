@@ -519,55 +519,47 @@ h2 { font-size: clamp(28px, 4vw, 44px); font-weight: 800; line-height: 1.2; colo
    ══════════════════════════════════════ */
 .form-wrap { max-width: 880px; margin: 0 auto; }
 .question {
-  margin-bottom: 48px;
-  padding: 40px;
+  margin-bottom: 16px;
+  padding: 18px 24px 14px;
   background: #fff;
   border: 1px solid var(--border);
+  border-left: 3px solid var(--accent);
   position: relative;
-  overflow: hidden;
 }
-.question::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0;
-  width: 100%; height: 4px;
-  background: linear-gradient(90deg, var(--accent), var(--accent-bright));
-}
-.question-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 12px; gap: 16px; flex-wrap: wrap; }
-.question-title { font-size: 22px; font-weight: 800; color: var(--black); letter-spacing: -0.01em; line-height: 1.3; }
+.question::before { display: none; }
+.question-header { display: flex; justify-content: flex-start; align-items: baseline; margin-bottom: 4px; gap: 12px; flex-wrap: wrap; }
+.question-title { font-size: 16px; font-weight: 700; color: var(--black); letter-spacing: -0.01em; line-height: 1.4; flex: 1; }
 .question-num {
   display: inline-block;
-  padding: 4px 10px;
+  padding: 2px 8px;
   background: var(--accent);
   color: #fff;
   font-family: "SF Mono", Menlo, monospace;
-  font-size: 11px;
-  letter-spacing: 0.12em;
+  font-size: 10px;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   font-weight: 700;
+  flex-shrink: 0;
 }
-.question-sub { font-size: 14px; color: var(--meta); margin-bottom: 32px; line-height: 1.6; }
+.question-sub { font-size: 12px; color: var(--meta); margin-bottom: 12px; line-height: 1.5; }
 
-/* Value display side-by-side */
-.value-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px; }
-.value-box { padding: 20px; background: var(--accent-soft); border-left: 4px solid var(--accent); position: relative; overflow: hidden; }
-.value-box.you { background: linear-gradient(135deg, var(--accent-soft), rgba(90, 76, 199, 0.12)); }
-.value-box.world-box { background: linear-gradient(135deg, var(--world-soft), rgba(201, 55, 44, 0.12)); border-left-color: var(--world); }
-.value-box-label { font-family: "SF Mono", Menlo, monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--meta); margin-bottom: 6px; font-weight: 700; }
-.value-box .value-num { font-size: 44px; font-weight: 900; line-height: 1; color: var(--black); font-family: "SF Mono", Menlo, monospace; letter-spacing: -0.03em; }
+/* Value display inline with slider */
+.value-row { display: flex; align-items: baseline; gap: 12px; margin-bottom: 4px; }
+.value-box { padding: 0; background: transparent; border-left: none; position: relative; overflow: visible; }
+.value-box.you { background: transparent; }
+.value-box-label { font-family: "SF Mono", Menlo, monospace; font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--meta); font-weight: 700; display: inline; margin-right: 8px; }
+.value-box .value-num { font-size: 26px; font-weight: 900; line-height: 1; color: var(--accent); font-family: "SF Mono", Menlo, monospace; letter-spacing: -0.02em; display: inline; }
 .value-box.you .value-num { color: var(--accent); }
-.value-box.world-box .value-num { color: var(--world); }
-.value-box .value-note { font-size: 11px; color: var(--meta); margin-top: 6px; font-family: "SF Mono", Menlo, monospace; letter-spacing: 0.05em; }
 
-/* SLIDER with world marker overlay */
-.slider-container { position: relative; padding: 56px 0 12px; }
+/* SLIDER */
+.slider-container { position: relative; padding: 20px 0 8px; }
 .slider-track-bg {
   position: absolute;
-  top: 70px;
+  top: 36px;
   left: 0; right: 0;
-  height: 8px;
+  height: 6px;
   background: var(--bg-alt);
-  border-radius: 4px;
+  border-radius: 3px;
   pointer-events: none;
 }
 .slider-world-marker {
@@ -607,29 +599,29 @@ h2 { font-size: clamp(28px, 4vw, 44px); font-weight: 800; line-height: 1.2; colo
   box-shadow: 0 0 0 1px var(--world);
 }
 .slider-container input[type="range"] {
-  -webkit-appearance: none; appearance: none; width: 100%; height: 8px; border-radius: 4px;
+  -webkit-appearance: none; appearance: none; width: 100%; height: 6px; border-radius: 3px;
   background: transparent; outline: none; cursor: pointer;
   position: relative; z-index: 3;
-  margin: 64px 0 0;
+  margin: 32px 0 0;
 }
 .slider-container input[type="range"]::-webkit-slider-runnable-track {
-  height: 8px; background: transparent; border-radius: 4px;
+  height: 6px; background: transparent; border-radius: 3px;
 }
 .slider-container input[type="range"]::-webkit-slider-thumb {
   -webkit-appearance: none; appearance: none;
-  width: 32px; height: 32px; border-radius: 50%;
-  background: var(--accent); cursor: pointer; border: 5px solid #fff;
-  box-shadow: 0 0 0 2px var(--accent), 0 4px 12px rgba(47, 43, 146, 0.3);
-  margin-top: -13px;
+  width: 22px; height: 22px; border-radius: 50%;
+  background: var(--accent); cursor: pointer; border: 3px solid #fff;
+  box-shadow: 0 0 0 1px var(--accent), 0 2px 6px rgba(47, 43, 146, 0.3);
+  margin-top: -8px;
   transition: transform 0.15s;
 }
-.slider-container input[type="range"]:active::-webkit-slider-thumb { transform: scale(1.2); }
+.slider-container input[type="range"]:active::-webkit-slider-thumb { transform: scale(1.15); }
 .slider-container input[type="range"]::-moz-range-thumb {
-  width: 32px; height: 32px; border-radius: 50%; background: var(--accent); cursor: pointer;
-  border: 5px solid #fff; box-shadow: 0 0 0 2px var(--accent), 0 4px 12px rgba(47, 43, 146, 0.3);
+  width: 22px; height: 22px; border-radius: 50%; background: var(--accent); cursor: pointer;
+  border: 3px solid #fff; box-shadow: 0 0 0 1px var(--accent), 0 2px 6px rgba(47, 43, 146, 0.3);
 }
-.slider-labels { display: flex; justify-content: space-between; font-size: 11px; color: var(--meta); margin-top: 16px; font-family: "SF Mono", Menlo, monospace; letter-spacing: 0.04em; padding: 0 16px; }
-.slider-container .slider-track-bg { left: 16px; right: 16px; }
+.slider-labels { display: flex; justify-content: space-between; font-size: 10px; color: var(--meta); margin-top: 10px; font-family: "SF Mono", Menlo, monospace; letter-spacing: 0.04em; padding: 0 11px; }
+.slider-container .slider-track-bg { left: 11px; right: 11px; }
 
 /* No world marker for Q3-Q5 */
 .question.no-compare .value-row { grid-template-columns: 1fr; }
@@ -1093,16 +1085,20 @@ h2 { font-size: clamp(28px, 4vw, 44px); font-weight: 800; line-height: 1.2; colo
   <h2>では、<br>あなたは？</h2>
   <p class="lead" style="margin-top:24px;">5つの問いに、直感で答える。答えた後に世界の予測が明かされる。</p>
 
-  <div style="margin-top:48px;max-width:720px;background:#fff;border:1px solid var(--border);border-top:3px solid var(--accent);padding:28px 32px;text-align:left;">
-    <div style="font-family:'SF Mono',Menlo,monospace;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--accent);margin-bottom:12px;">◆ 設問の前に · AGIの定義</div>
-    <p style="font-size:15px;line-height:1.8;color:var(--body-text);margin-bottom:16px;"><strong style="color:var(--accent);">AGI（Artificial General Intelligence）</strong>に統一された定義はない。論者で範囲が大きくずれる。代表的な定義と出典:</p>
-    <ul style="font-size:14px;line-height:1.95;color:var(--body-text);padding-left:20px;margin-bottom:16px;">
-      <li style="margin-bottom:10px;"><strong>OpenAI憲章</strong> — 「経済的に価値ある仕事のほとんどで人間を上回る高度自律システム」<br><span style="font-family:'SF Mono',monospace;font-size:11px;color:var(--meta);letter-spacing:0.04em;">出典: <a href="https://openai.com/charter/" target="_blank" rel="noopener" style="color:var(--accent);text-decoration:underline;">OpenAI Charter (2018)</a></span></li>
-      <li style="margin-bottom:10px;"><strong>DeepMind · Morris et al.</strong> — 「多くの非物理タスクで幅広い知能を発揮するシステム」。Level 1〜5で段階化（Emerging / Competent / Expert / Virtuoso / Superhuman）<br><span style="font-family:'SF Mono',monospace;font-size:11px;color:var(--meta);letter-spacing:0.04em;">出典: <a href="https://arxiv.org/abs/2311.02462" target="_blank" rel="noopener" style="color:var(--accent);text-decoration:underline;">Levels of AGI (2024)</a></span></li>
-      <li style="margin-bottom:10px;"><strong>Metaculus Q3479</strong> — 拡張チューリングテスト / SAT高得点 / ロボット操作 / 数学オリンピック金賞を同一システムで達成<br><span style="font-family:'SF Mono',monospace;font-size:11px;color:var(--meta);letter-spacing:0.04em;">出典: <a href="https://www.metaculus.com/questions/3479/" target="_blank" rel="noopener" style="color:var(--accent);text-decoration:underline;">Metaculus Q3479 解題</a></span></li>
-      <li style="margin-bottom:10px;"><strong>Jensen Huang (NVIDIA)</strong> — 「熟練した専門家の仕事をこなせるAI」。2026年3月時点で「もう到達済」と明言<br><span style="font-family:'SF Mono',monospace;font-size:11px;color:var(--meta);letter-spacing:0.04em;">出典: <a href="https://finance.yahoo.com/news/nvidia-ceo-jensen-huang-claims-agi-has-been-achieved-can-create-billion-dollar-businesses-172225126.html" target="_blank" rel="noopener" style="color:var(--accent);text-decoration:underline;">Lex Fridman Podcast (Mar 2026)</a></span></li>
-    </ul>
-    <p style="font-size:13px;line-height:1.7;color:var(--mid);">Metaculusの運用定義は厳しく、OpenAI憲章やHuangの定義は緩い。この差がQ2の回答に2〜5年のズレを生む。以下の設問では、自分の中で一つ基準を決めて答えてほしい。</p>
+  <div style="margin-top:48px;max-width:720px;background:#fff;border:1px solid var(--border);border-top:3px solid var(--accent);padding:32px;text-align:left;">
+    <div style="font-family:'SF Mono',Menlo,monospace;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--accent);margin-bottom:16px;">◆ 設問の前に · AGIの定義</div>
+    <p style="font-size:19px;line-height:1.7;color:var(--body-text);font-weight:700;margin-bottom:8px;letter-spacing:-0.01em;">人間と同等以上に、広い領域で知的タスクをこなせるAI。</p>
+    <p style="font-size:13px;color:var(--mid);line-height:1.7;margin-bottom:20px;">これが本アンケートでの運用上の定義。ただし論者で範囲がずれる。Metaculusは厳しく、OpenAI/Huangは緩い。この差がQ2の回答に2〜5年のズレを生む。</p>
+
+    <details style="background:var(--bg-alt);border:1px solid var(--border);padding:14px 18px;font-size:12px;">
+      <summary style="cursor:pointer;font-family:'SF Mono',monospace;font-size:11px;letter-spacing:0.08em;color:var(--meta);font-weight:700;text-transform:uppercase;">主要定義の出典を見る</summary>
+      <ul style="font-size:12px;line-height:1.7;color:var(--mid);padding-left:18px;margin-top:12px;list-style:disc;">
+        <li style="margin-bottom:6px;"><strong style="color:var(--body-text);">OpenAI憲章</strong>: 経済的に価値ある仕事のほとんどで人間を上回る高度自律システム — <a href="https://openai.com/charter/" target="_blank" rel="noopener" style="color:var(--accent);text-decoration:underline;">Charter (2018)</a></li>
+        <li style="margin-bottom:6px;"><strong style="color:var(--body-text);">DeepMind · Morris et al.</strong>: 多くの非物理タスクで幅広い知能を発揮するシステム。Level 1〜5段階化 — <a href="https://arxiv.org/abs/2311.02462" target="_blank" rel="noopener" style="color:var(--accent);text-decoration:underline;">Levels of AGI (2024)</a></li>
+        <li style="margin-bottom:6px;"><strong style="color:var(--body-text);">Metaculus Q3479</strong>: 拡張チューリング / SAT / ロボット操作 / 数学五輪金を同一システムで達成 — <a href="https://www.metaculus.com/questions/3479/" target="_blank" rel="noopener" style="color:var(--accent);text-decoration:underline;">Q3479</a></li>
+        <li><strong style="color:var(--body-text);">Jensen Huang (NVIDIA)</strong>: 熟練した専門家の仕事をこなせるAI。「もう到達済」(2026) — <a href="https://finance.yahoo.com/news/nvidia-ceo-jensen-huang-claims-agi-has-been-achieved-can-create-billion-dollar-businesses-172225126.html" target="_blank" rel="noopener" style="color:var(--accent);text-decoration:underline;">Lex Fridman</a></li>
+      </ul>
+    </details>
   </div>
 </div>
 

@@ -137,7 +137,7 @@ h2 { font-size: clamp(28px, 4vw, 44px); font-weight: 800; line-height: 1.2; colo
 /* The actual horizontal timeline */
 .timeline-wrap {
   position: relative;
-  padding: 40px 0 260px;
+  padding: 40px 0 210px;
 }
 .timeline-axis {
   position: relative;
@@ -260,14 +260,14 @@ h2 { font-size: clamp(28px, 4vw, 44px); font-weight: 800; line-height: 1.2; colo
   transform: translateX(-50%) translateY(0);
   pointer-events: auto;
 }
-/* Tier-below: pin sits well under the axis (below upper cards + bracket) */
-.timeline-pin.tier-below { top: 140px; }
+/* Tier-below: pin sits under the axis (below upper cards) */
+.timeline-pin.tier-below { top: 110px; }
 .timeline-pin.tier-below .pin-face { margin-top: 0; }
-.timeline-pin.tier-below .pin-line { top: -132px; height: 132px; }
-.timeline-pin.tier-below .pin-card { top: 60px; }
+.timeline-pin.tier-below .pin-line { top: -102px; height: 102px; }
+.timeline-pin.tier-below .pin-card { top: 56px; }
 /* Tier-below quote: opens DOWNWARD (no room above) */
 .timeline-pin.tier-below .pin-quote {
-  top: 60px;
+  top: 56px;
   bottom: auto;
   transform: translateX(-50%) translateY(-12px);
 }
@@ -275,6 +275,16 @@ h2 { font-size: clamp(28px, 4vw, 44px); font-weight: 800; line-height: 1.2; colo
 .timeline-pin.tier-below:focus-within .pin-quote {
   transform: translateX(-50%) translateY(0);
 }
+
+/* Edge pins: shift quote to avoid overflow */
+.timeline-pin.edge-left .pin-quote {
+  left: calc(50% + 28px);
+  right: auto;
+}
+.timeline-pin.edge-left:not(.tier-below) .pin-quote { transform: translateY(12px); }
+.timeline-pin.edge-left.tier-below .pin-quote { transform: translateY(-12px); }
+.timeline-pin.edge-left:hover .pin-quote,
+.timeline-pin.edge-left:focus-within .pin-quote { transform: translateY(0); }
 
 .timeline-pin.metaculus .pin-quote { border-top-color: var(--green); left: auto; right: calc(50% + 28px); transform: translateY(12px); }
 .timeline-pin.metaculus:hover .pin-quote,
@@ -912,7 +922,7 @@ h2 { font-size: clamp(28px, 4vw, 44px); font-weight: 800; line-height: 1.2; colo
 
       <!-- Forecaster pins: 2026-2036 scale -->
       <!-- 2026=0%, 2027=10%, 2029=30%, 2030=40%, 2031=50%, 2032=60% -->
-      <div class="timeline-pin" style="left: 0%;" tabindex="0">
+      <div class="timeline-pin edge-left" style="left: 0%;" tabindex="0">
         <div class="pin-face" style="background-image: url('images/people/dario-amodei.jpg');"></div>
         <div class="pin-line"></div>
         <div class="pin-card">
@@ -925,7 +935,7 @@ h2 { font-size: clamp(28px, 4vw, 44px); font-weight: 800; line-height: 1.2; colo
           <div class="quote-source">Dario Amodei · <a href="https://darioamodei.com/essay/machines-of-loving-grace" target="_blank" rel="noopener">Machines of Loving Grace</a> · Oct 2024</div>
         </div>
       </div>
-      <div class="timeline-pin" style="left: 10%;" tabindex="0">
+      <div class="timeline-pin tier-below" style="left: 10%;" tabindex="0">
         <div class="pin-face" style="background-image: url('images/thinkers/aschenbrenner.jpg');"></div>
         <div class="pin-line"></div>
         <div class="pin-card">
@@ -938,7 +948,7 @@ h2 { font-size: clamp(28px, 4vw, 44px); font-weight: 800; line-height: 1.2; colo
           <div class="quote-source">Leopold Aschenbrenner · <a href="https://situational-awareness.ai/" target="_blank" rel="noopener">Situational Awareness</a> · Jun 2024</div>
         </div>
       </div>
-      <div class="timeline-pin tier-below" style="left: 0%;" tabindex="0">
+      <div class="timeline-pin tier-below edge-left" style="left: 0%;" tabindex="0">
         <div class="pin-face" style="background-image: url('images/people/jensen-huang.jpg');"></div>
         <div class="pin-line"></div>
         <div class="pin-card">
@@ -951,7 +961,7 @@ h2 { font-size: clamp(28px, 4vw, 44px); font-weight: 800; line-height: 1.2; colo
           <div class="quote-source">Jensen Huang · <a href="https://finance.yahoo.com/news/nvidia-ceo-jensen-huang-claims-agi-has-been-achieved-can-create-billion-dollar-businesses-172225126.html" target="_blank" rel="noopener">Lex Fridman Podcast</a> · Mar 2026</div>
         </div>
       </div>
-      <div class="timeline-pin tier-below" style="left: 25%;" tabindex="0">
+      <div class="timeline-pin" style="left: 25%;" tabindex="0">
         <div class="pin-face" style="background-image: url('images/thinkers/bioshok3.jpg');"></div>
         <div class="pin-line"></div>
         <div class="pin-card">
@@ -964,7 +974,7 @@ h2 { font-size: clamp(28px, 4vw, 44px); font-weight: 800; line-height: 1.2; colo
           <div class="quote-source">bioshok3 · <a href="https://x.com/bioshok3" target="_blank" rel="noopener">@bioshok3</a> · <a href="https://note.com/bioshok3" target="_blank" rel="noopener">note.com</a></div>
         </div>
       </div>
-      <div class="timeline-pin" style="left: 40%;" tabindex="0">
+      <div class="timeline-pin tier-below" style="left: 40%;" tabindex="0">
         <div class="pin-face" style="background-image: url('images/people/demis-hassabis.jpg');"></div>
         <div class="pin-line"></div>
         <div class="pin-card">
@@ -992,7 +1002,7 @@ h2 { font-size: clamp(28px, 4vw, 44px); font-weight: 800; line-height: 1.2; colo
       </div>
 
       <!-- Metaculus pin (value hidden until user answers) -->
-      <div class="timeline-pin metaculus" style="left: 60%; opacity: 0.45;" tabindex="0">
+      <div class="timeline-pin metaculus tier-below" style="left: 60%; opacity: 0.45;" tabindex="0">
         <div class="pin-face" style="background: var(--meta); box-shadow: 0 0 0 2px var(--meta), 0 6px 16px rgba(117, 117, 117, 0.3);">?</div>
         <div class="pin-line" style="background: rgba(117, 117, 117, 0.4);"></div>
         <div class="pin-card" style="border-top-color: var(--meta);">
@@ -1007,7 +1017,6 @@ h2 { font-size: clamp(28px, 4vw, 44px); font-weight: 800; line-height: 1.2; colo
       </div>
 
       <!-- Bracket indicating CEO cluster -->
-      <div class="ceo-bracket" style="left: -2%; right: 48%;"></div>
     </div>
 
     <p style="text-align:center;font-size:13px;color:var(--mid);margin-top:32px;max-width:680px;margin-left:auto;margin-right:auto;line-height:1.7;">
@@ -1288,7 +1297,7 @@ h2 { font-size: clamp(28px, 4vw, 44px); font-weight: 800; line-height: 1.2; colo
           <span style="left: 100%;">2036+</span>
         </div>
 
-        <div class="timeline-pin" style="left: 0%;" tabindex="0">
+        <div class="timeline-pin edge-left" style="left: 0%;" tabindex="0">
           <div class="pin-face" style="background-image: url('images/people/dario-amodei.jpg');"></div>
           <div class="pin-line"></div>
           <div class="pin-card">
@@ -1301,7 +1310,7 @@ h2 { font-size: clamp(28px, 4vw, 44px); font-weight: 800; line-height: 1.2; colo
             <div class="quote-source">Dario Amodei · <a href="https://darioamodei.com/essay/machines-of-loving-grace" target="_blank" rel="noopener">Machines of Loving Grace</a> · Oct 2024</div>
           </div>
         </div>
-        <div class="timeline-pin" style="left: 10%;" tabindex="0">
+        <div class="timeline-pin tier-below" style="left: 10%;" tabindex="0">
           <div class="pin-face" style="background-image: url('images/thinkers/aschenbrenner.jpg');"></div>
           <div class="pin-line"></div>
           <div class="pin-card">
@@ -1314,7 +1323,7 @@ h2 { font-size: clamp(28px, 4vw, 44px); font-weight: 800; line-height: 1.2; colo
             <div class="quote-source">Leopold Aschenbrenner · <a href="https://situational-awareness.ai/" target="_blank" rel="noopener">Situational Awareness</a> · Jun 2024</div>
           </div>
         </div>
-        <div class="timeline-pin tier-below" style="left: 0%;" tabindex="0">
+        <div class="timeline-pin tier-below edge-left" style="left: 0%;" tabindex="0">
           <div class="pin-face" style="background-image: url('images/people/jensen-huang.jpg');"></div>
           <div class="pin-line"></div>
           <div class="pin-card">
@@ -1327,7 +1336,7 @@ h2 { font-size: clamp(28px, 4vw, 44px); font-weight: 800; line-height: 1.2; colo
             <div class="quote-source">Jensen Huang · <a href="https://finance.yahoo.com/news/nvidia-ceo-jensen-huang-claims-agi-has-been-achieved-can-create-billion-dollar-businesses-172225126.html" target="_blank" rel="noopener">Lex Fridman Podcast</a> · Mar 2026</div>
           </div>
         </div>
-        <div class="timeline-pin tier-below" style="left: 25%;" tabindex="0">
+        <div class="timeline-pin" style="left: 25%;" tabindex="0">
           <div class="pin-face" style="background-image: url('images/thinkers/bioshok3.jpg');"></div>
           <div class="pin-line"></div>
           <div class="pin-card">
@@ -1340,7 +1349,7 @@ h2 { font-size: clamp(28px, 4vw, 44px); font-weight: 800; line-height: 1.2; colo
             <div class="quote-source">bioshok3 · <a href="https://x.com/bioshok3" target="_blank" rel="noopener">@bioshok3</a> · <a href="https://note.com/bioshok3" target="_blank" rel="noopener">note.com</a></div>
           </div>
         </div>
-        <div class="timeline-pin" style="left: 40%;" tabindex="0">
+        <div class="timeline-pin tier-below" style="left: 40%;" tabindex="0">
           <div class="pin-face" style="background-image: url('images/people/demis-hassabis.jpg');"></div>
           <div class="pin-line"></div>
           <div class="pin-card">
@@ -1368,7 +1377,7 @@ h2 { font-size: clamp(28px, 4vw, 44px); font-weight: 800; line-height: 1.2; colo
         </div>
 
         <!-- Metaculus pin (always shown in final) -->
-        <div class="timeline-pin metaculus" style="left: 60%;" tabindex="0">
+        <div class="timeline-pin metaculus tier-below" style="left: 60%;" tabindex="0">
           <div class="pin-face" style="background:var(--green);box-shadow:0 0 0 2px var(--green), 0 6px 16px rgba(26, 122, 58, 0.35);font-size:14px;">2032</div>
           <div class="pin-line" style="background:rgba(26, 122, 58, 0.4);"></div>
           <div class="pin-card" style="border-top-color:var(--green);">

@@ -1042,17 +1042,25 @@ h2 { font-size: clamp(28px, 4vw, 44px); font-weight: 800; line-height: 1.2; colo
       <div class="big-stat-num"><span data-meta="q3479.median_year">2032</span></div>
       <div class="big-stat-desc">AGI到達年の中央予測</div>
       <div class="big-stat-meta"><span data-meta="q3479.forecasters_fmt">3,512</span>人の予測者</div>
-      <div style="margin-top:20px;font-family:'SF Mono',monospace;font-size:11px;color:var(--meta);letter-spacing:0.05em;">
-        <div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px dotted var(--border);">
-          <span>25%ile (楽観)</span><strong style="color:var(--black);" data-meta="q3479.p25_year">2028</strong>
+
+      <!-- Distribution chart: 2026-2050 axis with 25/50/75%ile markers -->
+      <div style="margin-top:28px;position:relative;">
+        <div style="position:relative;height:80px;background:linear-gradient(to right, rgba(26,122,58,0.0) 0%, rgba(26,122,58,0.08) 8%, rgba(26,122,58,0.35) 25%, rgba(26,122,58,0.22) 58%, rgba(26,122,58,0.06) 90%, rgba(26,122,58,0.0) 100%);border-bottom:1px solid var(--border);">
+          <!-- 25%ile marker (2028 = 8.3% of 2026-2050) -->
+          <div style="position:absolute;left:8.3%;top:0;bottom:0;width:1px;background:rgba(0,0,0,0.25);"></div>
+          <div style="position:absolute;left:8.3%;top:-18px;transform:translateX(-50%);font-family:'SF Mono',monospace;font-size:10px;color:var(--meta);letter-spacing:0.04em;white-space:nowrap;">P25 · 2028</div>
+          <!-- 50%ile median (2032 = 25%) -->
+          <div style="position:absolute;left:25%;top:-4px;bottom:-4px;width:3px;background:var(--green);"></div>
+          <div style="position:absolute;left:25%;top:-18px;transform:translateX(-50%);font-family:'SF Mono',monospace;font-size:11px;color:var(--green);letter-spacing:0.04em;font-weight:700;white-space:nowrap;">P50 · 2032</div>
+          <!-- 75%ile (2040 = 58.3%) -->
+          <div style="position:absolute;left:58.3%;top:0;bottom:0;width:1px;background:rgba(0,0,0,0.25);"></div>
+          <div style="position:absolute;left:58.3%;top:-18px;transform:translateX(-50%);font-family:'SF Mono',monospace;font-size:10px;color:var(--meta);letter-spacing:0.04em;white-space:nowrap;">P75 · 2040</div>
         </div>
-        <div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px dotted var(--border);">
-          <span>50%ile (中央)</span><strong style="color:var(--green);" data-meta="q3479.median_year">2032</strong>
-        </div>
-        <div style="display:flex;justify-content:space-between;padding:4px 0;">
-          <span>75%ile (悲観)</span><strong style="color:var(--black);" data-meta="q3479.p75_year">2040</strong>
+        <div style="display:flex;justify-content:space-between;font-family:'SF Mono',monospace;font-size:10px;color:var(--meta);margin-top:6px;letter-spacing:0.04em;">
+          <span>2026</span><span>2032</span><span>2038</span><span>2044</span><span>2050</span>
         </div>
       </div>
+      <p style="margin-top:14px;font-size:11px;line-height:1.6;color:var(--meta);">3,512人の予測者の分布。25%が2028年まで、中央値2032年、75%が2040年までに到達と見ている。</p>
     </div>
 
     <div class="big-stat alt reveal reveal-delay-1">
@@ -1070,19 +1078,6 @@ h2 { font-size: clamp(28px, 4vw, 44px); font-weight: 800; line-height: 1.2; colo
       <p style="margin-top:14px;font-size:11px;line-height:1.6;color:var(--meta);">
         各人の出典は冒頭タイムラインの顔ピンをホバー。発言の正確な引用と一次URLを表示。
       </p>
-    </div>
-
-    <div class="big-stat amber-accent reveal reveal-delay-2">
-      <span class="big-stat-tag">Capital Committed 2025</span>
-      <div class="big-stat-num">$131<span class="unit">B</span></div>
-      <div class="big-stat-desc">AIインフラに実際に払われた金（2025年）</div>
-      <div class="big-stat-meta">口約束ではなく、すでに動いた資金</div>
-      <div class="invest-list">
-        <div class="invest-row"><span class="invest-entity">Microsoft AI infra</span><span class="invest-amount">$80B</span></div>
-        <div class="invest-row"><span class="invest-entity">TSMC 2025 CAPEX</span><span class="invest-amount">$40B</span></div>
-        <div class="invest-row"><span class="invest-entity">xAI Memphis</span><span class="invest-amount">$10B</span></div>
-        <div class="invest-row"><span class="invest-entity">Figure Series C</span><span class="invest-amount">$1B</span></div>
-      </div>
     </div>
 
     <div class="big-stat reveal reveal-delay-3">

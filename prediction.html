@@ -1457,6 +1457,12 @@ h2 { font-size: clamp(28px, 4vw, 44px); font-weight: 800; line-height: 1.2; colo
 (function() {
   'use strict';
 
+  // Prevent browser auto-scroll-restore on reload. Only honor URL hash if present.
+  if ('scrollRestoration' in history) { history.scrollRestoration = 'manual'; }
+  window.addEventListener('load', function() {
+    if (!location.hash) { window.scrollTo(0, 0); }
+  });
+
   // ── Slider live update ──
   var sliders = [
     { id: 'q1', display: 'q1-display' },

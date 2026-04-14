@@ -261,7 +261,9 @@ h2 { font-size: clamp(28px, 4vw, 44px); font-weight: 800; line-height: 1.2; colo
   transform: translateX(-50%) translateY(0);
   pointer-events: auto;
 }
-.timeline-pin.metaculus .pin-quote { border-top-color: var(--green); }
+.timeline-pin.metaculus .pin-quote { border-top-color: var(--green); left: calc(50% + 28px); right: auto; transform: translateY(-12px); }
+.timeline-pin.metaculus:hover .pin-quote,
+.timeline-pin.metaculus:focus-within .pin-quote { transform: translateY(0); }
 .timeline-pin.you-pin .pin-quote { border-top-color: var(--world); }
 .pin-quote .quote-text {
   font-size: 13px;

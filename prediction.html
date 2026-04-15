@@ -623,6 +623,60 @@ h2 { font-size: clamp(28px, 4vw, 44px); font-weight: 800; line-height: 1.2; colo
 .slider-labels { display: flex; justify-content: space-between; font-size: 10px; color: var(--meta); margin-top: 10px; font-family: "SF Mono", Menlo, monospace; letter-spacing: 0.04em; padding: 0 11px; }
 .slider-container .slider-track-bg { left: 11px; right: 11px; }
 
+/* Thinker reference bar under the slider */
+.q-thinker-bar {
+  margin-top: 20px;
+  padding: 14px 11px 8px;
+  border-top: 1px dotted var(--border);
+}
+.q-thinker-bar-label {
+  font-family: "SF Mono", Menlo, monospace;
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--meta);
+  margin-bottom: 28px;
+  font-weight: 700;
+}
+.q-thinker-track {
+  position: relative;
+  height: 38px;
+}
+.q-thinker-pin {
+  position: absolute;
+  transform: translateX(-50%);
+  text-align: center;
+  cursor: help;
+}
+.q-thinker-pin img {
+  display: block;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  box-shadow: 0 0 0 1.5px var(--accent), 0 2px 4px rgba(0,0,0,0.12);
+  object-fit: cover;
+  object-position: center top;
+  margin: 0 auto;
+}
+.q-thinker-pin .tp-label {
+  font-family: "SF Mono", Menlo, monospace;
+  font-size: 9px;
+  font-weight: 700;
+  color: var(--body-text);
+  margin-top: 4px;
+  white-space: nowrap;
+  line-height: 1.2;
+}
+.q-thinker-pin .tp-val {
+  font-family: "SF Mono", Menlo, monospace;
+  font-size: 8px;
+  color: var(--meta);
+  display: block;
+  margin-top: 1px;
+}
+.q-thinker-pin.extreme img { box-shadow: 0 0 0 1.5px var(--world), 0 2px 4px rgba(0,0,0,0.12); }
+
 /* No world marker for Q3-Q5 */
 .question.no-compare .value-row { grid-template-columns: 1fr; }
 .question.no-compare .slider-world-marker { display: none; }
@@ -777,19 +831,46 @@ h2 { font-size: clamp(28px, 4vw, 44px); font-weight: 800; line-height: 1.2; colo
 .bar-marker.world .bar-pin { opacity: 0.85; }
 
 .verdict {
-  margin-top: 56px;
-  padding: 48px 56px;
-  background: #fff;
-  border: 1px solid var(--border);
-  border-top: 3px solid var(--accent);
-  font-family: 游ゴシック体, YuGothic, "游ゴシック Medium", "Yu Gothic Medium", "ヒラギノ角ゴ ProN W3", "Hiragino Kaku Gothic ProN", sans-serif;
-  font-size: 18px;
-  line-height: 2;
-  color: var(--body-text);
-  letter-spacing: 0.01em;
+  margin-top: 72px;
+  padding: 0;
+  background: transparent;
+  border: none;
+  counter-reset: v-line;
 }
-.verdict strong { color: var(--accent); font-weight: 700; border-bottom: 2px solid var(--accent-line); padding-bottom: 1px; }
-@media (max-width: 768px) { .verdict { padding: 32px 24px; font-size: 16px; line-height: 1.9; } }
+.verdict .v-line {
+  position: relative;
+  padding: 32px 0 32px 72px;
+  border-top: 1px solid var(--border);
+  font-family: 游ゴシック体, YuGothic, "游ゴシック Medium", "Yu Gothic Medium", "ヒラギノ角ゴ ProN W3", "Hiragino Kaku Gothic ProN", sans-serif;
+  font-size: 22px;
+  line-height: 1.65;
+  letter-spacing: -0.005em;
+  color: var(--body-text);
+  font-weight: 500;
+  counter-increment: v-line;
+}
+.verdict .v-line:last-child { border-bottom: 1px solid var(--border); }
+.verdict .v-line::before {
+  content: counter(v-line, decimal-leading-zero);
+  position: absolute;
+  left: 0; top: 36px;
+  font-family: "SF Mono", Menlo, monospace;
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  color: var(--accent);
+  font-weight: 700;
+}
+.verdict strong {
+  color: var(--accent);
+  font-weight: 900;
+  font-size: 1.15em;
+  letter-spacing: -0.015em;
+  white-space: nowrap;
+}
+@media (max-width: 768px) {
+  .verdict .v-line { padding: 24px 0 24px 52px; font-size: 17px; line-height: 1.7; }
+  .verdict .v-line::before { top: 28px; font-size: 10px; }
+}
 
 /* Extra results — big circular gauges */
 .extras-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 64px; }
@@ -1195,6 +1276,36 @@ h2 { font-size: clamp(28px, 4vw, 44px); font-weight: 800; line-height: 1.2; colo
         <input type="range" id="q4" min="0" max="100" value="50" step="1">
         <div class="slider-labels"><span>0% 不可能</span><span>50%</span><span>100% 十分</span></div>
       </div>
+
+      <div class="q-thinker-bar">
+        <div class="q-thinker-bar-label">◆ 主要研究者のスタンス</div>
+        <div class="q-thinker-track">
+          <div class="q-thinker-pin" style="left: 10%;" title="François Chollet — ARC-AGI著者、純粋スケーリング否定">
+            <img src="images/people/francois-chollet.jpg" alt="Chollet">
+            <div class="tp-label">Chollet</div><span class="tp-val">懐疑</span>
+          </div>
+          <div class="q-thinker-pin" style="left: 20%;" title="Gary Marcus — 長年のスケーリング懐疑派">
+            <img src="images/thinkers/marcus.jpg" alt="Marcus">
+            <div class="tp-label">Marcus</div><span class="tp-val">懐疑</span>
+          </div>
+          <div class="q-thinker-pin" style="left: 30%;" title="Yann LeCun — スケーリングでは不十分">
+            <img src="images/people/yann-lecun.jpg" alt="LeCun">
+            <div class="tp-label">LeCun</div><span class="tp-val">懐疑</span>
+          </div>
+          <div class="q-thinker-pin" style="left: 70%;" title="Demis Hassabis — 基盤は必要だが革新も要る">
+            <img src="images/people/demis-hassabis.jpg" alt="Hassabis">
+            <div class="tp-label">Hassabis</div><span class="tp-val">中道</span>
+          </div>
+          <div class="q-thinker-pin" style="left: 85%;" title="Leopold Aschenbrenner — スケーリング強支持">
+            <img src="images/thinkers/aschenbrenner.jpg" alt="Aschenbrenner">
+            <div class="tp-label">Aschenbrenner</div><span class="tp-val">支持</span>
+          </div>
+          <div class="q-thinker-pin" style="left: 95%;" title="Ilya Sutskever — スケーリング仮説の核心提唱者">
+            <img src="images/people/sam-altman.jpg" alt="Altman">
+            <div class="tp-label">Altman</div><span class="tp-val">支持</span>
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- Q5 -->
@@ -1216,6 +1327,36 @@ h2 { font-size: clamp(28px, 4vw, 44px); font-weight: 800; line-height: 1.2; colo
         <div class="slider-track-bg"></div>
         <input type="range" id="q5" min="0" max="100" value="10" step="1">
         <div class="slider-labels"><span>0% リスクなし</span><span>50%</span><span>100% 確実に破滅</span></div>
+      </div>
+
+      <div class="q-thinker-bar">
+        <div class="q-thinker-bar-label">◆ 主要研究者のp(doom) 推定</div>
+        <div class="q-thinker-track">
+          <div class="q-thinker-pin" style="left: 1%;" title="Yann LeCun — ほぼゼロ。AIは道具">
+            <img src="images/people/yann-lecun.jpg" alt="LeCun">
+            <div class="tp-label">LeCun</div><span class="tp-val">&lt;1%</span>
+          </div>
+          <div class="q-thinker-pin" style="left: 5%;" title="Andrew Ng — 過大評価">
+            <img src="images/thinkers/ng.jpg" alt="Ng">
+            <div class="tp-label">Ng</div><span class="tp-val">~1%</span>
+          </div>
+          <div class="q-thinker-pin" style="left: 20%;" title="Yoshua Bengio — 実質的リスクあり">
+            <img src="images/thinkers/bengio.jpg" alt="Bengio">
+            <div class="tp-label">Bengio</div><span class="tp-val">~20%</span>
+          </div>
+          <div class="q-thinker-pin" style="left: 50%;" title="Geoffrey Hinton — コイントス">
+            <img src="images/thinkers/hinton.jpg" alt="Hinton">
+            <div class="tp-label">Hinton</div><span class="tp-val">~50%</span>
+          </div>
+          <div class="q-thinker-pin extreme" style="left: 80%;" title="Connor Leahy — 極めて高い">
+            <img src="images/thinkers/leahy.webp" alt="Leahy">
+            <div class="tp-label">Leahy</div><span class="tp-val">~80%</span>
+          </div>
+          <div class="q-thinker-pin extreme" style="left: 95%;" title="Eliezer Yudkowsky — ほぼ確実な破滅">
+            <img src="images/thinkers/yudkowsky.jpg" alt="Yudkowsky">
+            <div class="tp-label">Yudkowsky</div><span class="tp-val">&gt;95%</span>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -1778,7 +1919,7 @@ h2 { font-size: clamp(28px, 4vw, 44px); font-weight: 800; line-height: 1.2; colo
       lines.push('p(doom) ' + q5 + '%は、AI安全性コミュニティでは<strong>楽観的な部類</strong>だ。');
     }
 
-    verdictEl.innerHTML = lines.join('<br><br>');
+    verdictEl.innerHTML = lines.map(function(l){ return '<p class="v-line">' + l + '</p>'; }).join('');
 
     // Reveal results section + always scroll to results (which contains
     // the final comparison timeline with everyone + you).

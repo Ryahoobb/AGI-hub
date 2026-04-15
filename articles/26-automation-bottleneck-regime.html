@@ -433,6 +433,113 @@
           <img class="hero img-fullbleed" src="../images/26-automation-bottleneck-regime/slide5.jpg" alt="Black and white photo of industrial factory with pipes">
           <p class="lead">本稿が「産業爆発」と呼ぶものは、一括して起きる単一の事象ではない。<strong>既に資本が投下された領域から順に、制度の時定数の短い順に、段階的に波及する</strong>経路を想定している。ここまでに挙げた数字で順序を示すと、経路の実体が見える。</p>
           <p class="lead">第一段階は、<strong>資本が既に張られた領域</strong>だ。データセンターと半導体供給。TSMCの2025年$38-42BのCAPEX、Arizona追加$100B、SEMI推計で2026年に$166.5Bまで跳ねる半導体製造装置投資、xAI Memphisの100万GPU。ここは資金も意思決定も既に動いており、残る変数は送電インフラの時定数（IEA推計4-8年）だけだ。第二段階は、<strong>現場導入実績が出た領域</strong>。Figureのヒューマノイドは既にBMWの製造ラインで30,000台の生産に貢献し、Agility RoboticsはGXOとの複数年契約、Mercado Libreでの10万トート移動を報告している。IFRの統計では産業用ロボット稼働累積が448万台に達し、2024年だけで54万台が新規設置された。ここから第三段階として、<strong>制度の時定数が比較的短い領域</strong>（物流、倉庫、製造ライン、バックオフィス、専門職の一部）が続く。送電や工場投資に比べれば、これらの現場導入は規制と契約の再編で数年単位で動く。最後に到達するのが<strong>制度の時定数が長い領域</strong>——臨床試験、建築基準、労働法制、教育課程だ。ここはソフトウェアとハードウェアの速度では押し込めない。</p>
+
+          <div class="svg-diagram">
+            <svg viewBox="0 0 960 420" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="stageFlowTitle stageFlowDesc">
+              <title id="stageFlowTitle">産業爆発の4段階と時定数</title>
+              <desc id="stageFlowDesc">左から右へ、資本投下済みの領域から制度時定数の長い領域へ、4段階の順序と各段階の代表領域・根拠数字・時定数を示すフロー図</desc>
+              <defs>
+                <marker id="arrowStage26" markerWidth="7" markerHeight="9" refX="6" refY="4.5" orient="auto">
+                  <path d="M0,0 L7,4.5 L0,9 z" fill="var(--accent, #2f2b92)"/>
+                </marker>
+              </defs>
+
+              <!-- Section label -->
+              <text x="480" y="22" text-anchor="middle" font-family="'SF Mono',monospace" font-size="11" fill="#757575" letter-spacing="0.12em">PATHWAY · SHORT → LONG TIME CONSTANT</text>
+
+              <!-- Stage 1 -->
+              <rect x="20" y="50" width="220" height="60" rx="3" fill="var(--accent-soft, rgba(47,43,146,0.10))" stroke="var(--accent, #2f2b92)" stroke-width="2"/>
+              <text x="130" y="72" text-anchor="middle" font-family="'SF Mono',monospace" font-size="10" fill="var(--accent, #2f2b92)" letter-spacing="0.08em" font-weight="700">STAGE 1 · 資本投下済み</text>
+              <text x="130" y="92" text-anchor="middle" font-family="sans-serif" font-size="13" fill="#1a1a1a" font-weight="600">データセンター・半導体</text>
+              <text x="130" y="106" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#757575">残るは送電の時定数のみ</text>
+
+              <!-- Stage 2 -->
+              <rect x="260" y="50" width="220" height="60" rx="3" fill="var(--accent-soft, rgba(47,43,146,0.06))" stroke="var(--accent, #2f2b92)" stroke-width="1.5"/>
+              <text x="370" y="72" text-anchor="middle" font-family="'SF Mono',monospace" font-size="10" fill="var(--accent, #2f2b92)" letter-spacing="0.08em" font-weight="700">STAGE 2 · 現場導入実績</text>
+              <text x="370" y="92" text-anchor="middle" font-family="sans-serif" font-size="13" fill="#1a1a1a" font-weight="600">ヒューマノイド・産業ロボット</text>
+              <text x="370" y="106" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#757575">契約と量産は既に稼働</text>
+
+              <!-- Stage 3 -->
+              <rect x="500" y="50" width="220" height="60" rx="3" fill="none" stroke="#999" stroke-width="1.5" stroke-dasharray="5,3"/>
+              <text x="610" y="72" text-anchor="middle" font-family="'SF Mono',monospace" font-size="10" fill="#555" letter-spacing="0.08em" font-weight="700">STAGE 3 · 短時定数</text>
+              <text x="610" y="92" text-anchor="middle" font-family="sans-serif" font-size="13" fill="#1a1a1a" font-weight="600">物流・倉庫・バックオフィス</text>
+              <text x="610" y="106" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#757575">規制と契約の再編で数年</text>
+
+              <!-- Stage 4 -->
+              <rect x="740" y="50" width="220" height="60" rx="3" fill="none" stroke="#999" stroke-width="1.5" stroke-dasharray="5,3"/>
+              <text x="850" y="72" text-anchor="middle" font-family="'SF Mono',monospace" font-size="10" fill="#555" letter-spacing="0.08em" font-weight="700">STAGE 4 · 長時定数</text>
+              <text x="850" y="92" text-anchor="middle" font-family="sans-serif" font-size="13" fill="#1a1a1a" font-weight="600">臨床・建築・労働法・教育</text>
+              <text x="850" y="106" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#757575">技術の速度では押し込めない</text>
+
+              <!-- Inter-stage arrows -->
+              <line x1="240" y1="80" x2="260" y2="80" stroke="var(--accent, #2f2b92)" stroke-width="2" marker-end="url(#arrowStage26)"/>
+              <line x1="480" y1="80" x2="500" y2="80" stroke="var(--accent, #2f2b92)" stroke-width="2" marker-end="url(#arrowStage26)"/>
+              <line x1="720" y1="80" x2="740" y2="80" stroke="#999" stroke-width="2" marker-end="url(#arrowStage26)"/>
+
+              <!-- Evidence cards -->
+              <!-- Stage 1 evidence -->
+              <rect x="20" y="140" width="220" height="150" rx="3" fill="#fff" stroke="#ccc" stroke-width="1"/>
+              <text x="30" y="160" font-family="'SF Mono',monospace" font-size="9" fill="#999" letter-spacing="0.06em">EVIDENCE</text>
+              <text x="30" y="180" font-family="sans-serif" font-size="11" fill="#1a1a1a" font-weight="600">TSMC CAPEX</text>
+              <text x="30" y="194" font-family="sans-serif" font-size="11" fill="#555">$38-42B（2025年）</text>
+              <text x="30" y="215" font-family="sans-serif" font-size="11" fill="#1a1a1a" font-weight="600">Arizona追加投資</text>
+              <text x="30" y="229" font-family="sans-serif" font-size="11" fill="#555">$100B（予定）</text>
+              <text x="30" y="250" font-family="sans-serif" font-size="11" fill="#1a1a1a" font-weight="600">SEMI装置投資</text>
+              <text x="30" y="264" font-family="sans-serif" font-size="11" fill="#555">$166.5B（2026予測）</text>
+              <text x="30" y="280" font-family="sans-serif" font-size="11" fill="#555">xAI Memphis: 100万GPU</text>
+
+              <!-- Stage 2 evidence -->
+              <rect x="260" y="140" width="220" height="150" rx="3" fill="#fff" stroke="#ccc" stroke-width="1"/>
+              <text x="270" y="160" font-family="'SF Mono',monospace" font-size="9" fill="#999" letter-spacing="0.06em">EVIDENCE</text>
+              <text x="270" y="180" font-family="sans-serif" font-size="11" fill="#1a1a1a" font-weight="600">Figure × BMW</text>
+              <text x="270" y="194" font-family="sans-serif" font-size="11" fill="#555">1,250時間稼働・3万台貢献</text>
+              <text x="270" y="215" font-family="sans-serif" font-size="11" fill="#1a1a1a" font-weight="600">Agility × GXO</text>
+              <text x="270" y="229" font-family="sans-serif" font-size="11" fill="#555">複数年商用契約</text>
+              <text x="270" y="250" font-family="sans-serif" font-size="11" fill="#1a1a1a" font-weight="600">IFR World Robotics</text>
+              <text x="270" y="264" font-family="sans-serif" font-size="11" fill="#555">累積448万台</text>
+              <text x="270" y="280" font-family="sans-serif" font-size="11" fill="#555">2024新規54万台</text>
+
+              <!-- Stage 3 evidence -->
+              <rect x="500" y="140" width="220" height="150" rx="3" fill="#fafafa" stroke="#ddd" stroke-width="1" stroke-dasharray="3,2"/>
+              <text x="510" y="160" font-family="'SF Mono',monospace" font-size="9" fill="#999" letter-spacing="0.06em">PROJECTED · 数年</text>
+              <text x="510" y="180" font-family="sans-serif" font-size="11" fill="#1a1a1a" font-weight="600">規制・契約の再編</text>
+              <text x="510" y="194" font-family="sans-serif" font-size="11" fill="#555">産業安全規格 3-5年</text>
+              <text x="510" y="215" font-family="sans-serif" font-size="11" fill="#555">保険制度 数年</text>
+              <text x="510" y="236" font-family="sans-serif" font-size="11" fill="#1a1a1a" font-weight="600">浸透先</text>
+              <text x="510" y="250" font-family="sans-serif" font-size="11" fill="#555">物流・倉庫・製造ライン</text>
+              <text x="510" y="264" font-family="sans-serif" font-size="11" fill="#555">バックオフィス</text>
+              <text x="510" y="278" font-family="sans-serif" font-size="11" fill="#555">専門職の一部</text>
+
+              <!-- Stage 4 evidence -->
+              <rect x="740" y="140" width="220" height="150" rx="3" fill="#fafafa" stroke="#ddd" stroke-width="1" stroke-dasharray="3,2"/>
+              <text x="750" y="160" font-family="'SF Mono',monospace" font-size="9" fill="#999" letter-spacing="0.06em">PROJECTED · 10年〜</text>
+              <text x="750" y="180" font-family="sans-serif" font-size="11" fill="#1a1a1a" font-weight="600">臨床試験</text>
+              <text x="750" y="194" font-family="sans-serif" font-size="11" fill="#555">第I相〜承認 平均10年</text>
+              <text x="750" y="215" font-family="sans-serif" font-size="11" fill="#1a1a1a" font-weight="600">建築基準法</text>
+              <text x="750" y="229" font-family="sans-serif" font-size="11" fill="#555">改正〜施行 5年超</text>
+              <text x="750" y="250" font-family="sans-serif" font-size="11" fill="#1a1a1a" font-weight="600">教育課程</text>
+              <text x="750" y="264" font-family="sans-serif" font-size="11" fill="#555">改訂 10年周期</text>
+              <text x="750" y="280" font-family="sans-serif" font-size="11" fill="#555">労働法制: 議論未着手</text>
+
+              <!-- Current position marker -->
+              <line x1="130" y1="50" x2="130" y2="35" stroke="var(--accent, #2f2b92)" stroke-width="1.5"/>
+              <line x1="370" y1="50" x2="370" y2="35" stroke="var(--accent, #2f2b92)" stroke-width="1.5"/>
+              <line x1="130" y1="35" x2="370" y2="35" stroke="var(--accent, #2f2b92)" stroke-width="1.5"/>
+              <rect x="215" y="24" width="70" height="16" rx="2" fill="var(--accent, #2f2b92)"/>
+              <text x="250" y="36" text-anchor="middle" font-family="'SF Mono',monospace" font-size="10" fill="#fff" letter-spacing="0.06em" font-weight="700">2026 NOW</text>
+
+              <!-- Time axis -->
+              <line x1="20" y1="330" x2="960" y2="330" stroke="#ccc" stroke-width="1"/>
+              <text x="20" y="350" font-family="'SF Mono',monospace" font-size="10" fill="#757575" letter-spacing="0.06em">← 資本の時計（動いている）</text>
+              <text x="960" y="350" text-anchor="end" font-family="'SF Mono',monospace" font-size="10" fill="#757575" letter-spacing="0.06em">制度の時計（圧力で変形する） →</text>
+
+              <!-- Insight band -->
+              <rect x="20" y="370" width="940" height="40" rx="3" fill="var(--accent-soft, rgba(47,43,146,0.06))" stroke="var(--accent, #2f2b92)" stroke-width="1"/>
+              <text x="480" y="388" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#1a1a1a" font-weight="600">「産業爆発は起きない」という直感は、多くの場合 STAGE 4 だけを見て生まれる</text>
+              <text x="480" y="402" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#555">STAGE 1・2 は既に動いている。問いは「方向」ではなく「STAGE 3 の波及速度」</text>
+            </svg>
+          </div>
+
           <p class="lead">この順序で読み替えると、「産業爆発がとってつけた仮説」という印象は<strong>第一段階と第二段階をスキップして第四段階だけを見た場合に生じる</strong>錯覚だとわかる。資本と現場導入は既に動いている。残る問いは、第三段階の波及速度と、第四段階でどれだけ屈折するかだ。以下、5つの「信じない理由」を、この順序と照らし合わせて再評価する。</p>
           <p class="lead">産業爆発を信じないことは合理的か。ここまでの議論を振り返ると、答えは「条件付きで合理的、ただし条件が崩れつつある」だ。</p>
           <table class="compare">

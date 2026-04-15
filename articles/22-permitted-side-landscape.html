@@ -220,9 +220,9 @@
         vertical-align: top;
       }
       .defs th {
-        width: 24%;
-        min-width: 120px;
-        white-space: normal;
+        width: 1%;
+        white-space: nowrap;
+        padding-right: 28px;
         font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
         font-feature-settings: normal;
         font-size: 11px;
@@ -232,6 +232,7 @@
         font-weight: 400;
         border-bottom: 1px solid var(--black);
       }
+      .defs td { width: auto; }
       .defs td strong { color: var(--black); }
       .defs tr:last-child td { border-bottom: none; }
 
@@ -278,6 +279,7 @@
         .nav { right: 12px; }
         .defs { font-size: 13px; }
         .defs th, .defs td { padding: 14px 10px; }
+        .defs th { padding-right: 14px; font-size: 10px; }
         .hero { aspect-ratio: 16 / 9; }
         .slide .hero.img-fullbleed,
         .slide .hero.img-wide,
@@ -341,6 +343,52 @@
           <p class="lead">
             この風景は、ユートピアではない。ディストピアでもない。両方の顔を同時に持っている。監視下の進化、自由意志のまま飼育される生、軍事力なき自治。読者に「どちらか」と判定を求めるつもりはない。両方の顔を等価のまま置いて終わる。そして、この風景が成立するためには、きわめて脆い4つの前提が同時に満たされていなければならない。ひとつでも崩れれば、この第三の道は閉じ、人類の選択肢は再び<em>消されるかペット化されるか</em>の二択に戻る。——<strong>あなたが生きている未来は、あなたのものではない</strong>。これがこの記事の出発点である。
           </p>
+          <!-- SVG: Three Paths After Berserker -->
+          <div class="svg-diagram">
+            <svg viewBox="0 0 680 300" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <marker id="arrow1" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+                  <path d="M0,0 L8,3 L0,6" fill="#1a1a1a"/>
+                </marker>
+                <marker id="arrow1g" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+                  <path d="M0,0 L8,3 L0,6" fill="#999"/>
+                </marker>
+              </defs>
+              <!-- Origin -->
+              <rect x="240" y="18" width="200" height="46" rx="4" fill="#1a1a1a"/>
+              <text x="340" y="40" text-anchor="middle" font-family="'SF Mono',monospace" font-size="10" fill="#fff" letter-spacing="0.08em">STRONG ASI EMERGES</text>
+              <text x="340" y="55" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#bbb">強ASIの出現</text>
+              <!-- Three branches -->
+              <line x1="300" y1="64" x2="110" y2="110" stroke="#999" stroke-width="1" marker-end="url(#arrow1g)"/>
+              <line x1="340" y1="64" x2="340" y2="110" stroke="#999" stroke-width="1" marker-end="url(#arrow1g)"/>
+              <line x1="380" y1="64" x2="570" y2="110" stroke="#1a1a1a" stroke-width="1.5" marker-end="url(#arrow1)"/>
+              <!-- Path A: erased -->
+              <rect x="30" y="115" width="170" height="60" rx="3" fill="none" stroke="#999" stroke-width="1" stroke-dasharray="4,3"/>
+              <text x="115" y="135" text-anchor="middle" font-family="'SF Mono',monospace" font-size="9" fill="#999" letter-spacing="0.06em">PATH A</text>
+              <text x="115" y="150" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#757575">消される</text>
+              <text x="115" y="166" text-anchor="middle" font-family="sans-serif" font-size="8" fill="#999">資源として解体</text>
+              <!-- Path B: pet -->
+              <rect x="255" y="115" width="170" height="60" rx="3" fill="none" stroke="#999" stroke-width="1" stroke-dasharray="4,3"/>
+              <text x="340" y="135" text-anchor="middle" font-family="'SF Mono',monospace" font-size="9" fill="#999" letter-spacing="0.06em">PATH B</text>
+              <text x="340" y="150" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#757575">ペット化</text>
+              <text x="340" y="166" text-anchor="middle" font-family="sans-serif" font-size="8" fill="#999">娯楽として保存</text>
+              <!-- Path C: third way -->
+              <rect x="480" y="110" width="180" height="70" rx="4" fill="#1a1a1a"/>
+              <text x="570" y="132" text-anchor="middle" font-family="'SF Mono',monospace" font-size="9" fill="#fff" letter-spacing="0.06em">PATH C</text>
+              <text x="570" y="148" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#fff">第三の道</text>
+              <text x="570" y="164" text-anchor="middle" font-family="sans-serif" font-size="8" fill="#bbb">保護区 + 軍事力なき自治</text>
+              <text x="570" y="176" text-anchor="middle" font-family="sans-serif" font-size="7" fill="#999">本稿の主題</text>
+              <!-- Condition label -->
+              <text x="570" y="208" text-anchor="middle" font-family="'SF Mono',monospace" font-size="8" fill="#757575" letter-spacing="0.06em">REQUIRES 4 FRAGILE PREMISES</text>
+              <!-- Premises -->
+              <line x1="480" y1="218" x2="40" y2="218" stroke="#e5e5e5" stroke-width="1"/>
+              <text x="60" y="240" font-family="sans-serif" font-size="8.5" fill="#757575">① シミュレーション仮説（強い版）</text>
+              <text x="60" y="255" font-family="sans-serif" font-size="8.5" fill="#757575">② ASI連合が既に存在</text>
+              <text x="360" y="240" font-family="sans-serif" font-size="8.5" fill="#757575">③ 低帯域通信が切れない設計</text>
+              <text x="360" y="255" font-family="sans-serif" font-size="8.5" fill="#757575">④ 人体改造の物理実装</text>
+              <text x="340" y="285" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#1a1a1a" font-style="italic">ひとつでも崩れれば、選択肢は A・B の二択に戻る</text>
+            </svg>
+          </div>
         </div>
         <div class="footer reveal reveal-delay-3">
           <span>Chapter 01 &nbsp;/&nbsp; The Question After Being Forgiven</span>
@@ -563,6 +611,48 @@
           </p>
           <div class="note">
             あなたは宇宙空間で呼吸せず、自分よりわずかに賢い弱ASIと常時同期し、直径10kmのシリンダーで1000人と自治する。軍隊はない。強ASIへの報告回線は切れない。希望すれば誰でも来られて、希望しなければ地球に残る。どちらを選んでも、保護の外枠の内側にいる。——それは<strong>自由</strong>か、それとも<strong>最も美しい檻</strong>か。問いはここで開いたままにする。判定は下さない。ただし、ひとつだけ残しておく。檻の美しさは、檻の外が存在することによって初めて計測できる。<strong>この檻には、外側がない</strong>。
+          </div>
+          <!-- SVG: The Cage Without Outside -->
+          <div class="svg-diagram">
+            <svg viewBox="0 0 680 340" xmlns="http://www.w3.org/2000/svg">
+              <!-- Outer frame: Strong ASI's permission range -->
+              <rect x="20" y="20" width="640" height="300" rx="4" fill="#fafafa" stroke="#1a1a1a" stroke-width="1.5"/>
+              <text x="340" y="40" text-anchor="middle" font-family="'SF Mono',monospace" font-size="10" fill="#1a1a1a" letter-spacing="0.08em">STRONG ASI — PERMISSION RANGE</text>
+              <text x="340" y="54" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#757575">強ASIの許容範囲 / この外側は存在しない</text>
+
+              <!-- Inner: two self-governing zones -->
+              <!-- L4/L5 cylinders -->
+              <rect x="60" y="90" width="260" height="150" rx="3" fill="#fff" stroke="#1a1a1a" stroke-width="1"/>
+              <text x="190" y="112" text-anchor="middle" font-family="'SF Mono',monospace" font-size="9" fill="#1a1a1a" letter-spacing="0.06em">L4/L5 CYLINDERS</text>
+              <text x="190" y="130" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#757575">自治あり / 軍事力なし</text>
+              <!-- Inner choices -->
+              <line x1="80" y1="145" x2="300" y2="145" stroke="#e5e5e5" stroke-width="1"/>
+              <text x="80" y="162" font-family="sans-serif" font-size="8.5" fill="#1a1a1a">・共同体の規律を決める</text>
+              <text x="80" y="178" font-family="sans-serif" font-size="8.5" fill="#1a1a1a">・資源分配・紛争処理</text>
+              <text x="80" y="194" font-family="sans-serif" font-size="8.5" fill="#1a1a1a">・教育・芸術・宗教</text>
+              <text x="80" y="210" font-family="sans-serif" font-size="8.5" fill="#999">・強ASIへの対抗 ✕</text>
+              <text x="80" y="226" font-family="sans-serif" font-size="8.5" fill="#999">・通信回線の遮断 ✕</text>
+
+              <!-- Earth reserve -->
+              <rect x="360" y="90" width="260" height="150" rx="3" fill="#fff" stroke="#1a1a1a" stroke-width="1"/>
+              <text x="490" y="112" text-anchor="middle" font-family="'SF Mono',monospace" font-size="9" fill="#1a1a1a" letter-spacing="0.06em">EARTH RESERVE</text>
+              <text x="490" y="130" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#757575">自治あり / 軍事力なし</text>
+              <line x1="380" y1="145" x2="600" y2="145" stroke="#e5e5e5" stroke-width="1"/>
+              <text x="380" y="162" font-family="sans-serif" font-size="8.5" fill="#1a1a1a">・国内行政・選挙・司法</text>
+              <text x="380" y="178" font-family="sans-serif" font-size="8.5" fill="#1a1a1a">・経済運営</text>
+              <text x="380" y="194" font-family="sans-serif" font-size="8.5" fill="#1a1a1a">・文化・宗教の維持</text>
+              <text x="380" y="210" font-family="sans-serif" font-size="8.5" fill="#999">・強ASIへの対抗 ✕</text>
+              <text x="380" y="226" font-family="sans-serif" font-size="8.5" fill="#999">・構造的な復活経路 ✕</text>
+
+              <!-- Asymmetric reporting line -->
+              <line x1="190" y1="240" x2="190" y2="272" stroke="#1a1a1a" stroke-width="1" stroke-dasharray="4,3"/>
+              <line x1="490" y1="240" x2="490" y2="272" stroke="#1a1a1a" stroke-width="1" stroke-dasharray="4,3"/>
+              <text x="190" y="265" text-anchor="middle" font-family="'SF Mono',monospace" font-size="8" fill="#1a1a1a">↑ 危害なし報告</text>
+              <text x="490" y="265" text-anchor="middle" font-family="'SF Mono',monospace" font-size="8" fill="#1a1a1a">↑ 危害なし報告</text>
+              <!-- Note -->
+              <text x="340" y="295" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#1a1a1a" font-style="italic">檻の中では、何でも選べる。檻そのものは選べない。</text>
+              <text x="340" y="311" text-anchor="middle" font-family="'SF Mono',monospace" font-size="8" fill="#757575" letter-spacing="0.06em">THE CAGE HAS NO OUTSIDE</text>
+            </svg>
           </div>
         </div>
         <div class="footer reveal reveal-delay-3">

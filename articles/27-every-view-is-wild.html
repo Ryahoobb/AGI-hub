@@ -7,7 +7,7 @@
 <link rel="icon" type="image/svg+xml" href="../favicon.svg">
     <title>どちらに転んでも、現在は異常である — AGI HUB</title>
     <link rel="stylesheet" href="../design-system/palette.css">
-    <meta name="revised" content="2026.04.14">
+    <meta name="revised" content="2026.04.15">
     <style>
       :root {
         --black: #000;
@@ -339,7 +339,15 @@
         border-left: 4px solid var(--accent);
         background: var(--accent-soft);
         position: relative;
-        overflow-x: auto;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        word-break: break-word;
+        max-width: 100%;
+        box-sizing: border-box;
+      }
+      .note * {
+        max-width: 100%;
+        overflow-wrap: break-word;
         word-break: break-word;
       }
       .note::before {
@@ -376,17 +384,18 @@
       /* SVG diagram styles */
       .svg-diagram {
         max-width: none;
-        width: min(960px, calc(100vw - 48px));
-        margin: 32px auto;
+        width: min(1040px, calc(100vw - 48px));
+        margin: 36px auto;
       }
       .svg-diagram svg {
         width: 100%;
         height: auto;
-        min-height: 240px;
+        min-height: 320px;
+        display: block;
       }
 
       @media (max-width: 768px) {
-        .slide { padding: 64px 24px 48px; }
+        .slide { padding: 64px 20px 48px; }
         .grid-2, .grid-3, .timeline { grid-template-columns: 1fr; }
         .nav { right: 12px; }
         table.compare { font-size: 13px; }
@@ -399,6 +408,13 @@
         }
         .slide .hero.img-content { max-width: 100%; aspect-ratio: 16 / 9; }
         .credits { padding: 32px 24px 64px; }
+        .note { padding: 20px 18px; font-size: 15px; }
+        .svg-diagram { width: 100% !important; margin: 24px auto; }
+        .loop-block { padding: 20px 18px !important; }
+      }
+      @media (max-width: 480px) {
+        .slide { padding: 56px 16px 40px; }
+        .note { padding: 16px 14px; font-size: 14px; }
       }
 
       @media print {
@@ -448,37 +464,70 @@
           <p class="lead">Karnofskyが主張したのは特定の未来ではない。<strong>少なくとも彼が提示したこの三叉路の枠組みで見る限り、「穏当な未来」と呼べる選択肢が見当たらない</strong>ということだ。三本の分岐路のどれを選んでも、「信じがたい」と感じる場所に立つ。一つの分岐だけが奇妙なのではない。分岐構造全体が、現在という時間の異常さを告発している。この記事では、Karnofskyの論証がなぜ単なるモデルではなく人口統計学・物理学・経済学の具体的な数値に根ざしているのかを辿り、その先で日本語読者に届きにくい周辺論点を重ねて読み替える。どこまでがKarnofskyの主張で、どこからが本記事の拡張かは、本文中で明示する。</p>
 
           <!-- SVG: Triple Fork Diagram -->
-          <div class="svg-diagram">
-            <svg viewBox="0 0 760 260" xmlns="http://www.w3.org/2000/svg">
+          <div class="svg-diagram" style="width:min(1040px, calc(100vw - 48px));">
+            <svg viewBox="0 0 900 440" xmlns="http://www.w3.org/2000/svg">
               <defs>
-                <marker id="arrowR" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
-                  <path d="M0,0 L8,3 L0,6" fill="#b23a2f"/>
+                <marker id="arrowR" markerWidth="10" markerHeight="8" refX="10" refY="4" orient="auto">
+                  <path d="M0,0 L10,4 L0,8" fill="#b23a2f"/>
                 </marker>
               </defs>
-              <!-- Convergence: WILD -->
-              <rect x="20" y="96" width="165" height="52" rx="4" fill="#b23a2f"/>
-              <text x="103" y="124" text-anchor="middle" font-family="'SF Mono',monospace" font-size="13" fill="#f3f1e9" font-weight="700" letter-spacing="0.10em">ALL VIEWS: WILD</text>
-              <text x="103" y="139" text-anchor="middle" font-family="sans-serif" font-size="10" fill="rgba(243,241,233,0.8)">どれを選んでも「常識外れ」</text>
-              <line x1="185" y1="122" x2="230" y2="122" stroke="#b23a2f" stroke-width="2" stroke-dasharray="6,4"/>
-              <!-- Center label -->
-              <rect x="230" y="100" width="190" height="44" rx="4" fill="none" stroke="#1a1a1a" stroke-width="2"/>
-              <text x="325" y="120" text-anchor="middle" font-family="'SF Mono',monospace" font-size="11" fill="#1a1a1a" letter-spacing="0.06em">PRESENT MOMENT</text>
-              <text x="325" y="136" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#757575">現在という分岐点</text>
-              <!-- Three forks -->
-              <line x1="420" y1="110" x2="480" y2="42" stroke="#b23a2f" stroke-width="2" marker-end="url(#arrowR)"/>
-              <line x1="420" y1="122" x2="480" y2="122" stroke="#b23a2f" stroke-width="2" marker-end="url(#arrowR)"/>
-              <line x1="420" y1="134" x2="480" y2="202" stroke="#b23a2f" stroke-width="2" marker-end="url(#arrowR)"/>
+              <!-- Title -->
+              <text x="450" y="28" text-anchor="middle" font-family="sans-serif" font-size="13" fill="#1a1a1a" font-weight="700">Karnofskyの三叉路 — 現在から三つのシナリオへ</text>
+              <text x="450" y="46" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#757575">「穏当な中間地帯」が構造的に存在しない</text>
+
+              <!-- Center label: PRESENT -->
+              <rect x="320" y="190" width="260" height="70" rx="4" fill="none" stroke="#1a1a1a" stroke-width="2.5"/>
+              <text x="450" y="216" text-anchor="middle" font-family="'SF Mono',monospace" font-size="14" fill="#1a1a1a" letter-spacing="0.08em" font-weight="700">PRESENT MOMENT</text>
+              <text x="450" y="236" text-anchor="middle" font-family="sans-serif" font-size="13" fill="#1a1a1a" font-weight="600">現在 — 分岐点に立つ21世紀</text>
+              <text x="450" y="253" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#757575">この点からシナリオが三方向へ分岐する</text>
+
+              <!-- Three fork lines from center to destinations -->
+              <line x1="580" y1="210" x2="680" y2="100" stroke="#b23a2f" stroke-width="2.5" marker-end="url(#arrowR)"/>
+              <line x1="580" y1="225" x2="680" y2="225" stroke="#b23a2f" stroke-width="2.5" marker-end="url(#arrowR)"/>
+              <line x1="580" y1="240" x2="680" y2="350" stroke="#b23a2f" stroke-width="2.5" marker-end="url(#arrowR)"/>
+
               <!-- Path labels on lines -->
-              <text x="442" y="68" font-family="sans-serif" font-size="9" fill="#b23a2f" transform="rotate(-25,442,68)">楽観</text>
-              <text x="442" y="116" font-family="sans-serif" font-size="9" fill="#b23a2f">保守</text>
-              <text x="442" y="172" font-family="sans-serif" font-size="9" fill="#b23a2f" transform="rotate(25,442,172)">懐疑</text>
-              <!-- Destination labels -->
-              <text x="494" y="30" font-family="'SF Mono',monospace" font-size="11" fill="#b23a2f" letter-spacing="0.05em" font-weight="700">楽観シナリオ</text>
-              <text x="494" y="44" font-family="sans-serif" font-size="10" fill="#1a1a1a">銀河文明の起源 ← 21世紀が分岐点</text>
-              <text x="494" y="116" font-family="'SF Mono',monospace" font-size="11" fill="#b23a2f" letter-spacing="0.05em" font-weight="700">保守シナリオ</text>
-              <text x="494" y="130" font-family="sans-serif" font-size="10" fill="#1a1a1a">10万年かかっても銀河に到達する</text>
-              <text x="494" y="200" font-family="'SF Mono',monospace" font-size="11" fill="#b23a2f" letter-spacing="0.05em" font-weight="700">懐疑シナリオ</text>
-              <text x="494" y="214" font-family="sans-serif" font-size="10" fill="#1a1a1a">宇宙は沈黙する ← 人類は消える</text>
+              <text x="625" y="145" font-family="sans-serif" font-size="13" fill="#b23a2f" font-weight="700" transform="rotate(-47,625,145)">楽観</text>
+              <text x="620" y="218" font-family="sans-serif" font-size="13" fill="#b23a2f" font-weight="700">保守</text>
+              <text x="625" y="305" font-family="sans-serif" font-size="13" fill="#b23a2f" font-weight="700" transform="rotate(47,625,305)">懐疑</text>
+
+              <!-- Destination 1: 楽観 -->
+              <rect x="680" y="60" width="210" height="80" rx="4" fill="#fff" stroke="#b23a2f" stroke-width="1.5"/>
+              <text x="690" y="80" font-family="'SF Mono',monospace" font-size="12" fill="#b23a2f" letter-spacing="0.06em" font-weight="700">楽観シナリオ</text>
+              <text x="690" y="102" font-family="sans-serif" font-size="12" fill="#1a1a1a" font-weight="600">銀河文明の起源</text>
+              <text x="690" y="120" font-family="sans-serif" font-size="11" fill="#585858">21世紀中にAIが離陸</text>
+              <text x="690" y="135" font-family="sans-serif" font-size="11" fill="#585858">→ 数兆人の人類を生む</text>
+
+              <!-- Destination 2: 保守 -->
+              <rect x="680" y="185" width="210" height="80" rx="4" fill="#fff" stroke="#b23a2f" stroke-width="1.5"/>
+              <text x="690" y="205" font-family="'SF Mono',monospace" font-size="12" fill="#b23a2f" letter-spacing="0.06em" font-weight="700">保守シナリオ</text>
+              <text x="690" y="227" font-family="sans-serif" font-size="12" fill="#1a1a1a" font-weight="600">10万年かけて到達</text>
+              <text x="690" y="245" font-family="sans-serif" font-size="11" fill="#585858">遅くても銀河の時間軸では</text>
+              <text x="690" y="260" font-family="sans-serif" font-size="11" fill="#585858">楽観と区別がつかない</text>
+
+              <!-- Destination 3: 懐疑 -->
+              <rect x="680" y="310" width="210" height="80" rx="4" fill="#fff" stroke="#b23a2f" stroke-width="1.5"/>
+              <text x="690" y="330" font-family="'SF Mono',monospace" font-size="12" fill="#b23a2f" letter-spacing="0.06em" font-weight="700">懐疑シナリオ</text>
+              <text x="690" y="352" font-family="sans-serif" font-size="12" fill="#1a1a1a" font-weight="600">宇宙に広がらない</text>
+              <text x="690" y="370" font-family="sans-serif" font-size="11" fill="#585858">自滅 or 技術的不可能</text>
+              <text x="690" y="385" font-family="sans-serif" font-size="11" fill="#585858">→ 人類はほぼ消える</text>
+
+              <!-- Convergence arrow: ALL → WILD -->
+              <line x1="895" y1="100" x2="905" y2="100" stroke="none"/>
+              <path d="M895,100 Q960,100 960,225 Q960,350 895,350" stroke="#b23a2f" stroke-width="1.5" fill="none" stroke-dasharray="5,4" opacity="0"/>
+
+              <!-- Bottom convergence box: ALL THREE → WILD -->
+              <rect x="120" y="370" width="660" height="52" rx="4" fill="#b23a2f"/>
+              <text x="450" y="396" text-anchor="middle" font-family="'SF Mono',monospace" font-size="15" fill="#f3f1e9" font-weight="700" letter-spacing="0.14em">ALL THREE PATHS → WILD</text>
+              <text x="450" y="412" text-anchor="middle" font-family="sans-serif" font-size="12" fill="rgba(243,241,233,0.85)">三つの分岐路すべてが「常識外れ」の結論に帰着する</text>
+
+              <!-- Arrows from each destination down to WILD box -->
+              <line x1="785" y1="140" x2="680" y2="370" stroke="#b23a2f" stroke-width="1" stroke-dasharray="4,3" opacity="0.55"/>
+              <line x1="785" y1="265" x2="530" y2="370" stroke="#b23a2f" stroke-width="1" stroke-dasharray="4,3" opacity="0.55"/>
+              <line x1="785" y1="310" x2="380" y2="370" stroke="#b23a2f" stroke-width="1" stroke-dasharray="4,3" opacity="0.55"/>
+
+              <!-- Left side annotation -->
+              <text x="30" y="216" font-family="sans-serif" font-size="11" fill="#757575" transform="rotate(-90,30,216)">穏当な中間地帯 = 存在しない</text>
             </svg>
           </div>
 
@@ -528,51 +577,56 @@
         <div class="panel reveal reveal-delay-3">
           <p class="lead">保守派はこう主張する。100年では速すぎる。ニュートンの物理学から量子力学まで300年かかった。AGIから技術的成熟までなら500年、場合によっては10万年の科学的蓄積が必要だ。この立場は穏当に聞こえる。Karnofskyはそこを突く。</p>
 
-          <p class="lead">銀河の存続期間はおよそ100億年だ。その時間軸でチャートを描いたとき、「100年で到達」と「10万年で到達」の差は、グラフ上で視認できない。Karnofskyは実際に両方のチャートを並べて見せた。ほぼ同一の図になる。保守的な見積もりは、楽観シナリオの結論を否定しない。到着が遅れるだけで、到着する事実は変わらない。</p>
+          <p class="lead">銀河の存続期間はおよそ100億年だ。その時間軸でチャートを描いたとき、「100年で到達」と「10万年で到達」の差は、グラフ上で視認できない。Karnofskyは実際に両方のチャートを並べて見せた。ほぼ同一の図になる。保守的な見積もりは、楽観シナリオの結論を覆さない。到着が遅れるだけで、到着する事実は変わらない。</p>
 
           <!-- SVG: Galactic Timeline — 100yr vs 10万yr are visually indistinguishable -->
-          <div class="svg-diagram">
-            <svg viewBox="0 0 680 240" xmlns="http://www.w3.org/2000/svg">
+          <div class="svg-diagram" style="width:min(1040px, calc(100vw - 48px));">
+            <svg viewBox="0 0 900 380" xmlns="http://www.w3.org/2000/svg">
               <!-- Title -->
-              <text x="340" y="20" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#757575">銀河の存続期間（100億年）を基準にした時間軸</text>
+              <text x="450" y="26" text-anchor="middle" font-family="sans-serif" font-size="13" fill="#1a1a1a" font-weight="700">銀河の存続期間（100億年）を基準にした時間軸</text>
+              <text x="450" y="44" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#757575">100年も10万年も、100億年に対しては同じ「左端の一点」に重なる</text>
 
-              <!-- Main axis (linear scale: 0 to 10^10 years = 580px) -->
-              <line x1="60" y1="130" x2="640" y2="130" stroke="#1a1a1a" stroke-width="1.5"/>
+              <!-- Main axis (linear scale: 0 to 10^10 years) -->
+              <line x1="80" y1="180" x2="820" y2="180" stroke="#1a1a1a" stroke-width="2"/>
               <!-- Left origin -->
-              <line x1="60" y1="124" x2="60" y2="136" stroke="#1a1a1a" stroke-width="1"/>
-              <text x="60" y="150" text-anchor="middle" font-family="'SF Mono',monospace" font-size="10" fill="#757575">0</text>
-
-              <!-- 100yr position: 100 / 10^10 = 10^-8 → x = 60 + 0.00000001 * 580 ≈ 60 (pixel-level rounding to 60.0) -->
-              <!-- 10万yr: 10^5 / 10^10 = 10^-5 → x = 60 + 0.00001 * 580 ≈ 60.006 (also essentially 60) -->
-              <!-- Both are AT the left edge, visually overlapping -->
-              <rect x="60" y="80" width="8" height="42" rx="1" fill="#b23a2f" opacity="0.9"/>
-              <rect x="62" y="80" width="8" height="42" rx="1" fill="#b23a2f" opacity="0.5"/>
-
-              <!-- Zoom box to show the difference -->
-              <rect x="56" y="76" width="20" height="58" rx="2" fill="none" stroke="#b23a2f" stroke-width="1" stroke-dasharray="3,2"/>
-
-              <!-- Magnifying glass annotation -->
-              <line x1="76" y1="95" x2="140" y2="60" stroke="#b23a2f" stroke-width="1" stroke-dasharray="3,2"/>
-              <line x1="76" y1="115" x2="140" y2="160" stroke="#b23a2f" stroke-width="1" stroke-dasharray="3,2"/>
-              <rect x="140" y="40" width="160" height="130" rx="3" fill="#fff" fill-opacity="0.95" stroke="#b23a2f" stroke-width="1"/>
-              <!-- Zoomed bars -->
-              <rect x="155" y="60" width="30" height="80" rx="2" fill="#b23a2f" opacity="0.9"/>
-              <rect x="200" y="80" width="30" height="60" rx="2" fill="#b23a2f" opacity="0.5"/>
-              <text x="170" y="155" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#b23a2f" font-weight="700">100年で到達</text>
-              <text x="215" y="155" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#b23a2f">10万年で到達</text>
-              <text x="190" y="50" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#757575">↑ 拡大して初めて区別できる</text>
+              <line x1="80" y1="170" x2="80" y2="190" stroke="#1a1a1a" stroke-width="2"/>
+              <text x="80" y="208" text-anchor="middle" font-family="'SF Mono',monospace" font-size="11" fill="#757575">現在</text>
+              <text x="80" y="222" text-anchor="middle" font-family="'SF Mono',monospace" font-size="10" fill="#999">(t=0)</text>
 
               <!-- 10^10 yr right edge -->
-              <line x1="630" y1="124" x2="630" y2="136" stroke="#1a1a1a" stroke-width="1.5"/>
-              <text x="630" y="150" text-anchor="middle" font-family="'SF Mono',monospace" font-size="10" fill="#757575">10¹⁰ yr</text>
-              <text x="630" y="163" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#999">銀河の終わり</text>
+              <line x1="810" y1="170" x2="810" y2="190" stroke="#1a1a1a" stroke-width="2"/>
+              <text x="810" y="208" text-anchor="middle" font-family="'SF Mono',monospace" font-size="11" fill="#757575">10¹⁰年</text>
+              <text x="810" y="222" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#999">銀河の終わり</text>
+
+              <!-- SINGLE overlapping bar at left edge — 100yr AND 10万yr both collapse here -->
+              <!-- Linear scale: 100 / 10^10 = 10^-8, 10^5 / 10^10 = 10^-5 → pixel distance <0.01px -->
+              <rect x="78" y="140" width="6" height="80" fill="#b23a2f"/>
+
+              <!-- Annotation arrow from bar to combined label -->
+              <line x1="84" y1="150" x2="200" y2="105" stroke="#b23a2f" stroke-width="1" stroke-dasharray="4,3"/>
+
+              <!-- Combined label for both scenarios -->
+              <rect x="200" y="75" width="320" height="70" rx="4" fill="#fff" stroke="#b23a2f" stroke-width="1.5"/>
+              <text x="360" y="97" text-anchor="middle" font-family="'SF Mono',monospace" font-size="11" fill="#b23a2f" font-weight="700" letter-spacing="0.08em">BOTH COLLAPSE TO THIS POINT</text>
+              <text x="360" y="118" text-anchor="middle" font-family="sans-serif" font-size="12" fill="#1a1a1a" font-weight="600">「100年で到達」も「10万年で到達」も</text>
+              <text x="360" y="135" text-anchor="middle" font-family="sans-serif" font-size="12" fill="#1a1a1a" font-weight="600">同じ一点に重なる（視認不能）</text>
+
+              <!-- Math annotation -->
+              <rect x="550" y="80" width="260" height="60" rx="3" fill="#f3f1e9" stroke="#ddd5bd" stroke-width="1"/>
+              <text x="560" y="98" font-family="'SF Mono',monospace" font-size="10" fill="#585858">100年  / 10¹⁰年 = 10⁻⁸</text>
+              <text x="560" y="114" font-family="'SF Mono',monospace" font-size="10" fill="#585858">10万年 / 10¹⁰年 = 10⁻⁵</text>
+              <text x="560" y="132" font-family="'SF Mono',monospace" font-size="10" fill="#b23a2f" font-weight="700">差 = 0.001%（ピクセル未満）</text>
 
               <!-- Galaxy span bracket -->
-              <line x1="60" y1="175" x2="630" y2="175" stroke="#999" stroke-width="1" stroke-dasharray="4,3"/>
-              <text x="345" y="190" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#757575">銀河の存続期間 100億年</text>
+              <line x1="80" y1="250" x2="810" y2="250" stroke="#999" stroke-width="1.5" stroke-dasharray="6,4"/>
+              <line x1="80" y1="244" x2="80" y2="256" stroke="#999" stroke-width="1.5"/>
+              <line x1="810" y1="244" x2="810" y2="256" stroke="#999" stroke-width="1.5"/>
+              <text x="445" y="270" text-anchor="middle" font-family="sans-serif" font-size="12" fill="#757575">銀河の存続期間 = 100億年（10¹⁰年）</text>
 
-              <!-- Key insight text -->
-              <text x="340" y="215" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#b23a2f" font-weight="700">「100年」と「10万年」は、この時間軸では視認できない</text>
+              <!-- Key insight text at bottom -->
+              <rect x="150" y="300" width="600" height="52" rx="4" fill="#b23a2f"/>
+              <text x="450" y="325" text-anchor="middle" font-family="'SF Mono',monospace" font-size="12" fill="#f3f1e9" font-weight="700" letter-spacing="0.10em">CONSERVATIVE ≠ MODERATE</text>
+              <text x="450" y="343" text-anchor="middle" font-family="sans-serif" font-size="12" fill="rgba(243,241,233,0.9)">保守的な見積もりを採っても、楽観シナリオの結論は覆らない</text>
             </svg>
           </div>
 
@@ -601,69 +655,113 @@
           <p class="lead">世界のGDPの倍増時間も、紀元前からおよそ1960年頃まで同じ双曲線に乗っていた。Open PhilanthropyのDavid Roodmanは2020年の研究 "Modeling the Human Trajectory" で、人類の経済成長軌道全体をモデル化し、この双曲線パターンが単なる偶然ではないことを示した。成長率そのものが成長する。倍増時間が短くなり続ける。21世紀初頭にはシンギュラリティに到達するはずだった。</p>
 
           <!-- SVG: Hyperbolic Growth Diagram -->
-          <div class="svg-diagram">
-            <svg viewBox="0 0 680 320" xmlns="http://www.w3.org/2000/svg">
+          <div class="svg-diagram" style="width:min(1040px, calc(100vw - 48px));">
+            <svg viewBox="0 0 900 440" xmlns="http://www.w3.org/2000/svg">
               <defs>
-                <marker id="arrowB" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
-                  <path d="M0,0 L8,3 L0,6" fill="#1a1a1a"/>
+                <marker id="arrowB" markerWidth="10" markerHeight="8" refX="10" refY="4" orient="auto">
+                  <path d="M0,0 L10,4 L0,8" fill="#1a1a1a"/>
                 </marker>
-                <marker id="arrowDrop" markerWidth="6" markerHeight="8" refX="3" refY="8" orient="auto">
-                  <path d="M0,0 L3,8 L6,0" fill="#b23a2f"/>
+                <marker id="arrowDrop" markerWidth="8" markerHeight="10" refX="4" refY="10" orient="auto">
+                  <path d="M0,0 L4,10 L8,0" fill="#b23a2f"/>
                 </marker>
               </defs>
+
+              <!-- Title -->
+              <text x="450" y="24" text-anchor="middle" font-family="sans-serif" font-size="14" fill="#1a1a1a" font-weight="700">GDPの成長率（倍増速度）— 数千年間の軌跡と1960年の崩壊</text>
+              <text x="450" y="44" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#757575">縦軸: 成長の速さ（上ほど速い） / 横軸: 時間</text>
+
               <!-- Axes -->
-              <line x1="80" y1="270" x2="640" y2="270" stroke="#1a1a1a" stroke-width="1.5" marker-end="url(#arrowB)"/>
-              <line x1="80" y1="270" x2="80" y2="25" stroke="#1a1a1a" stroke-width="1.5" marker-end="url(#arrowB)"/>
-              <text x="360" y="300" text-anchor="middle" font-family="'SF Mono',monospace" font-size="10" fill="#757575" letter-spacing="0.06em">TIME →</text>
-              <text x="30" y="148" text-anchor="middle" font-family="'SF Mono',monospace" font-size="10" fill="#757575" letter-spacing="0.06em" transform="rotate(-90,30,148)">GDP DOUBLING RATE ↑</text>
+              <line x1="90" y1="360" x2="840" y2="360" stroke="#1a1a1a" stroke-width="2" marker-end="url(#arrowB)"/>
+              <line x1="90" y1="360" x2="90" y2="70" stroke="#1a1a1a" stroke-width="2" marker-end="url(#arrowB)"/>
+
+              <!-- Axis labels -->
+              <text x="460" y="420" text-anchor="middle" font-family="'SF Mono',monospace" font-size="12" fill="#1a1a1a" font-weight="600" letter-spacing="0.06em">時間（紀元前 → 現在 → 未来）</text>
+              <text x="40" y="215" text-anchor="middle" font-family="'SF Mono',monospace" font-size="12" fill="#1a1a1a" font-weight="600" letter-spacing="0.06em" transform="rotate(-90,40,215)">GDP成長の速さ ↑</text>
+
+              <!-- Vertical grid marks for time -->
+              <line x1="170" y1="360" x2="170" y2="364" stroke="#999" stroke-width="1"/>
+              <line x1="310" y1="360" x2="310" y2="364" stroke="#999" stroke-width="1"/>
+              <line x1="480" y1="360" x2="480" y2="364" stroke="#999" stroke-width="1"/>
+              <line x1="620" y1="360" x2="620" y2="364" stroke="#b23a2f" stroke-width="2"/>
+              <line x1="730" y1="360" x2="730" y2="364" stroke="#999" stroke-width="1"/>
 
               <!-- Time labels -->
-              <text x="130" y="285" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#999">古代</text>
-              <text x="250" y="285" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#999">中世</text>
-              <text x="370" y="285" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#999">産業革命</text>
-              <text x="468" y="285" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#b23a2f" font-weight="700">1960</text>
-              <text x="560" y="285" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#999">現在</text>
+              <text x="170" y="380" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#585858">紀元前</text>
+              <text x="310" y="380" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#585858">中世</text>
+              <text x="480" y="380" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#585858">産業革命</text>
+              <text x="620" y="380" text-anchor="middle" font-family="'SF Mono',monospace" font-size="12" fill="#b23a2f" font-weight="700">1960</text>
+              <text x="620" y="395" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#b23a2f">崩壊点</text>
+              <text x="730" y="380" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#585858">現在</text>
+              <text x="810" y="380" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#585858">未来</text>
 
-              <!-- PHASE 1: Hyperbolic curve (historical, BC to 1960) -->
-              <path d="M130,255 C185,250 250,240 320,222 C360,208 400,180 432,132 C452,95 460,65 468,45" stroke="#b23a2f" stroke-width="2.5" fill="none"/>
-              <!-- End point of hyperbola -->
-              <circle cx="468" cy="45" r="5" fill="#b23a2f"/>
+              <!-- PHASE 1: Hyperbolic curve (historical, BC to 1960) — curve from bottom-left rising sharply to top-right at 1960 -->
+              <path d="M170,340 C250,335 330,320 420,295 C490,272 555,220 595,140 C610,105 615,90 620,78" stroke="#b23a2f" stroke-width="3" fill="none"/>
+              <circle cx="620" cy="78" r="6" fill="#b23a2f"/>
 
               <!-- 1960 vertical divider -->
-              <line x1="468" y1="45" x2="468" y2="265" stroke="#b23a2f" stroke-width="1.5" stroke-dasharray="5,4"/>
+              <line x1="620" y1="78" x2="620" y2="360" stroke="#b23a2f" stroke-width="1.5" stroke-dasharray="5,4" opacity="0.5"/>
 
-              <!-- PHASE 2: The DROP — demographic transition collapses the growth rate -->
-              <!-- Drop arrow from hyperbola endpoint down to flat level -->
-              <line x1="468" y1="50" x2="468" y2="148" stroke="#b23a2f" stroke-width="2" marker-end="url(#arrowDrop)"/>
-              <!-- Break annotation box -->
-              <rect x="474" y="85" width="90" height="42" rx="3" fill="#fff" fill-opacity="0.9" stroke="#b23a2f" stroke-width="1.5"/>
-              <text x="519" y="102" text-anchor="middle" font-family="'SF Mono',monospace" font-size="10" fill="#b23a2f" font-weight="700">BREAK</text>
-              <text x="519" y="116" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#b23a2f">人口転換 → 崩壊</text>
+              <!-- PHASE 2: The DROP — demographic transition -->
+              <line x1="620" y1="86" x2="620" y2="218" stroke="#b23a2f" stroke-width="2.5" marker-end="url(#arrowDrop)"/>
+
+              <!-- BREAK annotation -->
+              <rect x="508" y="120" width="108" height="54" rx="3" fill="#fff" stroke="#b23a2f" stroke-width="1.5"/>
+              <text x="562" y="142" text-anchor="middle" font-family="'SF Mono',monospace" font-size="12" fill="#b23a2f" font-weight="700">BREAK</text>
+              <text x="562" y="160" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#b23a2f">人口転換</text>
 
               <!-- PHASE 3: Flatline after 1960 (actual) -->
-              <path d="M468,150 L560,148 L620,146" stroke="#1a1a1a" stroke-width="2" stroke-dasharray="6,4"/>
-              <text x="590" y="137" font-family="sans-serif" font-size="9" fill="#757575">実際の成長（水平化）</text>
+              <path d="M620,220 L730,218 L800,216" stroke="#1a1a1a" stroke-width="2.5" stroke-dasharray="8,5"/>
+              <text x="755" y="205" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#585858">実績 = 水平化</text>
 
               <!-- PHASE 4: AI restart (hypothetical) -->
-              <path d="M560,148 C570,132 580,95 592,55 C597,40 600,35 602,32" stroke="#b23a2f" stroke-width="2" stroke-dasharray="3,3"/>
-              <circle cx="560" cy="148" r="4" fill="none" stroke="#b23a2f" stroke-width="1.5"/>
-              <text x="612" y="35" font-family="'SF Mono',monospace" font-size="10" fill="#b23a2f" font-weight="700">AI再起動?</text>
-              <text x="612" y="49" font-family="sans-serif" font-size="9" fill="#b23a2f">ループが閉じ直される</text>
+              <path d="M730,218 C750,180 770,130 790,80 C795,68 798,62 800,58" stroke="#b23a2f" stroke-width="2.5" stroke-dasharray="4,4"/>
+              <circle cx="730" cy="218" r="5" fill="none" stroke="#b23a2f" stroke-width="2"/>
 
-              <!-- Legend -->
-              <line x1="100" y1="40" x2="128" y2="40" stroke="#b23a2f" stroke-width="2.5"/>
-              <circle cx="96" cy="40" r="3" fill="#b23a2f"/>
-              <text x="133" y="44" font-family="sans-serif" font-size="9" fill="#757575">双曲線パターン（紀元前〜1960）</text>
-              <line x1="100" y1="56" x2="128" y2="56" stroke="#1a1a1a" stroke-width="2" stroke-dasharray="6,4"/>
-              <text x="133" y="60" font-family="sans-serif" font-size="9" fill="#757575">実績（1960〜現在）水平化</text>
-              <line x1="100" y1="72" x2="128" y2="72" stroke="#b23a2f" stroke-width="2" stroke-dasharray="3,3"/>
-              <text x="133" y="76" font-family="sans-serif" font-size="9" fill="#757575">AI仮説（フィードバックループ再起動）</text>
+              <!-- AI restart annotation -->
+              <rect x="680" y="85" width="150" height="40" rx="3" fill="#b23a2f"/>
+              <text x="755" y="103" text-anchor="middle" font-family="'SF Mono',monospace" font-size="11" fill="#f3f1e9" font-weight="700" letter-spacing="0.06em">AI RESTART?</text>
+              <text x="755" y="119" text-anchor="middle" font-family="sans-serif" font-size="10" fill="rgba(243,241,233,0.9)">ループが閉じ直される</text>
+
+              <!-- Annotation for PHASE 1 curve -->
+              <text x="320" y="270" font-family="sans-serif" font-size="11" fill="#b23a2f" font-style="italic">数千年の双曲線成長 ↗</text>
+
+              <!-- Legend (bottom-left box) -->
+              <rect x="90" y="70" width="270" height="80" rx="3" fill="#f3f1e9" stroke="#ddd5bd" stroke-width="1"/>
+              <text x="104" y="88" font-family="'SF Mono',monospace" font-size="10" fill="#1a1a1a" font-weight="700" letter-spacing="0.08em">LEGEND</text>
+              <line x1="104" y1="102" x2="136" y2="102" stroke="#b23a2f" stroke-width="3"/>
+              <text x="144" y="106" font-family="sans-serif" font-size="10" fill="#585858">双曲線（紀元前〜1960）</text>
+              <line x1="104" y1="120" x2="136" y2="120" stroke="#1a1a1a" stroke-width="2.5" stroke-dasharray="6,3"/>
+              <text x="144" y="124" font-family="sans-serif" font-size="10" fill="#585858">実績（1960以降、横ばい）</text>
+              <line x1="104" y1="138" x2="136" y2="138" stroke="#b23a2f" stroke-width="2.5" stroke-dasharray="3,3"/>
+              <text x="144" y="142" font-family="sans-serif" font-size="10" fill="#585858">AI仮説（ループ再起動）</text>
             </svg>
           </div>
 
           <p class="lead">だが1960年頃、パターンは崩壊した。人口転換（demographic transition）が起きたのだ。豊かになった社会は出生率を下げた。資源の増加が人口増加に直結しなくなった。GDPの倍増時間は水平化し、双曲線は折れた。Scott Alexanderは2019年の "1960: The Year The Singularity Was Cancelled" でこの構造を精緻に復元している。</p>
 
-          <p class="lead">ここで理解すべきは、なぜ双曲線が成立していたかだ。数千年にわたる人類史の大部分で、マルサスの罠と呼ばれるフィードバックループが回っていた。<strong>技術が改善される → 食料生産が増える → 人口が増える → 研究者が増える → 技術がさらに改善される</strong>。この5段階の自己強化ループが、成長率そのものの加速を駆動していた。各段階をもう少し具体的に見てみよう。農業技術の改善は一人当たりの余剰カロリーを生む。余剰カロリーは人口扶養力を高める。人口が増えれば、その中から技術者や発明者が一定比率で生まれる。発明者が増えれば技術の改善速度が上がる。そして改善された技術が再び食料生産を押し上げる。産業革命は、このループの最も劇的な加速局面だった。トラクターが食料生産を効率化し、より多くの人間を養い、より多くの発明者を生み出した。</p>
+          <p class="lead">ここで理解すべきは、なぜ双曲線が成立していたかだ。数千年にわたる人類史の大部分で、マルサスの罠と呼ばれるフィードバックループが回っていた。この5段階の自己強化ループが、成長率そのものの加速を駆動していた。</p>
+
+          <!-- Self-reinforcing loop block -->
+          <div class="loop-block" style="margin:20px 0;padding:28px 32px;background:#1a1a1a;color:#f3f1e9;border-radius:4px;box-sizing:border-box;max-width:100%;overflow-wrap:break-word;">
+            <div style="font-family:'SF Mono','Fira Code',Menlo,Consolas,monospace;font-size:10px;letter-spacing:0.12em;color:#b23a2f;font-weight:700;margin-bottom:14px;">THE SELF-REINFORCING LOOP</div>
+            <div style="font-size:18px;font-weight:700;line-height:1.7;color:#f3f1e9;">
+              技術が改善される
+              <span style="color:#b23a2f;margin:0 8px;">→</span>
+              食料生産が増える
+              <span style="color:#b23a2f;margin:0 8px;">→</span>
+              人口が増える
+              <span style="color:#b23a2f;margin:0 8px;">→</span>
+              研究者が増える
+              <span style="color:#b23a2f;margin:0 8px;">→</span>
+              技術がさらに改善される
+              <span style="color:#b23a2f;margin:0 8px;">↻</span>
+            </div>
+            <div style="margin-top:16px;padding-top:16px;border-top:1px solid rgba(243,241,233,0.2);font-size:13px;line-height:1.7;color:rgba(243,241,233,0.85);">
+              このループの唯一のボトルネックは<strong style="color:#f3f1e9;">人口</strong>だった。研究者の供給源は人間であり、人間の供給源は食料扶養力だった。人口が増え続ける限り、ループは自己加速した。AIがやっているのは、このループから人口という制約を外すことだ。研究者の供給を、食料生産と無関係に拡張できるようになる。ループが回る速度は、もはや赤ん坊が大人になるまでの20年で律速されない。
+            </div>
+          </div>
+
+          <p class="lead">各段階をもう少し具体的に見てみよう。農業技術の改善は一人当たりの余剰カロリーを生む。余剰カロリーは人口扶養力を高める。人口が増えれば、その中から技術者や発明者が一定比率で生まれる。発明者が増えれば技術の改善速度が上がる。そして改善された技術が再び食料生産を押し上げる。産業革命は、このループの最も劇的な加速局面だった。トラクターが食料生産を効率化し、より多くの人間を養い、より多くの発明者を生み出した。</p>
 
           <p class="lead">だがAlexanderが強調するように、<strong>トラクターは発明できない</strong>。トラクターは食料を増やすが、トラクター自身が次のトラクターを設計することはない。フィードバックループの「研究者→技術」の部分は、つねに人間の頭脳に依存していた。人口転換がその頭脳の供給を止めた瞬間、ループは途切れた。</p>
 
@@ -730,6 +828,8 @@
           <p class="lead">Karnofskyはこの数字の意味を掘り下げるために「完璧な1年」の思考実験を使う。銀河の全原子が意識を持ち、その一つひとつが「毎秒が至福の瞬間である完璧な1年間」を体験したとしても、それが生み出す価値はまだ10の85乗ドルに届かない。2%成長が8,200年を超えて続くには、<strong>人間が経験として認識可能な活動の枠組みそのものを超える必要がある</strong>。</p>
 
           <p class="lead">この分析が教えるのは二つのことだ。第一に、現在の成長率が永続する未来はない。物理法則が許容しない。第二に、成長が止まるか変容するかの分岐点は、宇宙スケールの歴史の中では「もうすぐ」に位置している。Roodmanの成長軌道モデルとDavidsonの爆発的成長分析を重ねると、双曲線の再起動が起きた場合、数年から数十年で物理的限界への接近が始まる。保守派の「年率2%」ですらこの壁にぶつかるのだから、AIが再起動した双曲線はさらに速く壁に到達する。成長の終着点がどこかではない。<strong>成長という概念そのものが意味を失う地平</strong>が、想定よりはるかに近い。</p>
+
+          <p class="lead">ここで自然な問いが立つ。保守派の年率2%ですら8,200年で銀河を使い尽くすなら、AIが成長率を跳ね上げた場合、飽和はあっという間に到達するのではないか。この問いは正しい。2%ではなく10%で成長したら、原子の壁は8,200年ではなく1,800年で来る。成長率20%なら900年だ。AIが双曲線を再起動すれば、壁までの距離は歴史的スケールから人間のライフスパンに縮む可能性がある。ではその後はどうなるか。想定を別の次元に逃がせる仮説が三つある。<strong>第一に、計算の熱力学的効率</strong>。ランダウアー限界（1ビットの消去に必要な最小エネルギー）に到達するまで、現在の計算機は桁違いに無駄が多い。物理法則の抜け穴ではなく、既知の法則の範囲内でまだ十数桁の改善余地がある。<strong>第二に、デジタル空間への軸足移動</strong>。物質の移動を伴わない価値（意識の深度、体験、多様性）は、物理的フットプリントに対して非線形に伸びる。GDPを「財+サービスの総量」と定義し続ける限り壁は近いが、価値の測定単位を変えれば壁の位置も動く。<strong>第三に、宇宙論スケールの資源拡張</strong>。ダイソン球的な恒星エネルギーの回収、銀河間への拡張、ブラックホールを使った計算機（Frautschi 1982）など、現在のGDPが前提にする「地球規模の資源」を数十桁拡張する経路が理論上は存在する。いずれも既知の物理の範囲内だ。飽和が終わりを意味するとは限らない。成長の定義そのものが、物理的上限とは別の次元へ逃げる可能性がある——ただし、その逃亡を「穏当」と呼ぶことはできない。</p>
 
           <div class="note">
             <strong>「成長が飽和する」なら、その後はどうなるか？</strong><br><br>

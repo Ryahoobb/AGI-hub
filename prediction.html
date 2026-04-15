@@ -1269,18 +1269,18 @@ h2 { font-size: clamp(28px, 4vw, 44px); font-weight: 800; line-height: 1.2; colo
     </div>
 
     <div class="big-stat reveal reveal-delay-3">
-      <span class="big-stat-tag">Metaculus Q5121 · 確率</span>
-      <div class="big-stat-num"><span data-meta="q5121.probability_pct">26</span><span class="unit">%</span></div>
-      <div class="big-stat-desc">2030年末までのAGI達成確率</div>
-      <div class="big-stat-meta"><span data-meta="q5121.forecasters_fmt">2,847</span>人の予測者</div>
+      <span class="big-stat-tag">Metaculus Q3479 分布より推定</span>
+      <div class="big-stat-num">~59<span class="unit">%</span></div>
+      <div class="big-stat-desc">2035年末までのAGI達成確率</div>
+      <div class="big-stat-meta">P50=2032 / P75=2040 から線形補間</div>
       <div class="big-stat-bar-wrap">
         <div class="big-stat-bar">
-          <div class="big-stat-bar-fill" data-meta-style="q5121.probability_pct:width:%" style="width: 26%;"></div>
+          <div class="big-stat-bar-fill" style="width: 59%;"></div>
         </div>
         <div class="big-stat-bar-labels"><span>0%</span><span>50%</span><span>100%</span></div>
       </div>
       <p style="margin-top:14px;font-size:12px;line-height:1.6;color:var(--mid);">
-        中央値2032年から逆算すれば、2030年は「ありうるが少数派」。業界トップが2026-29を口にするほど、金を賭けた予測者たちとの距離が開く。
+        中央値2032年から3年後の2035年。予測者の約6割がそこまでに到達すると見ている。業界トップ（Amodei・Aschenbrenner・Huang）はさらに早いレンジを主張。
       </p>
     </div>
 
@@ -1337,7 +1337,7 @@ h2 { font-size: clamp(28px, 4vw, 44px); font-weight: 800; line-height: 1.2; colo
       <div class="question-header">
         <div class="question-num">Q01 · Comparable</div>
       </div>
-      <div class="question-title">2030年末までにAGIは達成されるか？</div>
+      <div class="question-title">2035年末までにAGIは達成されるか？</div>
       <div class="question-sub">直感で答える。世界の数字は送信後に出る。</div>
 
       <div class="value-row">
@@ -1371,8 +1371,8 @@ h2 { font-size: clamp(28px, 4vw, 44px); font-weight: 800; line-height: 1.2; colo
 
       <div class="slider-container">
         <div class="slider-track-bg"></div>
-        <input type="range" id="q2" min="2026" max="2050" value="2035" step="1">
-        <div class="slider-labels"><span>2026</span><span>2038</span><span>2050+</span></div>
+        <input type="range" id="q2" min="2026" max="2044" value="2035" step="1">
+        <div class="slider-labels"><span>2026</span><span>2035</span><span>2044+</span></div>
       </div>
     </div>
 
@@ -1666,7 +1666,7 @@ h2 { font-size: clamp(28px, 4vw, 44px); font-weight: 800; line-height: 1.2; colo
 
     <!-- Q1 Bar Comparison -->
     <div class="compare-bar">
-      <div class="compare-bar-title">Q1 · 2030年末までのAGI達成確率</div>
+      <div class="compare-bar-title">Q1 · 2035年末までのAGI達成確率</div>
       <div class="compare-bar-sub">0% ─ 50% ─ 100%</div>
       <div class="bar-axis">
         <div class="bar-marker you" id="bar-q1-you" style="left: 50%;">
@@ -1686,7 +1686,7 @@ h2 { font-size: clamp(28px, 4vw, 44px); font-weight: 800; line-height: 1.2; colo
     <!-- Q2 Bar Comparison -->
     <div class="compare-bar">
       <div class="compare-bar-title">Q2 · AGI到達年</div>
-      <div class="compare-bar-sub">2026 ─ 2038 ─ 2050+</div>
+      <div class="compare-bar-sub">2026 ─ 2035 ─ 2044+</div>
       <div class="bar-axis">
         <div class="bar-marker you" id="bar-q2-you" style="left: 25%;">
           <div class="bar-val" id="bar-q2-you-val">2032</div>
@@ -1699,7 +1699,7 @@ h2 { font-size: clamp(28px, 4vw, 44px); font-weight: 800; line-height: 1.2; colo
           <div class="bar-tag">Metaculus</div>
         </div>
       </div>
-      <div class="bar-axis-labels"><span>2026</span><span>2038</span><span>2050+</span></div>
+      <div class="bar-axis-labels"><span>2026</span><span>2035</span><span>2044+</span></div>
     </div>
 
     <!-- Verdict -->
@@ -1848,7 +1848,7 @@ h2 { font-size: clamp(28px, 4vw, 44px); font-weight: 800; line-height: 1.2; colo
   reveals.forEach(function(el) { observer.observe(el); });
 
   // ── Reference values (overridden by prediction-data.json fetch below) ──
-  var META_Q5121_PROB = 26;
+  var META_Q5121_PROB = 59;
   var META_Q3479_YEAR = 2032;
   var GAUGE_CIRCUMFERENCE = 2 * Math.PI * 52; // ≈ 326.7
 
@@ -1982,11 +1982,11 @@ h2 { font-size: clamp(28px, 4vw, 44px); font-weight: 800; line-height: 1.2; colo
     } else if (q1diff > 0) {
       diffMain.className = 'diff-num';
       diffDesc.textContent = 'あなたは' + q1diff + 'ポイント楽観的';
-      diffSub.textContent = '2030年AGIの確率を、予測市場より高く見ている';
+      diffSub.textContent = '2035年AGIの確率を、予測市場より高く見ている';
     } else {
       diffMain.className = 'diff-num 悲観';
       diffDesc.textContent = 'あなたは' + Math.abs(q1diff) + 'ポイント悲観的';
-      diffSub.textContent = '2030年AGIの確率を、予測市場より低く見ている';
+      diffSub.textContent = '2035年AGIの確率を、予測市場より低く見ている';
     }
 
     // Animate diff counter
@@ -2002,7 +2002,7 @@ h2 { font-size: clamp(28px, 4vw, 44px); font-weight: 800; line-height: 1.2; colo
     document.getElementById('bar-q1-you-val').textContent = q1 + '%';
 
     // Q2 bar position
-    var q2pct = ((q2 - 2026) / (2050 - 2026)) * 100;
+    var q2pct = ((q2 - 2026) / (2044 - 2026)) * 100;
     var q2Marker = document.getElementById('bar-q2-you');
     setTimeout(function() {
       q2Marker.style.transition = 'left 1s var(--ease)';

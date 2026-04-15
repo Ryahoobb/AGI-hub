@@ -683,15 +683,7 @@ h2 { font-size: clamp(28px, 4vw, 44px); font-weight: 800; line-height: 1.2; colo
 
 /* SLIDER */
 .slider-container { position: relative; padding: 20px 0 8px; }
-.slider-track-bg {
-  position: absolute;
-  top: 32px;
-  left: 0; right: 0;
-  height: 6px;
-  background: var(--bg-alt);
-  border-radius: 3px;
-  pointer-events: none;
-}
+.slider-track-bg { display: none; /* replaced by native ::-webkit-slider-runnable-track */ }
 .slider-world-marker {
   position: absolute;
   top: 36px;
@@ -729,13 +721,16 @@ h2 { font-size: clamp(28px, 4vw, 44px); font-weight: 800; line-height: 1.2; colo
   box-shadow: 0 0 0 1px var(--world);
 }
 .slider-container input[type="range"] {
-  -webkit-appearance: none; appearance: none; width: 100%; height: 6px; border-radius: 3px;
+  -webkit-appearance: none; appearance: none;
+  width: 100%; height: 22px;
   background: transparent; outline: none; cursor: pointer;
   position: relative; z-index: 3;
-  margin: 32px 0 0;
+  margin: 22px 0 0;
+  display: block;
 }
 .slider-container input[type="range"]::-webkit-slider-runnable-track {
-  height: 6px; background: transparent; border-radius: 3px;
+  height: 6px; background: var(--bg-alt); border-radius: 3px;
+  margin: 0 11px;
 }
 .slider-container input[type="range"]::-webkit-slider-thumb {
   -webkit-appearance: none; appearance: none;
@@ -746,12 +741,15 @@ h2 { font-size: clamp(28px, 4vw, 44px); font-weight: 800; line-height: 1.2; colo
   transition: transform 0.15s;
 }
 .slider-container input[type="range"]:active::-webkit-slider-thumb { transform: scale(1.15); }
+.slider-container input[type="range"]::-moz-range-track {
+  height: 6px; background: var(--bg-alt); border-radius: 3px;
+  margin: 0 11px;
+}
 .slider-container input[type="range"]::-moz-range-thumb {
-  width: 22px; height: 22px; border-radius: 50%; background: var(--accent); cursor: pointer;
+  width: 16px; height: 16px; border-radius: 50%; background: var(--accent); cursor: pointer;
   border: 3px solid #fff; box-shadow: 0 0 0 1px var(--accent), 0 2px 6px rgba(47, 43, 146, 0.3);
 }
 .slider-labels { display: flex; justify-content: space-between; font-size: 10px; color: var(--meta); margin-top: 10px; font-family: "SF Mono", Menlo, monospace; letter-spacing: 0.04em; padding: 0 11px; }
-.slider-container .slider-track-bg { left: 11px; right: 11px; }
 
 /* Thinker reference bar under the slider */
 .q-thinker-bar {

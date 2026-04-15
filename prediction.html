@@ -49,6 +49,124 @@ a { color: var(--accent); text-decoration: none; }
 
 .eyebrow { font-family: "SF Mono", Menlo, monospace; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); margin-bottom: 16px; }
 .eyebrow::before { content: '◆'; color: var(--accent); margin-right: 10px; font-size: 9px; }
+
+/* Oversized chapter number (WIRED editorial) */
+.chapter-num {
+  font-family: "SF Mono", Menlo, monospace;
+  font-size: clamp(100px, 18vw, 220px);
+  font-weight: 900;
+  line-height: 0.85;
+  letter-spacing: -0.05em;
+  color: transparent;
+  -webkit-text-stroke: 2px var(--accent);
+  margin-bottom: -10px;
+  display: block;
+}
+.section-dark .chapter-num { -webkit-text-stroke-color: rgba(255,255,255,0.7); }
+
+/* Pull quote (editorial) */
+.pull-quote {
+  margin: 48px auto;
+  max-width: 760px;
+  padding: 24px 0 24px 32px;
+  border-left: 4px solid var(--accent);
+  font-family: 游ゴシック体, YuGothic, "ヒラギノ角ゴ ProN W3", "Hiragino Kaku Gothic ProN", sans-serif;
+  font-size: clamp(20px, 2.2vw, 28px);
+  font-weight: 600;
+  line-height: 1.55;
+  letter-spacing: -0.01em;
+  color: var(--body-text);
+}
+.pull-quote strong { color: var(--accent); font-weight: 900; }
+.pull-quote .pq-source {
+  display: block;
+  margin-top: 12px;
+  font-family: "SF Mono", Menlo, monospace;
+  font-size: 11px;
+  color: var(--meta);
+  letter-spacing: 0.08em;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+/* Drop cap */
+.drop-cap::first-letter {
+  float: left;
+  font-family: "SF Mono", Menlo, monospace;
+  font-size: 4.2em;
+  line-height: 0.88;
+  font-weight: 900;
+  margin: 4px 12px 0 0;
+  color: var(--accent);
+}
+
+/* Editorial portrait spread */
+.editorial-spread {
+  position: relative;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 120px 48px;
+  display: grid;
+  grid-template-columns: 1fr 1.1fr;
+  gap: 64px;
+  align-items: center;
+  background: var(--bg-dark);
+  color: #fff;
+  overflow: hidden;
+}
+.editorial-spread::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 30% 50%, rgba(201, 55, 44, 0.18), transparent 60%);
+  pointer-events: none;
+}
+.editorial-spread > * { position: relative; z-index: 1; }
+.es-portrait {
+  aspect-ratio: 3/4;
+  background-size: cover;
+  background-position: center top;
+  filter: grayscale(0.6) contrast(1.1);
+  border: 1px solid rgba(255,255,255,0.12);
+}
+.es-eyebrow {
+  font-family: "SF Mono", Menlo, monospace;
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  color: var(--world);
+  text-transform: uppercase;
+  font-weight: 700;
+  margin-bottom: 24px;
+}
+.es-headline {
+  font-size: clamp(32px, 4.5vw, 60px);
+  font-weight: 900;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: #fff;
+  margin-bottom: 28px;
+}
+.es-headline em { font-style: normal; color: var(--world); }
+.es-body {
+  font-size: 16px;
+  line-height: 1.85;
+  color: rgba(255,255,255,0.8);
+  margin-bottom: 24px;
+}
+.es-attribution {
+  font-family: "SF Mono", Menlo, monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  color: rgba(255,255,255,0.5);
+  text-transform: uppercase;
+  font-weight: 700;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255,255,255,0.2);
+}
+.es-attribution strong { color: #fff; font-weight: 700; }
+@media (max-width: 768px) {
+  .editorial-spread { grid-template-columns: 1fr; padding: 64px 24px; gap: 32px; }
+}
 .section-dark .eyebrow { color: var(--accent-bright); }
 .section-dark .eyebrow::before { color: var(--accent-bright); }
 
@@ -61,6 +179,18 @@ h2 { font-size: clamp(28px, 4vw, 44px); font-weight: 800; line-height: 1.2; colo
    HERO — BIG VISUAL TIMELINE
    ══════════════════════════════════════ */
 .hero-section { padding-top: 64px; padding-bottom: 96px; position: relative; overflow: hidden; }
+.hero-section::after {
+  content: '';
+  position: absolute;
+  top: -60px; right: -180px;
+  width: 720px; height: 720px;
+  background: url('images/dyson-swarm.jpg') center/cover no-repeat;
+  filter: grayscale(0.3) contrast(0.95);
+  opacity: 0.14;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+}
 .hero-section::before {
   content: '';
   position: absolute;
@@ -1087,9 +1217,10 @@ h2 { font-size: clamp(28px, 4vw, 44px); font-weight: 800; line-height: 1.2; colo
       <!-- Bracket indicating CEO cluster -->
     </div>
 
-    <p style="text-align:center;font-size:13px;color:var(--mid);margin-top:32px;max-width:680px;margin-left:auto;margin-right:auto;line-height:1.7;">
-      <strong>Huangは「もう来た」、Altmanは2031年。業界の予測者は"到達済"から2031年まで散らばっている</strong>。顔にカーソルを合わせると本人の発言と出典が出る。<br>Metaculusの値は、あなたが回答したあとに明かされる。
-    </p>
+    <blockquote class="pull-quote">
+      Huangは「<strong>もう来た</strong>」、Altmanは<strong>2031年</strong>。業界の予測者は"到達済"から2031年まで散らばっている。
+      <span class="pq-source">◆ 顔にカーソルで発言と出典 · Metaculusは回答後に開示</span>
+    </blockquote>
 
   </div>
 </div>
@@ -1099,6 +1230,7 @@ h2 { font-size: clamp(28px, 4vw, 44px); font-weight: 800; line-height: 1.2; colo
      ══════════════════════════════════════════════ -->
 <div class="section-alt">
 <div class="section">
+  <span class="chapter-num reveal">01</span>
   <div class="eyebrow reveal">Chapter 01 · World Forecast</div>
   <h2 class="reveal">予測市場のAGI予測</h2>
   <p class="lead reveal">予測市場では当てた人が儲かる。だから口先だけの意見より精度が出る。CEOの発言にも株価と評判がかかっている。どちらも身銭を切った予測だ。</p>
@@ -1158,17 +1290,29 @@ h2 { font-size: clamp(28px, 4vw, 44px); font-weight: 800; line-height: 1.2; colo
 </div>
 </div>
 
+<!-- Editorial portrait spread -->
+<div class="editorial-spread">
+  <div class="es-portrait" style="background-image: url('images/thinkers/yudkowsky.jpg');"></div>
+  <div>
+    <div class="es-eyebrow">◆ Voice · Extreme Spectrum</div>
+    <h2 class="es-headline">AIは、ほぼ確実に<br>人類を<em>破滅させる</em>。</h2>
+    <p class="es-body">Eliezer Yudkowskyのp(doom)は<strong style="color:#fff;">95%以上</strong>。アラインメント研究を20年以上主導した人物の結論。極端に見える数字だが、この見立てに共鳴する研究者は増えている——Hintonは50%、Bengioは20%、Leahyは80%。</p>
+    <div class="es-attribution"><strong>Eliezer Yudkowsky</strong> · MIRI · AGI-ruin論の提唱者</div>
+  </div>
+</div>
+
 <!-- ══════════════════════════════════════════════
      DIVIDER — PUNCH
      ══════════════════════════════════════════════ -->
 <div class="divider-section">
+  <span class="chapter-num">02</span>
   <div class="eyebrow">Chapter 02 · Your Turn</div>
   <h2>では、<br>あなたは？</h2>
   <p class="lead" style="margin-top:24px;">5つの問いに、直感で答える。答えた後に世界の予測が明かされる。</p>
 
   <div style="margin-top:48px;max-width:720px;background:#fff;border:1px solid var(--border);border-top:3px solid var(--accent);padding:32px;text-align:left;">
     <div style="font-family:'SF Mono',Menlo,monospace;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--accent);margin-bottom:16px;">◆ 設問の前に · AGIの定義</div>
-    <p style="font-size:19px;line-height:1.7;color:var(--body-text);font-weight:700;margin-bottom:8px;letter-spacing:-0.01em;">人間と同等以上に、広い領域で知的タスクをこなせるAI。</p>
+    <p class="drop-cap" style="font-size:19px;line-height:1.7;color:var(--body-text);font-weight:700;margin-bottom:8px;letter-spacing:-0.01em;">人間と同等以上に、広い領域で知的タスクをこなせるAI。</p>
     <p style="font-size:13px;color:var(--mid);line-height:1.7;margin-bottom:20px;">これが本アンケートでの運用上の定義。ただし論者で範囲がずれる。Metaculusは厳しく、OpenAI/Huangは緩い。この差がQ2の回答に2〜5年のズレを生む。</p>
 
     <details style="background:var(--bg-alt);border:1px solid var(--border);padding:14px 18px;font-size:12px;">

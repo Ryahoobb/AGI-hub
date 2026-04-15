@@ -804,6 +804,15 @@ h2 { font-size: clamp(28px, 4vw, 44px); font-weight: 800; line-height: 1.2; colo
   margin-top: 1px;
 }
 .q-thinker-pin.extreme img { box-shadow: 0 0 0 1.5px var(--world), 0 2px 4px rgba(0,0,0,0.12); }
+.q-thinker-pin .meta-dot {
+  display: flex; align-items: center; justify-content: center;
+  width: 28px; height: 28px; border-radius: 50%;
+  background: var(--green); color: #fff;
+  font-family: "SF Mono", Menlo, monospace; font-size: 13px; font-weight: 900;
+  border: 2px solid #fff;
+  box-shadow: 0 0 0 1.5px var(--green), 0 2px 4px rgba(0,0,0,0.12);
+  margin: 0 auto;
+}
 
 /* No world marker for Q3-Q5 */
 .question.no-compare .value-row { grid-template-columns: 1fr; }
@@ -1373,6 +1382,36 @@ h2 { font-size: clamp(28px, 4vw, 44px); font-weight: 800; line-height: 1.2; colo
         <div class="slider-track-bg"></div>
         <input type="range" id="q2" min="2026" max="2044" value="2035" step="1">
         <div class="slider-labels"><span>2026</span><span>2035</span><span>2044+</span></div>
+      </div>
+
+      <div class="q-thinker-bar">
+        <div class="q-thinker-bar-label">◆ 業界の予測者はここに散らばっている</div>
+        <div class="q-thinker-track">
+          <div class="q-thinker-pin" style="left: 1%;" title="Dario Amodei — Anthropic CEO">
+            <img src="images/people/dario-amodei.jpg" alt="Amodei">
+            <div class="tp-label">Amodei</div><span class="tp-val">2026</span>
+          </div>
+          <div class="q-thinker-pin" style="left: 6%;" title="Leopold Aschenbrenner — 元OpenAI">
+            <img src="images/thinkers/aschenbrenner.jpg" alt="Aschenbrenner">
+            <div class="tp-label">Aschenbrenner</div><span class="tp-val">2027</span>
+          </div>
+          <div class="q-thinker-pin" style="left: 14%;" title="bioshok3 — 日本のAI解説者">
+            <img src="images/thinkers/bioshok3.jpg" alt="bioshok3">
+            <div class="tp-label">bioshok3</div><span class="tp-val">2027–30</span>
+          </div>
+          <div class="q-thinker-pin" style="left: 22%;" title="Demis Hassabis — DeepMind">
+            <img src="images/people/demis-hassabis.jpg" alt="Hassabis">
+            <div class="tp-label">Hassabis</div><span class="tp-val">2030</span>
+          </div>
+          <div class="q-thinker-pin" style="left: 28%;" title="Sam Altman — OpenAI">
+            <img src="images/people/sam-altman.jpg" alt="Altman">
+            <div class="tp-label">Altman</div><span class="tp-val">2031</span>
+          </div>
+          <div class="q-thinker-pin meta-pin" style="left: 33%;" title="Metaculus 中央値 (3,512人の予測者)">
+            <div class="meta-dot">M</div>
+            <div class="tp-label" style="color:var(--green);">Metaculus</div><span class="tp-val">2032 中央値</span>
+          </div>
+        </div>
       </div>
     </div>
 

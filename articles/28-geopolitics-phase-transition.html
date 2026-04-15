@@ -323,50 +323,6 @@
         margin-top: 4px;
       }
 
-      /* Site Header */
-      .site-header {
-        position: sticky;
-        top: 0;
-        z-index: 60;
-        background: var(--black);
-        border-bottom: 1px solid rgba(255,255,255,0.1);
-      }
-
-      .site-header-inner {
-        max-width: 1120px;
-        margin: 0 auto;
-        padding: 12px 48px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-      }
-
-      .site-header a {
-        color: #fff;
-        text-decoration: none;
-        font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
-        font-feature-settings: normal;
-        font-size: 12px;
-        letter-spacing: 0.1em;
-        text-transform: uppercase;
-      }
-
-      .site-header .logo-text { font-weight: 700; font-size: 14px; }
-
-      #google_translate_element {
-        position: fixed;
-        bottom: 24px;
-        left: 24px;
-        z-index: 99;
-        background: var(--bg);
-        border: 1px solid var(--border);
-        padding: 4px 8px;
-        font-size: 12px;
-        opacity: 0.6;
-        transition: opacity 0.3s;
-      }
-      #google_translate_element:hover { opacity: 1; }
-
       /* Reveal animation */
       .reveal {
         opacity: 0;
@@ -385,7 +341,6 @@
         .lead { font-size: 15px; }
         .nav { display: none; }
         .grid-2, .grid-3 { grid-template-columns: 1fr; }
-        .site-header-inner { padding: 10px 20px; }
         table.compare { font-size: 12px; }
         table.compare th, table.compare td { padding: 8px 10px; }
       }
@@ -403,14 +358,8 @@
       <button data-target="slide-5" aria-label="Section 5"></button>
     </nav>
 
-    <header class="site-header">
-      <div class="site-header-inner">
-        <a href="../index.html" class="logo-text">AGI HUB</a>
-        <a href="../index.html">Archive</a>
-      </div>
-    </header>
-
-    <div id="google_translate_element"></div>
+    <div id="site-header-mount"></div>
+    <script src="../partials/header.js" defer></script>
 
     <div class="article-breadcrumb" style="font-family:'SF Mono','Fira Code',Menlo,Consolas,monospace;font-size:11px;letter-spacing:0.083em;text-transform:uppercase;color:#757575;display:flex;justify-content:space-between;align-items:center;padding:10px 32px;border-bottom:1px solid #e5e5e5;background:var(--bg);gap:16px;flex-wrap:wrap;">
       <span>No. 28 / 28 &nbsp;&middot;&nbsp; Governance &nbsp;&middot;&nbsp; 5 Sections</span>

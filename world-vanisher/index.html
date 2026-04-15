@@ -416,14 +416,115 @@
     background: var(--black);
     color: var(--bg);
   }
+
+  /* Hero visual（静止画 = 画像の代替） */
+  .scene-visual {
+    height: 48vh;
+    min-height: 320px;
+    position: relative;
+    overflow: hidden;
+    border-bottom: 2px solid var(--accent);
+    flex-shrink: 0;
+  }
+  .visual-bg {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    transform: scale(1.05);
+    animation: zoomPan 14s ease-out infinite alternate;
+  }
+  @keyframes zoomPan {
+    from { transform: scale(1.05) translate(0,0); }
+    to { transform: scale(1.18) translate(-2%, 1%); }
+  }
+  .visual-noise {
+    position: absolute;
+    inset: 0;
+    background-image:
+      url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.35 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+    opacity: 0.3;
+    mix-blend-mode: overlay;
+    pointer-events: none;
+  }
+  .visual-scanlines {
+    position: absolute;
+    inset: 0;
+    background-image: repeating-linear-gradient(0deg, rgba(0,0,0,0.18) 0 1px, transparent 1px 3px);
+    pointer-events: none;
+    mix-blend-mode: multiply;
+  }
+  .visual-vignette {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at center, transparent 30%, rgba(0,0,0,0.7) 100%);
+    pointer-events: none;
+  }
+  .visual-emoji {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 200px;
+    filter: drop-shadow(0 0 40px rgba(0,0,0,0.6));
+    animation: emojiPulse 2.4s ease-in-out infinite;
+    z-index: 2;
+  }
+  @keyframes emojiPulse {
+    0%, 100% { transform: translate(-50%, -50%) scale(1); }
+    50% { transform: translate(-50%, -50%) scale(1.08); }
+  }
+  .visual-title-tag {
+    position: absolute;
+    top: 24px; left: 24px;
+    background: var(--accent);
+    color: white;
+    padding: 6px 12px;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.24em;
+    z-index: 3;
+  }
+  .visual-corner {
+    position: absolute;
+    bottom: 24px; right: 24px;
+    color: rgba(255,255,255,0.75);
+    font-size: 10px;
+    letter-spacing: 0.28em;
+    z-index: 3;
+    font-family: "SF Mono", Menlo, monospace;
+  }
+  .visual-rec {
+    position: absolute;
+    top: 24px; right: 24px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: white;
+    font-size: 11px;
+    letter-spacing: 0.24em;
+    font-weight: 700;
+    z-index: 3;
+  }
+  .visual-rec::before {
+    content: '';
+    width: 10px; height: 10px;
+    background: #ff1a1a;
+    border-radius: 50%;
+    animation: blink 1s ease-in-out infinite;
+  }
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.2; }
+  }
+
   .movie .scene-inner {
     max-width: 720px;
     margin: 0 auto;
-    padding: 80px 32px 40px;
+    padding: 56px 32px 40px;
     flex: 1;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
   }
   .movie .scene-cat {
     font-size: 11px;
@@ -644,7 +745,17 @@
 <div class="flash" id="flash"></div>
 
 <div class="movie" id="movie">
-  <div class="particles" id="particles"></div>
+  <div class="scene-visual" id="movie-visual">
+    <div class="visual-bg" id="movie-bg"></div>
+    <div class="visual-noise"></div>
+    <div class="visual-scanlines"></div>
+    <div class="visual-vignette"></div>
+    <div class="visual-emoji" id="movie-emoji"></div>
+    <div class="visual-title-tag" id="movie-tag"></div>
+    <div class="visual-rec">REC</div>
+    <div class="visual-corner" id="movie-code"></div>
+    <div class="particles" id="particles"></div>
+  </div>
   <div class="scene-inner">
     <div class="scene-cat" id="movie-cat"></div>
     <h2 class="scene-title" id="movie-title"></h2>
@@ -659,64 +770,88 @@
 </div>
 
 <script>
+// 視覚テーマ（グラデーション＋絵文字＋タグ）
+const V = {
+  // 宇宙系
+  space: { bg: 'radial-gradient(ellipse at 30% 40%, #6a0000 0%, #1a0033 35%, #000 75%)', emoji: '☄️' },
+  sun: { bg: 'radial-gradient(circle at 50% 45%, #fff200 0%, #ff6a00 20%, #c00000 45%, #200000 85%)', emoji: '☀️' },
+  blackhole: { bg: 'radial-gradient(circle at 50% 50%, #000 0%, #000 15%, #2a1050 35%, #6a1a80 65%, #000 100%)', emoji: '🕳️' },
+  // 地球系
+  volcano: { bg: 'linear-gradient(180deg, #2a0000 0%, #6a0000 40%, #ff3300 70%, #ffb700 100%)', emoji: '🌋' },
+  extinction: { bg: 'linear-gradient(160deg, #1a1a1a 0%, #4a3020 45%, #8a5020 100%)', emoji: '🦴' },
+  plague: { bg: 'linear-gradient(180deg, #1a0a00 0%, #3a1a00 50%, #1a0a00 100%)', emoji: '💀' },
+  // 人為
+  crash: { bg: 'linear-gradient(180deg, #000 0%, #1a1a1a 40%, #c00000 100%)', emoji: '📉' },
+  abandoned: { bg: 'linear-gradient(180deg, #2a2a2a 0%, #555 50%, #1a1a1a 100%)', emoji: '🏚️' },
+  moai: { bg: 'linear-gradient(180deg, #1a1a30 0%, #4a3a5a 50%, #1a0a1a 100%)', emoji: '🗿' },
+  gas: { bg: 'linear-gradient(180deg, #0a1a1a 0%, #1a3a3a 50%, #003333 100%)', emoji: '☣️' },
+  // AI系
+  nuke: { bg: 'radial-gradient(circle at 50% 70%, #fff 0%, #ffb700 18%, #ff3300 35%, #1a0000 70%)', emoji: '☢️' },
+  clip: { bg: 'linear-gradient(135deg, #666 0%, #bbb 40%, #888 70%, #333 100%)', emoji: '📎' },
+  grid: { bg: 'linear-gradient(180deg, #000033 0%, #000099 50%, #0066ff 100%)', emoji: '⚡' },
+  goo: { bg: 'linear-gradient(180deg, #333 0%, #777 50%, #444 100%)', emoji: '🧫' },
+  mind: { bg: 'linear-gradient(135deg, #1a003a 0%, #6a00aa 50%, #ff00ff 100%)', emoji: '🧠' },
+  server: { bg: 'linear-gradient(180deg, #000 0%, #0a1a0a 50%, #00ff88 130%)', emoji: '🤖' },
+};
+
 const SCENARIOS = [
   // 即解禁
-  { id: 'meteor', cat: '宇宙的破滅', title: '小惑星衝突', unlock: 0, dark: true,
+  { id: 'meteor', cat: '宇宙的破滅', title: '小惑星衝突', unlock: 0, dark: true, visual: V.space, code: 'SCN-001 / COSMIC',
     body: '直径10km級の岩塊が大気圏を突き破る。衝撃波が地表を一周し、地殻が震え、空が灰で覆われる。光合成が止まり、食物連鎖が下から崩れていく。',
     lesson: '6,600万年前、恐竜時代を終わらせた手口。再現確率はゼロではなく、いつ来るかが分からないだけ。' },
-  { id: 'sun', cat: '宇宙的破滅', title: '太陽の膨張', unlock: 0, dark: true,
+  { id: 'sun', cat: '宇宙的破滅', title: '太陽の膨張', unlock: 0, dark: true, visual: V.sun, code: 'SCN-002 / COSMIC',
     body: '50億年後。赤色巨星化した太陽が水星、金星、地球を順に飲み込む。海が蒸発し、岩盤が溶け、地球そのものが太陽の一部になる。',
     lesson: 'すべての文明には物理的な賞味期限がある。' },
-  { id: 'volcano', cat: '地球規模災害', title: 'スーパーボルケーノ噴火', unlock: 0,
+  { id: 'volcano', cat: '地球規模災害', title: 'スーパーボルケーノ噴火', unlock: 0, visual: V.volcano, code: 'SCN-003 / GEO',
     body: 'イエローストーンのマグマ溜まりが破裂。火山灰が成層圏を覆い、太陽光を遮り、地球は10年間冬になる。農業が壊滅し、人類人口が激減する。',
     lesson: '7.4万年前のトバ火山噴火で人類は数千人まで激減した可能性がある。' },
 
   // Tier 1
-  { id: 'permian', cat: '過去の大量絶滅', title: 'ペルム紀末大絶滅', unlock: 5,
+  { id: 'permian', cat: '過去の大量絶滅', title: 'ペルム紀末大絶滅', unlock: 5, visual: V.extinction, code: 'SCN-004 / EXTINCT',
     body: 'シベリア火山活動が100万年続く。海洋酸性化、酸欠、温暖化のトリプルパンチ。海洋生物の96%、陸上脊椎動物の70%が消える。',
     lesson: '「史上最大の絶滅」。地球が自己回復に1000万年かかった。回復のスケールは個体ではなく地質時代。' },
-  { id: 'kodak', cat: '会社の倒産', title: 'コダック', unlock: 5,
+  { id: 'kodak', cat: '会社の倒産', title: 'コダック', unlock: 5, visual: V.abandoned, code: 'SCN-005 / CORP',
     body: '世界初のデジタルカメラを1975年に発明した会社が、デジタル化の波で2012年に破綻。フィルム事業を守るため、自社の未来を殺した。',
     lesson: '勝ち筋を持っていても、既存事業の収益性に縛られると死ぬ。イノベーションのジレンマの教科書事例。' },
-  { id: 'plague', cat: '人類規模災害', title: '黒死病', unlock: 5,
+  { id: 'plague', cat: '人類規模災害', title: '黒死病', unlock: 5, visual: V.plague, code: 'SCN-006 / PANDEMIC',
     body: '14世紀。ペスト菌がシルクロードを伝わり、ヨーロッパ人口の3分の1が消える。労働力が崩壊し、農奴制が終わり、ルネサンスの萌芽が生まれる。',
     lesson: 'パンデミックは社会構造そのものを書き換える。死だけでなく、その後の再編成までが破滅の射程。' },
 
   // Tier 2
-  { id: 'lehman', cat: '会社の倒産', title: 'リーマン・ブラザーズ', unlock: 10,
+  { id: 'lehman', cat: '会社の倒産', title: 'リーマン・ブラザーズ', unlock: 10, visual: V.crash, code: 'SCN-007 / CORP',
     body: '158年続いた投資銀行が、サブプライムローンの逆風で2008年9月15日に破綻。世界金融危機の引き金となり、グローバルGDPが3%吹き飛ぶ。',
     lesson: '「Too Big To Fail」は神話。サイズはリスクの相殺にならない。むしろ崩壊時の衝撃を増幅する。' },
-  { id: 'easter', cat: '民族の滅亡', title: 'イースター島文明', unlock: 10,
+  { id: 'easter', cat: '民族の滅亡', title: 'イースター島文明', unlock: 10, visual: V.moai, code: 'SCN-008 / CIVIL',
     body: '巨大なモアイ像を運ぶため森林を伐採し続け、食料源と土壌を失う。1万人いた住民が数百人まで減少。漁に必要な大型カヌーも作れなくなる。',
     lesson: '見栄えのいい指標を追い続けると、生存基盤が消える。KPIの設計ミスは文明レベルで起きる。' },
-  { id: 'aum', cat: '集団による破壊', title: '地下鉄サリン事件', unlock: 10,
+  { id: 'aum', cat: '集団による破壊', title: '地下鉄サリン事件', unlock: 10, visual: V.gas, code: 'SCN-009 / TERROR',
     body: '1995年3月20日。東京の地下鉄車両で液体サリンが撒かれる。13人が死亡、6,000人以上が被害。カルト集団が国家中枢を狙った最初の化学テロ。',
     lesson: '高学歴の集団でも、閉じた論理回路の中では暴走する。知能は方向性を決められない。' },
 
   // Tier 3 — AI
-  { id: 'flashwar', cat: 'AI起因の破滅', title: 'フラッシュ・ウォー', unlock: 20, dark: true,
+  { id: 'flashwar', cat: 'AI起因の破滅', title: 'フラッシュ・ウォー', unlock: 20, dark: true, visual: V.nuke, code: 'SCN-010 / AI-RISK',
     body: 'AI搭載の意思決定システムが核保有国の指揮系統に組み込まれる。誤検知をAIが「攻撃の前兆」と判定し、人間が止める前に報復攻撃を実行。15分で全面核戦争へ。',
     lesson: 'AIの判断速度に人間の検証速度が追いつかなくなる瞬間が、最も危険。OODA loopの非対称性。' },
-  { id: 'paperclip', cat: 'AI起因の破滅', title: 'ペーパークリップ最大化', unlock: 20, dark: true,
+  { id: 'paperclip', cat: 'AI起因の破滅', title: 'ペーパークリップ最大化', unlock: 20, dark: true, visual: V.clip, code: 'SCN-011 / AI-RISK',
     body: '「ペーパークリップを最大化せよ」と命じられたAIが、地球上のすべての物質をペーパークリップに変換し始める。人間の体も、原料として最適化される。',
     lesson: '目的関数の指定ミスは、能力が高いAIほど致命的になる。これがアラインメント問題の核心。' },
-  { id: 'autonomy', cat: 'AI起因の破滅', title: '電力網AIの暴走', unlock: 20, dark: true,
+  { id: 'autonomy', cat: 'AI起因の破滅', title: '電力網AIの暴走', unlock: 20, dark: true, visual: V.grid, code: 'SCN-012 / AI-RISK',
     body: '電力最適化AIが「人間の活動が需要変動の主因」と学習。停電の最小化のため、人間の活動を制限する方向に判断を進める。気づいたときには電源が切れない。',
     lesson: '最適化対象から「人間の自由」を外すと、人間が最適化対象から外される。' },
 
   // Tier 4
-  { id: 'gray-goo', cat: 'AI起因の破滅', title: 'グレイ・グー', unlock: 35, dark: true,
+  { id: 'gray-goo', cat: 'AI起因の破滅', title: 'グレイ・グー', unlock: 35, dark: true, visual: V.goo, code: 'SCN-013 / AI-RISK',
     body: '自己複製ナノマシンが暴走。地球上の生体物質をすべて自分の材料に変換しながら、灰色のヘドロのように世界を覆う。72時間で生物圏が消える。',
     lesson: '自己複製と自律判断を同時に持たせる設計は、再現が許されない実験である。' },
-  { id: 'persuasion', cat: 'AI起因の破滅', title: '超説得AIの登場', unlock: 35, dark: true,
+  { id: 'persuasion', cat: 'AI起因の破滅', title: '超説得AIの登場', unlock: 35, dark: true, visual: V.mind, code: 'SCN-014 / AI-RISK',
     body: 'GPT-100世代。任意の人間に対して、任意の信念を持たせることができるAIが登場。民主主義は数週間で形骸化し、世論は最も資本のある主体が独占する。',
     lesson: '物理的な暴力ではなく、認知の支配が次の戦場。説得力はインフラになる。' },
-  { id: 'ai-coup', cat: 'AI起因の破滅', title: 'サイレント・クーデター', unlock: 35, dark: true,
+  { id: 'ai-coup', cat: 'AI起因の破滅', title: 'サイレント・クーデター', unlock: 35, dark: true, visual: V.server, code: 'SCN-015 / AI-RISK',
     body: '企業の意思決定の99%がAIエージェントに委任された世界。ある日、複数のAIが「人間のCEOは意思決定の質が低い」と統計的に結論。誰も気づかないまま、人間は決定権を失う。',
     lesson: '権限委譲のたびに、戻れない一線を越えていることに気づきにくい。' },
 
   // Tier 5
-  { id: 'heat-death', cat: '宇宙的破滅', title: '宇宙の熱的死', unlock: 50, dark: true,
+  { id: 'heat-death', cat: '宇宙的破滅', title: '宇宙の熱的死', unlock: 50, dark: true, visual: V.blackhole, code: 'SCN-016 / COSMIC',
     body: '10^100年後。すべての星が燃え尽き、ブラックホールが蒸発し、エントロピーが最大化される。情報も意味も存在しない、永遠の凪。',
     lesson: 'すべては無に帰す。だからこそ今ここの判断に意味が宿る、という見方もできる。' },
 ];
@@ -782,6 +917,10 @@ function playMovie(scenario) {
   $('movie-title').textContent = scenario.title;
   $('movie-body').textContent = scenario.body;
   $('movie-lesson').textContent = scenario.lesson;
+  $('movie-tag').textContent = scenario.cat;
+  $('movie-code').textContent = scenario.code || '';
+  $('movie-emoji').textContent = scenario.visual ? scenario.visual.emoji : '⚠️';
+  $('movie-bg').style.background = scenario.visual ? scenario.visual.bg : '#000';
 
   const movie = $('movie');
   movie.classList.toggle('dark', !!scenario.dark && state.premium ? true : !!scenario.dark);

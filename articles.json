@@ -1,5 +1,16 @@
 [
   {
+    "no": 30,
+    "slug": "30-nagi-npt-analog-closing-window",
+    "category": "governance",
+    "date": "2026.04.17",
+    "slides": "5 Sections",
+    "thumb": "images/thumb-nagi-npt-analog-closing-window.jpg",
+    "title": "固定化の前夜 — AGI参入の時間窓が閉じるまで",
+    "excerpt": "AI安全サミット、EU AI Act、各国AI安全研究所。善意で積み上がる国際枠組みの輪郭は、核拡散防止条約が1968年に引いた線に似てくる。拡散と安全性の関係は核とAGIで逆転しているが、制度的固定化の物理学は同じだ。FLOPSを捨て電力を測る国家、原子炉とSMRへの還元、時間窓の値段。扉は善意で閉じられる。",
+    "featured": true
+  },
+  {
     "no": 29,
     "slug": "29-deep-utopia-solved-world",
     "category": "lineage",
@@ -8,7 +19,7 @@
     "thumb": "images/thumb-29-deep-utopia-solved-world.jpg",
     "title": "解決された世界 — 労働なき楽園の目的問題",
     "excerpt": "Nick Bostromの《Deep Utopia》(2024)を軸に、AGI後の労働なき楽園で生きる理由をどう再設計するかを問う。ケインズ予言の歪み、deep redundancyの五つの環、ThermoRexの寓話、百万年の興味、114,238回の食事の墓碑銘。量で測れない意味だけが、深い楽園のなかで失われうる。",
-    "featured": true
+    "featured": false
   },
   {
     "no": 28,

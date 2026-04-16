@@ -1,5 +1,16 @@
 [
   {
+    "no": 29,
+    "slug": "29-deep-utopia-solved-world",
+    "category": "lineage",
+    "date": "2026.04.17",
+    "slides": "6 Sections",
+    "thumb": "images/thumb-29-deep-utopia-solved-world.jpg",
+    "title": "解決された世界 — 労働なき楽園の目的問題",
+    "excerpt": "Nick Bostromの《Deep Utopia》(2024)を軸に、AGI後の労働なき楽園で生きる理由をどう再設計するかを問う。ケインズ予言の歪み、deep redundancyの五つの環、ThermoRexの寓話、百万年の興味、114,238回の食事の墓碑銘。量で測れない意味だけが、深い楽園のなかで失われうる。",
+    "featured": true
+  },
+  {
     "no": 28,
     "slug": "28-geopolitics-phase-transition",
     "category": "governance",
@@ -8,7 +19,7 @@
     "thumb": "images/thumb-geopolitics-phase-transition.jpg",
     "title": "地政学の相転移 — AGIが書き換える争いの変数",
     "excerpt": "全人類が億万長者並みに暮らせるとき、何のために国家は戦争するのか。computeの階級社会、技術が変数を殺す歴史パターン、資源飽和後に残る不寛容性。地政学の概念そのものが相転移を迎える構造を、5つの平和設計要件とともに描く。",
-    "featured": true
+    "featured": false
   },
   {
     "no": 27,

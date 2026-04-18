@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+    <title>沈黙は、無知ではない — 日本のAGI議論はなぜ成立しないか — AGI HUB</title>
+    <link rel="stylesheet" href="../design-system/palette.css">
+    <style>
+      :root {
+        --black: #000;
+        --body-text: #1a1a1a;
+        --mid: #585858;
+        --meta: #757575;
+        --light-gray: #999;
+        --border: #d6dce6;
+        --bg: #f5f6f8;
+        --bg-alt: #eaeef5;
+        --accent: #1f3a5f;
+        --accent-soft: rgba(31, 58, 95, 0.08);
+        --ease: cubic-bezier(0.22, 1, 0.36, 1);
+      }
+
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+      html { scroll-behavior: smooth; }
+
+      body {
+        font-family: HelveticaNeue, "Helvetica Neue", Helvetica, Arial,
+          游ゴシック体, YuGothic, "游ゴシック Medium", "Yu Gothic Medium",
+          游ゴシック, "Yu Gothic", "ヒラギノ角ゴ ProN W3", "Hiragino Kaku Gothic ProN",
+          "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", "MS ゴシック", "MS Gothic",
+          sans-serif;
+        font-feature-settings: "palt";
+        font-size: 16px;
+        line-height: 1.8;
+        color: var(--body-text);
+        background: var(--bg);
+        -webkit-font-smoothing: antialiased;
+        overflow-x: hidden;
+        word-wrap: break-word;
+      }
+
+      .progress {
+        position: fixed; top: 0; left: 0;
+        height: 2px; background: var(--accent);
+        width: 0%; z-index: 100;
+        transition: width 0.3s var(--ease);
+      }
+
+      .nav {
+        position: fixed; right: 24px; top: 50%;
+        transform: translateY(-50%);
+        display: grid; gap: 16px; z-index: 50;
+      }
+
+      .nav button {
+        width: 8px; height: 8px; border-radius: 999px;
+        border: 1.5px solid var(--meta);
+        background: transparent; cursor: pointer;
+        transition: all 0.3s var(--ease);
+      }
+
+      .nav button.active {
+        background: var(--accent);
+        border-color: var(--accent);
+        transform: scale(1.4);
+      }
+
+      main { scroll-snap-type: y proximity; }
+
+      .slide {
+        position: relative;
+        min-height: 100vh;
+        max-width: 1120px;
+        margin: 0 auto;
+        padding: 88px 48px 72px;
+        display: grid;
+        grid-template-rows: auto auto 1fr auto;
+        gap: 32px;
+        scroll-snap-align: start;
+      }
+
+      .slide + .slide { border-top: 1px solid var(--border); }
+
+      .hero {
+        width: 100%;
+        aspect-ratio: 16 / 7;
+        object-fit: cover;
+        display: block;
+        filter: grayscale(0.55) contrast(1.08);
+        transition: filter 0.6s var(--ease);
+      }
+
+      .hero:hover { filter: grayscale(0) contrast(1); }
+
+      .slide .hero.img-fullbleed {
+        width: 100vw;
+        margin-left: calc(50% - 50vw);
+        margin-right: calc(50% - 50vw);
+        max-width: none;
+        aspect-ratio: 21/9;
+      }
+      .slide .hero.img-wide {
+        width: min(1280px, calc(100vw - 48px));
+        position: relative;
+        left: 50%;
+        transform: translateX(-50%);
+        max-width: none;
+      }
+      .slide .hero.img-content { max-width: 680px; margin: 0 auto; aspect-ratio: 4/3; }
+      .slide .hero.img-side-by-side {
+        display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+        aspect-ratio: auto;
+      }
+      .slide .hero.img-side-by-side img {
+        width: 100%; aspect-ratio: 4/3; object-fit: cover;
+        filter: grayscale(0.55) contrast(1.08);
+      }
+
+      .hero-caption {
+        font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 11px;
+        letter-spacing: 0.083em;
+        color: var(--light-gray);
+        margin-top: 8px;
+        text-transform: uppercase;
+      }
+
+      .credits {
+        max-width: 1120px;
+        margin: 0 auto;
+        padding: 48px 48px 80px;
+        border-top: 1px solid var(--border);
+      }
+
+      .credits p {
+        font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 11px;
+        letter-spacing: 0.047em;
+        line-height: 2;
+        color: var(--light-gray);
+      }
+
+      .credits a {
+        color: var(--meta);
+        text-decoration: none;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .credits a:hover {
+        color: var(--black);
+        border-bottom-color: var(--black);
+      }
+
+      .reveal {
+        opacity: 0;
+        transform: translateY(24px);
+        transition: opacity 0.6s var(--ease), transform 0.6s var(--ease);
+      }
+      .reveal.visible { opacity: 1; transform: translateY(0); }
+      .reveal-delay-1 { transition-delay: 0.08s; }
+      .reveal-delay-2 { transition-delay: 0.18s; }
+      .reveal-delay-3 { transition-delay: 0.30s; }
+
+      .eyebrow {
+        font-family: "SF Mono", "Fira Code", "Fira Mono", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        color: var(--accent);
+      }
+
+      h1, h2 {
+        color: var(--black);
+        font-weight: 800;
+        line-height: 1.3;
+        letter-spacing: -0.01em;
+        max-width: 22ch;
+        padding-bottom: 18px;
+        border-bottom: 3px double var(--accent);
+      }
+
+      h1 { font-size: clamp(32px, 4.6vw, 42px); }
+      h2 { font-size: clamp(26px, 3.8vw, 34px); }
+
+      /* Broadsheet: multi-column first paragraph, large drop feel */
+      .lead {
+        max-width: 780px;
+        font-size: 16px;
+        line-height: 1.85;
+        color: var(--body-text);
+      }
+      .lead + .lead { margin-top: 10px; }
+      .lead.first::first-letter {
+        float: left;
+        font-size: 56px;
+        line-height: 0.9;
+        font-weight: 800;
+        margin: 4px 10px 0 0;
+        color: var(--accent);
+      }
+
+      .panel { display: grid; gap: 26px; align-content: start; }
+      .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 28px; }
+      .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+      .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
+
+      .card {
+        padding: 22px 20px 22px 0;
+        border-top: 3px solid var(--accent);
+        background: transparent;
+      }
+
+      .card .tag { color: var(--accent); font-weight: 700; }
+      .card strong { color: var(--black); }
+
+      .card p {
+        font-size: 15px;
+        line-height: 1.75;
+        color: var(--body-text);
+      }
+
+      .tag {
+        display: inline-block;
+        font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 11px;
+        letter-spacing: 0.083em;
+        color: var(--meta);
+        margin-bottom: 12px;
+      }
+
+      .bullets { display: grid; gap: 16px; }
+
+      .point {
+        padding-left: 16px;
+        border-left: 3px solid var(--accent);
+        font-size: 16px;
+        line-height: 1.8;
+        color: var(--body-text);
+      }
+
+      .point strong { color: var(--black); }
+
+      table.compare {
+        width: 100%;
+        border-collapse: collapse;
+        border-top: 3px solid var(--accent);
+        border-bottom: 3px double var(--accent);
+        background: var(--bg);
+      }
+
+      table.compare th, table.compare td {
+        padding: 18px 16px;
+        text-align: left;
+        font-size: 14.5px;
+        line-height: 1.7;
+        color: var(--body-text);
+        border-bottom: 1px solid var(--border);
+        vertical-align: top;
+      }
+
+      table.compare th {
+        font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 11px;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--accent);
+        font-weight: 700;
+        border-bottom: 1px solid var(--accent);
+        background: var(--accent-soft);
+      }
+
+      table.compare td strong { color: var(--black); }
+      table.compare tr:last-child td { border-bottom: none; }
+
+      .note {
+        font-size: 16px;
+        line-height: 1.75;
+        color: var(--body-text);
+        padding: 24px 28px;
+        margin: 12px 0;
+        border-left: 4px solid var(--accent);
+        background: var(--accent-soft);
+        position: relative;
+        overflow-wrap: break-word;
+        word-break: break-word;
+        max-width: 100%;
+      }
+      .note::before {
+        content: "NOTE";
+        display: block;
+        font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        color: var(--accent);
+        margin-bottom: 10px;
+      }
+      .note strong { color: var(--accent); }
+
+      .pullquote {
+        font-family: "Times New Roman", serif;
+        font-size: clamp(22px, 2.6vw, 28px);
+        line-height: 1.45;
+        font-style: italic;
+        color: var(--black);
+        padding: 28px 0;
+        border-top: 1px solid var(--accent);
+        border-bottom: 1px solid var(--accent);
+        margin: 16px 0;
+        max-width: 760px;
+      }
+      .pullquote .attr {
+        display: block;
+        font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+        font-style: normal;
+        font-size: 11px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--meta);
+        margin-top: 14px;
+      }
+
+      .footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: end;
+        gap: 16px;
+        font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+        font-feature-settings: normal;
+        font-size: 11px;
+        letter-spacing: 0.083em;
+        color: var(--light-gray);
+        text-transform: uppercase;
+      }
+
+      .slide-count { font-weight: 700; color: var(--accent); }
+
+      .player-chip {
+        display: inline-block;
+        padding: 2px 8px;
+        font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+        font-size: 10.5px;
+        letter-spacing: 0.08em;
+        background: var(--accent-soft);
+        color: var(--accent);
+        border-radius: 3px;
+        margin-right: 6px;
+      }
+
+      @media (max-width: 768px) {
+        .slide { padding: 64px 20px 48px; }
+        .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+        .nav { right: 12px; }
+        table.compare { font-size: 13px; }
+        table.compare th, table.compare td { padding: 14px 10px; }
+        .hero { aspect-ratio: 16 / 9; }
+        .slide .hero.img-fullbleed,
+        .slide .hero.img-wide {
+          width: 100%; max-width: 100%; aspect-ratio: 16/9;
+          margin: 0; transform: none; left: 0; position: static;
+        }
+        .slide .hero.img-content { max-width: 100%; aspect-ratio: 16 / 9; }
+        .slide .hero.img-side-by-side { grid-template-columns: 1fr; }
+        .credits { padding: 32px 24px 64px; }
+        .note { padding: 20px 18px; font-size: 15px; }
+        .lead.first::first-letter { font-size: 44px; }
+      }
+
+      @media (max-width: 480px) {
+        .slide { padding: 56px 16px 40px; }
+        .note { padding: 16px 14px; font-size: 14px; }
+      }
+
+      @media print {
+        .slide { min-height: auto; page-break-after: always; padding: 24px 0; }
+        .nav, .progress { display: none; }
+        .reveal { opacity: 1; transform: none; }
+      }
+    </style>
+  </head>
+  <body class="pattern-broadsheet accent-deepblue has-site-header" data-category="governance">
+    <div id="site-header-mount"><header style="font:500 15px/48px Inter,sans-serif;padding:0 24px;border-bottom:1px solid #222;color:#aaa">AGI HUB</header></div>
+<script src="../partials/header.js" defer></script>
+    <div class="progress" id="progress"></div>
+
+    <aside class="nav" aria-label="Section navigation">
+      <button data-target="slide-1" class="active" aria-label="Section 1"></button>
+      <button data-target="slide-2" aria-label="Section 2"></button>
+      <button data-target="slide-3" aria-label="Section 3"></button>
+      <button data-target="slide-4" aria-label="Section 4"></button>
+      <button data-target="slide-5" aria-label="Section 5"></button>
+      <button data-target="slide-6" aria-label="Section 6"></button>
+      <button data-target="slide-7" aria-label="Section 7"></button>
+      <button data-target="slide-nav" aria-label="Navigation"></button>
+    </aside>
+
+    <div class="article-breadcrumb" style="font-family:'SF Mono','Fira Code',Menlo,Consolas,monospace;font-size:11px;letter-spacing:0.083em;text-transform:uppercase;color:#757575;display:flex;justify-content:space-between;align-items:center;padding:10px 32px;border-bottom:1px solid #e5e5e5;background:#fff;gap:16px;flex-wrap:wrap;">
+      <span>No. 32 / 32 &nbsp;&middot;&nbsp; Governance &nbsp;&middot;&nbsp; 7 Sections</span>
+      <span style="display:flex;gap:20px;align-items:center;">
+        <a href="31-agi-timelines-institutions-map.html" style="color:inherit;text-decoration:none;">&larr; Prev</a>
+        <a href="../index.html#filter=governance" style="color:inherit;text-decoration:none;">Same Category</a>
+        <span style="opacity:0.3;">Next &rarr;</span>
+      </span>
+    </div>
+
+    <main>
+
+      <!-- ═══════════ SECTION 1: THE SILENCE ═══════════ -->
+      <section class="slide" id="slide-1">
+        <div class="eyebrow reveal">AGI HUB &middot; No. 32 &middot; Governance &middot; The Silence &middot; 2026.04.18 &middot; By Ryao</div>
+        <h1 class="reveal reveal-delay-1">沈黙は、無知ではない</h1>
+        <img class="hero img-fullbleed reveal reveal-delay-2" src="../images/japan-agi-silence/slide1.jpg" alt="無人の会議室、静かな空白">
+
+        <div class="panel reveal reveal-delay-3">
+          <p class="lead first">あなたは2030年の朝、日本語の全国紙を開く。一面に「AGI到達は2027年から2032年」と自分の名前で見出しを書いた日本人研究者は、どこにもいない。並んでいるのはEnglishの見出しを翻訳した記事だけである。AnthropicのDario Amodei、Google DeepMindのDemis Hassabis、Forecasting Research InstituteのEpoch AI、外部機関METRの予測が、すべて日本語化されて配信されている。日本の研究者が独自に出した時期論はどこにあるか。探しても、ほとんど見つからない。</p>
+
+          <p class="lead">この光景は4年後の想像だが、2026年4月時点の現実はすでにこれに近い。「2030年前後までにAGI」と明言した日本人研究者を具体名で列挙しようとすると、リストはほとんど埋まらない。松尾豊は「5年から10年、もしくはもっと」と幅を持たせた発言に留めている。山川宏は「AGIは近未来に起こりうる」と言うが、数字の線引きは書かない。西川徹も David Ha も、時期論の発信は回避している。ALIGN(AIアライメントネットワーク)が2025年3月にJSAIで発表した「NAIAビジョン」[1]は、日本発で最も体系的なAGI政策提言だが、そこで扱われているのはインフラと安全性であって、時期論ではない。</p>
+
+          <p class="lead">研究者が無知なのか。能力が足りないのか。違う。発信する能力は十分にある。にもかかわらず、時期論という形式を選ばない。<strong>この沈黙は無知ではなく、構造の帰結である。</strong>時期論を発信することの社会的コストとリターンが、欧米と日本で逆向きに働いている。米国では時期論の発信が資本と政策を動員するが、日本では時期論の発信が個人責任を発生させ、発信者を孤立させる。本稿が問うのはこの非対称の構造であり、最終的には、時計を持たない国が次の10年をどう生きるかという問いに着地する。</p>
+
+          <div class="note">
+            <strong>本稿の射程。</strong> 「日本が遅れている」論でも「日本独自でよい」論でもない。問うのは一段下、<strong>時期論の発信インセンティブが欠落しているという構造</strong>である。これは研究者個人の問題ではなく、資本・政策・責任帰属の三者が接続されていない制度的な問題として現れる。
+          </div>
+        </div>
+
+        <div class="footer">
+          <span>発信の沈黙は、能力の不在ではない</span>
+          <span class="slide-count">1 / 7</span>
+        </div>
+      </section>
+
+      <!-- ═══════════ SECTION 2: FOUR LAYERS ═══════════ -->
+      <section class="slide" id="slide-2">
+        <div class="eyebrow reveal">Four Layers</div>
+        <h2 class="reveal reveal-delay-1">研究・産業・ガバナンス・資本</h2>
+        <img class="hero img-wide reveal reveal-delay-2" src="../images/japan-agi-silence/slide2.jpg" alt="夜の東京、抽象的な都市の階層構造">
+
+        <div class="panel reveal reveal-delay-3">
+          <p class="lead">沈黙の構造を見るには、層を分けて誰が何を発信していないかを具体名で並べる必要がある。抽象的に「日本は遅れている」と言っても意味がない。日本には研究者がいて、企業があり、政府があり、資本がある。それぞれが独立に動いており、それぞれが独立に時期論を回避している。その回避の型を4層で整理する。</p>
+
+          <table class="compare">
+            <thead>
+              <tr>
+                <th style="width:14%;">層</th>
+                <th style="width:32%;">主要プレイヤー</th>
+                <th style="width:54%;">発信している時期論の型</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>研究</strong></td>
+                <td>松尾研究室 (東大)、理研AIP、NII、WBAI (山川宏)、Third Intelligence</td>
+                <td>松尾豊は「5〜10年、もっとかかるかもしれない」[2]。山川宏はNAIAビジョンで時期を具体化せず、インフラと安全性を論点化。<strong>幅を持たせた発言はあるが、年次を刻んだ予測は発信されない。</strong></td>
+              </tr>
+              <tr>
+                <td><strong>産業</strong></td>
+                <td>Preferred Networks (西川徹/岡野原大輔)、Sakana AI (David Ha / Llion Jones)、Third Intelligence (松尾)</td>
+                <td>PFNは国産生成AI「PLaMo」を開発し、2025年9月にさくらインターネット・NICTと基本合意[3]。Sakana AIは2025年11月にシリーズBで約200億円(推定 $135M〜$200M規模)を調達[4]。<strong>基盤モデル開発は活発。ただしAGI時期論は会社としての発信対象にしない。</strong></td>
+              </tr>
+              <tr>
+                <td><strong>ガバナンス</strong></td>
+                <td>AI戦略会議 (松尾座長)、経産省、総務省、デジタル庁、IPA</td>
+                <td>AI事業者ガイドライン第1.1版 (2025-03)[5]、行政調達ガイドライン (2025-05)[6]。<strong>「AGI」「時期」「到達」を公式文書で定義しない。定義すると行政対応の義務が発生する構造。</strong></td>
+              </tr>
+              <tr>
+                <td><strong>資本</strong></td>
+                <td>JIC、ANRI、ソフトバンク、経産省補正予算、国産AI 1兆円5年計画</td>
+                <td>2024年度補正でABCI 3.0 (NVIDIA H200 × 6,128基)[7]。2025年1月から富岳NEXT開発開始[8]。<strong>金額は動くが、「いつAGIか」の前提は暗黙に欧米予測に依存。日本独自の時期予測を根拠とする投資計画は存在しない。</strong></td>
+              </tr>
+            </tbody>
+          </table>
+
+          <p class="lead">この表は、各層を貫いて一つの事実を示している。<strong>ハードもソフトも金も動いている。動いていないのは「いつ到達するか」の発信だけである。</strong>ABCI 3.0は半精度6.2エクサフロップスで日本最大のAI計算資源になった。富岳NEXTは2026年度から詳細設計に入る。PFNとSakana AIは合計して数百億円規模の資金を集めた。一方で、「この計算資源でいつAGIに到達させるか」という問いの答えは、日本の公式文書にも企業のリリースにも書かれていない。</p>
+
+          <div class="note">
+            <strong>4層の構造的な特徴。</strong> 米国では4層が時期論を軸に連動する。Anthropic の Dario Amodei が「2026年までに人間レベルAI」と発信する(研究/産業層)、それを受けて SoftBank が4,000億ドル規模のAIインフラに動く(資本層)、政策側は大統領令でコンピュートの輸出制御を入れる(ガバナンス層)。時期論が4層を接続する共通言語として機能している。日本では、各層が時期論を避けながら独立に動き、結果として4層は共通言語を持たない。
+          </div>
+        </div>
+
+        <div class="footer">
+          <span>4層すべてが時期論を回避して動いている</span>
+          <span class="slide-count">2 / 7</span>
+        </div>
+      </section>
+
+      <!-- ═══════════ SECTION 3: WHY SILENCE ═══════════ -->
+      <section class="slide" id="slide-3">
+        <div class="eyebrow reveal">Why Silence</div>
+        <h2 class="reveal reveal-delay-1">時期論はなぜ発信されないか</h2>
+        <img class="hero img-content reveal reveal-delay-2" src="../images/japan-agi-silence/slide3.jpg" alt="夜のオフィス街、制度の影">
+
+        <div class="panel reveal reveal-delay-3">
+          <p class="lead">なぜ日本では時期論が発信されないのか。能力の問題ではないのは前節で見た通りである。理由は、時期論を発信したときに何が起きるかの経路が、日米で構造的に異なるところにある。米国型経路と日本型経路を並べて見ると、沈黙が合理的な選択であることが分かる。</p>
+
+          <div class="grid-2">
+            <div class="card">
+              <span class="tag">US PATHWAY</span>
+              <p><strong>発信 → 資本動員 → 政策追従 → 発信者に報酬</strong></p>
+              <p>Leopold Aschenbrenner が2024年6月に『Situational Awareness』[9]を公表すると、数ヶ月で Congressional briefing に招かれた。Daniel Kokotajlo らの『AI 2027』[10]も同様に、予測の具体性が政策サークルへのアクセス権になっている。時期論を発信することは、リスクではなく社会資本への変換経路である。外れても、発信した事実が独立したキャリア資産として残る。</p>
+            </div>
+            <div class="card">
+              <span class="tag">JP PATHWAY</span>
+              <p><strong>発信 → 個人責任発生 → 官庁沈黙 → 発信者孤立</strong></p>
+              <p>「2028年までにAGI」と日本人研究者が発信した瞬間、3つの力が同時に働く。(a)予測が外れた場合のメディア批判、(b)官庁が「公式見解ではない」と距離を取る、(c)産業側が「個人の見解」として防波堤を立てる。発信コストが高く、発信リターンが低い。発信しないことが合理的になる。</p>
+            </div>
+          </div>
+
+          <p class="lead">この非対称を最も象徴的に示すのが、松尾豊の立場である。松尾は東大の人工知能研究者であり、AI戦略会議の座長であり、日本ディープラーニング協会の理事長であり、2025年6月に新会社Third Intelligenceを設立し「遍在型AGI」の実現を掲げた Chief Scientist でもある[11]。日本で最もAGI時期論を発信できる立場にいる人物である。</p>
+
+          <p class="lead">しかし松尾が公にする時期論は「5年、もしくは10年、もしくはもっと」[2]の幅に留まる。これは松尾個人の慎重さではなく、<strong>AI戦略会議座長という立場が時期論の発信を禁じる構造がある</strong>からだと読める。もし松尾が「2028年」と断言すれば、それは AI戦略会議の暗黙の前提として行政文書に影響を及ぼし始める。行政は根拠のない数字を前提にしたくない。だから座長には「幅を持たせた発言」という行動様式が要請される。日本で最も発信能力のある研究者が、最も発信を制約される立場にいる。</p>
+
+          <div class="pullquote">
+            日本で最も発信能力のある研究者が、最も発信を制約される立場にいる。
+            <span class="attr">本稿の観察</span>
+          </div>
+
+          <p class="lead">官庁側も対称的に沈黙する。AI事業者ガイドライン第1.1版[5]、デジタル庁の行政調達ガイドライン[6]、総務省の生成AIリスク対策ガイドブック——いずれも2025年3月から2025年10月の間に公表された最新の政策文書だが、「AGI」「時期」「到達」という語は公式定義の対象になっていない。これは欠落ではなく選択である。定義すれば、定義に基づく規制・監督・補助金設計の義務が発生する。定義しなければ、その義務から免れる。<strong>沈黙は、責任を引き受けない合理的な選択の結果である。</strong></p>
+        </div>
+
+        <div class="footer">
+          <span>発信コストが発信リターンを超える国の構造</span>
+          <span class="slide-count">3 / 7</span>
+        </div>
+      </section>
+
+      <!-- ═══════════ SECTION 4: NAIA READING ═══════════ -->
+      <section class="slide" id="slide-4">
+        <div class="eyebrow reveal">NAIA Reading</div>
+        <h2 class="reveal reveal-delay-1">NAIAビジョンを正確に読む</h2>
+        <img class="hero img-content reveal reveal-delay-2" src="../images/japan-agi-silence/slide4.jpg" alt="書物の並ぶ静かな部屋、文書のアーカイブ">
+
+        <div class="panel reveal reveal-delay-3">
+          <p class="lead">それでもなお、日本発のAGI政策提言が全くないわけではない。山川宏が代表理事を務める一般社団法人AIアライメントネットワーク(ALIGN)は、2025年3月17日にJSAI2025(人工知能学会)汎用AI研究会において「NAIAビジョンの提案」[1]を発表した。日本語圏でAGIの制度設計を正面から扱った最も体系的な文書である。本稿の射程で言えば、<strong>日本発の発信のなかで最も時期論に近づいた文書</strong>と言える。それでもなお、この文書が時期論そのものを主題化していないことは注目に値する。</p>
+
+          <p class="lead">NAIAビジョンが提示する戦略は4つに整理される。第一に、機械倫理の創発(Emergent Machine Ethics, EME)。第二に、アラインメントとモニタリング。第三に、外交と安全保障による社会安定性の確保。第四に、動的適応リスクゲート(DAR-G)および統合行動リスク枠組(IBRF)を運用する国際機関NAIAの設立[1]。この4戦略は全て、AGI到達後の共生条件を設計するための提案である。AGIがいつ到達するかの時期論は、前提として置かれるが、主題ではない。</p>
+
+          <div class="note">
+            <strong>表記についての注。</strong> AGI HUB の前回記事(No.31)[12]で「『日本AGI基盤構想(NAGI計画)第二版』v2.0.1」と引用したが、2026年4月時点で公開されている原典は「NAIAビジョンの提案」(JSAI2025 AGI-029)[1]であり、政府計画としての「NAGI計画v2.0.1」はまだ存在しない。本稿はこの表記ズレを認めた上で、実体として何が発信されているかに立ち戻って論じる。この差自体が「日本の政策文書は、構想と公式計画の間に空白を抱えている」という本稿の論点を支える例になっている。
+          </div>
+
+          <p class="lead">NAIAが時期論を主題化しないことは、失敗ではない。むしろ学術的な誠実さの現れでもある。山川は全脳アーキテクチャ・イニシアティブ(WBAI)を2015年から主導しており[13]、脳参照アーキテクチャ駆動開発の技術ロードマップを2023年にJSAIで発表している[14]。時期を断定するより、インフラと安全性の制度設計を優先する判断は、長期的な研究姿勢として一貫している。</p>
+
+          <p class="lead">しかし本稿が問うているのは、その正当な優先順位付けの裏側で、<strong>日本に「時期論を発信する役割」を引き受ける主体が誰も残らない</strong>という事態である。ALIGN/WBAI は安全性とインフラを扱う。松尾は座長立場により幅発言に制約される。PFNとSakana AIは基盤モデル開発を主軸にし、時期論は会社のリスク管理から外に置く。行政は文書化しない。結果として、「いつか」という問いに答える主体が、制度の隙間に落ちる。この空白が日本のAGI議論の中心にある。</p>
+
+          <p class="lead">WIRED.jpが2025年に掲載した石井敦(Turing)×山川宏×工藤郁子(大阪大学)の鼎談[15]は、日本語圏では珍しく時期論に正面から触れた場だった。山川はこの鼎談で「自己改善が加速すれば、AGIや超知能は近未来になる可能性がある」と踏み込んだ。しかし鼎談という形式自体が、論文・政策文書・公式リリースとは別の、<strong>発信責任が希釈された場</strong>で時期論がかろうじて可視化されている現状を示している。公式文書では言えないことが、対談では言える。この二重構造が日本のAGI時期論の表現様式である。</p>
+        </div>
+
+        <div class="footer">
+          <span>構想と公式計画の間に空白がある</span>
+          <span class="slide-count">4 / 7</span>
+        </div>
+      </section>
+
+      <!-- ═══════════ SECTION 5: DOWNSTREAM EFFECTS ═══════════ -->
+      <section class="slide" id="slide-5">
+        <div class="eyebrow reveal">Downstream Effects</div>
+        <h2 class="reveal reveal-delay-1">時計を持たない国は、時間割を決められない</h2>
+        <div class="hero img-side-by-side reveal reveal-delay-2">
+          <img src="../images/japan-agi-silence/slide5a.jpg" alt="無人の会議室、決裁を待つ場所">
+          <img src="../images/japan-agi-silence/slide5b.jpg" alt="暗い講堂、空席の列">
+        </div>
+
+        <div class="panel reveal reveal-delay-3">
+          <p class="lead">発信しないことの帰結は、3段階で現れる。一段目は規制、二段目は産業、三段目は主権である。それぞれを具体的に見る。</p>
+
+          <div class="bullets">
+            <div class="point"><strong>一段目: 規制議論の遅れ。</strong> EU AI Actは2024年3月に採択され、2026年8月から完全施行に入る。米国は2025年1月の大統領令でfrontier model の輸出管理を強化した。英AISI(AI Safety Institute)は2023年11月設立以来、既に Anthropic、OpenAI、Google DeepMindのモデル事前評価を独立機関として引き受けている。これらの制度は全て「frontier model」「advanced AI」の射程を何らかの形で定義している。日本は AI事業者ガイドライン第1.1版[5]を出しているが、「frontier model」「AGI」の独自定義はない。AGI到達時期を発信しなければ、規制の時間軸も決められない。時間軸がなければ、どの技術水準から厳格規制を適用するかの線引きもできない。</div>
+
+            <div class="point"><strong>二段目: 産業戦略の時間割の欠落。</strong> 日本政府は2026年度から5年間で約1兆円を投じ、国産AI開発を本格化させる計画を打ち出した[16]。ソフトバンクやPFN、NTT、KDDIなど日本企業10社以上が新会社を設立し、1兆パラメータ級の大規模AIモデルを開発する枠組みである。金額の規模は決して小さくない。しかし、「この1兆円がいつまでに、どのAGI段階に到達することを前提にしているか」は、公式文書に書かれていない。結果、予算は年次ベースの延長(2024年度補正→2025年度→2026年度)で決まっていく。5年後に何が到達していてほしいかが明示されない投資計画は、中途の軌道修正が効きにくい。</div>
+
+            <div class="point"><strong>三段目: 主権の喪失。</strong> Aschenbrenner『Situational Awareness』[9]が扱う中心テーマは、AGI競争の勝者が国際秩序の形を決めるという構造である。米中が競争の二極として前面に置かれ、次いでUK・イスラエル・フランス・UAEが名前の出る国として配置される。日本の名前は主要選択肢に入っていない。これは能力評価ではなく、<strong>時期論の共通言語に参加している国のリスト</strong>である。時期論を発信しない国は、その言語が使われる会議室に座らない。座らなければ、議題設定の側に回れない。</div>
+          </div>
+
+          <p class="lead">3段階をまとめると、遅れの本質は技術の遅れではない。<strong>議論に参加していないこと</strong>が遅れの正体である。フロンティア論文の発表数でも、基盤モデルのパラメータ数でもない。どの未来を選ぶかの議論に参加する権利が、時期論という入場券を発行しない国に配られないという構造的な事態である。</p>
+
+          <div class="note">
+            <strong>比較軸。</strong> 英国はフロンティアモデル開発では米中の後塵を拝すが、AISIという独立機関を通じて「frontier model evaluation」の制度設計を主導し、議論の中心に残っている。韓国は2024年5月のソウルAIサミットを共同議長国として主催し、同じく議題設定の側に入った。日本が同じ位置に入る経路は、時期論発信以外にも存在するが、現時点ではどれも踏み込まれていない。
+          </div>
+        </div>
+
+        <div class="footer">
+          <span>沈黙の帰結は3段階で現れる</span>
+          <span class="slide-count">5 / 7</span>
+        </div>
+      </section>
+
+      <!-- ═══════════ SECTION 6: MIDDLE POWER ═══════════ -->
+      <section class="slide" id="slide-6">
+        <div class="eyebrow reveal">Middle Power</div>
+        <h2 class="reveal reveal-delay-1">追いつかない選択はありうるか</h2>
+        <img class="hero img-content reveal reveal-delay-2" src="../images/japan-agi-silence/slide6.jpg" alt="静かな日本的風景、枯山水の石庭">
+
+        <div class="panel reveal reveal-delay-3">
+          <p class="lead">ここで一つの反論を先取りする。日本が米中フロンティアモデル競争に追いつく現実的な見込みは、すでに薄い。訓練コンピュート、人材プール、資本規模の3要素で構造的に劣位にある。Epoch AIのtraining compute trend[17]を見れば、frontier model のtraining compute は6ヶ月で倍増する成長を続けており、日本の国家プロジェクトが投入する計算資源(ABCI 3.0 + 富岳NEXT)は絶対値として米中トップラボの個別プロジェクトより1桁以上小さい。追いつくコストと戻ってくるリターンが釣り合わないなら、追わない選択も合理的である。</p>
+
+          <p class="lead">追わないと決めたとき、日本には3つの独自ポジションが開ける。ここから先は思考実験に近く、論理の強度は前節までより低い。ただし沈黙を選び続けるよりは、空白を埋める方向に踏み出す価値がある選択肢を、具体的に置いておく。</p>
+
+          <div class="grid-3">
+            <div class="card">
+              <p><strong>(1) コスト側の定量化を引き受ける</strong></p>
+              <p>時期論の発信には「いつ到達するか」の軸と「到達したら何が起きるか」の軸がある。後者の軸、特に雇用・生存・制度への波及コストを定量化する作業は、米国の frontier labs が自らの技術の負の側面として発信するには利害衝突が大きい。日本が雇用調整速度・社会保障の時定数・産業転換の歴史データを持ち込めば、欠落している論点を埋められる。</p>
+            </div>
+            <div class="card">
+              <p><strong>(2) 非英語圏ベンチマークを出す</strong></p>
+              <p>現在の frontier model 評価は英語中心に偏っている。日本語・中国語・韓国語・アラビア語の評価ベンチマークを国際標準として発信する役割は、言語ごとの特性を持つ国にしか担えない。Sakana AIの「Evo-Ukiyoe」[18]のような日本語文化特化アプローチの延長で、評価軸そのものを日本語圏から提案する経路がある。</p>
+            </div>
+            <div class="card">
+              <p><strong>(3) 時間観の工学翻訳</strong></p>
+              <p>西洋のAGI時期論は「到達」「達成」「完成」という離散的な語彙で表現される。日本語には「熟す」「醸す」「待つ」のような連続的な時間観がある。これを工学的概念(緩やかな能力移行、連続的性能指標、位相遷移の幅広検出)に翻訳する試みは成立する。ただしオリエンタリズムに堕すリスクが高い。慎重に。</p>
+            </div>
+          </div>
+
+          <p class="lead">この3つはいずれも、米中フロンティアモデル競争とは別の軸で発信ポジションを作る試みである。競争に勝つためではなく、議論に参加し続けるための発信。勝敗ではなく、議題設定の権利を確保するための発信。日本が選べる独自ポジションがあるとすれば、競争の主役ではなく、<strong>時期論のコストと多様性を引き受ける側</strong>としてである。</p>
+
+          <div class="note">
+            <strong>判定保留宣言。</strong> 本稿は「日本独自の道」を称揚しない。上記3つのポジションが自動的に成立する保証はない。ただし、時期論の発信不在がこのまま続けば、日本は次の10年、選択肢のない時間割を生きることになる。そのことだけは、確度を持って言える。
+          </div>
+        </div>
+
+        <div class="footer">
+          <span>追わない選択の合理性と空白の埋め方</span>
+          <span class="slide-count">6 / 7</span>
+        </div>
+      </section>
+
+      <!-- ═══════════ SECTION 7: WITHOUT A CLOCK ═══════════ -->
+      <section class="slide" id="slide-7">
+        <div class="eyebrow reveal">Without a Clock</div>
+        <h2 class="reveal reveal-delay-1">沈黙のまま、次の10年は来る</h2>
+
+        <div class="panel reveal reveal-delay-1">
+          <p class="lead first">時期論の発信には、責任が伴う。外れたときのコストを誰が引き受けるかを決めない社会では、責任を引き受けない個人が合理的である。日本が沈黙しているのは、個人の怯懦ではなく、制度がその責任の受け皿を用意していないからである。<strong>発信コストと発信リターンの非対称を書き換えない限り、どれだけ優秀な研究者を集めても、時期論という形式の発信は出てこない。</strong></p>
+
+          <p class="lead">構造を書き換えるには、誰が何を書き換えるかを具体化する必要がある。AI戦略会議が「日本独自のAGI到達時期予測」を公式文書化するのか。経産省が国産AI 1兆円計画に「2030年までに何を達成するか」の到達基準を明記するのか。ALIGN や WBAI のような独立機関が、政府とは別の時期論を定期発信する制度を持つのか。Sakana AI や PFN が投資家向けレターに「AGI到達の自社シナリオ」を書く日が来るのか。どれも、現在の制度構造では自動的には起きない。起きるとすれば、誰かが発信コストを先に引き受ける一手から始まる。</p>
+
+          <p class="lead">本稿は問いを一つだけ渡して終わる。<strong>あなたの組織は、どの層で発信を避けているか。</strong>研究者なら、「何年までに何が到達する」と書くことをどの瞬間に自主検閲しているか。企業の経営者なら、投資家に向けたメッセージに時期論を含めないのはなぜか。行政官なら、「AGI」を公式文書で定義しない選択がいつなされたか。どの層にいても、沈黙の構造に自分も参加している。参加の仕方を変えられるのは、その層の当事者しかいない。</p>
+
+          <div class="pullquote">
+            発信コストと発信リターンの非対称を書き換えない限り、時期論という形式の発信は出てこない。
+          </div>
+
+          <p class="lead">2027年、ある夜、東京のある会議室で、誰かが最初に「2029年までに到達する」と言い切る。その発言が報道され、翌朝の全国紙の一面を飾り、夕方には政策議論の素材になる。そして次の週には、金融市場が動く。その日、日本が時計を持ち始める日付は、過去の10年の沈黙によって、すでに書かれている。</p>
+
+          <div class="note" style="margin-top:20px;">
+            <strong>読者への問い。</strong> 時期論を発信しないことは、発信しないという意思決定である。沈黙を選ぶことと、発信を避けることは、同じ場所にいる。あなたの組織が沈黙を選んでいるのか、発信を避けているのかを、今週のうちに書き分けてほしい。その書き分けが、次の10年を決める。
+          </div>
+        </div>
+
+        <div class="footer">
+          <span>沈黙のまま、次の10年は来る</span>
+          <span class="slide-count">7 / 7</span>
+        </div>
+      </section>
+
+      <!-- ═══════════ Article Navigation ═══════════ -->
+      <section class="slide" id="slide-nav" style="min-height:auto;padding:64px 48px 80px;grid-template-rows:auto auto auto 1fr;">
+        <div class="eyebrow reveal">Continue Reading</div>
+        <h2 class="reveal reveal-delay-1" style="max-width:none;">次の記事へ</h2>
+        <div class="panel reveal reveal-delay-2">
+          <div class="grid-2">
+            <a href="31-agi-timelines-institutions-map.html" class="card" style="color:inherit;display:block;">
+              <p style="font-family:'SF Mono','Fira Code',Menlo,Consolas,monospace;font-feature-settings:normal;font-size:11px;letter-spacing:0.083em;text-transform:uppercase;color:#757575;margin-bottom:12px;">&larr; Prev &middot; No.31</p>
+              <p><strong>AGI到達予測の分布 — 予測者と機関のマッピング</strong></p>
+            </a>
+            <div class="card" style="opacity:0.35;">
+              <p style="font-family:'SF Mono','Fira Code',Menlo,Consolas,monospace;font-feature-settings:normal;font-size:11px;letter-spacing:0.083em;text-transform:uppercase;color:#757575;margin-bottom:12px;">Next &rarr;</p>
+              <p>最新の記事です</p>
+            </div>
+          </div>
+          <p style="margin-top:32px;text-align:center;">
+            <a href="../index.html" style="color:inherit;border-bottom:1px solid #999;padding-bottom:2px;">All Articles &mdash; 記事一覧へ</a>
+          </p>
+          <p style="margin-top:16px;text-align:center;font-family:'SF Mono','Fira Code',Menlo,Consolas,monospace;font-size:11px;letter-spacing:0.083em;text-transform:uppercase;color:#757575;">
+            <a href="../index.html#filter=governance" style="color:inherit;border-bottom:1px solid #999;padding-bottom:2px;">Governance カテゴリの記事一覧 &rarr;</a>
+          </p>
+        </div>
+      </section>
+    </main>
+
+    <footer class="credits">
+      <p>
+        <strong style="color:#585858;">AGI HUB &middot; No. 32 &middot; Governance</strong><br>
+        沈黙は、無知ではない &mdash; 日本のAGI議論はなぜ成立しないか<br>
+        公開: 2026.04.18 &middot; By Ryao
+      </p>
+      <p style="margin-top:12px;">
+        <strong style="color:#585858;">角度について。</strong>
+        本稿は「日本は遅れている」論でも「日本独自でよい」論でもない。一段下の構造問い——時期論を発信することの社会的コストとリターンが日米で逆向きに働いている、という非対称——を主題化した。この角度はAGI HUB No.31「AGI到達予測の分布」の日本セクションで予告した4層分析(研究・産業・ガバナンス・資本)を展開するものである。
+      </p>
+      <p style="margin-top:12px;">
+        <strong style="color:#585858;">NAIA/NAGI の表記について。</strong>
+        2026年4月時点で公開されている原典は、一般社団法人AIアライメントネットワーク(ALIGN)がJSAI2025 汎用AI研究会で発表した「NAIAビジョンの提案」(AGI-029, 2025-03-17)[1]であり、政府計画としての「NAGI計画 v2.0.1」という文書はまだ存在しない。本稿は実体に即してNAIAを基準に論じた。
+      </p>
+      <p style="margin-top:12px;">
+        <strong style="color:#585858;">References.</strong>
+      </p>
+      <p>
+        [1] 山川宏 (2025) 「NAIAビジョンの提案」人工知能学会 汎用人工知能研究会 第29回, AGI-029, 2025-03-17. <a href="https://www.jstage.jst.go.jp/article/jsaisigtwo/2025/AGI-029/2025_03/_article/-char/ja/">J-Stage</a>. <br>
+        [2] 松尾豊 (2026-01-05) 「2026年 年頭所感」一般社団法人日本ディープラーニング協会. <a href="https://www.jdla.org/news/260105001/">jdla.org</a>. 関連: 松尾豊 (2024) 「最終的にAIは"人工超知能"の技術領域に辿り着く」ログミーBusiness. <a href="https://logmi.jp/main/technology/330177">logmi.jp</a>.<br>
+        [3] Preferred Networks / さくらインターネット / NICT (2025-09-18) 「安心安全で日本社会と調和する国産生成AIのエコシステム構築に向け、基本合意を締結」. <a href="https://www.preferred.jp/ja/news/pr20250918">preferred.jp</a>.<br>
+        [4] Sakana AI (2025-11-18) Series B $135M+ round raised to build Japan-first generative AI models. <a href="https://digiscoop.net/2025/11/18/sakana-ai-raises-135m-to-build-japan-first-generative-ai-models/">Digiscoop</a>. 関連: STARTUP DB Media (2025-11) 「国内スタートアップ資金調達ランキング」. <a href="https://lp.startup-db.com/media/articles/funding-ranking-202511">startup-db.com</a>.<br>
+        [5] 経済産業省・総務省 (2025-03-28) 「AI事業者ガイドライン第1.1版 概要」. <a href="https://www.meti.go.jp/shingikai/mono_info_service/ai_shakai_jisso/pdf/20250328_2.pdf">meti.go.jp</a>. 関連: METI (2024-04-19) 「AI事業者ガイドライン(第1.0版)」. <a href="https://www.meti.go.jp/press/2024/04/20240419004/20240419004.html">meti.go.jp</a>.<br>
+        [6] デジタル庁 (2025-05-27) 「行政の進化と革新のための生成AIの調達・利活用に係るガイドライン」DS-920. <a href="https://www.digital.go.jp/assets/contents/node/basic_page/field_ref_resources/e2a06143-ed29-4f1d-9c31-0f06fca67afc/80419aea/20250527_resources_standard_guidelines_guideline_01.pdf">digital.go.jp</a>.<br>
+        [7] AIST Solutions (2025-01-20) 「大規模AIクラウド計算システム『ABCI 3.0』が国内随一のAI計算能力を証明」. <a href="https://prtimes.jp/main/html/rd/p/000000026.000146304.html">prtimes.jp</a>. 関連: NVIDIA (2025) 「NVIDIA、最先端のABCI 3.0で日本のソブリンAIへの取り組みを加速」. <a href="https://blogs.nvidia.co.jp/blog/abci-aist/">blogs.nvidia.co.jp</a>.<br>
+        [8] 理化学研究所 (2025-01-22) 「スーパーコンピュータ『富岳』の次世代となる新たなフラッグシップシステムの開発・整備を開始」. <a href="https://www.riken.jp/pr/news/2025/20250122_1/index.html">riken.jp</a>. 関連: 理化学研究所 (2025-08-22) 「富士通およびNVIDIAとの国際連携による『富岳NEXT』開発体制を始動」. <a href="https://www.riken.jp/pr/news/2025/20250822_1/index.html">riken.jp</a>.<br>
+        [9] Aschenbrenner, L. (2024-06) "Situational Awareness: The Decade Ahead." <a href="https://situational-awareness.ai/">situational-awareness.ai</a>.<br>
+        [10] Kokotajlo, D. et al. (2025) "AI 2027." <a href="https://ai-2027.com/">ai-2027.com</a>.<br>
+        [11] ITmedia (2025-06-05) 「東大・松尾豊教授、AI開発の新会社設立 Chief Scientistで参加 『AGIの確立目指す』」. <a href="https://www.itmedia.co.jp/aiplus/articles/2506/05/news082.html">itmedia.co.jp</a>.<br>
+        [12] AGI HUB (2026-04-18) 「No.31 AGI到達予測の分布 — 予測者と機関のマッピング」. <a href="31-agi-timelines-institutions-map.html">No.31</a>.<br>
+        [13] 全脳アーキテクチャ・イニシアティブ (WBAI) 組織概要. <a href="https://wba-initiative.org/">wba-initiative.org</a>. 関連: 内閣府NPOポータル. <a href="https://www.npo-homepage.go.jp/npoportal/detail/013011799">npo-homepage.go.jp</a>.<br>
+        [14] 山川宏 (2023) 「脳参照アーキテクチャ駆動開発による全脳アーキテクチャ完成にむけた技術ロードマップ」JSAI SIG-AGI-025. <a href="https://www.jstage.jst.go.jp/article/jsaisigtwo/2023/AGI-025/2023_06/_article/-char/ja/">J-Stage</a>.<br>
+        [15] WIRED.jp (2025) 「2025年はAGIの実現前夜となるか？：石井敦×山川宏×工藤郁子 鼎談」. <a href="https://wired.jp/article/ishii-yamakawa-kudo-ai-discussion-1/">wired.jp</a>.<br>
+        [16] 日本経済新聞系報道 (2025) 「国産AI 1兆円5年計画/ソフトバンク・PFN・NTT・KDDI等10社連携」. 関連: 日経電子版 (2025-11-07) 「AIスタートアップ資金調達高水準 7〜9月、エージェント関連のM&A活発」. <a href="https://www.nikkei.com/article/DGXZQOUC078C00X01C25A1000000/">nikkei.com</a>.<br>
+        [17] Epoch AI (2024-2025) "Training compute of frontier models" dataset. <a href="https://epoch.ai/">epoch.ai</a>.<br>
+        [18] Sakana AI / WIRED.jp (2025) 「多様なAIモデルを進化的にマージする：Sakana AI」特集THE WORLD IN 2025. <a href="https://wired.jp/article/vol55-the-evolutionary-model-merge-changes-the-ai-landscape/">wired.jp</a>.<br>
+        [19] 自由民主党 (2025) 「日本のAI国家戦略を議論 東大・松尾豊教授からヒアリング」. <a href="https://www.jimin.jp/news/information/212552.html">jimin.jp</a>.<br>
+        [20] JIC 産業革新投資機構 (2026-04) 「スタートアップ・ファイナンス市場レビュー(2025通年)」. <a href="https://www.j-ic.co.jp/jp/research/.assets/20260406_JIC_Research_VC.pdf">j-ic.co.jp</a>.
+      </p>
+      <p style="margin-top:12px;">
+        <strong style="color:#585858;">Images.</strong>
+        All photographs via <a href="https://unsplash.com/">Unsplash</a>.
+        Hero (slide1): <a href="https://unsplash.com/photos/6MtJ-y1hzTs">6MtJ-y1hzTs</a>.
+        Slide 2: <a href="https://unsplash.com/photos/VT4QPwbEKF4">VT4QPwbEKF4</a>.
+        Slide 3: <a href="https://unsplash.com/photos/kMl4FSGXQRo">kMl4FSGXQRo</a>.
+        Slide 4: <a href="https://unsplash.com/photos/Q_KdjKxntH8">Q_KdjKxntH8</a>.
+        Slide 5 (left): <a href="https://unsplash.com/photos/bV5dFLEYecM">bV5dFLEYecM</a>. Slide 5 (right): <a href="https://unsplash.com/photos/UmueYh50oKw">UmueYh50oKw</a>.
+        Slide 6: <a href="https://unsplash.com/photos/ZycaCbVcNGY">ZycaCbVcNGY</a>.
+        Thumbnail: <a href="https://unsplash.com/photos/SUcBkQ2kPak">SUcBkQ2kPak</a>.
+      </p>
+    </footer>
+
+    <!-- Feedback form -->
+    <section id="feedback-section" style="max-width:1120px;margin:0 auto;padding:48px 48px 64px;border-top:1px solid var(--border);">
+      <h3 style="font-size:18px;font-weight:700;color:var(--black);margin-bottom:8px;">Reader Feedback</h3>
+      <p style="font-size:13px;color:var(--meta);margin-bottom:24px;">この記事の評価・感想をお寄せください。匿名可、1分で完了します。</p>
+      <form id="feedback-form" style="display:grid;gap:16px;max-width:640px;">
+        <div>
+          <label style="display:block;font-size:12px;letter-spacing:0.08em;text-transform:uppercase;color:var(--meta);margin-bottom:8px;">評価 (1-5)</label>
+          <div id="star-group" style="display:flex;flex-direction:row-reverse;justify-content:flex-end;gap:4px;">
+            <input type="radio" name="rating" value="5" id="s5" style="display:none;"><label for="s5" style="cursor:pointer;font-size:28px;color:#ccc;transition:color 0.15s;">★</label>
+            <input type="radio" name="rating" value="4" id="s4" style="display:none;"><label for="s4" style="cursor:pointer;font-size:28px;color:#ccc;transition:color 0.15s;">★</label>
+            <input type="radio" name="rating" value="3" id="s3" style="display:none;"><label for="s3" style="cursor:pointer;font-size:28px;color:#ccc;transition:color 0.15s;">★</label>
+            <input type="radio" name="rating" value="2" id="s2" style="display:none;"><label for="s2" style="cursor:pointer;font-size:28px;color:#ccc;transition:color 0.15s;">★</label>
+            <input type="radio" name="rating" value="1" id="s1" style="display:none;"><label for="s1" style="cursor:pointer;font-size:28px;color:#ccc;transition:color 0.15s;">★</label>
+          </div>
+        </div>
+        <div>
+          <label for="fb-comment" style="display:block;font-size:12px;letter-spacing:0.08em;text-transform:uppercase;color:var(--meta);margin-bottom:8px;">コメント (任意)</label>
+          <textarea id="fb-comment" rows="4" style="width:100%;padding:10px 12px;border:1px solid var(--border);background:var(--bg-alt);font-family:inherit;font-size:14px;resize:vertical;"></textarea>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+          <div>
+            <label for="fb-name" style="display:block;font-size:12px;letter-spacing:0.08em;text-transform:uppercase;color:var(--meta);margin-bottom:8px;">名前 (任意)</label>
+            <input type="text" id="fb-name" style="width:100%;padding:10px 12px;border:1px solid var(--border);background:var(--bg-alt);font-family:inherit;font-size:14px;">
+          </div>
+          <div>
+            <label for="fb-email" style="display:block;font-size:12px;letter-spacing:0.08em;text-transform:uppercase;color:var(--meta);margin-bottom:8px;">メール (任意)</label>
+            <input type="email" id="fb-email" style="width:100%;padding:10px 12px;border:1px solid var(--border);background:var(--bg-alt);font-family:inherit;font-size:14px;">
+          </div>
+        </div>
+        <button type="submit" id="fb-submit" style="padding:12px 24px;background:var(--black);color:var(--bg);border:none;font-family:'SF Mono',monospace;font-size:12px;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;justify-self:start;">送信</button>
+      </form>
+      <p id="fb-success" style="display:none;font-size:14px;color:var(--body-text);margin-top:16px;">フィードバックを送信しました。ありがとうございます。</p>
+      <p id="fb-error" style="display:none;font-size:14px;color:var(--accent);margin-top:16px;">送信に失敗しました。時間をおいて再度お試しください。</p>
+    </section>
+
+    <script>
+      // Star rating hover
+      (function(){
+        const group = document.getElementById('star-group');
+        if (!group) return;
+        const labels = group.querySelectorAll('label');
+        labels.forEach((lab, i) => {
+          lab.addEventListener('mouseenter', () => {
+            labels.forEach(l => l.style.color = '#ccc');
+            let el = lab;
+            while (el) { el.style.color = '#000'; el = el.nextElementSibling; if (el && el.tagName !== 'LABEL') el = null; }
+          });
+        });
+        group.addEventListener('mouseleave', () => {
+          const checked = group.querySelector('input:checked');
+          labels.forEach(l => l.style.color = '#ccc');
+          if (checked) {
+            let el = group.querySelector(`label[for="${checked.id}"]`);
+            while (el) { el.style.color = '#000'; el = el.nextElementSibling; if (el && el.tagName !== 'LABEL') el = null; }
+          }
+        });
+      })();
+
+      // Form submit
+      document.getElementById('feedback-form').addEventListener('submit', function(e){
+        e.preventDefault();
+        const FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSclh1ETzrlXD4py-MJhlcMfL22vznue-1dLCWMlRCkelwA-xQ/formResponse';
+        const rating = (document.querySelector('input[name="rating"]:checked') || {}).value || '';
+        const comment = document.getElementById('fb-comment').value;
+        const name = document.getElementById('fb-name').value;
+        const email = document.getElementById('fb-email').value;
+        const eyebrowText = document.querySelector('.eyebrow').textContent;
+        const numMatch = eyebrowText.match(/No\.\s*(\d+)/);
+        const articleNo = numMatch ? numMatch[1] : '32';
+
+        const params = new URLSearchParams();
+        if (email) params.append('emailAddress', email);
+        params.append('entry.1131711956', rating);
+        params.append('entry.897250758', articleNo);
+        params.append('entry.242373434', comment);
+        params.append('entry.420368578', name);
+
+        fetch(FORM_URL, {method:'POST', mode:'no-cors', headers:{'Content-Type':'application/x-www-form-urlencoded'}, body: params.toString()})
+          .then(() => {
+            document.getElementById('feedback-form').style.display = 'none';
+            document.getElementById('fb-success').style.display = 'block';
+          })
+          .catch(() => {
+            document.getElementById('fb-error').style.display = 'block';
+          });
+      });
+    </script>
+
+    <script>
+      // Progress bar
+      const progress = document.getElementById('progress');
+      window.addEventListener('scroll', () => {
+        const h = document.documentElement;
+        const scrolled = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
+        progress.style.width = scrolled + '%';
+      });
+
+      // Reveal on scroll
+      const reveals = document.querySelectorAll('.reveal');
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+      }, { threshold: 0.2 });
+      reveals.forEach(el => io.observe(el));
+
+      // Nav dots
+      const buttons = document.querySelectorAll('.nav button');
+      buttons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const target = document.getElementById(btn.dataset.target);
+          if (target) target.scrollIntoView({behavior:'smooth'});
+        });
+      });
+
+      // Active dot tracking
+      const slides = document.querySelectorAll('.slide');
+      const slideIo = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+          if (e.isIntersecting) {
+            buttons.forEach(b => b.classList.remove('active'));
+            const match = document.querySelector(`.nav button[data-target="${e.target.id}"]`);
+            if (match) match.classList.add('active');
+          }
+        });
+      }, { threshold: 0.4 });
+      slides.forEach(s => slideIo.observe(s));
+    </script>
+  </body>
+</html>

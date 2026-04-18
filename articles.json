@@ -1,5 +1,16 @@
 [
   {
+    "no": 31,
+    "slug": "31-agi-timelines-institutions-map",
+    "category": "technical",
+    "date": "2026.04.18",
+    "slides": "7 Sections",
+    "thumb": "images/thumb-agi-timelines-institutions-map.jpg",
+    "title": "AGIはいつ来るのか — 9つの研究機関と3つの時間軸",
+    "excerpt": "Amodeiは2026-2027年。Aschenbrennerは2027年ASI。Hassabisは5-10年。LeCunは10年以上。Metaculus中央値は2030年前後。予測の散らばりは情報不足ではなく、定義・根拠・立場性の三重のズレが作る構造である。9つの研究機関が賭けている命題、3つの時間軸への収束、業界の収束点と分岐点。個別技術の枝記事に入る前の、幹の整地作業。",
+    "featured": true
+  },
+  {
     "no": 30,
     "slug": "30-nagi-npt-analog-closing-window",
     "category": "governance",
@@ -8,7 +19,7 @@
     "thumb": "images/thumb-nagi-npt-analog-closing-window.jpg",
     "title": "固定化の前夜 — AGI参入の時間窓が閉じるまで",
     "excerpt": "AI安全サミット、EU AI Act、各国AI安全研究所。善意で積み上がる国際枠組みの輪郭は、核拡散防止条約が1968年に引いた線に似てくる。拡散と安全性の関係は核とAGIで逆転しているが、制度的固定化の物理学は同じだ。FLOPSを捨て電力を測る国家、原子炉とSMRへの還元、時間窓の値段。扉は善意で閉じられる。",
-    "featured": true
+    "featured": false
   },
   {
     "no": 29,

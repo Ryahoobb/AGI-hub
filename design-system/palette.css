@@ -54,7 +54,27 @@
   --lh-normal: 1.5;
   --lh-relaxed: 1.75;
 
-  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  /* ── Motion (WIRED 2026-04-18 signature easing) ── */
+  --ease-signature: cubic-bezier(0.23, 1, 0.32, 1); /* WIRED本家のeaseOutExpo */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease: var(--ease-signature); /* legacy alias */
+  --dur-instant: 120ms;
+  --dur-fast: 200ms;
+  --dur-base: 300ms;
+  --dur-slow: 600ms;
+  --dur-hero: 900ms;
+
+  /* ── Spacing scale (4の倍数 / rem基準) ── */
+  --space-0: 0;
+  --space-1: 0.25rem;  /* 4px  — inline微調整 */
+  --space-2: 0.5rem;   /* 8px  — キャプションと図版 */
+  --space-3: 1rem;     /* 16px — 段落内余白 */
+  --space-4: 1.5rem;   /* 24px — 標準gutter */
+  --space-5: 2rem;     /* 32px — ブロック間 */
+  --space-6: 3rem;     /* 48px — セクション間 */
+  --space-7: 4rem;     /* 64px — 章区切り */
+  --space-8: 6rem;     /* 96px — ヒーロー前後 */
 }
 
 /* ═════════════════════════════════════════════════════
@@ -194,6 +214,52 @@ body {
   letter-spacing: 0.1em;
   text-transform: uppercase;
 }
+
+/* ═════════════════════════════════════════════════════
+   Editorial Micro-typography (WIRED 2026-04-18)
+   Byline prefix / 日付書式 / セクション区切り記号
+   ═════════════════════════════════════════════════════ */
+
+.byline {
+  font-family: var(--ff-mono);
+  font-feature-settings: normal;
+  font-size: var(--fs-meta);
+  color: var(--meta);
+  letter-spacing: 0.02em;
+  line-height: 1.4;
+}
+.byline .prefix {
+  font-style: italic;
+  color: var(--mid-gray);
+  margin-right: 0.3em;
+}
+/* Prefixバリエーション: By / Photography by / Illustration by /
+   In Conversation with / Edited by / As told to / Reported by /
+   Words by / Interview by */
+.byline strong {
+  color: var(--fg);
+  font-weight: 500;
+}
+
+/* WIRED式日付表記 YYYY.MM.DD */
+.date-wired {
+  font-family: var(--ff-mono);
+  font-feature-settings: "tnum";
+  letter-spacing: 0.05em;
+  color: var(--meta);
+  font-size: var(--fs-meta);
+}
+
+/* セクション区切り記号（::, —, / の運用） */
+.sep {
+  display: inline-block;
+  margin: 0 0.5em;
+  color: var(--light-gray);
+  font-weight: 400;
+}
+.sep-dot::before { content: "::"; }
+.sep-em::before  { content: "—"; }
+.sep-slash::before { content: "/"; }
 
 /* アスペクト比ユーティリティ */
 .ar-1-1  { aspect-ratio: 1 / 1; }
@@ -1598,4 +1664,58 @@ body.has-site-header { padding-top: 48px; }
 
   /* Side-by-side images */
   .hero.img-side-by-side { grid-template-columns: 1fr !important; }
+}
+
+/* ═════════════════════════════════════════════════════
+   Motion primitives (WIRED 2026-04-18)
+   リンク・ナビ・カード・CTAの基本遷移を統一
+   reduced-motionユーザーは無効化
+   ═════════════════════════════════════════════════════ */
+
+a {
+  transition: color var(--dur-fast) var(--ease-signature),
+              opacity var(--dur-fast) var(--ease-signature),
+              border-color var(--dur-fast) var(--ease-signature);
+}
+
+.nav a,
+.site-nav a {
+  transition: color var(--dur-base) var(--ease-signature),
+              border-bottom-color var(--dur-base) var(--ease-signature);
+}
+
+.card,
+article.card,
+.article-card {
+  transition: transform var(--dur-base) var(--ease-signature),
+              box-shadow var(--dur-base) var(--ease-signature),
+              background-color var(--dur-base) var(--ease-signature);
+}
+.card:hover,
+article.card:hover,
+.article-card:hover {
+  transform: translateY(-2px);
+}
+
+.cta,
+button.cta,
+a.cta {
+  transition: background-color var(--dur-fast) var(--ease-signature),
+              color var(--dur-fast) var(--ease-signature),
+              transform var(--dur-fast) var(--ease-signature);
+}
+.cta:active { transform: scale(0.98); }
+
+/* Hero image transitions use signature easing (上書き) */
+.hero {
+  transition: filter var(--dur-slow) var(--ease-signature);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

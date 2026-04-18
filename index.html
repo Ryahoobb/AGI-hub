@@ -724,22 +724,8 @@
         <span class="count">Start Here</span>
       </div>
 
-      <div class="picks-grid">
-        <a href="articles/01-ai-alignment.html" class="pick" data-category="alignment">
-          <img class="thumb" src="images/thumb-ai-alignment.jpg" alt="AI Alignment article thumbnail">
-          <h3>Yudkowskyを越えて — AIアラインメントの本来の射程</h3>
-          <p class="excerpt">
-            「If anyone builds it, everyone dies」と言い切ったEliezer Yudkowskyの論証を分解し、3つの論理的飛躍を検証する。防御・整合・共創の3層モデルで、破滅論の外側に広がるアラインメントの本来の射程を辿る。
-          </p>
-        </a>
-
-        <a href="articles/02-agi-evolution.html" class="pick" data-category="takeoff">
-          <img class="thumb" src="images/thumb-agi-evolution.jpg" alt="AGI Evolution article thumbnail">
-          <h3>AGIを宇宙進化の次相として位置づける</h3>
-          <p class="excerpt">
-            138億年の宇宙史を一本の線として眺めたとき、AGIは「便利な道具」でも「人類の脅威」でもなく、知能という現象が生物学的基盤を離れる転位点として現れる。担体のバトンリレーという視点で読み直す。
-          </p>
-        </a>
+      <div class="picks-grid" id="picks-grid">
+        <!-- cards injected from articles.json (pick属性) -->
       </div>
     </section>
 
@@ -821,10 +807,10 @@
       </div>
       <div style="max-width: 780px;">
         <p style="font-size: 17px; line-height: 1.8; color: var(--body-text); margin-bottom: 16px;">
-          AGI HUBは、知能・アラインメント・文明の次相に関する思考を蓄積する個人アーカイブである。完成したレポートを公開する場ではなく、考えの途中を記録して後から参照できるようにするためのもの。モノトーンのエディトリアルデザインで、読み物としての集中を優先している。
+          AGI HUBは、知能・アラインメント・文明の次相をめぐる論考を編集する独立メディア。ニュース追従でも予測競争でもない。宇宙進化史の中でAGIをどう位置づけるか、アラインメント問題をどう再定義するか、共創層の議論をどう言語化するか、その三つに絞って書く。
         </p>
         <p style="font-size: 17px; line-height: 1.8; color: var(--body-text);">
-          扱うテーマは、AGIを宇宙進化の文脈でどう位置づけるか、アラインメント問題をどう再定義するか、共創層の議論をどう言語化するか、といった領域。破滅論と楽観論の両方から距離を取り、第三の視座を探す。
+          破滅論と楽観論のどちらからも距離を取り、第三の視座を探す。記事は完成品ではなく、考えるための器として置いている。読んだ後に問いが増えていれば、この場所は機能している。
         </p>
       </div>
     </section>
@@ -832,44 +818,33 @@
     <!-- ── Article Renderer (from articles.json) ── -->
     <script>
       (function () {
+        var picksGrid = document.getElementById('picks-grid');
         var featuredSlot = document.getElementById('featured-slot');
         var grid = document.getElementById('article-grid');
-        if (!featuredSlot || !grid) return;
+        if (!grid) return;
 
         fetch('articles.json')
           .then(function (r) { return r.json(); })
           .then(function (articles) {
-            var catLabel = function (c) {
-              return c.charAt(0).toUpperCase() + c.slice(1);
-            };
-            var pad = function (n) { return n < 10 ? '0' + n : '' + n; };
+            // ── Editor's Picks: articles where pick is a positive number, sorted ascending ──
+            if (picksGrid) {
+              var picks = articles
+                .filter(function (a) { return typeof a.pick === 'number' && a.pick > 0; })
+                .sort(function (a, b) { return a.pick - b.pick; });
+              picks.forEach(function (a) {
+                picksGrid.insertAdjacentHTML('beforeend',
+                  '<a href="articles/' + a.slug + '.html" class="pick" data-category="' + a.category + '">' +
+                    '<img class="thumb" src="' + a.thumb + '" alt="' + a.slug + ' thumbnail">' +
+                    '<h3>' + a.title + '</h3>' +
+                    '<p class="excerpt">' + a.excerpt + '</p>' +
+                  '</a>'
+                );
+              });
+            }
 
-            // Interactive tiles to interleave every N cards
-            var exploreTiles = [
-              { href: 'displacement-map.html', cls: '', eyebrow: 'Live Tracker', stat: '<span class="accent">1.3M+</span>', title: '雇用代替トラッカー', desc: '企業公表の人員削減を追う。182件 / 20か国 / 11業種。', cta: 'ダッシュボードへ →' },
-              { href: 'models-evals.html', cls: '', eyebrow: 'Reference', stat: '30+', title: 'フロンティアモデル比較', desc: '米欧・中華の最前線30本と評価機関20。MLArena Elo一望。', cta: 'モデル比較へ →' },
-              { href: 'taxonomy-network.html', cls: '', eyebrow: 'Discussion Map', stat: '11 / 58', title: '議論の全体地図', desc: '11ドメイン58トピックで論点を俯瞰。32トピック執筆済み。', cta: '全体地図へ →' },
-              { href: 'pill-map.html', cls: 'dark', eyebrow: 'Depth Map', stat: '0.0 → ???', title: 'あなたはAGIの何層目か', desc: '7つの関門があなたの深度を可視化する。', cta: '深度を測る →' },
-              { href: 'prediction.html', cls: 'cream', eyebrow: 'Your Forecast', stat: '5 Q', title: '予測のズレを測る', desc: 'Metaculus数千人の集合知と、あなたの直感を照らし合わせる。', cta: '立ち位置を知る →' }
-            ];
-
-            var renderTile = function (t) {
-              return '<a href="' + t.href + '" class="explore-tile ' + t.cls + ' card-interstitial">' +
-                       '<div class="explore-eyebrow">' + t.eyebrow + '</div>' +
-                       '<div class="explore-stat">' + t.stat + '</div>' +
-                       '<h3>' + t.title + '</h3>' +
-                       '<p>' + t.desc + '</p>' +
-                       '<span class="explore-cta">' + t.cta + '</span>' +
-                     '</a>';
-            };
-
-            // Insert an interstitial every N article cards (3 = end of each row)
-            var INTERVAL = 3;
-            var cardIdx = 0;
-            var tileIdx = 0;
-
+            // ── Latest: featured + card grid ──
             articles.forEach(function (a) {
-              if (a.featured) {
+              if (a.featured && featuredSlot) {
                 featuredSlot.innerHTML =
                   '<a href="articles/' + a.slug + '.html" class="featured" data-category="' + a.category + '">' +
                     '<div><img class="thumb" src="' + a.thumb + '" alt="' + a.slug + ' thumbnail"></div>' +
@@ -879,7 +854,7 @@
                       '<span class="read-more">Read Article \u2192</span>' +
                     '</div>' +
                   '</a>';
-              } else {
+              } else if (!a.featured) {
                 grid.insertAdjacentHTML('beforeend',
                   '<a href="articles/' + a.slug + '.html" class="card" data-category="' + a.category + '">' +
                     '<img class="thumb" src="' + a.thumb + '" alt="' + a.slug + ' thumbnail">' +
@@ -887,19 +862,8 @@
                     '<p class="excerpt">' + a.excerpt + '</p>' +
                   '</a>'
                 );
-                cardIdx++;
-                if (cardIdx % INTERVAL === 0 && tileIdx < exploreTiles.length) {
-                  grid.insertAdjacentHTML('beforeend', renderTile(exploreTiles[tileIdx]));
-                  tileIdx++;
-                }
               }
             });
-
-            // Append any remaining interstitials at the end
-            while (tileIdx < exploreTiles.length) {
-              grid.insertAdjacentHTML('beforeend', renderTile(exploreTiles[tileIdx]));
-              tileIdx++;
-            }
 
             // Initialize category filter after cards are rendered
             initFilter();

@@ -792,7 +792,7 @@
   <p class="dash-subtitle">
     米中フロンティアモデルの実力差をベンチマーク横断で比較し、競争の構図を可視化する。30以上のモデルを統一ランキングで並べ、METR・Apollo・Epoch AIの評価も一覧する。
   </p>
-  <div class="dash-date">Updated: 2026-04-13 · Data as of early-to-mid April 2026</div>
+  <div class="dash-date">Updated: 2026-04-18 · Data as of mid-April 2026</div>
 
   <!-- ═══════════ KPI ═══════════ -->
   <div class="kpi-row">
@@ -813,8 +813,8 @@
     </div>
     <div class="kpi-card">
       <div class="kpi-label">Models Tracked</div>
-      <div class="kpi-value">30+</div>
-      <div class="kpi-note">米欧14 / 中華16以上。下記テーブル参照。cross-ref: <a href="https://artificialanalysis.ai/" target="_blank" rel="noopener" class="src-link">artificialanalysis.ai</a></div>
+      <div class="kpi-value">32+</div>
+      <div class="kpi-note">米欧15 / 中華16以上。Claude Opus 4.7とMuse Sparkが2026-04に追加。<a href="https://artificialanalysis.ai/" target="_blank" rel="noopener" class="src-link">artificialanalysis.ai</a></div>
     </div>
   </div>
 
@@ -879,15 +879,15 @@
     <div class="bench-grid">
       <div class="bench-card">
         <h3><a href="https://lmarena.ai/leaderboard" target="_blank" rel="noopener" class="src-link">LMArena — Overall</a></h3>
-        <div class="bench-sub">Chatbot Arena Elo · 2026-04</div>
+        <div class="bench-sub">Chatbot Arena Elo · 2026-04-17</div>
         <p class="bench-desc">実ユーザーが匿名の2モデル回答を盲検比較し、勝ち負けからEloレーティングを算出する。好みという「人間の判断」をそのまま順位化するため、ベンチマーク汚染の影響を受けにくい。Overall / Coding / Vision 等のサブボードあり。</p>
         <ol>
-          <li><span class="model"><a href="https://www.anthropic.com/claude/opus" target="_blank" rel="noopener" class="model-link">Claude Opus 4.6 Thinking</a></span><span class="score">1504</span></li>
-          <li><span class="model"><a href="https://deepmind.google/technologies/gemini/pro/" target="_blank" rel="noopener" class="model-link">Gemini 3.1 Pro Preview</a></span><span class="score">1493</span></li>
-          <li><span class="model"><a href="https://x.ai/news/grok-4" target="_blank" rel="noopener" class="model-link">Grok 4.20 Beta1</a></span><span class="score">1491</span></li>
-          <li><span class="model"><a href="https://openai.com/gpt-5" target="_blank" rel="noopener" class="model-link">GPT-5.4 High</a></span><span class="score">1484</span></li>
+          <li><span class="model"><a href="https://www.anthropic.com/news/claude-opus-4-7" target="_blank" rel="noopener" class="model-link">Claude Opus 4.7 Thinking</a></span><span class="score">1505</span></li>
+          <li><span class="model"><a href="https://www.anthropic.com/claude/opus" target="_blank" rel="noopener" class="model-link">Claude Opus 4.6 Thinking</a></span><span class="score">1503</span></li>
+          <li><span class="model"><a href="https://www.anthropic.com/news/claude-opus-4-7" target="_blank" rel="noopener" class="model-link">Claude Opus 4.7</a></span><span class="score">1498</span></li>
+          <li><span class="model"><a href="https://ai.meta.com/blog/introducing-muse-spark-msl/" target="_blank" rel="noopener" class="model-link">Muse Spark (Meta)</a></span><span class="score">1496</span></li>
         </ol>
-        <div class="bench-note">Coding subboardではClaude Opus 4.6が1561 Eloで独走。順位は週単位で変動する</div>
+        <div class="bench-note">Opus 4.7（2026-04-16公開）がOverall・Codingとも首位を奪取。Coding subboardでは1583 Eloで独走。Top 10が約30 Elo内に密集</div>
       </div>
       <div class="bench-card">
         <h3><a href="https://agi.safe.ai/" target="_blank" rel="noopener" class="src-link">Humanity's Last Exam</a></h3>
@@ -917,16 +917,16 @@
       </div>
       <div class="bench-card">
         <h3><a href="https://labs.scale.com/leaderboard/swe_bench_pro_public" target="_blank" rel="noopener" class="src-link">SWE-Bench Pro / Verified</a></h3>
-        <div class="bench-sub">Coding · 2026-04</div>
-        <p class="bench-desc">実在する12のGitHubリポジトリから集めた未解決Issueを、モデルにパッチで修正させる。テストスイートを通れば正解。Verifiedは手動検証版だったが汚染発覚、より厳格な Pro版（Scale AI運営）へ移行中。現実のエンジニアリング能力の近似指標。</p>
+        <div class="bench-sub">Coding · 2026-04-17</div>
+        <p class="bench-desc">実在する41の専門リポジトリから集めた1,865件のIssueを、モデルにパッチで修正させる。テストスイートを通れば正解。Verifiedは手動検証版だったが汚染発覚、より厳格な Pro版（Scale AI運営）へ移行中。現実のエンジニアリング能力の近似指標。</p>
         <ol>
-          <li><span class="model"><a href="https://www.anthropic.com/claude/opus" target="_blank" rel="noopener" class="model-link">Opus 4.6 + WarpGrep v2 (Pro)</a></span><span class="score">57.5%</span></li>
-          <li><span class="model"><a href="https://openai.com/gpt-5" target="_blank" rel="noopener" class="model-link">GPT-5.3-Codex (Pro)</a></span><span class="score">56.8%</span></li>
-          <li><span class="model"><a href="https://openai.com/gpt-5" target="_blank" rel="noopener" class="model-link">GPT-5.2-Codex (Pro)</a></span><span class="score">56.4%</span></li>
-          <li><span class="model"><a href="https://www.anthropic.com/claude/opus" target="_blank" rel="noopener" class="model-link">Claude Opus 4.5 (Pro, SEAL)</a></span><span class="score">45.9%</span></li>
-          <li><span class="model"><a href="https://www.anthropic.com/claude/opus" target="_blank" rel="noopener" class="model-link">Claude Opus 4.6 (Verified)</a></span><span class="score">80.8%</span></li>
+          <li><span class="model"><a href="https://openai.com/gpt-5" target="_blank" rel="noopener" class="model-link">GPT-5.4 (xHigh)</a></span><span class="score">59.1%</span></li>
+          <li><span class="model"><a href="https://ai.meta.com/blog/introducing-muse-spark-msl/" target="_blank" rel="noopener" class="model-link">Muse Spark (Meta)</a></span><span class="score">55.0%</span></li>
+          <li><span class="model"><a href="https://www.anthropic.com/claude/opus" target="_blank" rel="noopener" class="model-link">Claude Opus 4.6 Thinking</a></span><span class="score">51.9%</span></li>
+          <li><span class="model"><a href="https://deepmind.google/technologies/gemini/pro/" target="_blank" rel="noopener" class="model-link">Gemini 3.1 Pro Thinking</a></span><span class="score">46.1%</span></li>
+          <li><span class="model"><a href="https://www.anthropic.com/claude/opus" target="_blank" rel="noopener" class="model-link">Claude Opus 4.5</a></span><span class="score">45.9%</span></li>
         </ol>
-        <div class="bench-note">Verifiedは汚染問題あり（Gold patchを逐語再現するケースを検出）、Pro推奨。Verified上位はOpus 4.5/4.6とGemini 3.1 Proがいずれも80%台で拮抗</div>
+        <div class="bench-note">GPT-5.4 xHighが4月に首位を奪取。Muse Sparkが初登場で2位。Opus 4.7（2026-04-16公開）はScale Labs未計測だがAnthropicはagentic codingで「step-change」改善を主張。Verifiedは汚染問題ありPro推奨</div>
       </div>
     </div>
   </div>
@@ -960,7 +960,7 @@
           <td class="rank">1</td>
           <td class="lab"><span class="lab-logo"><img src="images/logos/google-deepmind.svg" alt="Google DeepMind" class="logo-img"></span><span class="lab-name">Google DM</span></td>
           <td><span class="model-name"><a href="https://deepmind.google/technologies/gemini/pro/" target="_blank" rel="noopener" class="model-link">Gemini 3.1 Pro</a></span></td>
-          <td class="bench">1493</td>
+          <td class="bench">1492</td>
           <td class="bench">44.7%</td>
           <td class="bench">94.3%</td>
           <td class="bench">77.1%</td>
@@ -970,8 +970,19 @@
         <tr>
           <td class="rank">2</td>
           <td class="lab"><span class="lab-logo"><img src="images/logos/anthropic.svg" alt="Anthropic" class="logo-img"></span><span class="lab-name">Anthropic</span></td>
+          <td><span class="model-name"><a href="https://www.anthropic.com/news/claude-opus-4-7" target="_blank" rel="noopener" class="model-link">Claude Opus 4.7</a></span></td>
+          <td class="bench"><strong>1505</strong></td>
+          <td class="bench">—</td>
+          <td class="bench">—</td>
+          <td class="bench">—</td>
+          <td class="bench">—</td>
+          <td class="bench"><strong>pending</strong></td>
+        </tr>
+        <tr>
+          <td class="rank">3</td>
+          <td class="lab"><span class="lab-logo"><img src="images/logos/anthropic.svg" alt="Anthropic" class="logo-img"></span><span class="lab-name">Anthropic</span></td>
           <td><span class="model-name"><a href="https://www.anthropic.com/claude/opus" target="_blank" rel="noopener" class="model-link">Claude Opus 4.6</a></span></td>
-          <td class="bench"><strong>1504</strong></td>
+          <td class="bench">1503</td>
           <td class="bench">34.4%</td>
           <td class="bench">88.0%</td>
           <td class="bench">31.0%</td>
@@ -1110,24 +1121,32 @@
   <div class="section-block">
     <div class="section-header">
       <h2>US / EU Frontier Models</h2>
-      <span class="section-meta">14 Models · 6 Labs · Ranked by Latest Flagship</span>
+      <span class="section-meta">16 Models · 6 Labs · Ranked by Latest Flagship</span>
     </div>
     <p class="section-intro">
-      最新フラグシップの総合性能（<a href="https://lmarena.ai/leaderboard" target="_blank" rel="noopener" class="src-link">LMArena Elo</a> + <a href="https://agi.safe.ai/" target="_blank" rel="noopener" class="src-link">HLE</a> + <a href="https://arcprize.org/leaderboard" target="_blank" rel="noopener" class="src-link">ARC-AGI-2</a> + <a href="https://labs.scale.com/leaderboard/swe_bench_pro_public" target="_blank" rel="noopener" class="src-link">SWE-Bench</a> の総合的位置）で並び替え。<a href="https://www.anthropic.com/claude/opus" target="_blank" rel="noopener" class="src-link">Anthropic（Claude Opus 4.6）</a>がLMArenaで総合1位、<a href="https://deepmind.google/technologies/gemini/pro/" target="_blank" rel="noopener" class="src-link">Google（Gemini 3.1 Pro）</a>がHLE・ARC-AGI-2・GPQAで記録更新。2025年後半以降、推論モデルと通常モデルの区別は曖昧になり、大半が「reasoning-on-demand」型へ収斂した。
+      最新フラグシップの総合性能（<a href="https://lmarena.ai/leaderboard" target="_blank" rel="noopener" class="src-link">LMArena Elo</a> + <a href="https://agi.safe.ai/" target="_blank" rel="noopener" class="src-link">HLE</a> + <a href="https://arcprize.org/leaderboard" target="_blank" rel="noopener" class="src-link">ARC-AGI-2</a> + <a href="https://labs.scale.com/leaderboard/swe_bench_pro_public" target="_blank" rel="noopener" class="src-link">SWE-Bench</a> の総合的位置）で並び替え。<a href="https://www.anthropic.com/news/claude-opus-4-7" target="_blank" rel="noopener" class="src-link">Anthropic（Claude Opus 4.7、2026-04-16）</a>がLMArena Elo 1505で総合1位を奪還、<a href="https://deepmind.google/technologies/gemini/pro/" target="_blank" rel="noopener" class="src-link">Google（Gemini 3.1 Pro）</a>がHLE・ARC-AGI-2・GPQAで記録保持、<a href="https://ai.meta.com/blog/muse-spark/" target="_blank" rel="noopener" class="src-link">Meta（Muse Spark、2026-04-08）</a>がSWE-Bench Proで55.0%と頭角。2025年後半以降、推論モデルと通常モデルの区別は曖昧になり、大半が「reasoning-on-demand」型へ収斂した。
     </p>
     <table class="model-table">
       <thead>
         <tr><th>Rank</th><th>Lab</th><th>Model</th><th>Context</th><th>Notes</th><th>Key Benchmarks</th></tr>
       </thead>
       <tbody>
-        <!-- ── #1 Anthropic (LMArena #1 @ 1504) ── -->
+        <!-- ── #1 Anthropic (LMArena #1 @ 1505 — Opus 4.7, 2026-04-16) ── -->
         <tr>
           <td class="rank">#1</td>
           <td class="lab"><span class="lab-logo"><img src="images/logos/anthropic.svg" alt="Anthropic logo" class="logo-img"></span><span class="lab-name">Anthropic</span></td>
+          <td><span class="model-name"><a href="https://www.anthropic.com/news/claude-opus-4-7" target="_blank" rel="noopener" class="model-link">Claude Opus 4.7 Thinking</a></span><span class="model-date">2026-04-16</span></td>
+          <td class="ctx">1M</td>
+          <td class="notes"><strong>LMArena Elo 1505で総合1位奪還</strong>。Coding subboard Elo 1583で独走。SWE-Bench / HLEは第三者集計待ち</td>
+          <td class="bench"><span>LMArena</span> 1505 · <span>Coding Elo</span> 1583</td>
+        </tr>
+        <tr>
+          <td class="rank"></td>
+          <td class="lab"><span class="lab-logo"><img src="images/logos/anthropic.svg" alt="Anthropic logo" class="logo-img"></span><span class="lab-name">Anthropic</span></td>
           <td><span class="model-name"><a href="https://www.anthropic.com/claude/opus" target="_blank" rel="noopener" class="model-link">Claude Opus 4.6 Thinking</a></span><span class="model-date">2026 Q1</span></td>
           <td class="ctx">1M</td>
-          <td class="notes">Adaptive Thinking搭載。<strong>LMArena Elo 1504で総合1位</strong>（2026-04）。Coding subboardでも1位</td>
-          <td class="bench"><span>LMArena</span> 1504 · <span>SWE-Ver</span> 80.8% · <span>HLE</span> 34.4% · <span>Coding Elo</span> 1561</td>
+          <td class="notes">Adaptive Thinking搭載。4.7リリース前はLMArena 1位（2026-04）。SWE-Bench Pro 51.9%で4.7のポテンシャルを補完</td>
+          <td class="bench"><span>LMArena</span> 1503 · <span>SWE-Ver</span> 80.8% · <span>SWE-Pro</span> 51.9% · <span>HLE</span> 34.4% · <span>Coding Elo</span> 1561</td>
         </tr>
         <tr>
           <td class="rank"></td>
@@ -1153,7 +1172,7 @@
           <td><span class="model-name"><a href="https://deepmind.google/technologies/gemini/pro/" target="_blank" rel="noopener" class="model-link">Gemini 3.1 Pro</a></span><span class="model-date">2026-02</span></td>
           <td class="ctx">1M</td>
           <td class="notes"><strong>Artificial Analysis Intelligence Index #1（115モデル中）</strong>。HLE / ARC-AGI-2 / GPQA で現在のSOTA</td>
-          <td class="bench"><span>LMArena</span> 1493 · <span>GPQA</span> 94.3% · <span>HLE</span> 44.7% · <span>ARC-AGI-2</span> 77.1% · <span>SWE-Ver</span> 80.6%</td>
+          <td class="bench"><span>LMArena</span> 1492 · <span>GPQA</span> 94.3% · <span>HLE</span> 44.7% · <span>ARC-AGI-2</span> 77.1% · <span>SWE-Ver</span> 80.6%</td>
         </tr>
         <tr>
           <td class="rank"></td>
@@ -1226,9 +1245,17 @@
           <td class="bench"><span>OSS #2</span> non-reasoning</td>
         </tr>
 
-        <!-- ── #6 Meta (Llama 4, long-context disputed) ── -->
+        <!-- ── #6 Meta (Muse Spark 2026-04-08, Llama 4 系譜) ── -->
         <tr>
           <td class="rank">#6</td>
+          <td class="lab"><span class="lab-logo"><img src="images/logos/meta.svg" alt="Meta logo" class="logo-img"></span><span class="lab-name">Meta</span></td>
+          <td><span class="model-name"><a href="https://ai.meta.com/blog/muse-spark/" target="_blank" rel="noopener" class="model-link">Muse Spark</a></span><span class="model-date">2026-04-08</span></td>
+          <td class="ctx">1M</td>
+          <td class="notes">Metaの最新フロンティア。<strong>SWE-Bench Pro 55.0%で第2位</strong>（GPT-5.4 xHighに次ぐ）。LMArena Elo 1496、coding & reasoning両軸で急浮上</td>
+          <td class="bench"><span>LMArena</span> 1496 · <span>SWE-Pro</span> 55.0%</td>
+        </tr>
+        <tr>
+          <td class="rank"></td>
           <td class="lab"><span class="lab-logo"><img src="images/logos/meta.svg" alt="Meta logo" class="logo-img"></span><span class="lab-name">Meta</span></td>
           <td><span class="model-name"><a href="https://ai.meta.com/blog/llama-4-multimodal-intelligence/" target="_blank" rel="noopener" class="model-link">Llama 4 Scout / Maverick</a></span><span class="model-date">2025-04</span></td>
           <td class="ctx">10M*</td>
@@ -1595,7 +1622,7 @@
       <div class="finding">
         <div class="date">2026-04</div>
         <div class="body">
-          <p><strong>SWE-Bench ProのTOPがVerifiedの約7割。</strong>Verifiedで80%台だったフロンティアモデルも、汚染を除去したProでは46〜57%に落ちる。GPT-5.3-CodexがPro 56.8%で首位。Anthropicの Opus 4.6 に WarpGrep v2 を組み合わせると57.5%に到達。Verifiedベースの「コーディング解決済み」言説は現場の難易度を2割ほど過小評価していた。</p>
+          <p><strong>Claude Opus 4.7とMeta Muse Sparkが相次ぎ投入、SWE-Bench Proの天井が59.1%に押し上げ。</strong>GPT-5.4 xHighがPro 59.1%で首位、Muse Sparkが55.0%、Opus 4.6 Thinkingが51.9%。Opus 4.7はLMArena Elo 1505で総合1位（Coding subboard 1583）を奪還したが、Pro値は第三者集計待ち。Verifiedで80%台だったフロンティアモデルが汚染を除去したProで46〜59%に落ちるギャップは、第三者評価の重要性を示している。</p>
           <p class="src"><a href="https://labs.scale.com/leaderboard/swe_bench_pro_public" target="_blank" rel="noopener">labs.scale.com · SWE-Bench Pro Public</a></p>
         </div>
       </div>
@@ -1661,7 +1688,7 @@
   <!-- ═══════════ Footer ═══════════ -->
   <div class="dash-footer">
     <p><strong>Data Quality Note:</strong> 米欧モデルの日付は主要ベンダーの公式ブログまたは信頼できるリーダーボードから取得。中華系はベンダーのHuggingFaceカード、公式ブログ、英語メディア（VentureBeat / SCMP / TechCrunch 等）を優先。ベンダー主張のみの数値は "claim" と明示。</p>
-    <p><strong>Evolution:</strong> LMArena Eloと ARC-AGI-2は週単位で変動するため、表示スコアは2026-04-13時点のスナップショット。SWE-Bench Verified 汚染問題のため、コーディング系SOTAは慎重に扱う（上記Findings参照）。</p>
+    <p><strong>Evolution:</strong> LMArena Eloと ARC-AGI-2は週単位で変動するため、表示スコアは2026-04-18時点のスナップショット。SWE-Bench Verified 汚染問題のため、コーディング系SOTAは慎重に扱う（上記Findings参照）。</p>
     <p><strong>Sources:</strong> OpenAI, Anthropic, Google DeepMind, xAI, Meta AI, Mistral, DeepSeek, Alibaba Qwen, Moonshot, Zhipu, ByteDance, MiniMax, Baidu, Tencent の公式発表 / METR / Apollo Research / Epoch AI / Scale SEAL / Artificial Analysis / LMArena / ARC Prize Foundation / HuggingFace model cards.</p>
     <p><strong>Photo Credits:</strong> All portraits from Wikimedia Commons.
       Sam Altman (Steve Jennings / TechCrunch, CC BY 2.0) ·
@@ -1974,6 +2001,8 @@
       rel('OpenAI', 2026.25, 'GPT-5.4 Pro', true),
       rel('Qwen', 2026.27, 'Qwen3.6-Plus'),
       rel('xAI', 2026.25, 'Grok 4.20 Beta1', true),
+      rel('Meta', 2026.27, 'Muse Spark', true),
+      rel('Anthropic', 2026.29, 'Claude Opus 4.7', true),
     ];
     const frontier = releases.filter(r => r.frontier);
     const normal = releases.filter(r => !r.frontier);

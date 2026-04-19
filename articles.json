@@ -1,5 +1,16 @@
 [
   {
+    "no": 33,
+    "slug": "33-alignment-schools-map",
+    "category": "alignment",
+    "date": "2026.04.19",
+    "slides": "5 Sections",
+    "thumb": "images/thumb-alignment-schools-map.jpg",
+    "title": "「完全アラインメントは数学的に不可能」 — 見出しを剥がすと、学派の地図が残る",
+    "excerpt": "PNAS Nexusに掲載されたZenilらの論文が「AIと人間価値の完全整合は数学的に不可能」と報じられた。論文が実際に証明したのはRiceの定理の応用であり、見出しとは別物である。その一段下に広がるMIRI・Anthropic・DeepMind・CHAI・CAISの五学派を地図化し、三つの断層線で離散構造を示す。managed misalignmentをEcosystem派の古い系譜の名付け直しとして配置する。",
+    "featured": true
+  },
+  {
     "no": 32,
     "slug": "32-japan-agi-silence",
     "category": "governance",
@@ -8,7 +19,7 @@
     "thumb": "images/thumb-japan-agi-silence.jpg",
     "title": "沈黙は、無知ではない — 日本のAGI議論はなぜ成立しないか",
     "excerpt": "2030年、日本語の全国紙を開いても「AGI到達は2027-2032年」と見出しに書いた日本人研究者はほぼ見当たらない。これは能力の不在ではなく、発信コストと発信リターンの非対称という構造の帰結である。松尾豊、山川宏、西川徹、David Ha、Llion Jones。研究・産業・ガバナンス・資本の四層を具体名で辿り、NAIAビジョンを読み、時計を持たない国の時間割を描く。",
-    "featured": true
+    "featured": false
   },
   {
     "no": 31,

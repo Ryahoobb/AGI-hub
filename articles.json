@@ -6,8 +6,8 @@
     "date": "2026.04.19",
     "slides": "5 Sections",
     "thumb": "images/thumb-alignment-schools-map.jpg",
-    "title": "「完全アラインメントは数学的に不可能」 — 見出しを剥がすと、学派の地図が残る",
-    "excerpt": "PNAS Nexusに掲載されたZenilらの論文が「AIと人間価値の完全整合は数学的に不可能」と報じられた。論文が実際に証明したのはRiceの定理の応用であり、見出しとは別物である。その一段下に広がるMIRI・Anthropic・DeepMind・CHAI・CAISの五学派を地図化し、三つの断層線で離散構造を示す。managed misalignmentをEcosystem派の古い系譜の名付け直しとして配置する。",
+    "title": "アラインメントは五つの学派に分裂している — Hernández-Espinosa 論文が接続する系譜",
+    "excerpt": "PNAS Nexus 2026-04-14掲載のHernández-Espinosa, Abrahão, Witkowski, Zenil論文を数学的射程と運用提案の両面で検証する。Rice定理の応用としての不可能性の限界、MIRI・Anthropic・DeepMind・CHAI・CAISの五学派マップ、三本の断層線。managed misalignmentをRussell–Drexler–Critch のEcosystem派の系譜に接続し、アラインメント研究の地政学を描き直す。",
     "featured": true
   },
   {

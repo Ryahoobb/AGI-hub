@@ -5,6 +5,15 @@
  * Self-locates base path from its own script src.
  */
 (function () {
+  // ── Theme init (runs ASAP to minimize FOUC when stored pref differs from OS) ──
+  try {
+    var storedTheme = localStorage.getItem('agi-hub-theme');
+    if (storedTheme === 'dark' || storedTheme === 'light') {
+      document.documentElement.setAttribute('data-theme', storedTheme);
+    }
+    // if nothing stored, CSS @media (prefers-color-scheme: dark) handles OS preference
+  } catch (e) { /* noop */ }
+
   var currentScript = document.currentScript;
   if (!currentScript) {
     var scripts = document.getElementsByTagName('script');
@@ -67,6 +76,26 @@
             toggle.setAttribute('aria-expanded', 'false');
           });
         }
+      }
+
+      // Theme toggle wiring
+      var themeToggle = headerEl.querySelector('[data-theme-toggle]');
+      if (themeToggle) {
+        themeToggle.addEventListener('click', function () {
+          var current = document.documentElement.getAttribute('data-theme');
+          var next;
+          if (current === 'dark') {
+            next = 'light';
+          } else if (current === 'light') {
+            next = 'dark';
+          } else {
+            // no explicit attribute: derive from current OS preference and flip
+            var osDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+            next = osDark ? 'light' : 'dark';
+          }
+          document.documentElement.setAttribute('data-theme', next);
+          try { localStorage.setItem('agi-hub-theme', next); } catch (e) { /* noop */ }
+        });
       }
 
       // Initialize Google Translate widget if the function exists

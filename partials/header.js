@@ -5,13 +5,29 @@
  * Self-locates base path from its own script src.
  */
 (function () {
+  // Determine current page identifier early so theme-init can use it
+  var path = location.pathname.replace(/\/$/, '');
+  var fileName = path.substring(path.lastIndexOf('/') + 1).replace(/\.html$/, '');
+  if (!fileName || path.endsWith('/AGI-hub') || path === '') fileName = 'index';
+  // Article pages all count as "articles"
+  if (location.pathname.indexOf('/articles/') !== -1) fileName = 'articles';
+
+  // Dark mode is enabled only on index and article pages (reading-oriented).
+  // Feature pages (map, prediction, taxonomy, etc.) stay light-only.
+  var darkEnabled = (fileName === 'index' || fileName === 'articles');
+
   // ── Theme init (runs ASAP to minimize FOUC when stored pref differs from OS) ──
   try {
-    var storedTheme = localStorage.getItem('agi-hub-theme');
-    if (storedTheme === 'dark' || storedTheme === 'light') {
-      document.documentElement.setAttribute('data-theme', storedTheme);
+    if (darkEnabled) {
+      var storedTheme = localStorage.getItem('agi-hub-theme');
+      if (storedTheme === 'dark' || storedTheme === 'light') {
+        document.documentElement.setAttribute('data-theme', storedTheme);
+      }
+      // if nothing stored, CSS @media (prefers-color-scheme: dark) handles OS preference
+    } else {
+      // Force light mode on feature pages (overrides OS preference and any stored theme)
+      document.documentElement.setAttribute('data-theme', 'light');
     }
-    // if nothing stored, CSS @media (prefers-color-scheme: dark) handles OS preference
   } catch (e) { /* noop */ }
 
   var currentScript = document.currentScript;
@@ -30,13 +46,6 @@
   var scriptUrl = currentScript.src;
   var partialsBase = scriptUrl.substring(0, scriptUrl.lastIndexOf('/') + 1);
   var siteBase = partialsBase.replace(/partials\/$/, '');
-
-  // Determine current page identifier for active state
-  var path = location.pathname.replace(/\/$/, '');
-  var fileName = path.substring(path.lastIndexOf('/') + 1).replace(/\.html$/, '');
-  if (!fileName || path.endsWith('/AGI-hub') || path === '') fileName = 'index';
-  // Article pages all count as "articles"
-  if (location.pathname.indexOf('/articles/') !== -1) fileName = 'articles';
 
   fetch(partialsBase + 'header.html')
     .then(function (r) {
@@ -78,24 +87,28 @@
         }
       }
 
-      // Theme toggle wiring
+      // Theme toggle wiring (only on dark-enabled pages; hidden elsewhere)
       var themeToggle = headerEl.querySelector('[data-theme-toggle]');
       if (themeToggle) {
-        themeToggle.addEventListener('click', function () {
-          var current = document.documentElement.getAttribute('data-theme');
-          var next;
-          if (current === 'dark') {
-            next = 'light';
-          } else if (current === 'light') {
-            next = 'dark';
-          } else {
-            // no explicit attribute: derive from current OS preference and flip
-            var osDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-            next = osDark ? 'light' : 'dark';
-          }
-          document.documentElement.setAttribute('data-theme', next);
-          try { localStorage.setItem('agi-hub-theme', next); } catch (e) { /* noop */ }
-        });
+        if (!darkEnabled) {
+          themeToggle.style.display = 'none';
+        } else {
+          themeToggle.addEventListener('click', function () {
+            var current = document.documentElement.getAttribute('data-theme');
+            var next;
+            if (current === 'dark') {
+              next = 'light';
+            } else if (current === 'light') {
+              next = 'dark';
+            } else {
+              // no explicit attribute: derive from current OS preference and flip
+              var osDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+              next = osDark ? 'light' : 'dark';
+            }
+            document.documentElement.setAttribute('data-theme', next);
+            try { localStorage.setItem('agi-hub-theme', next); } catch (e) { /* noop */ }
+          });
+        }
       }
 
       // Initialize Google Translate widget if the function exists

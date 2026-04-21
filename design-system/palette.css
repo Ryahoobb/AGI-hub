@@ -2116,6 +2116,283 @@ a.cta {
 }
 
 /* ═════════════════════════════════════════════════════
+   Dark Mode: 特集ページ向けオーバーライド
+   map/pill-map/prediction/taxonomy/thinkers/skeptics 等、
+   ページ独自の<style>で色を直書きしているクラスをカバー。
+   ═════════════════════════════════════════════════════ */
+
+/* 追加のインラインstyle属性カバー: グレー背景・入力要素背景 */
+:root[data-theme="dark"] [style*="background:#e5e5e5"],
+:root[data-theme="dark"] [style*="background: #e5e5e5"],
+:root[data-theme="dark"] [style*="background:#fafafa"],
+:root[data-theme="dark"] [style*="background: #fafafa"],
+:root[data-theme="dark"] [style*="background:#f7f7f7"],
+:root[data-theme="dark"] [style*="background: #f7f7f7"],
+:root[data-theme="dark"] [style*="background:#f0efea"],
+:root[data-theme="dark"] [style*="background: #f0efea"],
+:root[data-theme="dark"] [style*="background:#faf8f1"],
+:root[data-theme="dark"] [style*="background: #faf8f1"],
+:root[data-theme="dark"] [style*="background:#f3f1e9"],
+:root[data-theme="dark"] [style*="background: #f3f1e9"] {
+  background: var(--bg-gray) !important;
+  background-color: var(--bg-gray) !important;
+}
+
+/* インライン薄グレー文字(#999/#aaa/#ccc)はダーク時に見やすく */
+:root[data-theme="dark"] [style*="color:#aaa"],
+:root[data-theme="dark"] [style*="color: #aaa"],
+:root[data-theme="dark"] [style*="color:#ccc"],
+:root[data-theme="dark"] [style*="color: #ccc"] {
+  color: #b8b8b8 !important;
+}
+
+/* インラインborder指定の淡色 */
+:root[data-theme="dark"] [style*="border:1px solid #e5e5e5"],
+:root[data-theme="dark"] [style*="border: 1px solid #e5e5e5"],
+:root[data-theme="dark"] [style*="border:1px solid #e4e4e4"],
+:root[data-theme="dark"] [style*="border: 1px solid #e4e4e4"],
+:root[data-theme="dark"] [style*="border-bottom:1px solid #e5e5e5"],
+:root[data-theme="dark"] [style*="border-top:1px solid #e5e5e5"] {
+  border-color: var(--border) !important;
+}
+
+/* map.html / pill-map.html / taxonomy-*.html */
+:root[data-theme="dark"] .info-panel,
+:root[data-theme="dark"] .info-bar,
+:root[data-theme="dark"] .legend,
+:root[data-theme="dark"] .legend-line,
+:root[data-theme="dark"] .cat-banner,
+:root[data-theme="dark"] .domain-header,
+:root[data-theme="dark"] .domain,
+:root[data-theme="dark"] .domain-count,
+:root[data-theme="dark"] .topic,
+:root[data-theme="dark"] .topic-grid,
+:root[data-theme="dark"] .topic-thumb,
+:root[data-theme="dark"] .concept-grid,
+:root[data-theme="dark"] .concept-card,
+:root[data-theme="dark"] .concept-label,
+:root[data-theme="dark"] .article-chip,
+:root[data-theme="dark"] .depth-indicator,
+:root[data-theme="dark"] .gate,
+:root[data-theme="dark"] .grid-section,
+:root[data-theme="dark"] .info-fill,
+:root[data-theme="dark"] .chaos-map,
+:root[data-theme="dark"] .chaos-legend,
+:root[data-theme="dark"] .chaos-person,
+:root[data-theme="dark"] .chaos-name,
+:root[data-theme="dark"] .chaos-quadrant-label {
+  background-color: transparent;
+  color: var(--body-text) !important;
+  border-color: var(--border) !important;
+}
+
+:root[data-theme="dark"] .info-fill,
+:root[data-theme="dark"] .info-bar {
+  background: #3a3a3a !important;
+}
+
+:root[data-theme="dark"] .concept-card,
+:root[data-theme="dark"] .topic,
+:root[data-theme="dark"] .topic-grid {
+  background: var(--bg-gray) !important;
+}
+
+/* prediction.html */
+:root[data-theme="dark"] .big-stat-grid,
+:root[data-theme="dark"] .diff-hero,
+:root[data-theme="dark"] .editorial-spread,
+:root[data-theme="dark"] .extras-grid,
+:root[data-theme="dark"] .hero-timeline,
+:root[data-theme="dark"] .hero-timeline-header,
+:root[data-theme="dark"] .question,
+:root[data-theme="dark"] .timeline-wrap,
+:root[data-theme="dark"] .compare-bar,
+:root[data-theme="dark"] .divider-section {
+  color: var(--body-text) !important;
+  border-color: var(--border) !important;
+}
+
+/* thinkers.html */
+:root[data-theme="dark"] .dashboard,
+:root[data-theme="dark"] .dash-title,
+:root[data-theme="dark"] .dash-subtitle,
+:root[data-theme="dark"] .section-header,
+:root[data-theme="dark"] .star-label,
+:root[data-theme="dark"] .chaos-axis-x-label,
+:root[data-theme="dark"] .chaos-axis-y-label,
+:root[data-theme="dark"] .chaos-axis-x-ticks,
+:root[data-theme="dark"] .chaos-axis-y-ticks {
+  color: var(--body-text) !important;
+}
+
+/* skeptics-field-guide.html (詳細版) */
+:root[data-theme="dark"] .bias-group,
+:root[data-theme="dark"] .bias-group-head,
+:root[data-theme="dark"] .bias-group-name,
+:root[data-theme="dark"] .bias-group-desc,
+:root[data-theme="dark"] .bias-group-count,
+:root[data-theme="dark"] .bias-claims,
+:root[data-theme="dark"] .bias-claim-num,
+:root[data-theme="dark"] .bh-cell {
+  color: var(--body-text) !important;
+  border-color: var(--border) !important;
+}
+
+:root[data-theme="dark"] .bh-0 { background: #0f0f0f !important; }
+:root[data-theme="dark"] .bh-1 { background: #1a1a1a !important; }
+:root[data-theme="dark"] .bh-2 { background: #242424 !important; }
+:root[data-theme="dark"] .bh-3 { background: #2e2e2e !important; }
+
+/* フォーム要素(input/textarea/button)のインラインbg白→暗 */
+:root[data-theme="dark"] input[style*="background:#f0efea"],
+:root[data-theme="dark"] input[style*="background: #f0efea"],
+:root[data-theme="dark"] textarea[style*="background:#f0efea"],
+:root[data-theme="dark"] textarea[style*="background: #f0efea"] {
+  background: #1e1c18 !important;
+  color: var(--body-text) !important;
+  border-color: var(--border) !important;
+}
+
+:root[data-theme="dark"] button[style*="border:1px solid #1a1a1a"],
+:root[data-theme="dark"] button[style*="border: 1px solid #1a1a1a"] {
+  border-color: var(--body-text) !important;
+  color: var(--body-text) !important;
+}
+
+/* OSダーク時にも全て適用 */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) [style*="background:#e5e5e5"],
+  :root:not([data-theme="light"]) [style*="background: #e5e5e5"],
+  :root:not([data-theme="light"]) [style*="background:#fafafa"],
+  :root:not([data-theme="light"]) [style*="background: #fafafa"],
+  :root:not([data-theme="light"]) [style*="background:#f7f7f7"],
+  :root:not([data-theme="light"]) [style*="background: #f7f7f7"],
+  :root:not([data-theme="light"]) [style*="background:#f0efea"],
+  :root:not([data-theme="light"]) [style*="background: #f0efea"],
+  :root:not([data-theme="light"]) [style*="background:#faf8f1"],
+  :root:not([data-theme="light"]) [style*="background: #faf8f1"],
+  :root:not([data-theme="light"]) [style*="background:#f3f1e9"],
+  :root:not([data-theme="light"]) [style*="background: #f3f1e9"] {
+    background: var(--bg-gray) !important;
+    background-color: var(--bg-gray) !important;
+  }
+
+  :root:not([data-theme="light"]) [style*="color:#aaa"],
+  :root:not([data-theme="light"]) [style*="color: #aaa"],
+  :root:not([data-theme="light"]) [style*="color:#ccc"],
+  :root:not([data-theme="light"]) [style*="color: #ccc"] {
+    color: #b8b8b8 !important;
+  }
+
+  :root:not([data-theme="light"]) [style*="border:1px solid #e5e5e5"],
+  :root:not([data-theme="light"]) [style*="border: 1px solid #e5e5e5"],
+  :root:not([data-theme="light"]) [style*="border:1px solid #e4e4e4"],
+  :root:not([data-theme="light"]) [style*="border: 1px solid #e4e4e4"],
+  :root:not([data-theme="light"]) [style*="border-bottom:1px solid #e5e5e5"],
+  :root:not([data-theme="light"]) [style*="border-top:1px solid #e5e5e5"] {
+    border-color: var(--border) !important;
+  }
+
+  :root:not([data-theme="light"]) .info-panel,
+  :root:not([data-theme="light"]) .info-bar,
+  :root:not([data-theme="light"]) .legend,
+  :root:not([data-theme="light"]) .legend-line,
+  :root:not([data-theme="light"]) .cat-banner,
+  :root:not([data-theme="light"]) .domain-header,
+  :root:not([data-theme="light"]) .domain,
+  :root:not([data-theme="light"]) .domain-count,
+  :root:not([data-theme="light"]) .topic,
+  :root:not([data-theme="light"]) .topic-grid,
+  :root:not([data-theme="light"]) .topic-thumb,
+  :root:not([data-theme="light"]) .concept-grid,
+  :root:not([data-theme="light"]) .concept-card,
+  :root:not([data-theme="light"]) .concept-label,
+  :root:not([data-theme="light"]) .article-chip,
+  :root:not([data-theme="light"]) .depth-indicator,
+  :root:not([data-theme="light"]) .gate,
+  :root:not([data-theme="light"]) .grid-section,
+  :root:not([data-theme="light"]) .info-fill,
+  :root:not([data-theme="light"]) .chaos-map,
+  :root:not([data-theme="light"]) .chaos-legend,
+  :root:not([data-theme="light"]) .chaos-person,
+  :root:not([data-theme="light"]) .chaos-name,
+  :root:not([data-theme="light"]) .chaos-quadrant-label {
+    background-color: transparent;
+    color: var(--body-text) !important;
+    border-color: var(--border) !important;
+  }
+
+  :root:not([data-theme="light"]) .info-fill,
+  :root:not([data-theme="light"]) .info-bar {
+    background: #3a3a3a !important;
+  }
+
+  :root:not([data-theme="light"]) .concept-card,
+  :root:not([data-theme="light"]) .topic,
+  :root:not([data-theme="light"]) .topic-grid {
+    background: var(--bg-gray) !important;
+  }
+
+  :root:not([data-theme="light"]) .big-stat-grid,
+  :root:not([data-theme="light"]) .diff-hero,
+  :root:not([data-theme="light"]) .editorial-spread,
+  :root:not([data-theme="light"]) .extras-grid,
+  :root:not([data-theme="light"]) .hero-timeline,
+  :root:not([data-theme="light"]) .hero-timeline-header,
+  :root:not([data-theme="light"]) .question,
+  :root:not([data-theme="light"]) .timeline-wrap,
+  :root:not([data-theme="light"]) .compare-bar,
+  :root:not([data-theme="light"]) .divider-section {
+    color: var(--body-text) !important;
+    border-color: var(--border) !important;
+  }
+
+  :root:not([data-theme="light"]) .dashboard,
+  :root:not([data-theme="light"]) .dash-title,
+  :root:not([data-theme="light"]) .dash-subtitle,
+  :root:not([data-theme="light"]) .section-header,
+  :root:not([data-theme="light"]) .star-label,
+  :root:not([data-theme="light"]) .chaos-axis-x-label,
+  :root:not([data-theme="light"]) .chaos-axis-y-label,
+  :root:not([data-theme="light"]) .chaos-axis-x-ticks,
+  :root:not([data-theme="light"]) .chaos-axis-y-ticks {
+    color: var(--body-text) !important;
+  }
+
+  :root:not([data-theme="light"]) .bias-group,
+  :root:not([data-theme="light"]) .bias-group-head,
+  :root:not([data-theme="light"]) .bias-group-name,
+  :root:not([data-theme="light"]) .bias-group-desc,
+  :root:not([data-theme="light"]) .bias-group-count,
+  :root:not([data-theme="light"]) .bias-claims,
+  :root:not([data-theme="light"]) .bias-claim-num,
+  :root:not([data-theme="light"]) .bh-cell {
+    color: var(--body-text) !important;
+    border-color: var(--border) !important;
+  }
+
+  :root:not([data-theme="light"]) .bh-0 { background: #0f0f0f !important; }
+  :root:not([data-theme="light"]) .bh-1 { background: #1a1a1a !important; }
+  :root:not([data-theme="light"]) .bh-2 { background: #242424 !important; }
+  :root:not([data-theme="light"]) .bh-3 { background: #2e2e2e !important; }
+
+  :root:not([data-theme="light"]) input[style*="background:#f0efea"],
+  :root:not([data-theme="light"]) input[style*="background: #f0efea"],
+  :root:not([data-theme="light"]) textarea[style*="background:#f0efea"],
+  :root:not([data-theme="light"]) textarea[style*="background: #f0efea"] {
+    background: #1e1c18 !important;
+    color: var(--body-text) !important;
+    border-color: var(--border) !important;
+  }
+
+  :root:not([data-theme="light"]) button[style*="border:1px solid #1a1a1a"],
+  :root:not([data-theme="light"]) button[style*="border: 1px solid #1a1a1a"] {
+    border-color: var(--body-text) !important;
+    color: var(--body-text) !important;
+  }
+}
+
+/* ═════════════════════════════════════════════════════
    Site Theme Toggle Button
    Headerに配置。headerは両テーマで黒背景なので常時白アイコン。
    ═════════════════════════════════════════════════════ */

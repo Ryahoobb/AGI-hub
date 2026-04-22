@@ -101,17 +101,85 @@
      TAB 1: Article Graph (force-directed)
      ══════════════════════════════════════ */
 
-  /* Canvas */
-  #graph-container {
-    width: 100%; height: 72vh; min-height: 520px;
-    position: relative;
+  /* Layout: graph + side list */
+  .graph-layout {
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    height: 72vh; min-height: 520px;
     border-top: 1px solid #e5e5e5;
     border-bottom: 1px solid #e5e5e5;
+    background: #fff;
+  }
+
+  /* Canvas */
+  #graph-container {
+    width: 100%; height: 100%;
+    position: relative;
     cursor: grab;
     background: #fff;
   }
   #graph-container:active { cursor: grabbing; }
   #graph-canvas { width: 100%; height: 100%; display: block; }
+
+  /* Article list pane */
+  .article-list-pane {
+    border-left: 1px solid #e5e5e5;
+    display: flex; flex-direction: column;
+    overflow: hidden;
+    background: #fff;
+  }
+  .article-list-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 16px;
+    border-bottom: 1px solid #e5e5e5;
+    background: #fafafa;
+    font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+    font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: #757575;
+    flex-shrink: 0;
+  }
+  .alh-count { color: #1a1a1a; font-weight: 600; }
+  .alh-sort { color: #999; }
+  .alh-toggle {
+    display: none;
+    background: transparent; border: none; cursor: pointer;
+    font-family: inherit; font-size: 14px; color: #1a1a1a;
+    padding: 4px 8px; margin: -4px -8px;
+  }
+  .article-list {
+    list-style: none; padding: 0; margin: 0;
+    overflow-y: auto; flex: 1;
+  }
+  .article-list li {
+    display: grid;
+    grid-template-columns: 14px 48px 1fr;
+    gap: 10px; align-items: start;
+    padding: 10px 16px;
+    border-bottom: 1px solid #f2f2f2;
+    cursor: pointer;
+    transition: background 0.1s ease;
+    line-height: 1.4;
+  }
+  .article-list li:last-child { border-bottom: none; }
+  .article-list li:hover,
+  .article-list li.hover {
+    background: #f5f5f0;
+  }
+  .article-list li.fade { opacity: 0.35; }
+  .al-dot {
+    width: 10px; height: 10px; border-radius: 50%;
+    margin-top: 5px;
+    background: #999;
+  }
+  .al-no {
+    font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+    font-size: 10px; color: #999; letter-spacing: 0.02em;
+    padding-top: 2px;
+  }
+  .al-title {
+    font-size: 12.5px; color: #1a1a1a;
+    line-height: 1.45;
+  }
 
   /* Tooltip */
   .graph-tooltip {
@@ -584,7 +652,19 @@
     .tab-card-desc { font-size: 12px; }
     .legend { padding: 16px 24px; gap: 16px; }
     .info-panel { padding: 0 24px 48px; }
+    .graph-layout {
+      grid-template-columns: 1fr;
+      height: auto; min-height: 0;
+    }
     #graph-container { min-height: 360px; height: 55vh; }
+    .article-list-pane {
+      border-left: none;
+      border-top: 1px solid #e5e5e5;
+      max-height: 360px;
+    }
+    .article-list-pane.collapsed .article-list { display: none; }
+    .alh-toggle { display: inline-block; }
+    .article-list-pane.collapsed .alh-toggle { transform: rotate(-90deg); }
     .thinkers-wrap { padding: 24px 16px 48px; }
     .chaos-map { height: 540px; padding: 36px 32px 48px 60px; }
     .chaos-person { width: 44px; }
@@ -616,6 +696,9 @@
     .legend { padding: 12px 16px; gap: 12px; flex-wrap: wrap; }
     .info-panel { padding: 0 16px 36px; }
     #graph-container { min-height: 300px; height: 50vh; }
+    .article-list-pane { max-height: 300px; }
+    .article-list li { padding: 8px 12px; grid-template-columns: 12px 44px 1fr; gap: 8px; }
+    .al-title { font-size: 12px; }
     .thinkers-wrap { padding: 20px 12px 40px; }
     .chaos-map { height: 400px; padding: 28px 16px 40px 40px; }
     .chaos-person { width: 36px; }
@@ -689,8 +772,18 @@
      ══════════════════════════════════════ -->
 <div class="tab-panel active" id="panel-articles">
 
-<div id="graph-container">
-  <canvas id="graph-canvas"></canvas>
+<div class="graph-layout" id="graph-layout">
+  <div id="graph-container">
+    <canvas id="graph-canvas"></canvas>
+  </div>
+  <aside class="article-list-pane" id="article-list-pane">
+    <div class="article-list-header">
+      <span class="alh-count" id="alh-count">loading…</span>
+      <span class="alh-sort">新しい順</span>
+      <button type="button" class="alh-toggle" id="alh-toggle" aria-expanded="true" aria-controls="article-list" aria-label="記事一覧を開閉">▾</button>
+    </div>
+    <ul class="article-list" id="article-list"></ul>
+  </aside>
 </div>
 <div class="graph-tooltip" id="tooltip"></div>
 
@@ -1133,6 +1226,11 @@ function initArticlesGraph() {
   var tooltip   = document.getElementById('tooltip');
   var statLine  = document.getElementById('stat-line');
   var legendEl  = document.getElementById('legend');
+  var listEl    = document.getElementById('article-list');
+  var alhCount  = document.getElementById('alh-count');
+  var alhToggle = document.getElementById('alh-toggle');
+  var listPane  = document.getElementById('article-list-pane');
+  var listItemBySlug = {};
 
   var W = 0, H = 0;
   var dpr = window.devicePixelRatio || 1;
@@ -1341,6 +1439,42 @@ function initArticlesGraph() {
 
   function hideTooltip() { tooltip.classList.remove('visible'); }
 
+  // Sync .hover class on the list when canvas hover changes,
+  // and scroll the matching item into view (list → canvas hover flow
+  // doesn't trigger this; it's handled by the list's own mouseenter).
+  function syncListHover(slug, opts) {
+    for (var s in listItemBySlug) {
+      if (listItemBySlug[s]) listItemBySlug[s].classList.remove('hover');
+    }
+    if (slug && listItemBySlug[slug]) {
+      listItemBySlug[slug].classList.add('hover');
+      if (opts && opts.scroll) {
+        listItemBySlug[slug].scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+      }
+    }
+  }
+
+  // Set hoverNode by slug (used by list mouseenter)
+  function setHoverBySlug(slug) {
+    if (!slug) {
+      if (hoverNode) {
+        hoverNode = null;
+        if (simulation) simulation.alpha(0.05).restart();
+      }
+      hideTooltip();
+      return;
+    }
+    for (var i = 0; i < nodes.length; i++) {
+      if (nodes[i].slug === slug) {
+        if (hoverNode !== nodes[i]) {
+          hoverNode = nodes[i];
+          if (simulation) simulation.alpha(0.05).restart();
+        }
+        return;
+      }
+    }
+  }
+
   function escapeHtml(s) {
     return String(s || '').replace(/[&<>"']/g, function (c) {
       return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
@@ -1361,6 +1495,7 @@ function initArticlesGraph() {
       if (hoverNode !== n) {
         hoverNode = n;
         if (simulation) simulation.alpha(0.05).restart();
+        syncListHover(n.slug, { scroll: true });
       }
       canvas.style.cursor = 'pointer';
       showTooltip(n, e.clientX, e.clientY);
@@ -1368,6 +1503,7 @@ function initArticlesGraph() {
       if (hoverNode) {
         hoverNode = null;
         if (simulation) simulation.alpha(0.05).restart();
+        syncListHover(null);
       }
       canvas.style.cursor = 'grab';
       hideTooltip();
@@ -1423,7 +1559,7 @@ function initArticlesGraph() {
   canvas.addEventListener('mousedown', onMouseDown);
   window.addEventListener('mouseup', onMouseUp);
   canvas.addEventListener('mouseleave', function () {
-    if (!draggingNode) { hoverNode = null; hideTooltip(); canvas.style.cursor = 'grab'; if (simulation) simulation.alpha(0.05).restart(); }
+    if (!draggingNode) { hoverNode = null; hideTooltip(); canvas.style.cursor = 'grab'; syncListHover(null); if (simulation) simulation.alpha(0.05).restart(); }
   });
   canvas.addEventListener('touchstart', onTouchStart, { passive: false });
   canvas.addEventListener('touchmove',  onTouchMove,  { passive: false });
@@ -1521,6 +1657,47 @@ function initArticlesGraph() {
     buildLegend(usedCats);
 
     statLine.textContent = nodes.length + ' articles · ' + contentLinks.length + ' 本文リンク · ' + editorialLinks.length + ' 編集関連 · ' + softLinks.length + ' カテゴリ共有 · ' + usedCats.length + ' categories';
+
+    // Build side list (newest-first by no descending)
+    if (alhCount) alhCount.textContent = nodes.length + ' articles';
+    var listNodes = nodes.slice().sort(function (a, b) { return (b.no || 0) - (a.no || 0); });
+    listEl.innerHTML = '';
+    listItemBySlug = {};
+    listNodes.forEach(function (n) {
+      var li = document.createElement('li');
+      li.setAttribute('data-slug', n.slug);
+      var dot = document.createElement('span');
+      dot.className = 'al-dot';
+      dot.style.background = CATEGORY_COLORS[n.category] || '#999';
+      var noEl = document.createElement('span');
+      noEl.className = 'al-no';
+      noEl.textContent = 'No.' + String(n.no).padStart(2, '0');
+      var titleEl = document.createElement('span');
+      titleEl.className = 'al-title';
+      titleEl.textContent = n.title;
+      li.appendChild(dot);
+      li.appendChild(noEl);
+      li.appendChild(titleEl);
+      li.addEventListener('mouseenter', function () {
+        setHoverBySlug(n.slug);
+      });
+      li.addEventListener('mouseleave', function () {
+        setHoverBySlug(null);
+      });
+      li.addEventListener('click', function () {
+        window.location.href = 'articles/' + n.slug;
+      });
+      listEl.appendChild(li);
+      listItemBySlug[n.slug] = li;
+    });
+
+    // Mobile toggle
+    if (alhToggle) {
+      alhToggle.addEventListener('click', function () {
+        var collapsed = listPane.classList.toggle('collapsed');
+        alhToggle.setAttribute('aria-expanded', collapsed ? 'false' : 'true');
+      });
+    }
 
     categoryInitialPosition(nodes);
     startSimulation();

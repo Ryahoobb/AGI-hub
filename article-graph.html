@@ -510,10 +510,12 @@
 
   Promise.all([
     fetch('articles.json').then(function (r) { return r.json(); }),
-    fetch('backlinks.json').then(function (r) { return r.ok ? r.json() : { edges: [] }; })
+    fetch('backlinks.json').then(function (r) { return r.ok ? r.json() : { edges: [] }; }),
+    fetch('related.json').then(function (r) { return r.ok ? r.json() : { relations: [] }; }).catch(function () { return { relations: [] }; })
   ]).then(function (results) {
     var articles = results[0];
     var edgesData = (results[1] && results[1].edges) || [];
+    var relationData = (results[2] && results[2].relations) || [];
 
     var bySlug = {};
     nodes = articles.map(function (a) {
@@ -531,21 +533,35 @@
       return node;
     });
 
-    var hardLinks = edgesData.filter(function (e) {
+    var contentLinks = edgesData.filter(function (e) {
       return bySlug[e.from] && bySlug[e.to];
     }).map(function (e) {
       bySlug[e.from].degree++;
       bySlug[e.to].degree++;
-      return { source: e.from, target: e.to, type: 'hard' };
+      return { source: e.from, target: e.to, type: 'hard', origin: 'content' };
     });
 
-    // Soft edges: category co-membership, excluding pairs already connected by a hard edge.
-    var hardPairs = {};
-    hardLinks.forEach(function (l) {
-      var a = l.source < l.target ? l.source : l.target;
-      var b = l.source < l.target ? l.target : l.source;
-      hardPairs[a + '|' + b] = true;
+    // Editorial-related edges (undirected). Add as solid hard-type, deduped against content links.
+    var pairKey = function (x, y) { return x < y ? x + '|' + y : y + '|' + x; };
+    var contentPairs = {};
+    contentLinks.forEach(function (l) { contentPairs[pairKey(l.source, l.target)] = true; });
+
+    var editorialLinks = [];
+    relationData.forEach(function (rel) {
+      if (!rel || !rel.a || !rel.b) return;
+      var aSlug = rel.a.indexOf('.html') === -1 ? rel.a + '.html' : rel.a;
+      var bSlug = rel.b.indexOf('.html') === -1 ? rel.b + '.html' : rel.b;
+      if (!bySlug[aSlug] || !bySlug[bSlug]) return;
+      var key = pairKey(aSlug, bSlug);
+      if (contentPairs[key]) return; // avoid doubling an existing backlink
+      contentPairs[key] = true;
+      bySlug[aSlug].degree++;
+      bySlug[bSlug].degree++;
+      editorialLinks.push({ source: aSlug, target: bSlug, type: 'hard', origin: 'editorial' });
     });
+
+    var hardLinks = contentLinks.concat(editorialLinks);
+    var hardPairs = contentPairs;
     var byCategory = {};
     nodes.forEach(function (n) {
       (byCategory[n.category] = byCategory[n.category] || []).push(n.slug);
@@ -571,8 +587,8 @@
     var usedCats = Array.from(new Set(nodes.map(function (n) { return n.category; }))).sort();
     buildLegend(usedCats);
 
-    countEl.textContent = nodes.length + ' articles · ' + hardLinks.length + ' 本文 · ' + softLinks.length + ' カテゴリ';
-    statLine.textContent = nodes.length + ' articles · ' + hardLinks.length + ' 本文リンク · ' + softLinks.length + ' カテゴリ共有 · ' + usedCats.length + ' categories';
+    countEl.textContent = nodes.length + ' articles · ' + contentLinks.length + ' 本文 · ' + editorialLinks.length + ' 関連 · ' + softLinks.length + ' カテゴリ';
+    statLine.textContent = nodes.length + ' articles · ' + contentLinks.length + ' 本文リンク · ' + editorialLinks.length + ' 編集関連 · ' + softLinks.length + ' カテゴリ共有 · ' + usedCats.length + ' categories';
 
     categoryInitialPosition(nodes);
     startSimulation();

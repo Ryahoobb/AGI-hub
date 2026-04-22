@@ -116,79 +116,122 @@
         try { googleTranslateElementInit(); } catch (e) { /* noop */ }
       }
 
-      // Inject backlinks section on article pages
+      // Inject backlinks + related sections on article pages
       if (fileName === 'articles') {
-        injectBacklinks();
+        injectConnections();
       }
     })
     .catch(function (err) {
       console.warn('[AGI HUB header] ' + err.message);
     });
 
-  function injectBacklinks() {
+  function injectConnections() {
     var currentSlug = location.pathname.substring(location.pathname.lastIndexOf('/') + 1);
     if (!currentSlug || !/^\d+-[\w-]+\.html$/i.test(currentSlug)) return;
+    var currentSlugBare = currentSlug.replace(/\.html$/, '');
 
     Promise.all([
       fetch(siteBase + 'backlinks.json').then(function (r) { return r.ok ? r.json() : null; }),
-      fetch(siteBase + 'articles.json').then(function (r) { return r.ok ? r.json() : null; })
+      fetch(siteBase + 'articles.json').then(function (r) { return r.ok ? r.json() : null; }),
+      fetch(siteBase + 'related.json').then(function (r) { return r.ok ? r.json() : null; }).catch(function () { return null; })
     ]).then(function (results) {
       var blData = results[0];
       var articles = results[1];
-      if (!blData || !articles || !Array.isArray(blData.edges) || !Array.isArray(articles)) return;
+      var relData = results[2];
+      if (!articles || !Array.isArray(articles)) return;
 
-      var bySlug = {};
+      var bySlugFile = {}; // key: "NN-xxx.html"
+      var bySlugBare = {}; // key: "NN-xxx"
       for (var i = 0; i < articles.length; i++) {
-        var key = articles[i].slug.indexOf('.html') === -1 ? articles[i].slug + '.html' : articles[i].slug;
-        bySlug[key] = articles[i];
+        var bare = articles[i].slug.replace(/\.html$/, '');
+        var file = bare + '.html';
+        bySlugFile[file] = articles[i];
+        bySlugBare[bare] = articles[i];
       }
 
+      // Collect backlinks (articles pointing to current)
       var backlinks = [];
-      for (var j = 0; j < blData.edges.length; j++) {
-        var edge = blData.edges[j];
-        if (edge.to === currentSlug && bySlug[edge.from]) {
-          backlinks.push(bySlug[edge.from]);
+      if (blData && Array.isArray(blData.edges)) {
+        for (var j = 0; j < blData.edges.length; j++) {
+          var edge = blData.edges[j];
+          if (edge.to === currentSlug && bySlugFile[edge.from]) {
+            backlinks.push(bySlugFile[edge.from]);
+          }
         }
+        backlinks.sort(function (a, b) { return (a.no || 0) - (b.no || 0); });
       }
-      backlinks.sort(function (a, b) { return (a.no || 0) - (b.no || 0); });
-      if (backlinks.length === 0) return;
+
+      // Collect related (undirected; current article on either side)
+      var related = [];
+      var seenRelated = {};
+      if (relData && Array.isArray(relData.relations)) {
+        for (var k = 0; k < relData.relations.length; k++) {
+          var rel = relData.relations[k];
+          var other = null;
+          if (rel.a === currentSlugBare) other = rel.b;
+          else if (rel.b === currentSlugBare) other = rel.a;
+          if (other && bySlugBare[other] && !seenRelated[other]) {
+            seenRelated[other] = true;
+            related.push(bySlugBare[other]);
+          }
+        }
+        related.sort(function (a, b) { return (a.no || 0) - (b.no || 0); });
+      }
+
+      if (backlinks.length === 0 && related.length === 0) return;
 
       var main = document.querySelector('main');
       if (!main) return;
 
-      var section = document.createElement('section');
-      section.className = 'backlinks-section';
-      section.setAttribute('aria-label', 'この記事を参照している記事');
-      section.innerHTML =
-        '<style>' +
-        '.backlinks-section{max-width:720px;margin:64px auto 0;padding:32px 24px 48px;border-top:1px solid var(--bl-border,#e5e5e5);font-family:HelveticaNeue,"Helvetica Neue",Helvetica,Arial,"Hiragino Kaku Gothic ProN",sans-serif;font-feature-settings:"palt";}' +
-        '[data-theme="dark"] .backlinks-section{--bl-border:#2a2a2a;}' +
-        '.backlinks-section .bl-label{font-family:"SF Mono","Fira Code",Menlo,Consolas,monospace;font-size:12px;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:var(--bl-muted,#555);margin-bottom:20px;display:flex;align-items:center;gap:10px;}' +
-        '.backlinks-section .bl-count{display:inline-flex;align-items:center;justify-content:center;min-width:22px;height:22px;padding:0 7px;border-radius:11px;background:var(--bl-badge-bg,#1a1a1a);color:var(--bl-badge-fg,#fff);font-size:11px;font-weight:600;letter-spacing:0;}' +
-        '[data-theme="dark"] .backlinks-section .bl-count{--bl-badge-bg:#e5e5e5;--bl-badge-fg:#1a1a1a;}' +
-        '[data-theme="dark"] .backlinks-section .bl-label{--bl-muted:#777;}' +
-        '.backlinks-section ul{list-style:none;padding:0;margin:0;}' +
-        '.backlinks-section li{padding:12px 0;border-bottom:1px solid var(--bl-border-soft,#f0f0f0);}' +
-        '[data-theme="dark"] .backlinks-section li{--bl-border-soft:#1f1f1f;}' +
-        '.backlinks-section li:last-child{border-bottom:none;}' +
-        '.backlinks-section a{display:block;color:var(--bl-text,#1a1a1a);text-decoration:none;transition:color 0.15s;}' +
-        '[data-theme="dark"] .backlinks-section a{--bl-text:#e5e5e5;}' +
-        '.backlinks-section a:hover{color:var(--bl-hover,#007acc);}' +
-        '.backlinks-section .bl-no{display:inline-block;font-family:"SF Mono","Fira Code",Menlo,Consolas,monospace;font-size:12px;color:var(--bl-muted,#999);margin-right:12px;min-width:48px;}' +
-        '.backlinks-section .bl-title{font-size:15px;line-height:1.5;}' +
-        '</style>' +
-        '<div class="bl-label">この記事を参照している記事 <span class="bl-count">' + backlinks.length + '</span></div>' +
-        '<ul>' +
-        backlinks.map(function (a) {
-          var num = a.no != null ? ('No.' + String(a.no).padStart(2, '0')) : '';
-          var href = a.slug.indexOf('.html') === -1 ? a.slug + '.html' : a.slug;
-          return '<li><a href="' + href + '"><span class="bl-no">' + num + '</span><span class="bl-title">' + escapeHtml(a.title || a.slug) + '</span></a></li>';
-        }).join('') +
-        '</ul>';
+      // Shared styles injected once per page
+      if (!document.getElementById('connections-style')) {
+        var styleEl = document.createElement('style');
+        styleEl.id = 'connections-style';
+        styleEl.textContent =
+          '.connections-section{max-width:720px;margin:0 auto;padding:32px 24px;font-family:HelveticaNeue,"Helvetica Neue",Helvetica,Arial,"Hiragino Kaku Gothic ProN",sans-serif;font-feature-settings:"palt";}' +
+          '.connections-section.first{margin-top:64px;border-top:1px solid var(--cn-border,#e5e5e5);padding-top:32px;}' +
+          '.connections-section.last{padding-bottom:48px;}' +
+          '[data-theme="dark"] .connections-section.first{--cn-border:#2a2a2a;}' +
+          '.connections-section .cn-label{font-family:"SF Mono","Fira Code",Menlo,Consolas,monospace;font-size:12px;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:var(--cn-muted,#555);margin-bottom:20px;display:flex;align-items:center;gap:10px;}' +
+          '[data-theme="dark"] .connections-section .cn-label{--cn-muted:#777;}' +
+          '.connections-section .cn-count{display:inline-flex;align-items:center;justify-content:center;min-width:22px;height:22px;padding:0 7px;border-radius:11px;font-size:11px;font-weight:600;letter-spacing:0;background:var(--cn-badge-bg,#1a1a1a);color:var(--cn-badge-fg,#fff);}' +
+          '[data-theme="dark"] .connections-section .cn-count{--cn-badge-bg:#e5e5e5;--cn-badge-fg:#1a1a1a;}' +
+          '.connections-section.related .cn-count{--cn-badge-bg:#007acc;--cn-badge-fg:#fff;}' +
+          '[data-theme="dark"] .connections-section.related .cn-count{--cn-badge-bg:#4ea3d9;--cn-badge-fg:#0f0f0f;}' +
+          '.connections-section ul{list-style:none;padding:0;margin:0;}' +
+          '.connections-section li{padding:12px 0;border-bottom:1px solid var(--cn-border-soft,#f0f0f0);}' +
+          '[data-theme="dark"] .connections-section li{--cn-border-soft:#1f1f1f;}' +
+          '.connections-section li:last-child{border-bottom:none;}' +
+          '.connections-section a{display:block;color:var(--cn-text,#1a1a1a);text-decoration:none;transition:color 0.15s;}' +
+          '[data-theme="dark"] .connections-section a{--cn-text:#e5e5e5;}' +
+          '.connections-section a:hover{color:var(--cn-hover,#007acc);}' +
+          '.connections-section .cn-no{display:inline-block;font-family:"SF Mono","Fira Code",Menlo,Consolas,monospace;font-size:12px;color:var(--cn-muted,#999);margin-right:12px;min-width:48px;}' +
+          '.connections-section .cn-title{font-size:15px;line-height:1.5;}';
+        document.head.appendChild(styleEl);
+      }
 
-      main.appendChild(section);
+      var sectionsToAppend = [];
+      if (related.length > 0) sectionsToAppend.push({ kind: 'related', label: '関連記事', items: related });
+      if (backlinks.length > 0) sectionsToAppend.push({ kind: 'backlinks', label: 'この記事を参照している記事', items: backlinks });
+
+      sectionsToAppend.forEach(function (cfg, idx) {
+        var section = document.createElement('section');
+        section.className = 'connections-section ' + cfg.kind + (idx === 0 ? ' first' : '') + (idx === sectionsToAppend.length - 1 ? ' last' : '');
+        section.setAttribute('aria-label', cfg.label);
+        section.innerHTML =
+          '<div class="cn-label">' + cfg.label + ' <span class="cn-count">' + cfg.items.length + '</span></div>' +
+          '<ul>' +
+          cfg.items.map(function (a) {
+            var num = a.no != null ? ('No.' + String(a.no).padStart(2, '0')) : '';
+            var bare = a.slug.replace(/\.html$/, '');
+            var href = bare + '.html';
+            return '<li><a href="' + href + '"><span class="cn-no">' + num + '</span><span class="cn-title">' + escapeHtml(a.title || a.slug) + '</span></a></li>';
+          }).join('') +
+          '</ul>';
+        main.appendChild(section);
+      });
     }).catch(function (err) {
-      console.warn('[AGI HUB backlinks] ' + (err && err.message ? err.message : err));
+      console.warn('[AGI HUB connections] ' + (err && err.message ? err.message : err));
     });
   }
 

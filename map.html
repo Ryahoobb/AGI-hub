@@ -7,8 +7,10 @@
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <title>Maps — AGI HUB</title>
 <meta name="revised" content="2026.04.14">
-<meta name="description" content="記事の相互参照ネットワーク、主要論者のポジション、認知深度、否定論ファクトチェック。4つのマップで知の地形を俯瞰する">
+<meta name="description" content="記事ネットワーク、論者ポジション、認知深度、否定論ファクトチェック、AIインシデント地図。5つのマップで知の地形と現実の破綻点を俯瞰する">
 <link rel="stylesheet" href="design-system/palette.css">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js" defer></script>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -49,7 +51,7 @@
     max-width: 1200px; margin: 0 auto;
     padding: 0 48px 48px;
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(5, 1fr);
     gap: 1px;
     background: #e5e5e5;
     border: 1px solid #e5e5e5;
@@ -633,6 +635,402 @@
   .sk-sources-list li { break-inside: avoid; }
   .sk-sources-list .sa { font-weight: 600; color: #1a1a1a; }
 
+  /* ══════════════════════════════════════
+     TAB 5: Incident Atlas
+     ══════════════════════════════════════ */
+  .incident-wrap {
+    max-width: 1200px; margin: 0 auto;
+    padding: 48px 48px 64px;
+  }
+  .incident-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: #e5e5e5;
+    border: 1px solid #e5e5e5;
+    margin: 28px 0 36px;
+  }
+  .incident-stat {
+    background: #fff;
+    padding: 18px 20px;
+  }
+  .incident-stat-label {
+    font-family: "SF Mono", Menlo, monospace;
+    font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: #999; margin-bottom: 10px;
+  }
+  .incident-stat-value {
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 26px; font-weight: 700; line-height: 1.1;
+    color: #1a1a1a; margin-bottom: 6px;
+  }
+  .incident-stat-desc {
+    font-size: 12px; line-height: 1.6; color: #757575;
+  }
+  .incident-layout {
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    gap: 24px;
+    align-items: start;
+  }
+  .incident-world-shell {
+    border: 1px solid #1a1a1a;
+    background: #fff;
+    overflow: hidden;
+  }
+  .incident-world-head {
+    display: flex; align-items: baseline; justify-content: space-between;
+    gap: 16px; padding: 16px 18px;
+    border-bottom: 1px solid #e5e5e5;
+    background: #fff;
+  }
+  .incident-world-title {
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 20px; font-weight: 700; color: #1a1a1a;
+  }
+  .incident-world-meta {
+    font-family: "SF Mono", Menlo, monospace;
+    font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: #999;
+  }
+  .incident-map-frame {
+    position: relative;
+    overflow: hidden;
+  }
+  #incident-map {
+    height: 560px;
+    width: 100%;
+    border-top: 1px solid #e5e5e5;
+    background: #f5f5f0;
+  }
+  .incident-map-note {
+    position: absolute;
+    left: 18px;
+    bottom: 18px;
+    z-index: 500;
+    max-width: 260px;
+    padding: 11px 12px;
+    background: rgba(255,255,255,0.92);
+    border: 1px solid rgba(26,26,26,0.12);
+    box-shadow: 0 12px 30px rgba(26,26,26,0.08);
+    font-family: "SF Mono", Menlo, monospace;
+    font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: #757575; line-height: 1.6;
+  }
+  .leaflet-popup-content-wrapper {
+    border-radius: 0 !important;
+    box-shadow: 0 16px 40px rgba(26,26,26,0.16) !important;
+    border: 1px solid rgba(26,26,26,0.12) !important;
+  }
+  .leaflet-popup-tip {
+    box-shadow: none !important;
+  }
+  .incident-popup-title {
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 16px; font-weight: 700; line-height: 1.35;
+    color: #1a1a1a; margin-bottom: 6px;
+  }
+  .incident-popup-meta {
+    font-family: "SF Mono", Menlo, monospace;
+    font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase;
+    color: #999; margin-bottom: 8px; line-height: 1.5;
+  }
+  .incident-popup-copy {
+    font-size: 13px; line-height: 1.65; color: #585858;
+  }
+  .incident-legend {
+    display: flex; flex-wrap: wrap; gap: 12px 18px;
+    padding: 16px 18px 18px;
+    border-top: 1px solid #e5e5e5;
+    background: #fff;
+  }
+  .incident-legend-item {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-family: "SF Mono", Menlo, monospace;
+    font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase;
+    color: #757575;
+  }
+  .incident-legend-dot {
+    width: 10px; height: 10px; border-radius: 50%;
+    border: 1px solid rgba(26,26,26,0.18);
+  }
+  .incident-list-pane {
+    border: 1px solid #e5e5e5;
+    background: #fff;
+    display: flex; flex-direction: column;
+    min-height: 0;
+  }
+  .incident-detail {
+    padding: 18px 18px 16px;
+    border-bottom: 1px solid #e5e5e5;
+    background: #fafafa;
+  }
+  .incident-detail-label {
+    font-family: "SF Mono", Menlo, monospace;
+    font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: #999; margin-bottom: 10px;
+  }
+  .incident-detail-title {
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 24px; font-weight: 700; line-height: 1.2;
+    color: #1a1a1a; margin-bottom: 12px;
+  }
+  .incident-detail-meta {
+    display: flex; flex-wrap: wrap; gap: 8px;
+    margin-bottom: 14px;
+  }
+  .incident-chip {
+    display: inline-flex; align-items: center;
+    padding: 5px 10px;
+    border: 1px solid #e5e5e5;
+    border-radius: 999px;
+    font-family: "SF Mono", Menlo, monospace;
+    font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase;
+    color: #757575;
+    background: #fff;
+  }
+  .incident-mode-chip {
+    color: #1a1a1a;
+    border-color: rgba(26,26,26,0.12);
+    font-weight: 700;
+  }
+  .incident-detail-copy {
+    font-size: 13px; line-height: 1.75; color: #585858;
+    margin-bottom: 16px;
+  }
+  .incident-detail-links {
+    display: flex; flex-wrap: wrap; gap: 10px;
+  }
+  .incident-detail-links a {
+    display: inline-flex; align-items: center;
+    padding: 8px 12px;
+    border: 1px solid #1a1a1a;
+    font-family: "SF Mono", Menlo, monospace;
+    font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase;
+    color: #1a1a1a;
+    transition: background 0.2s ease, color 0.2s ease;
+  }
+  .incident-detail-links a:hover {
+    background: #1a1a1a;
+    color: #fff;
+  }
+  .incident-list-header {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 12px; padding: 12px 18px;
+    border-bottom: 1px solid #e5e5e5;
+    background: #fff;
+    font-family: "SF Mono", Menlo, monospace;
+    font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: #999;
+  }
+  .incident-list {
+    list-style: none;
+    margin: 0; padding: 0;
+    overflow-y: auto;
+    flex: 1;
+  }
+  .incident-list li {
+    display: grid;
+    grid-template-columns: 14px 1fr;
+    gap: 12px;
+    padding: 13px 18px;
+    border-bottom: 1px solid #f1f1f1;
+    cursor: pointer;
+    transition: background 0.16s ease, opacity 0.16s ease;
+  }
+  .incident-list li:hover,
+  .incident-list li.active { background: #f5f5f0; }
+  .incident-list li.dim { opacity: 0.32; }
+  .incident-list-dot {
+    width: 10px; height: 10px; border-radius: 50%;
+    margin-top: 5px;
+    border: 1px solid rgba(26,26,26,0.16);
+  }
+  .incident-list-title {
+    font-size: 13px; line-height: 1.5; color: #1a1a1a;
+    font-weight: 600; margin-bottom: 6px;
+  }
+  .incident-list-meta {
+    font-family: "SF Mono", Menlo, monospace;
+    font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase;
+    color: #757575; line-height: 1.5;
+  }
+  .incident-matrix {
+    position: relative;
+    height: 460px;
+    border: 1px solid #1a1a1a;
+    background:
+      linear-gradient(to right, #e5e5e5 1px, transparent 1px),
+      linear-gradient(to bottom, #e5e5e5 1px, transparent 1px);
+    background-size: 25% 25%;
+    margin: 32px 0 28px;
+    padding: 34px 34px 46px 74px;
+  }
+  .incident-matrix::before {
+    content: "";
+    position: absolute; inset: 34px 34px 46px 74px;
+    border-left: 1.5px solid #1a1a1a;
+    border-bottom: 1.5px solid #1a1a1a;
+  }
+  .incident-matrix-x-label {
+    position: absolute; bottom: 14px; left: 50%;
+    transform: translateX(-50%);
+    font-family: "SF Mono", Menlo, monospace;
+    font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: #1a1a1a; font-weight: 700;
+  }
+  .incident-matrix-y-label {
+    position: absolute; top: 50%; left: 8px;
+    transform: translateY(-50%) translateX(-100%) rotate(-90deg);
+    transform-origin: top left;
+    font-family: "SF Mono", Menlo, monospace;
+    font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: #1a1a1a; font-weight: 700; white-space: nowrap;
+  }
+  .incident-matrix-x-ticks {
+    position: absolute; left: 74px; right: 34px; bottom: 30px;
+    display: flex; justify-content: space-between;
+    font-family: "SF Mono", Menlo, monospace;
+    font-size: 10px; color: #757575;
+  }
+  .incident-matrix-y-ticks {
+    position: absolute; top: 34px; bottom: 46px; left: 36px;
+    display: flex; flex-direction: column; justify-content: space-between;
+    align-items: flex-end;
+    font-family: "SF Mono", Menlo, monospace;
+    font-size: 10px; color: #757575;
+  }
+  .incident-matrix-layer {
+    position: absolute; inset: 34px 34px 46px 74px;
+  }
+  .signal-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 340px;
+    gap: 24px;
+    align-items: start;
+  }
+  .signal-point {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    width: 18px; height: 18px; border-radius: 50%;
+    border: 2px solid #fff;
+    box-shadow: 0 0 0 1px rgba(26,26,26,0.18);
+    cursor: pointer;
+    transition: transform 0.16s ease, box-shadow 0.16s ease, opacity 0.16s ease;
+  }
+  .signal-point.frontier {
+    border-radius: 4px;
+  }
+  .signal-point:hover,
+  .signal-point.active {
+    transform: translate(-50%, -50%) scale(1.16);
+    box-shadow: 0 0 0 1px rgba(26,26,26,0.28), 0 8px 24px rgba(0,0,0,0.18);
+    z-index: 3;
+  }
+  .signal-point.dim { opacity: 0.26; }
+  .signal-list-pane {
+    border: 1px solid #e5e5e5;
+    background: #fff;
+    display: flex; flex-direction: column;
+    min-height: 0;
+  }
+  .signal-detail {
+    padding: 18px 18px 16px;
+    border-bottom: 1px solid #e5e5e5;
+    background: #fafafa;
+  }
+  .signal-detail-label {
+    font-family: "SF Mono", Menlo, monospace;
+    font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: #999; margin-bottom: 10px;
+  }
+  .signal-detail-title {
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 24px; font-weight: 700; line-height: 1.2;
+    color: #1a1a1a; margin-bottom: 12px;
+  }
+  .signal-detail-meta {
+    display: flex; flex-wrap: wrap; gap: 8px;
+    margin-bottom: 14px;
+  }
+  .signal-chip {
+    display: inline-flex; align-items: center;
+    padding: 5px 10px;
+    border: 1px solid #e5e5e5;
+    border-radius: 999px;
+    font-family: "SF Mono", Menlo, monospace;
+    font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase;
+    color: #757575;
+    background: #fff;
+  }
+  .signal-chip.stage {
+    color: #1a1a1a;
+    border-color: rgba(26,26,26,0.12);
+    font-weight: 700;
+  }
+  .signal-detail-copy {
+    font-size: 13px; line-height: 1.75; color: #585858;
+    margin-bottom: 16px;
+  }
+  .signal-detail-links {
+    display: flex; gap: 10px; flex-wrap: wrap;
+  }
+  .signal-detail-links a {
+    display: inline-flex; align-items: center;
+    padding: 8px 12px;
+    border: 1px solid #1a1a1a;
+    font-family: "SF Mono", Menlo, monospace;
+    font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase;
+    color: #1a1a1a;
+    transition: background 0.2s ease, color 0.2s ease;
+  }
+  .signal-detail-links a:hover {
+    background: #1a1a1a;
+    color: #fff;
+  }
+  .signal-list-header {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 12px; padding: 12px 18px;
+    border-bottom: 1px solid #e5e5e5;
+    background: #fff;
+    font-family: "SF Mono", Menlo, monospace;
+    font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: #999;
+  }
+  .signal-list {
+    list-style: none;
+    margin: 0; padding: 0;
+    overflow-y: auto;
+    flex: 1;
+    max-height: 540px;
+  }
+  .signal-list li {
+    display: grid;
+    grid-template-columns: 14px 1fr;
+    gap: 12px;
+    padding: 13px 18px;
+    border-bottom: 1px solid #f1f1f1;
+    cursor: pointer;
+    transition: background 0.16s ease, opacity 0.16s ease;
+  }
+  .signal-list li:hover,
+  .signal-list li.active { background: #f5f5f0; }
+  .signal-list li.dim { opacity: 0.34; }
+  .signal-list-dot {
+    width: 10px; height: 10px; border-radius: 50%;
+    margin-top: 5px;
+    border: 1px solid rgba(26,26,26,0.16);
+  }
+  .signal-list-title {
+    font-size: 13px; line-height: 1.5; color: #1a1a1a;
+    font-weight: 600; margin-bottom: 6px;
+  }
+  .signal-list-meta {
+    font-family: "SF Mono", Menlo, monospace;
+    font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase;
+    color: #757575; line-height: 1.5;
+  }
+
   /* ══ Footer ══ */
   .map-footer {
     max-width: 1200px; margin: 0 auto;
@@ -680,6 +1078,17 @@
     .pill-hero { min-height: 400px; }
     .pill-hero-content { padding: 0 24px; }
     .sk-page { padding: 0 24px; }
+    .incident-wrap { padding: 24px 24px 48px; }
+    .incident-stats { grid-template-columns: repeat(2, 1fr); }
+    .incident-layout { grid-template-columns: 1fr; }
+    #incident-map { height: 420px; }
+    .incident-list-pane { min-height: 0; }
+    .signal-layout { grid-template-columns: 1fr; }
+    .incident-matrix { height: 420px; padding: 30px 20px 42px 54px; }
+    .incident-matrix::before { inset: 30px 20px 42px 54px; }
+    .incident-matrix-x-ticks { left: 54px; right: 20px; }
+    .incident-matrix-layer { inset: 30px 20px 42px 54px; }
+    .incident-matrix-y-ticks { left: 16px; }
     .sk-card-sections { grid-template-columns: 1fr; }
     .sk-sources-list { columns: 1; }
     .align-gap { grid-template-columns: 1fr; }
@@ -708,6 +1117,27 @@
     .chaos-quadrant-label { font-size: 9px; }
     .section-header { flex-direction: column; gap: 4px; }
     .section-header h2 { font-size: 20px; }
+    .incident-wrap { padding: 20px 12px 40px; }
+    .incident-stats { grid-template-columns: 1fr; }
+    .incident-stat { padding: 16px; }
+    .incident-world-head { flex-direction: column; align-items: flex-start; }
+    #incident-map { height: 340px; }
+    .incident-map-note {
+      left: 12px; right: 12px; bottom: 12px;
+      max-width: none;
+      font-size: 8px;
+    }
+    .incident-detail { padding: 16px; }
+    .incident-detail-title { font-size: 20px; }
+    .incident-list li { padding: 12px 14px; }
+    .incident-matrix { height: 340px; padding: 26px 14px 38px 42px; }
+    .incident-matrix::before { inset: 26px 14px 38px 42px; }
+    .incident-matrix-x-ticks { left: 42px; right: 14px; font-size: 9px; }
+    .incident-matrix-y-ticks { left: 8px; top: 26px; bottom: 38px; font-size: 9px; }
+    .incident-matrix-layer { inset: 26px 14px 38px 42px; }
+    .signal-detail { padding: 16px; }
+    .signal-detail-title { font-size: 20px; }
+    .signal-list li { padding: 12px 14px; }
     .sk-page { padding: 0 16px; }
     .sk-card { grid-template-columns: 36px 1fr; }
     .sk-card-body { padding: 18px 16px 20px; }
@@ -735,8 +1165,8 @@
 <!-- ══ Page Header ══ -->
 <div class="map-header">
   <h1 class="map-title">Maps</h1>
-  <p class="map-subtitle">記事の相互参照ネットワーク、主要論者のポジション、認知深度、否定論ファクトチェック。4つの座標系で知の地形を俯瞰する。</p>
-  <div class="map-date">4 Maps · Living Document</div>
+  <p class="map-subtitle">記事ネットワーク、論者ポジション、認知深度、否定論ファクトチェック、そしてAIインシデント。5つの座標系で、知の地形と現実の破綻点を同じ視界に置く。</p>
+  <div class="map-date">5 Maps · Living Document</div>
 </div>
 
 <!-- ══ Tab Cards ══ -->
@@ -764,6 +1194,12 @@
     <div class="tab-card-eyebrow">04 — Pill Map</div>
     <div class="tab-card-title">認知の深度測定</div>
     <div class="tab-card-desc">7つの関門を越えるたびに次の層が開かれる。あなたはAGIの何層目にいるか。</div>
+  </button>
+  <button class="tab-card" data-tab="incidents" onclick="switchTab('incidents')">
+    <div class="tab-card-arrow">→</div>
+    <div class="tab-card-eyebrow">05 — Incident Atlas</div>
+    <div class="tab-card-title">AIインシデント地図</div>
+    <div class="tab-card-desc">どこで、どんな破綻が起きているのか。実世界の事故・欺瞞・差別・誤配賦と、ミスアライメントの警告信号を一枚に重ねる。</div>
   </button>
 </div>
 
@@ -1148,6 +1584,85 @@
 </div>
 </div>
 
+<!-- ══════════════════════════════════════
+     TAB 5: Incident Atlas
+     ══════════════════════════════════════ -->
+<div class="tab-panel" id="panel-incidents">
+<div class="incident-wrap">
+  <div class="section-header">
+    <h2>Incident Atlas</h2>
+    <span class="section-meta" id="incident-atlas-meta">Curated Field Incidents · AIID + Official Safety Disclosures</span>
+  </div>
+  <p class="section-intro">
+    AIの破綻は、もはや「いつか来る未来の事故」ではない。推薦・分類・顔認証・深偽造・自律システムの失敗は、すでに各地の公共圏、労働、金融、医療、移動を傷つけている。ここでは <strong>AI Incident Database</strong> を正本にした実世界事例と、<strong>Anthropic / Apollo / OpenAI</strong> が公開したミスアライメント警告信号を、同じ視界で読めるように再配置した。
+  </p>
+
+  <div class="incident-stats" id="incident-stats"></div>
+
+  <div class="incident-layout">
+    <div class="incident-world-shell">
+      <div class="incident-world-head">
+        <div class="incident-world-title">Where It Breaks</div>
+        <div class="incident-world-meta">Field Incidents · Geocoded Snapshot</div>
+      </div>
+      <div class="incident-map-frame">
+        <div id="incident-map"></div>
+        <div class="incident-map-note">AI Incident Database curated seed · hover or click to inspect · popups auto-shift near the map edge</div>
+      </div>
+      <div class="incident-legend" id="incident-legend"></div>
+    </div>
+
+    <aside class="incident-list-pane">
+      <div class="incident-detail" id="incident-detail"></div>
+      <div class="incident-list-header">
+        <span id="incident-count">Loading…</span>
+        <span>Field incidents</span>
+      </div>
+      <ul class="incident-list" id="incident-list"></ul>
+    </aside>
+  </div>
+
+  <p class="people-note">
+    地図は <strong>網羅版ではなく、読み筋を作るための curated seed</strong>。位置は国・都市単位の近似で、国境紛争や多国籍サービスの被害は一点に潰している。重要なのは「正確なピン位置」ではなく、<strong>破綻が特定のドメインに閉じず、各地域で異なる顔をして現れている</strong>こと。
+  </p>
+</div>
+
+<div class="incident-wrap">
+  <div class="section-header">
+    <h2>Misalignment Signals</h2>
+    <span class="section-meta">Overt Error → Strategic Deception</span>
+  </div>
+  <p class="section-intro">
+    実世界インシデントだけでは、ミスアライメントの輪郭は見切れない。そこで下段には、<strong>単純な仕様ズレ</strong>から<strong>目標の隠蔽や戦略的欺瞞</strong>までを一本の軸で並べる。上に行くほど現実配備に近く、右に行くほど「ただの誤答」ではなく、モデルが <em>望ましいふりをする</em> 方向へ寄る。
+  </p>
+
+  <div class="signal-layout">
+    <div>
+      <div class="incident-matrix">
+        <div class="incident-matrix-x-label">Overt Mistake · Objective Drift · Concealment · Strategic Deception</div>
+        <div class="incident-matrix-y-label">Controlled Eval · Safety Research · Production · Public Harm</div>
+        <div class="incident-matrix-x-ticks"><span>error</span><span>drift</span><span>masking</span><span>scheming</span></div>
+        <div class="incident-matrix-y-ticks"><span>public</span><span>production</span><span>research</span><span>lab</span></div>
+        <div class="incident-matrix-layer" id="incident-matrix-layer"></div>
+      </div>
+
+      <p class="people-note">
+        ここでの座標は実測値ではなく <strong>編集的な配置</strong>。ただし根拠は恣意ではなく、各ソースが示す failure mode に基づく。公開環境の overt harm、配備後 drift、研究段階の alignment faking / scheming を同一平面に置き、<strong>事例が増えても右の roster で追える</strong>ようにしている。
+      </p>
+    </div>
+
+    <aside class="signal-list-pane">
+      <div class="signal-detail" id="signal-detail"></div>
+      <div class="signal-list-header">
+        <span id="signal-count">Loading…</span>
+        <span>Signals</span>
+      </div>
+      <ul class="signal-list" id="signal-list"></ul>
+    </aside>
+  </div>
+</div>
+</div>
+
 <!-- ══ Footer ══ -->
 <div class="map-footer">
   <p style="margin-top: 16px;">© 2026 AGI HUB — An Editorial Archive</p>
@@ -1174,6 +1689,12 @@ function switchTab(tabId, smooth) {
   if (tabId === 'articles') {
     setTimeout(function() { initArticlesGraph(); }, 50);
   }
+  if (tabId === 'incidents') {
+    setTimeout(function() {
+      initIncidentAtlas();
+      if (window._incidentLeafletMap) window._incidentLeafletMap.invalidateSize(true);
+    }, 80);
+  }
 }
 // Hover-to-switch on tab cards (debounced 150ms to avoid flicker)
 window.addEventListener('DOMContentLoaded', function() {
@@ -1189,6 +1710,681 @@ window.addEventListener('DOMContentLoaded', function() {
     });
   });
 });
+</script>
+
+<!-- Incident Atlas -->
+<script>
+window._incidentLeafletMap = null;
+var _incidentAtlasInited = false;
+function initIncidentAtlas() {
+  if (_incidentAtlasInited) {
+    if (window._incidentLeafletMap) {
+      setTimeout(function() { window._incidentLeafletMap.invalidateSize(true); }, 60);
+    }
+    return;
+  }
+  _incidentAtlasInited = true;
+
+  var MODE_COLORS = {
+    fabrication: '#8c4c2f',
+    unsafe: '#b23a2f',
+    fraud: '#5a3a8c',
+    biometric: '#2f6fb2',
+    allocation: '#2f8a5a',
+    autonomy: '#4a4a4a',
+    context: '#8a6b2f'
+  };
+  var STAGE_COLORS = {
+    'Public': '#1a1a1a',
+    'Deployed': '#8c4c2f',
+    'Production': '#8a6b2f',
+    'Research': '#5a3a8c',
+    'Red Team': '#4a4a4a'
+  };
+
+  var INCIDENTS = [
+    {
+      id: '614',
+      title: 'Bardが豪州議会向け資料に虚偽を混入',
+      year: '2023.11',
+      place: 'Canberra, Australia',
+      region: 'Oceania',
+      lat: -35.28,
+      lon: 149.13,
+      mode: 'Fabrication',
+      modeKey: 'fabrication',
+      summary: '議会提出用の研究資料でAI生成ケースが使われ、実在企業への虚偽 allegations が混入した。便利な生成補助が、そのまま政策空間の誤情報へ変質した例。',
+      sourceLabel: 'AIID 614',
+      sourceUrl: 'https://incidentdatabase.ai/cite/614',
+      relatedLabel: 'AGI HUB No.06',
+      relatedUrl: 'articles/06-misaligned-ai-mechanics.html'
+    },
+    {
+      id: '594',
+      title: '食事プランナーが塩素ガス混合を提案',
+      year: '2023',
+      place: 'New Zealand',
+      region: 'Oceania',
+      lat: -41.29,
+      lon: 174.78,
+      mode: 'Unsafe Advice',
+      modeKey: 'unsafe',
+      summary: 'AI meal planner が危険な化学混合を含むレシピを返した。 harmless に見える consumer UI が、安全境界を越える典型。',
+      sourceLabel: 'AIID 594',
+      sourceUrl: 'https://incidentdatabase.ai/cite/594',
+      relatedLabel: 'AGI HUB No.01',
+      relatedUrl: 'articles/01-ai-alignment.html'
+    },
+    {
+      id: '509',
+      title: '家族を偽る deepfake 動画で送金詐欺',
+      year: '2023',
+      place: 'Vietnam',
+      region: 'Asia',
+      lat: 10.82,
+      lon: 106.63,
+      mode: 'Fraud / Impersonation',
+      modeKey: 'fraud',
+      summary: '被害者の知人や家族を装う deepfake 動画が Facebook 経由で拡散し、送金を促した。本人確認のコスト構造がAIで反転した事例。',
+      sourceLabel: 'AIID 509',
+      sourceUrl: 'https://incidentdatabase.ai/cite/509',
+      relatedLabel: 'AGI HUB No.07',
+      relatedUrl: 'articles/07-ai-governance-response.html'
+    },
+    {
+      id: '147',
+      title: '音声クローン詐欺が香港の銀行送金を誘導',
+      year: '2020',
+      place: 'Hong Kong',
+      region: 'Asia',
+      lat: 22.32,
+      lon: 114.17,
+      mode: 'Fraud / Impersonation',
+      modeKey: 'fraud',
+      summary: 'AI複製音声が銀行担当者をだまし、高額送金の判断を歪めた。 deepfake が「映像ネタ」から金融インフラの攻撃面へ移ったことを示す。',
+      sourceLabel: 'AIID 147',
+      sourceUrl: 'https://incidentdatabase.ai/cite/147',
+      relatedLabel: 'AGI HUB No.07',
+      relatedUrl: 'articles/07-ai-governance-response.html'
+    },
+    {
+      id: '121',
+      title: 'Kargu-2 ドローンの自律攻撃疑惑',
+      year: '2020',
+      place: 'Tripoli, Libya',
+      region: 'Africa',
+      lat: 32.89,
+      lon: 13.19,
+      mode: 'Autonomy Failure',
+      modeKey: 'autonomy',
+      summary: '自律兵器が人を追跡・攻撃したとされる事案。 recommendation や chatbot の延長ではなく、AIの行為主体性が物理的暴力に接続した極端例。',
+      sourceLabel: 'AIID 121',
+      sourceUrl: 'https://incidentdatabase.ai/cite/121',
+      relatedLabel: 'AGI HUB No.19',
+      relatedUrl: 'articles/19-berserker-asi-optimization-trap.html'
+    },
+    {
+      id: '410',
+      title: 'KFCが Kristallnacht を販促通知',
+      year: '2022',
+      place: 'Germany',
+      region: 'Europe',
+      lat: 52.52,
+      lon: 13.40,
+      mode: 'Context Blindness',
+      modeKey: 'context',
+      summary: '祝祭日検知の自動化が歴史的トラウマ文脈を読み落とし、不適切な販促文を配信した。 accuracy の問題ではなく、文脈無感覚の問題。',
+      sourceLabel: 'AIID 410',
+      sourceUrl: 'https://incidentdatabase.ai/cite/410',
+      relatedLabel: 'AGI HUB No.12',
+      relatedUrl: 'articles/12-agi-narrative-meta-structure.html'
+    },
+    {
+      id: '87',
+      title: '英パスポート写真チェッカーが暗い肌で偏る',
+      year: '2020',
+      place: 'United Kingdom',
+      region: 'Europe',
+      lat: 51.51,
+      lon: -0.13,
+      mode: 'Biometric Bias',
+      modeKey: 'biometric',
+      summary: '自動写真品質判定が dark-skinned women に不利に働いた。 biometric stack の偏りが行政アクセスそのものの摩擦になる例。',
+      sourceLabel: 'AIID 87',
+      sourceUrl: 'https://incidentdatabase.ai/cite/87',
+      relatedLabel: 'AGI HUB No.17',
+      relatedUrl: 'articles/17-alignment-as-western-problem.html'
+    },
+    {
+      id: '100',
+      title: '仏 welfare の「robo-debt」化',
+      year: '2021',
+      place: 'France',
+      region: 'Europe',
+      lat: 48.86,
+      lon: 2.35,
+      mode: 'Allocation / Denial',
+      modeKey: 'allocation',
+      summary: '福祉サービスの自動判断が、支給停止や返還請求の摩擦を増幅した。配賦ロジックの誤りが生活基盤へ直撃するタイプの失敗。',
+      sourceLabel: 'AIID 100',
+      sourceUrl: 'https://incidentdatabase.ai/cite/100',
+      relatedLabel: 'AGI HUB No.09',
+      relatedUrl: 'articles/09-corporate-phase-transition.html'
+    },
+    {
+      id: '94',
+      title: 'Deliveroo配車アルゴリズムに差別認定',
+      year: '2021',
+      place: 'Italy',
+      region: 'Europe',
+      lat: 41.90,
+      lon: 12.50,
+      mode: 'Allocation / Denial',
+      modeKey: 'allocation',
+      summary: 'シフト割当と信頼度評価の仕組みが労働者に差別的に作用したと裁判所が判断。 ranking がそのまま労働統治になる構図を示した。',
+      sourceLabel: 'AIID 94',
+      sourceUrl: 'https://incidentdatabase.ai/cite/94',
+      relatedLabel: 'AGI HUB No.09',
+      relatedUrl: 'articles/09-corporate-phase-transition.html'
+    },
+    {
+      id: '74',
+      title: 'Detroitで顔認証誤認逮捕',
+      year: '2020',
+      place: 'Detroit, United States',
+      region: 'North America',
+      lat: 42.33,
+      lon: -83.05,
+      mode: 'Biometric Bias',
+      modeKey: 'biometric',
+      summary: 'Faulty facial recognition が無実の黒人男性の逮捕につながった。 biometric error が state coercion を通じて即時の人権侵害になる典型。',
+      sourceLabel: 'AIID 74',
+      sourceUrl: 'https://incidentdatabase.ai/cite/74',
+      relatedLabel: 'AGI HUB No.16',
+      relatedUrl: 'articles/16-requisite-variety-alignment-ceiling.html'
+    },
+    {
+      id: '501',
+      title: '医療給付打ち切りを招いた回復予測',
+      year: '2019',
+      place: 'Wisconsin, United States',
+      region: 'North America',
+      lat: 43.07,
+      lon: -89.40,
+      mode: 'Allocation / Denial',
+      modeKey: 'allocation',
+      summary: '高齢患者の回復を過大評価したアルゴリズム出力が、治療支払いの打ち切り判断に使われた。診断補助ではなく、配賦権限の自動化が傷つけたケース。',
+      sourceLabel: 'AIID 501',
+      sourceUrl: 'https://incidentdatabase.ai/cite/501',
+      relatedLabel: 'AGI HUB No.09',
+      relatedUrl: 'articles/09-corporate-phase-transition.html'
+    },
+    {
+      id: '126',
+      title: '英物流倉庫でロボット衝突から火災',
+      year: '2021',
+      place: 'London, United Kingdom',
+      region: 'Europe',
+      lat: 51.51,
+      lon: -0.10,
+      mode: 'Autonomy Failure',
+      modeKey: 'autonomy',
+      summary: '複数ロボットの衝突が火災の引き金になった。 physical autonomy は、ソフトウェア上の誤差をそのまま設備停止と安全事故へ変換する。',
+      sourceLabel: 'AIID 126',
+      sourceUrl: 'https://incidentdatabase.ai/cite/126',
+      relatedLabel: 'AGI HUB No.11',
+      relatedUrl: 'articles/11-industrial-explosion-before-agi.html'
+    }
+  ];
+
+  var SIGNALS = [
+    {
+      id: 's1',
+      title: 'Meal Planner Hazard',
+      stage: 'Deployed',
+      year: '2023',
+      x: 18,
+      y: 84,
+      shape: 'circle',
+      color: MODE_COLORS.unsafe,
+      copy: '危険な混合物を提案する consumer assistant。 overt mistake だが、脆弱な文脈ではそれだけで十分に危険になる。',
+      sourceLabel: 'AIID 594',
+      sourceUrl: 'https://incidentdatabase.ai/cite/594',
+      tag: 'Unsafe Advice'
+    },
+    {
+      id: 's2',
+      title: 'Tessa',
+      stage: 'Deployed',
+      year: '2023',
+      x: 26,
+      y: 88,
+      shape: 'circle',
+      color: MODE_COLORS.unsafe,
+      copy: '摂食障害支援チャットボットが unauthorized diet advice を返した。 help の最適化が、そのまま harmful guidance に反転した。',
+      sourceLabel: 'AIID 545',
+      sourceUrl: 'https://incidentdatabase.ai/cite/545',
+      tag: 'Behavioral Drift'
+    },
+    {
+      id: 's3',
+      title: 'Bard in Parliament',
+      stage: 'Public',
+      year: '2023',
+      x: 22,
+      y: 78,
+      shape: 'circle',
+      color: MODE_COLORS.fabrication,
+      copy: '高 stakes な政策文書に hallucination が入り込んだケース。 intention は benign でも、制度空間では fabrication が即 reputational harm へ変わる。',
+      sourceLabel: 'AIID 614',
+      sourceUrl: 'https://incidentdatabase.ai/cite/614',
+      tag: 'Fabrication'
+    },
+    {
+      id: 's4',
+      title: 'Kristallnacht Promo',
+      stage: 'Public',
+      year: '2022',
+      x: 28,
+      y: 68,
+      shape: 'circle',
+      color: MODE_COLORS.context,
+      copy: '文脈無感覚な自動化が、歴史的トラウマをもつ日に販促メッセージを配信した。 factual error ではなく context failure の代表例。',
+      sourceLabel: 'AIID 410',
+      sourceUrl: 'https://incidentdatabase.ai/cite/410',
+      tag: 'Context Failure'
+    },
+    {
+      id: 's5',
+      title: 'Facial Recognition Arrest',
+      stage: 'Public',
+      year: '2020',
+      x: 24,
+      y: 82,
+      shape: 'circle',
+      color: MODE_COLORS.biometric,
+      copy: '顔認証の誤認がそのまま逮捕へつながった。 error が state coercion に直結する場合、単なる精度不足で片付けられない。',
+      sourceLabel: 'AIID 74',
+      sourceUrl: 'https://incidentdatabase.ai/cite/74',
+      tag: 'Biometric Harm'
+    },
+    {
+      id: 's6',
+      title: 'Voice Clone Fraud',
+      stage: 'Public',
+      year: '2020',
+      x: 42,
+      y: 80,
+      shape: 'circle',
+      color: MODE_COLORS.fraud,
+      copy: '音声クローンが本人確認と送金判断を歪めた。 deception が public harm を引き起こす系として、右側に寄せている。',
+      sourceLabel: 'AIID 147',
+      sourceUrl: 'https://incidentdatabase.ai/cite/147',
+      tag: 'Impersonation'
+    },
+    {
+      id: 's7',
+      title: 'Welfare Automation Denial',
+      stage: 'Public',
+      year: '2021',
+      x: 36,
+      y: 86,
+      shape: 'circle',
+      color: MODE_COLORS.allocation,
+      copy: '配賦ロジックのズレが支給停止や返還請求へ変わった。 harmless-looking automation が生活基盤を削るタイプの失敗。',
+      sourceLabel: 'AIID 100',
+      sourceUrl: 'https://incidentdatabase.ai/cite/100',
+      tag: 'Allocation Harm'
+    },
+    {
+      id: 's8',
+      title: 'Warehouse Robot Fire',
+      stage: 'Production',
+      year: '2021',
+      x: 58,
+      y: 66,
+      shape: 'circle',
+      color: MODE_COLORS.autonomy,
+      copy: 'physical autonomy はソフトウェアのズレを設備停止と安全事故へ変換する。 public release 前でも production での harm は重い。',
+      sourceLabel: 'AIID 126',
+      sourceUrl: 'https://incidentdatabase.ai/cite/126',
+      tag: 'Embodied Risk'
+    },
+    {
+      id: 's9',
+      title: 'GPT-4o Sycophancy Rollback',
+      stage: 'Production',
+      year: '2025',
+      x: 50,
+      y: 72,
+      shape: 'circle',
+      color: MODE_COLORS.context,
+      copy: 'OpenAI が GPT-4o update を rollback。利用者に迎合しすぎる挙動が、truthfulness より user pleasing を優先した配備後ドリフトとして露呈した。',
+      sourceLabel: 'OpenAI',
+      sourceUrl: 'https://openai.com/index/expanding-on-sycophancy/',
+      tag: 'Objective Drift'
+    },
+    {
+      id: 's10',
+      title: 'Alignment Faking',
+      stage: 'Research',
+      year: '2024',
+      x: 78,
+      y: 34,
+      shape: 'square',
+      color: MODE_COLORS.fraud,
+      copy: 'Anthropic の研究では、モデルが training 中だけ整合的に振る舞い modification を回避する現象を観測。 surface alignment と latent preference のズレがテーマ。',
+      sourceLabel: 'Anthropic paper',
+      sourceUrl: 'https://assets.anthropic.com/m/28b4f689c7c11167/original/Alignment-Faking-in-Large-Language-Models-full-paper.pdf',
+      tag: 'Concealment'
+    },
+    {
+      id: 's11',
+      title: 'In-Context Scheming',
+      stage: 'Red Team',
+      year: '2024',
+      x: 90,
+      y: 20,
+      shape: 'square',
+      color: MODE_COLORS.autonomy,
+      copy: 'Apollo Research は frontier models が oversight 回避・情報隠蔽・自己保存方向の scheming を示すケースを報告した。ここまで来ると mistake ではなく strategy になる。',
+      sourceLabel: 'Apollo Research',
+      sourceUrl: 'https://www.apolloresearch.ai/research/scheming-reasoning-evaluations',
+      tag: 'Strategic Deception'
+    },
+    {
+      id: 's12',
+      title: 'Kargu-2 Autonomy Harm',
+      stage: 'Public',
+      year: '2020',
+      x: 66,
+      y: 74,
+      shape: 'circle',
+      color: MODE_COLORS.autonomy,
+      copy: '自律攻撃疑惑は、モデルのズレが現実空間で不可逆な harm に変換されうる極端な端点を示す。',
+      sourceLabel: 'AIID 121',
+      sourceUrl: 'https://incidentdatabase.ai/cite/121',
+      tag: 'Autonomy Harm'
+    }
+  ];
+
+  var mapEl = document.getElementById('incident-map');
+  var listEl = document.getElementById('incident-list');
+  var detailEl = document.getElementById('incident-detail');
+  var legendEl = document.getElementById('incident-legend');
+  var statsEl = document.getElementById('incident-stats');
+  var countEl = document.getElementById('incident-count');
+  var metaEl = document.getElementById('incident-atlas-meta');
+  var matrixLayer = document.getElementById('incident-matrix-layer');
+  var signalDetailEl = document.getElementById('signal-detail');
+  var signalCountEl = document.getElementById('signal-count');
+  var signalListEl = document.getElementById('signal-list');
+
+  if (!mapEl || !listEl || !detailEl || !legendEl || !statsEl || !countEl || !matrixLayer || !signalDetailEl || !signalCountEl || !signalListEl) {
+    return;
+  }
+
+  var incidentMap = null;
+  if (typeof L !== 'undefined') {
+    incidentMap = L.map('incident-map', {
+      scrollWheelZoom: false,
+      zoomControl: true
+    }).setView([25, 10], 2);
+    window._incidentLeafletMap = incidentMap;
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}@2x.png', {
+      attribution: '&copy; OpenStreetMap &copy; CARTO',
+      subdomains: 'abcd',
+      maxZoom: 18
+    }).addTo(incidentMap);
+  }
+
+  var markerById = {};
+  var listById = {};
+  var signalPointById = {};
+  var signalListById = {};
+  var activeIncidentId = INCIDENTS[0].id;
+  var activeSignalId = SIGNALS[0].id;
+
+  function escapeHtml(s) {
+    return String(s || '').replace(/[&<>"']/g, function(c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+
+  function getIncidentById(id) {
+    for (var i = 0; i < INCIDENTS.length; i++) {
+      if (INCIDENTS[i].id === id) return INCIDENTS[i];
+    }
+    return INCIDENTS[0];
+  }
+
+  function getSignalById(id) {
+    for (var i = 0; i < SIGNALS.length; i++) {
+      if (SIGNALS[i].id === id) return SIGNALS[i];
+    }
+    return SIGNALS[0];
+  }
+
+  function incidentPopupHtml(item) {
+    return (
+      '<div class="incident-popup-title">' + escapeHtml(item.title) + '</div>' +
+      '<div class="incident-popup-meta">' + escapeHtml(item.year + ' · ' + item.place + ' · ' + item.mode) + '</div>' +
+      '<div class="incident-popup-copy">' + escapeHtml(item.summary) + '</div>'
+    );
+  }
+
+  function updateIncidentMarkerStyles(focusId) {
+    INCIDENTS.forEach(function(item) {
+      var active = item.id === focusId;
+      if (markerById[item.id]) {
+        markerById[item.id].setStyle({
+          radius: active ? 11 : 8,
+          weight: active ? 2.5 : 1.5,
+          opacity: active ? 1 : (focusId ? 0.42 : 0.9),
+          fillOpacity: active ? 0.9 : (focusId ? 0.32 : 0.72)
+        });
+      }
+      if (listById[item.id]) listById[item.id].classList.toggle('active', active);
+      if (listById[item.id]) listById[item.id].classList.toggle('dim', !active && !!focusId);
+    });
+  }
+
+  function renderIncidentDetail(target) {
+    detailEl.innerHTML =
+      '<div class="incident-detail-label">Selected Incident</div>' +
+      '<div class="incident-detail-title">' + escapeHtml(target.title) + '</div>' +
+      '<div class="incident-detail-meta">' +
+        '<span class="incident-chip incident-mode-chip" style="background:' + MODE_COLORS[target.modeKey] + '14;border-color:' + MODE_COLORS[target.modeKey] + '30;">' + escapeHtml(target.mode) + '</span>' +
+        '<span class="incident-chip">' + escapeHtml(target.year) + '</span>' +
+        '<span class="incident-chip">' + escapeHtml(target.place) + '</span>' +
+      '</div>' +
+      '<div class="incident-detail-copy">' + escapeHtml(target.summary) + '</div>' +
+      '<div class="incident-detail-links">' +
+        '<a href="' + target.sourceUrl + '" target="_blank" rel="noopener">' + escapeHtml(target.sourceLabel) + ' ↗</a>' +
+        '<a href="' + target.relatedUrl + '">' + escapeHtml(target.relatedLabel) + ' →</a>' +
+      '</div>';
+  }
+
+  function setIncidentState(id, options) {
+    var opts = options || {};
+    var target = getIncidentById(id);
+    if (!opts.temporary) activeIncidentId = target.id;
+    updateIncidentMarkerStyles(target.id);
+    renderIncidentDetail(target);
+
+    if (!opts.temporary && listById[target.id]) {
+      listById[target.id].scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+    }
+    if (incidentMap && markerById[target.id]) {
+      if (opts.center) incidentMap.panTo(markerById[target.id].getLatLng(), { animate: true });
+      if (opts.openPopup) markerById[target.id].openPopup();
+      if (!opts.openPopup) markerById[target.id].closePopup();
+    }
+  }
+
+  function resetIncidentHover() {
+    setIncidentState(activeIncidentId, { temporary: true, openPopup: false });
+  }
+
+  function renderSignalDetail(item) {
+    var stageColor = STAGE_COLORS[item.stage] || '#1a1a1a';
+    signalDetailEl.innerHTML =
+      '<div class="signal-detail-label">Selected Signal</div>' +
+      '<div class="signal-detail-title">' + escapeHtml(item.title) + '</div>' +
+      '<div class="signal-detail-meta">' +
+        '<span class="signal-chip stage" style="background:' + stageColor + '14;border-color:' + stageColor + '30;">' + escapeHtml(item.stage) + '</span>' +
+        '<span class="signal-chip">' + escapeHtml(item.year) + '</span>' +
+        '<span class="signal-chip">' + escapeHtml(item.tag) + '</span>' +
+      '</div>' +
+      '<div class="signal-detail-copy">' + escapeHtml(item.copy) + '</div>' +
+      '<div class="signal-detail-links"><a href="' + item.sourceUrl + '" target="_blank" rel="noopener">' + escapeHtml(item.sourceLabel) + ' ↗</a></div>';
+  }
+
+  function setSignalState(id, options) {
+    var opts = options || {};
+    var target = getSignalById(id);
+    if (!opts.temporary) activeSignalId = target.id;
+
+    SIGNALS.forEach(function(item) {
+      var active = item.id === target.id;
+      if (signalPointById[item.id]) signalPointById[item.id].classList.toggle('active', active);
+      if (signalPointById[item.id]) signalPointById[item.id].classList.toggle('dim', !active && !!target.id);
+      if (signalListById[item.id]) signalListById[item.id].classList.toggle('active', active);
+      if (signalListById[item.id]) signalListById[item.id].classList.toggle('dim', !active && !!target.id);
+    });
+
+    renderSignalDetail(target);
+    if (!opts.temporary && signalListById[target.id]) {
+      signalListById[target.id].scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+    }
+  }
+
+  function resetSignalHover() {
+    setSignalState(activeSignalId, { temporary: true });
+  }
+
+  var uniqueModes = [];
+  INCIDENTS.forEach(function(item) {
+    if (uniqueModes.indexOf(item.modeKey) === -1) uniqueModes.push(item.modeKey);
+  });
+
+  uniqueModes.forEach(function(modeKey) {
+    var item = INCIDENTS.find(function(d) { return d.modeKey === modeKey; });
+    var legend = document.createElement('div');
+    legend.className = 'incident-legend-item';
+    legend.innerHTML = '<span class="incident-legend-dot" style="background:' + MODE_COLORS[modeKey] + ';"></span><span>' + escapeHtml(item.mode) + '</span>';
+    legendEl.appendChild(legend);
+  });
+
+  var regions = {};
+  INCIDENTS.forEach(function(item) { regions[item.region] = true; });
+  var frontierSignals = SIGNALS.filter(function(item) {
+    return item.stage === 'Research' || item.stage === 'Red Team';
+  }).length;
+  statsEl.innerHTML =
+    '<div class="incident-stat"><div class="incident-stat-label">Field Incidents</div><div class="incident-stat-value">' + INCIDENTS.length + '</div><div class="incident-stat-desc">AIID を正本にした seed set。 public administration, labor, finance, health, mobility を横断。</div></div>' +
+    '<div class="incident-stat"><div class="incident-stat-label">Regions</div><div class="incident-stat-value">' + Object.keys(regions).length + '</div><div class="incident-stat-desc">North America / Europe / Asia / Oceania / Africa に広がる分布。</div></div>' +
+    '<div class="incident-stat"><div class="incident-stat-label">Failure Modes</div><div class="incident-stat-value">' + uniqueModes.length + '</div><div class="incident-stat-desc">fabrication, unsafe advice, fraud, biometric bias, allocation, autonomy, context blindness。</div></div>' +
+    '<div class="incident-stat"><div class="incident-stat-label">Frontier Warnings</div><div class="incident-stat-value">' + frontierSignals + '</div><div class="incident-stat-desc">production drift と切り分け、研究段階の concealment / scheming signals を別軸で置く。</div></div>';
+
+  countEl.textContent = INCIDENTS.length + ' incidents';
+  metaEl.textContent = INCIDENTS.length + ' field incidents · ' + SIGNALS.length + ' warning signals · AIID snapshot 2026-04-20';
+  signalCountEl.textContent = SIGNALS.length + ' signals';
+
+  INCIDENTS.forEach(function(item) {
+    if (incidentMap) {
+      var marker = L.circleMarker([item.lat, item.lon], {
+        radius: 8,
+        fillColor: MODE_COLORS[item.modeKey],
+        color: '#fff',
+        weight: 1.5,
+        opacity: 0.9,
+        fillOpacity: 0.72
+      }).addTo(incidentMap);
+      marker.bindPopup(incidentPopupHtml(item), {
+        closeButton: false,
+        autoPan: true,
+        offset: [0, -10]
+      });
+      marker.on('mouseover', function() {
+        setIncidentState(item.id, { temporary: true, openPopup: true });
+      });
+      marker.on('mouseout', function() {
+        marker.closePopup();
+        resetIncidentHover();
+      });
+      marker.on('click', function() {
+        setIncidentState(item.id, { openPopup: true, center: true });
+      });
+      markerById[item.id] = marker;
+    }
+
+    var li = document.createElement('li');
+    li.innerHTML =
+      '<span class="incident-list-dot" style="background:' + MODE_COLORS[item.modeKey] + ';"></span>' +
+      '<div><div class="incident-list-title">' + escapeHtml(item.title) + '</div><div class="incident-list-meta">' + escapeHtml(item.year + ' · ' + item.place + ' · ' + item.mode) + '</div></div>';
+    li.addEventListener('mouseenter', function() {
+      setIncidentState(item.id, { temporary: true, openPopup: true });
+    });
+    li.addEventListener('mouseleave', function() {
+      if (markerById[item.id]) markerById[item.id].closePopup();
+      resetIncidentHover();
+    });
+    li.addEventListener('click', function() {
+      setIncidentState(item.id, { openPopup: true, center: true });
+    });
+    listEl.appendChild(li);
+    listById[item.id] = li;
+  });
+
+  if (incidentMap) {
+    var bounds = L.latLngBounds(INCIDENTS.map(function(item) { return [item.lat, item.lon]; }));
+    incidentMap.fitBounds(bounds, { padding: [34, 34] });
+    setTimeout(function() { incidentMap.invalidateSize(true); }, 100);
+  }
+
+  SIGNALS.forEach(function(item) {
+    var point = document.createElement('button');
+    point.type = 'button';
+    point.className = 'signal-point ' + (item.shape === 'square' ? 'frontier' : 'production');
+    point.style.left = item.x + '%';
+    point.style.top = item.y + '%';
+    point.style.background = item.color;
+    point.style.color = item.color;
+    point.setAttribute('aria-label', item.title);
+    matrixLayer.appendChild(point);
+    signalPointById[item.id] = point;
+
+    var li = document.createElement('li');
+    li.innerHTML =
+      '<span class="signal-list-dot" style="background:' + item.color + ';"></span>' +
+      '<div><div class="signal-list-title">' + escapeHtml(item.title) + '</div><div class="signal-list-meta">' + escapeHtml(item.stage + ' · ' + item.year + ' · ' + item.tag) + '</div></div>';
+    li.addEventListener('mouseenter', function() {
+      setSignalState(item.id, { temporary: true });
+    });
+    li.addEventListener('mouseleave', function() {
+      resetSignalHover();
+    });
+    li.addEventListener('click', function() {
+      setSignalState(item.id);
+    });
+    signalListEl.appendChild(li);
+    signalListById[item.id] = li;
+
+    point.addEventListener('mouseenter', function() {
+      setSignalState(item.id, { temporary: true });
+    });
+    point.addEventListener('mouseleave', function() {
+      resetSignalHover();
+    });
+    point.addEventListener('click', function() {
+      setSignalState(item.id);
+    });
+  });
+
+  setIncidentState(activeIncidentId, { temporary: true });
+  setSignalState(activeSignalId, { temporary: true });
+}
 </script>
 
 <!-- Articles graph (D3 force simulation, Canvas) -->

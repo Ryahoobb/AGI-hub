@@ -139,7 +139,8 @@
 
       var bySlug = {};
       for (var i = 0; i < articles.length; i++) {
-        bySlug[articles[i].slug] = articles[i];
+        var key = articles[i].slug.indexOf('.html') === -1 ? articles[i].slug + '.html' : articles[i].slug;
+        bySlug[key] = articles[i];
       }
 
       var backlinks = [];
@@ -162,7 +163,9 @@
         '<style>' +
         '.backlinks-section{max-width:720px;margin:64px auto 0;padding:32px 24px 48px;border-top:1px solid var(--bl-border,#e5e5e5);font-family:HelveticaNeue,"Helvetica Neue",Helvetica,Arial,"Hiragino Kaku Gothic ProN",sans-serif;font-feature-settings:"palt";}' +
         '[data-theme="dark"] .backlinks-section{--bl-border:#2a2a2a;}' +
-        '.backlinks-section .bl-label{font-family:"SF Mono","Fira Code",Menlo,Consolas,monospace;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--bl-muted,#999);margin-bottom:20px;}' +
+        '.backlinks-section .bl-label{font-family:"SF Mono","Fira Code",Menlo,Consolas,monospace;font-size:12px;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:var(--bl-muted,#555);margin-bottom:20px;display:flex;align-items:center;gap:10px;}' +
+        '.backlinks-section .bl-count{display:inline-flex;align-items:center;justify-content:center;min-width:22px;height:22px;padding:0 7px;border-radius:11px;background:var(--bl-badge-bg,#1a1a1a);color:var(--bl-badge-fg,#fff);font-size:11px;font-weight:600;letter-spacing:0;}' +
+        '[data-theme="dark"] .backlinks-section .bl-count{--bl-badge-bg:#e5e5e5;--bl-badge-fg:#1a1a1a;}' +
         '[data-theme="dark"] .backlinks-section .bl-label{--bl-muted:#777;}' +
         '.backlinks-section ul{list-style:none;padding:0;margin:0;}' +
         '.backlinks-section li{padding:12px 0;border-bottom:1px solid var(--bl-border-soft,#f0f0f0);}' +
@@ -174,11 +177,12 @@
         '.backlinks-section .bl-no{display:inline-block;font-family:"SF Mono","Fira Code",Menlo,Consolas,monospace;font-size:12px;color:var(--bl-muted,#999);margin-right:12px;min-width:48px;}' +
         '.backlinks-section .bl-title{font-size:15px;line-height:1.5;}' +
         '</style>' +
-        '<div class="bl-label">この記事を参照している記事</div>' +
+        '<div class="bl-label">この記事を参照している記事 <span class="bl-count">' + backlinks.length + '</span></div>' +
         '<ul>' +
         backlinks.map(function (a) {
           var num = a.no != null ? ('No.' + String(a.no).padStart(2, '0')) : '';
-          return '<li><a href="' + a.slug + '"><span class="bl-no">' + num + '</span><span class="bl-title">' + escapeHtml(a.title || a.slug) + '</span></a></li>';
+          var href = a.slug.indexOf('.html') === -1 ? a.slug + '.html' : a.slug;
+          return '<li><a href="' + href + '"><span class="bl-no">' + num + '</span><span class="bl-title">' + escapeHtml(a.title || a.slug) + '</span></a></li>';
         }).join('') +
         '</ul>';
 

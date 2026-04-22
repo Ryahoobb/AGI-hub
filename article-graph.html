@@ -93,6 +93,12 @@
   [data-theme="dark"] .legend { color: #888; }
   .legend-item { display: flex; align-items: center; gap: 8px; }
   .legend-dot { width: 10px; height: 10px; border-radius: 50%; }
+  .legend-line { width: 18px; height: 0; border-top: 1.5px solid #555; }
+  .legend-line.dashed { border-top: 1.5px dashed #888; opacity: 0.75; }
+  [data-theme="dark"] .legend-line { border-top-color: #bbb; }
+  [data-theme="dark"] .legend-line.dashed { border-top-color: #888; }
+  .legend-sep { width: 1px; height: 14px; background: #ddd; }
+  [data-theme="dark"] .legend-sep { background: #333; }
 
   .info-panel {
     max-width: 1200px; margin: 0 auto;
@@ -219,6 +225,30 @@
       item.appendChild(label);
       legendEl.appendChild(item);
     });
+
+    var sep = document.createElement('div');
+    sep.className = 'legend-sep';
+    legendEl.appendChild(sep);
+
+    var hardItem = document.createElement('div');
+    hardItem.className = 'legend-item';
+    var hardLine = document.createElement('div');
+    hardLine.className = 'legend-line';
+    var hardLabel = document.createElement('span');
+    hardLabel.textContent = '本文リンク';
+    hardItem.appendChild(hardLine);
+    hardItem.appendChild(hardLabel);
+    legendEl.appendChild(hardItem);
+
+    var softItem = document.createElement('div');
+    softItem.className = 'legend-item';
+    var softLine = document.createElement('div');
+    softLine.className = 'legend-line dashed';
+    var softLabel = document.createElement('span');
+    softLabel.textContent = 'カテゴリ共有';
+    softItem.appendChild(softLine);
+    softItem.appendChild(softLabel);
+    legendEl.appendChild(softItem);
   }
 
   function categoryInitialPosition(nodes) {
@@ -248,8 +278,8 @@
     simulation = d3.forceSimulation(nodes)
       .force('link', d3.forceLink(links)
         .id(function (d) { return d.slug; })
-        .distance(60)
-        .strength(0.6))
+        .distance(function (l) { return l.type === 'soft' ? 140 : 60; })
+        .strength(function (l) { return l.type === 'soft' ? 0.04 : 0.6; }))
       .force('charge', d3.forceManyBody().strength(-200))
       .force('center', d3.forceCenter(W / 2, H / 2))
       .force('collide', d3.forceCollide().radius(function (d) { return d.radius + 4; }))
@@ -275,6 +305,8 @@
     var dark = isDark();
     var edgeBase     = dark ? 'rgba(190,190,190,0.18)' : 'rgba(50,50,50,0.14)';
     var edgeHi       = dark ? 'rgba(255,255,255,0.65)' : 'rgba(20,20,20,0.6)';
+    var softBase     = dark ? 'rgba(190,190,190,0.06)' : 'rgba(50,50,50,0.07)';
+    var softHi       = dark ? 'rgba(200,200,200,0.35)' : 'rgba(40,40,40,0.32)';
     var labelColor   = dark ? '#d8d8d8' : '#1a1a1a';
     var labelFade    = dark ? 'rgba(216,216,216,0.25)' : 'rgba(26,26,26,0.22)';
     var strokeColor  = dark ? '#0f0f0f' : '#ffffff';
@@ -291,8 +323,27 @@
       });
     }
 
+    // Pass 1: soft edges (dashed, behind)
+    ctx.setLineDash([3, 3]);
+    ctx.lineWidth = 0.8;
+    links.forEach(function (l) {
+      if (l.type !== 'soft') return;
+      var s = typeof l.source === 'object' ? l.source : null;
+      var t = typeof l.target === 'object' ? l.target : null;
+      if (!s || !t) return;
+      var related = hoverSlug && (s.slug === hoverSlug || t.slug === hoverSlug);
+      ctx.strokeStyle = related ? softHi : softBase;
+      ctx.beginPath();
+      ctx.moveTo(s.x, s.y);
+      ctx.lineTo(t.x, t.y);
+      ctx.stroke();
+    });
+    ctx.setLineDash([]);
+
+    // Pass 2: hard edges (solid, on top)
     ctx.lineWidth = 1;
     links.forEach(function (l) {
+      if (l.type === 'soft') return;
       var s = typeof l.source === 'object' ? l.source : null;
       var t = typeof l.target === 'object' ? l.target : null;
       if (!s || !t) return;
@@ -480,13 +531,38 @@
       return node;
     });
 
-    links = edgesData.filter(function (e) {
+    var hardLinks = edgesData.filter(function (e) {
       return bySlug[e.from] && bySlug[e.to];
     }).map(function (e) {
       bySlug[e.from].degree++;
       bySlug[e.to].degree++;
-      return { source: e.from, target: e.to };
+      return { source: e.from, target: e.to, type: 'hard' };
     });
+
+    // Soft edges: category co-membership, excluding pairs already connected by a hard edge.
+    var hardPairs = {};
+    hardLinks.forEach(function (l) {
+      var a = l.source < l.target ? l.source : l.target;
+      var b = l.source < l.target ? l.target : l.source;
+      hardPairs[a + '|' + b] = true;
+    });
+    var byCategory = {};
+    nodes.forEach(function (n) {
+      (byCategory[n.category] = byCategory[n.category] || []).push(n.slug);
+    });
+    var softLinks = [];
+    Object.keys(byCategory).forEach(function (cat) {
+      var slugs = byCategory[cat];
+      for (var i = 0; i < slugs.length; i++) {
+        for (var j = i + 1; j < slugs.length; j++) {
+          var a = slugs[i] < slugs[j] ? slugs[i] : slugs[j];
+          var b = slugs[i] < slugs[j] ? slugs[j] : slugs[i];
+          if (hardPairs[a + '|' + b]) continue;
+          softLinks.push({ source: a, target: b, type: 'soft' });
+        }
+      }
+    });
+    links = hardLinks.concat(softLinks);
 
     nodes.forEach(function (n) {
       n.radius = 6 + Math.min(4, n.degree * 0.6);
@@ -495,8 +571,8 @@
     var usedCats = Array.from(new Set(nodes.map(function (n) { return n.category; }))).sort();
     buildLegend(usedCats);
 
-    countEl.textContent = nodes.length + ' articles / ' + links.length + ' edges';
-    statLine.textContent = nodes.length + ' articles · ' + links.length + ' edges · ' + usedCats.length + ' categories';
+    countEl.textContent = nodes.length + ' articles · ' + hardLinks.length + ' 本文 · ' + softLinks.length + ' カテゴリ';
+    statLine.textContent = nodes.length + ' articles · ' + hardLinks.length + ' 本文リンク · ' + softLinks.length + ' カテゴリ共有 · ' + usedCats.length + ' categories';
 
     categoryInitialPosition(nodes);
     startSimulation();

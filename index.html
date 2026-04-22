@@ -758,7 +758,7 @@
     <section class="section" id="explore" style="padding-top: 32px;">
       <div class="section-title">
         <h2>Explore — Interactive &amp; Data</h2>
-        <span class="count">5 Tools</span>
+        <span class="count">6 Tools</span>
       </div>
       <div class="explore-grid">
         <a href="displacement-map.html" class="explore-tile">
@@ -781,6 +781,13 @@
           <h3>議論の全体地図</h3>
           <p>11ドメイン60トピックで論点を俯瞰。34トピック執筆済み。</p>
           <span class="explore-cta">全体地図へ →</span>
+        </a>
+        <a href="article-graph.html" class="explore-tile">
+          <div class="explore-eyebrow">Article Graph</div>
+          <div class="explore-stat" id="graph-edge-count">— edges</div>
+          <h3>記事グラフ</h3>
+          <p>記事同士の相互参照を物理シミュレーションで可視化。ノードを掴んで動かせる。</p>
+          <span class="explore-cta">グラフを見る →</span>
         </a>
         <a href="pill-map.html" class="explore-tile dark">
           <div class="explore-eyebrow">Depth Map</div>
@@ -904,6 +911,14 @@
           fromHash();
           window.addEventListener('hashchange', fromHash);
         }
+      })();
+
+      (function () {
+        var el = document.getElementById('graph-edge-count');
+        if (!el) return;
+        fetch('backlinks.json').then(function (r) { return r.ok ? r.json() : null; }).then(function (d) {
+          if (d && Array.isArray(d.edges)) el.textContent = d.edges.length + ' edges';
+        }).catch(function () { /* noop */ });
       })();
     </script>
 

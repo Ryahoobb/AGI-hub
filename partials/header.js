@@ -115,8 +115,82 @@
       if (typeof googleTranslateElementInit === 'function') {
         try { googleTranslateElementInit(); } catch (e) { /* noop */ }
       }
+
+      // Inject backlinks section on article pages
+      if (fileName === 'articles') {
+        injectBacklinks();
+      }
     })
     .catch(function (err) {
       console.warn('[AGI HUB header] ' + err.message);
     });
+
+  function injectBacklinks() {
+    var currentSlug = location.pathname.substring(location.pathname.lastIndexOf('/') + 1);
+    if (!currentSlug || !/^\d+-[\w-]+\.html$/i.test(currentSlug)) return;
+
+    Promise.all([
+      fetch(siteBase + 'backlinks.json').then(function (r) { return r.ok ? r.json() : null; }),
+      fetch(siteBase + 'articles.json').then(function (r) { return r.ok ? r.json() : null; })
+    ]).then(function (results) {
+      var blData = results[0];
+      var articles = results[1];
+      if (!blData || !articles || !Array.isArray(blData.edges) || !Array.isArray(articles)) return;
+
+      var bySlug = {};
+      for (var i = 0; i < articles.length; i++) {
+        bySlug[articles[i].slug] = articles[i];
+      }
+
+      var backlinks = [];
+      for (var j = 0; j < blData.edges.length; j++) {
+        var edge = blData.edges[j];
+        if (edge.to === currentSlug && bySlug[edge.from]) {
+          backlinks.push(bySlug[edge.from]);
+        }
+      }
+      backlinks.sort(function (a, b) { return (a.no || 0) - (b.no || 0); });
+      if (backlinks.length === 0) return;
+
+      var main = document.querySelector('main');
+      if (!main) return;
+
+      var section = document.createElement('section');
+      section.className = 'backlinks-section';
+      section.setAttribute('aria-label', 'この記事を参照している記事');
+      section.innerHTML =
+        '<style>' +
+        '.backlinks-section{max-width:720px;margin:64px auto 0;padding:32px 24px 48px;border-top:1px solid var(--bl-border,#e5e5e5);font-family:HelveticaNeue,"Helvetica Neue",Helvetica,Arial,"Hiragino Kaku Gothic ProN",sans-serif;font-feature-settings:"palt";}' +
+        '[data-theme="dark"] .backlinks-section{--bl-border:#2a2a2a;}' +
+        '.backlinks-section .bl-label{font-family:"SF Mono","Fira Code",Menlo,Consolas,monospace;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--bl-muted,#999);margin-bottom:20px;}' +
+        '[data-theme="dark"] .backlinks-section .bl-label{--bl-muted:#777;}' +
+        '.backlinks-section ul{list-style:none;padding:0;margin:0;}' +
+        '.backlinks-section li{padding:12px 0;border-bottom:1px solid var(--bl-border-soft,#f0f0f0);}' +
+        '[data-theme="dark"] .backlinks-section li{--bl-border-soft:#1f1f1f;}' +
+        '.backlinks-section li:last-child{border-bottom:none;}' +
+        '.backlinks-section a{display:block;color:var(--bl-text,#1a1a1a);text-decoration:none;transition:color 0.15s;}' +
+        '[data-theme="dark"] .backlinks-section a{--bl-text:#e5e5e5;}' +
+        '.backlinks-section a:hover{color:var(--bl-hover,#007acc);}' +
+        '.backlinks-section .bl-no{display:inline-block;font-family:"SF Mono","Fira Code",Menlo,Consolas,monospace;font-size:12px;color:var(--bl-muted,#999);margin-right:12px;min-width:48px;}' +
+        '.backlinks-section .bl-title{font-size:15px;line-height:1.5;}' +
+        '</style>' +
+        '<div class="bl-label">この記事を参照している記事</div>' +
+        '<ul>' +
+        backlinks.map(function (a) {
+          var num = a.no != null ? ('No.' + String(a.no).padStart(2, '0')) : '';
+          return '<li><a href="' + a.slug + '"><span class="bl-no">' + num + '</span><span class="bl-title">' + escapeHtml(a.title || a.slug) + '</span></a></li>';
+        }).join('') +
+        '</ul>';
+
+      main.appendChild(section);
+    }).catch(function (err) {
+      console.warn('[AGI HUB backlinks] ' + (err && err.message ? err.message : err));
+    });
+  }
+
+  function escapeHtml(s) {
+    return String(s).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
 })();

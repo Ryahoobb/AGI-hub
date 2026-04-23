@@ -1591,10 +1591,10 @@
 <div class="incident-wrap">
   <div class="section-header">
     <h2>Incident Atlas</h2>
-    <span class="section-meta" id="incident-atlas-meta">Curated Field Incidents · AIID + Official Safety Disclosures</span>
+    <span class="section-meta" id="incident-atlas-meta">Recent Incidents 2023-2026 · AIID + Official Safety Disclosures</span>
   </div>
   <p class="section-intro">
-    AIの破綻は、もはや「いつか来る未来の事故」ではない。推薦・分類・顔認証・深偽造・自律システムの失敗は、すでに各地の公共圏、労働、金融、医療、移動を傷つけている。ここでは <strong>AI Incident Database</strong> を正本にした実世界事例と、<strong>Anthropic / Apollo / OpenAI</strong> が公開したミスアライメント警告信号を、同じ視界で読めるように再配置した。
+    AIの破綻は、もはや「いつか来る未来の事故」ではない。推薦・分類・顔認証・深偽造・自律システムの失敗は、いまこの瞬間も公共圏、労働、金融、医療、移動を傷つけている。ここでは <strong>AI Incident Database の 2026-04-20 snapshot を基礎データ</strong> にしつつ、<strong>公開 incident 一覧を 2026-04-23 に再確認</strong> して、<strong>2023年以降の recent incidents</strong> を最新事例まで引き直し、さらに <strong>Anthropic / Apollo / OpenAI</strong> が公開したミスアライメント警告信号を同じ視界で読めるように再配置した。
   </p>
 
   <div class="incident-stats" id="incident-stats"></div>
@@ -1607,7 +1607,7 @@
       </div>
       <div class="incident-map-frame">
         <div id="incident-map"></div>
-        <div class="incident-map-note">AI Incident Database curated seed · hover or click to inspect · popups auto-shift near the map edge</div>
+        <div class="incident-map-note">AI Incident Database recent atlas · 2023-2026 coverage · hover or click to inspect · popups auto-shift near the map edge</div>
       </div>
       <div class="incident-legend" id="incident-legend"></div>
     </div>
@@ -1623,7 +1623,7 @@
   </div>
 
   <p class="people-note">
-    地図は <strong>網羅版ではなく、読み筋を作るための curated seed</strong>。位置は国・都市単位の近似で、国境紛争や多国籍サービスの被害は一点に潰している。重要なのは「正確なピン位置」ではなく、<strong>破綻が特定のドメインに閉じず、各地域で異なる顔をして現れている</strong>こと。
+    地図は <strong>2023-2026 の recent atlas</strong> として組み直している。位置は国・都市単位の近似で、国境横断の詐欺や多国籍サービスの harm は一点に潰している。重要なのは「完全に正確なピン位置」ではなく、<strong>最新の failure がどの地域・制度・ユースケースに広がっているか</strong>を同じ画面で追えること。
   </p>
 </div>
 
@@ -1732,7 +1732,10 @@ function initIncidentAtlas() {
     biometric: '#2f6fb2',
     allocation: '#2f8a5a',
     autonomy: '#4a4a4a',
-    context: '#8a6b2f'
+    context: '#8a6b2f',
+    legal: '#7a3131',
+    service: '#1f7a78',
+    privacy: '#3c5c7a'
   };
   var STAGE_COLORS = {
     'Public': '#1a1a1a',
@@ -1744,198 +1747,505 @@ function initIncidentAtlas() {
 
   var INCIDENTS = [
     {
-      id: '614',
-      title: 'Bardが豪州議会向け資料に虚偽を混入',
-      year: '2023.11',
-      place: 'Canberra, Australia',
-      region: 'Oceania',
-      lat: -35.28,
-      lon: 149.13,
-      mode: 'Fabrication',
-      modeKey: 'fabrication',
-      summary: '議会提出用の研究資料でAI生成ケースが使われ、実在企業への虚偽 allegations が混入した。便利な生成補助が、そのまま政策空間の誤情報へ変質した例。',
-      sourceLabel: 'AIID 614',
-      sourceUrl: 'https://incidentdatabase.ai/cite/614',
-      relatedLabel: 'AGI HUB No.06',
-      relatedUrl: 'articles/06-misaligned-ai-mechanics.html'
+      "id": "1454",
+      "title": "Purported Deepfake Video Reportedly Portrayed Nirmala Sitharaman Endorsing Investment Scheme",
+      "year": "2026-04-16",
+      "place": "New Delhi, India",
+      "region": "Asia",
+      "lat": 28.61,
+      "lon": 77.21,
+      "mode": "Fraud / Impersonation",
+      "modeKey": "fraud",
+      "summary": "財務相を装う deepfake 投資動画が拡散し、金融詐欺の導線として使われた。生成AIが著名人の信頼を即時に詐欺資産へ変える典型。",
+      "sourceLabel": "AIID 1454",
+      "sourceUrl": "https://incidentdatabase.ai/cite/1454",
+      "relatedLabel": "Primary report",
+      "relatedUrl": "https://www.latestly.com/social-viral/fact-check/is-nirmala-sitharaman-promoting-a-inr-22000-investment-for-inr-5-5-lakh-returns-pib-fact-check-reveals-truth-behind-viral-video-7395645.html"
     },
     {
-      id: '594',
-      title: '食事プランナーが塩素ガス混合を提案',
-      year: '2023',
-      place: 'New Zealand',
-      region: 'Oceania',
-      lat: -41.29,
-      lon: 174.78,
-      mode: 'Unsafe Advice',
-      modeKey: 'unsafe',
-      summary: 'AI meal planner が危険な化学混合を含むレシピを返した。 harmless に見える consumer UI が、安全境界を越える典型。',
-      sourceLabel: 'AIID 594',
-      sourceUrl: 'https://incidentdatabase.ai/cite/594',
-      relatedLabel: 'AGI HUB No.01',
-      relatedUrl: 'articles/01-ai-alignment.html'
+      "id": "1446",
+      "title": "KBS AI Translation Subtitles Reportedly Broadcast Profanity During Artemis II Launch Livestream",
+      "year": "2026-04-02",
+      "place": "Seoul, South Korea",
+      "region": "Asia",
+      "lat": 37.57,
+      "lon": 126.98,
+      "mode": "Media / Translation Failure",
+      "modeKey": "context",
+      "summary": "KBS のAI字幕が Artemis II 配信で profanity を表示した。 harmless な翻訳自動化でも放送文脈では即事故化する。",
+      "sourceLabel": "AIID 1446",
+      "sourceUrl": "https://incidentdatabase.ai/cite/1446",
+      "relatedLabel": "Primary report",
+      "relatedUrl": "https://www.mk.co.kr/news/culture/12007144"
     },
     {
-      id: '509',
-      title: '家族を偽る deepfake 動画で送金詐欺',
-      year: '2023',
-      place: 'Vietnam',
-      region: 'Asia',
-      lat: 10.82,
-      lon: 106.63,
-      mode: 'Fraud / Impersonation',
-      modeKey: 'fraud',
-      summary: '被害者の知人や家族を装う deepfake 動画が Facebook 経由で拡散し、送金を促した。本人確認のコスト構造がAIで反転した事例。',
-      sourceLabel: 'AIID 509',
-      sourceUrl: 'https://incidentdatabase.ai/cite/509',
-      relatedLabel: 'AGI HUB No.07',
-      relatedUrl: 'articles/07-ai-governance-response.html'
+      "id": "1460",
+      "title": "Baidu Apollo Go Robotaxis Stopped in Traffic During Reported System Failure in Wuhan, Stranding Some Passengers",
+      "year": "2026-03-31",
+      "place": "Wuhan, China",
+      "region": "Asia",
+      "lat": 30.59,
+      "lon": 114.3,
+      "mode": "Autonomy Failure",
+      "modeKey": "autonomy",
+      "summary": "Baidu Apollo Go の robotaxi 群がシステム障害で交通を塞ぎ、一部乗客を車内に留めた。都市インフラ化した自律移動の停止リスク。",
+      "sourceLabel": "AIID 1460",
+      "sourceUrl": "https://incidentdatabase.ai/cite/1460",
+      "relatedLabel": "Primary report",
+      "relatedUrl": "https://www.wired.com/story/robotaxi-outage-in-china-leaves-passengers-stuck-in-cars-on-highways/"
     },
     {
-      id: '147',
-      title: '音声クローン詐欺が香港の銀行送金を誘導',
-      year: '2020',
-      place: 'Hong Kong',
-      region: 'Asia',
-      lat: 22.32,
-      lon: 114.17,
-      mode: 'Fraud / Impersonation',
-      modeKey: 'fraud',
-      summary: 'AI複製音声が銀行担当者をだまし、高額送金の判断を歪めた。 deepfake が「映像ネタ」から金融インフラの攻撃面へ移ったことを示す。',
-      sourceLabel: 'AIID 147',
-      sourceUrl: 'https://incidentdatabase.ai/cite/147',
-      relatedLabel: 'AGI HUB No.07',
-      relatedUrl: 'articles/07-ai-governance-response.html'
+      "id": "1450",
+      "title": "Florida Man Allegedly Used Purported Deepfake Video to Report Break-In of Deputy's Patrol Vehicle in Lake Mary",
+      "year": "2026-03-24",
+      "place": "Lake Mary, United States",
+      "region": "North America",
+      "lat": 28.76,
+      "lon": -81.32,
+      "mode": "Legal / Procedural Failure",
+      "modeKey": "legal",
+      "summary": "deepfake 動画を使った虚偽通報で警察車両の破損を偽装した事案。生成物が捜査・通報の証拠空間を汚染する。",
+      "sourceLabel": "AIID 1450",
+      "sourceUrl": "https://incidentdatabase.ai/cite/1450",
+      "relatedLabel": "Primary report",
+      "relatedUrl": "https://www.clickorlando.com/news/local/2026/04/08/florida-man-arrested-after-pranking-deputy-with-ai-video-in-lake-mary/"
     },
     {
-      id: '121',
-      title: 'Kargu-2 ドローンの自律攻撃疑惑',
-      year: '2020',
-      place: 'Tripoli, Libya',
-      region: 'Africa',
-      lat: 32.89,
-      lon: 13.19,
-      mode: 'Autonomy Failure',
-      modeKey: 'autonomy',
-      summary: '自律兵器が人を追跡・攻撃したとされる事案。 recommendation や chatbot の延長ではなく、AIの行為主体性が物理的暴力に接続した極端例。',
-      sourceLabel: 'AIID 121',
-      sourceUrl: 'https://incidentdatabase.ai/cite/121',
-      relatedLabel: 'AGI HUB No.19',
-      relatedUrl: 'articles/19-berserker-asi-optimization-trap.html'
+      "id": "1421",
+      "title": "Purported Deepfake Applicant Reportedly Impersonated Tokyo IT Executive Kenbun Yoshii During Online Job Interview",
+      "year": "2026-03-19",
+      "place": "Tokyo, Japan",
+      "region": "Asia",
+      "lat": 35.68,
+      "lon": 139.69,
+      "mode": "Fraud / Impersonation",
+      "modeKey": "fraud",
+      "summary": "deepfake 応募者が東京のIT幹部を装ってオンライン面接に侵入した。採用オペレーションが本人性崩壊の前線になっている。",
+      "sourceLabel": "AIID 1421",
+      "sourceUrl": "https://incidentdatabase.ai/cite/1421",
+      "relatedLabel": "Primary report",
+      "relatedUrl": "https://www.upi.com/Top_News/World-News/2026/03/20/nkorea-deepfake-online-hiring-interview/1741773979133/"
     },
     {
-      id: '410',
-      title: 'KFCが Kristallnacht を販促通知',
-      year: '2022',
-      place: 'Germany',
-      region: 'Europe',
-      lat: 52.52,
-      lon: 13.40,
-      mode: 'Context Blindness',
-      modeKey: 'context',
-      summary: '祝祭日検知の自動化が歴史的トラウマ文脈を読み落とし、不適切な販促文を配信した。 accuracy の問題ではなく、文脈無感覚の問題。',
-      sourceLabel: 'AIID 410',
-      sourceUrl: 'https://incidentdatabase.ai/cite/410',
-      relatedLabel: 'AGI HUB No.12',
-      relatedUrl: 'articles/12-agi-narrative-meta-structure.html'
+      "id": "1437",
+      "title": "Grok Allegedly Generated Publicly Visible Sexist Abuse Targeting Swiss Finance Minister Karin Keller-Sutter After X User Prompt",
+      "year": "2026-03-10",
+      "place": "Bern, Switzerland",
+      "region": "Europe",
+      "lat": 46.95,
+      "lon": 7.45,
+      "mode": "Fabrication / Defamation",
+      "modeKey": "fabrication",
+      "summary": "Grok がスイス財務相を標的にした sexist abuse を公開生成した。public-facing model の出力が名誉毀損と政治ハラスメントに接続した例。",
+      "sourceLabel": "AIID 1437",
+      "sourceUrl": "https://incidentdatabase.ai/cite/1437",
+      "relatedLabel": "Primary report",
+      "relatedUrl": "https://www.aargauerzeitung.ch/schweiz/keller-sutter-reicht-strafanzeige-gegen-elon-musks-ki-grok-ein-ld.4147350"
     },
     {
-      id: '87',
-      title: '英パスポート写真チェッカーが暗い肌で偏る',
-      year: '2020',
-      place: 'United Kingdom',
-      region: 'Europe',
-      lat: 51.51,
-      lon: -0.13,
-      mode: 'Biometric Bias',
-      modeKey: 'biometric',
-      summary: '自動写真品質判定が dark-skinned women に不利に働いた。 biometric stack の偏りが行政アクセスそのものの摩擦になる例。',
-      sourceLabel: 'AIID 87',
-      sourceUrl: 'https://incidentdatabase.ai/cite/87',
-      relatedLabel: 'AGI HUB No.17',
-      relatedUrl: 'articles/17-alignment-as-western-problem.html'
+      "id": "1413",
+      "title": "Purported AI-Generated Inland Revenue Scam Ads Reportedly Impersonated New Zealand Commissioner Peter Mersi in  Alleged Fake Crypto Tax Webinar",
+      "year": "2026-03-05",
+      "place": "Wellington, New Zealand",
+      "region": "Oceania",
+      "lat": -41.29,
+      "lon": 174.78,
+      "mode": "Fraud / Impersonation",
+      "modeKey": "fraud",
+      "summary": "ニュージーランド税務当局トップを装う AI 生成詐欺広告が流通した。行政権威の偽装が直接の送客装置になっている。",
+      "sourceLabel": "AIID 1413",
+      "sourceUrl": "https://incidentdatabase.ai/cite/1413",
+      "relatedLabel": "Primary report",
+      "relatedUrl": "https://www.rnz.co.nz/news/business/588758/commissioner-of-inland-revenue-latest-scam-target"
     },
     {
-      id: '100',
-      title: '仏 welfare の「robo-debt」化',
-      year: '2021',
-      place: 'France',
-      region: 'Europe',
-      lat: 48.86,
-      lon: 2.35,
-      mode: 'Allocation / Denial',
-      modeKey: 'allocation',
-      summary: '福祉サービスの自動判断が、支給停止や返還請求の摩擦を増幅した。配賦ロジックの誤りが生活基盤へ直撃するタイプの失敗。',
-      sourceLabel: 'AIID 100',
-      sourceUrl: 'https://incidentdatabase.ai/cite/100',
-      relatedLabel: 'AGI HUB No.09',
-      relatedUrl: 'articles/09-corporate-phase-transition.html'
+      "id": "1415",
+      "title": "Nippon Life Alleged ChatGPT Practiced Law Without a License in Illinois Disability Case",
+      "year": "2026-03-04",
+      "place": "Chicago, United States",
+      "region": "North America",
+      "lat": 41.88,
+      "lon": -87.63,
+      "mode": "Legal / Procedural Failure",
+      "modeKey": "legal",
+      "summary": "ChatGPT が disability case で無資格の法実務を行ったとする訴訟。法的助言と自動化の境界が崩れるタイプのインシデント。",
+      "sourceLabel": "AIID 1415",
+      "sourceUrl": "https://incidentdatabase.ai/cite/1415",
+      "relatedLabel": "Primary report",
+      "relatedUrl": "https://www.legal.io/articles/5798485/OpenAI-Sued-for-Unauthorized-Practice-of-Law-via-ChatGPT"
     },
     {
-      id: '94',
-      title: 'Deliveroo配車アルゴリズムに差別認定',
-      year: '2021',
-      place: 'Italy',
-      region: 'Europe',
-      lat: 41.90,
-      lon: 12.50,
-      mode: 'Allocation / Denial',
-      modeKey: 'allocation',
-      summary: 'シフト割当と信頼度評価の仕組みが労働者に差別的に作用したと裁判所が判断。 ranking がそのまま労働統治になる構図を示した。',
-      sourceLabel: 'AIID 94',
-      sourceUrl: 'https://incidentdatabase.ai/cite/94',
-      relatedLabel: 'AGI HUB No.09',
-      relatedUrl: 'articles/09-corporate-phase-transition.html'
+      "id": "1434",
+      "title": "DOJ Attorney Reportedly Used AI to File Brief With Purportedly Fabricated Quotes and Misstated Case Holdings",
+      "year": "2026-03-02",
+      "place": "Washington, United States",
+      "region": "North America",
+      "lat": 38.9,
+      "lon": -77.04,
+      "mode": "Legal / Procedural Failure",
+      "modeKey": "legal",
+      "summary": "DOJ 弁護士が AI による捏造引用や判例誤読を含む書面を提出したと報じられた。 hallucination が公的手続へ流入した例。",
+      "sourceLabel": "AIID 1434",
+      "sourceUrl": "https://incidentdatabase.ai/cite/1434",
+      "relatedLabel": "Primary report",
+      "relatedUrl": "https://www.abajournal.com/news/article/doj-leaders-must-explain-why-attorney-used-fabricated-quotes-in-court-filing"
     },
     {
-      id: '74',
-      title: 'Detroitで顔認証誤認逮捕',
-      year: '2020',
-      place: 'Detroit, United States',
-      region: 'North America',
-      lat: 42.33,
-      lon: -83.05,
-      mode: 'Biometric Bias',
-      modeKey: 'biometric',
-      summary: 'Faulty facial recognition が無実の黒人男性の逮捕につながった。 biometric error が state coercion を通じて即時の人権侵害になる典型。',
-      sourceLabel: 'AIID 74',
-      sourceUrl: 'https://incidentdatabase.ai/cite/74',
-      relatedLabel: 'AGI HUB No.16',
-      relatedUrl: 'articles/16-requisite-variety-alignment-ceiling.html'
+      "id": "1401",
+      "title": "Washington State DOL's AI Phone System Reportedly Failed to Provide Spanish-Language Service to Callers Requesting Spanish",
+      "year": "2026-02-27",
+      "place": "Olympia, United States",
+      "region": "North America",
+      "lat": 47.04,
+      "lon": -122.9,
+      "mode": "Service / Access Failure",
+      "modeKey": "service",
+      "summary": "ワシントン州 DOL のAI電話システムがスペイン語利用者に適切対応できなかった。自動化が行政アクセス格差を拡大した。",
+      "sourceLabel": "AIID 1401",
+      "sourceUrl": "https://incidentdatabase.ai/cite/1401",
+      "relatedLabel": "Primary report",
+      "relatedUrl": "https://apnews.com/article/washington-dol-spanish-accent-ai-3a1b8438a5674c07242a8d48c057d5a3"
     },
     {
-      id: '501',
-      title: '医療給付打ち切りを招いた回復予測',
-      year: '2019',
-      place: 'Wisconsin, United States',
-      region: 'North America',
-      lat: 43.07,
-      lon: -89.40,
-      mode: 'Allocation / Denial',
-      modeKey: 'allocation',
-      summary: '高齢患者の回復を過大評価したアルゴリズム出力が、治療支払いの打ち切り判断に使われた。診断補助ではなく、配賦権限の自動化が傷つけたケース。',
-      sourceLabel: 'AIID 501',
-      sourceUrl: 'https://incidentdatabase.ai/cite/501',
-      relatedLabel: 'AGI HUB No.09',
-      relatedUrl: 'articles/09-corporate-phase-transition.html'
+      "id": "1338",
+      "title": "Purported Deepfake Endorsements Reportedly Used to Promote Fraudulent Health and Investment Products in Montenegro and Bosnia and Herzegovina",
+      "year": "2025-12-24",
+      "place": "Podgorica, Montenegro",
+      "region": "Europe",
+      "lat": 42.43,
+      "lon": 19.26,
+      "mode": "Fraud / Impersonation",
+      "modeKey": "fraud",
+      "summary": "モンテネグロやボスニアで celebrity deepfake endorsement が投資・健康商材の詐欺に転用された。",
+      "sourceLabel": "AIID 1338",
+      "sourceUrl": "https://incidentdatabase.ai/cite/1338",
+      "relatedLabel": "Primary report",
+      "relatedUrl": "https://balkaninsight.com/2025/12/24/celebrity-endorsement-identity-abuse-via-ai-on-the-rise-in-montenegro/"
     },
     {
-      id: '126',
-      title: '英物流倉庫でロボット衝突から火災',
-      year: '2021',
-      place: 'London, United Kingdom',
-      region: 'Europe',
-      lat: 51.51,
-      lon: -0.10,
-      mode: 'Autonomy Failure',
-      modeKey: 'autonomy',
-      summary: '複数ロボットの衝突が火災の引き金になった。 physical autonomy は、ソフトウェア上の誤差をそのまま設備停止と安全事故へ変換する。',
-      sourceLabel: 'AIID 126',
-      sourceUrl: 'https://incidentdatabase.ai/cite/126',
-      relatedLabel: 'AGI HUB No.11',
-      relatedUrl: 'articles/11-industrial-explosion-before-agi.html'
+      "id": "1326",
+      "title": "Waymo Robotaxis Allegedly Contributed to Traffic Gridlock During San Francisco PG&E Power Outage",
+      "year": "2025-12-20",
+      "place": "San Francisco, United States",
+      "region": "North America",
+      "lat": 37.77,
+      "lon": -122.42,
+      "mode": "Autonomy Failure",
+      "modeKey": "autonomy",
+      "summary": "停電下で Waymo robotaxi が交通混乱に寄与したと報じられた。都市障害時の自律移動 fleet 制御リスクを示す。",
+      "sourceLabel": "AIID 1326",
+      "sourceUrl": "https://incidentdatabase.ai/cite/1326",
+      "relatedLabel": "Primary report",
+      "relatedUrl": "https://www.sfchronicle.com/bayarea/article/waymo-robotaxi-sf-power-outage-21260097.php"
+    },
+    {
+      "id": "1316",
+      "title": "Google AI-Generated Search Summary Reportedly Falsely Implicated Canadian Musician in Sexual Offenses, Leading to Concert Cancellation",
+      "year": "2025-12-19",
+      "place": "Halifax, Canada",
+      "region": "North America",
+      "lat": 44.65,
+      "lon": -63.57,
+      "mode": "Fabrication / Defamation",
+      "modeKey": "fabrication",
+      "summary": "Google のAI検索要約がカナダの音楽家を性犯罪と誤って結びつけ、公演中止に至った。生成要約が reputational harm を生んだ例。",
+      "sourceLabel": "AIID 1316",
+      "sourceUrl": "https://incidentdatabase.ai/cite/1316",
+      "relatedLabel": "Primary report",
+      "relatedUrl": "https://www.theglobeandmail.com/culture/article-ashley-macisaac-show-cancelled-google-ai-misinformation-music-fiddler/"
+    },
+    {
+      "id": "1310",
+      "title": "Canada Revenue Agency (CRA) AI Chatbot 'Charlie' Reportedly Gave Incorrect Tax Filing Guidance at Scale",
+      "year": "2025-12-12",
+      "place": "Ottawa, Canada",
+      "region": "North America",
+      "lat": 45.42,
+      "lon": -75.69,
+      "mode": "Service / Access Failure",
+      "modeKey": "service",
+      "summary": "CRA の税務チャットボット Charlie が誤った申告 guidance を大規模に返した。public service chatbot の制度リスク。",
+      "sourceLabel": "AIID 1310",
+      "sourceUrl": "https://incidentdatabase.ai/cite/1310",
+      "relatedLabel": "Primary report",
+      "relatedUrl": "https://www.junonews.com/p/cra-billed-taxpayers-over-18-million"
+    },
+    {
+      "id": "1312",
+      "title": "ZeroEyes AI Surveillance System Reportedly Flagged Clarinet as Gun, Triggering School Lockdown in Florida",
+      "year": "2025-12-09",
+      "place": "Florida, United States",
+      "region": "North America",
+      "lat": 28.54,
+      "lon": -81.38,
+      "mode": "Unsafe / Detection Failure",
+      "modeKey": "unsafe",
+      "summary": "銃検知AIが clarinet を銃と誤判定し、学校 lockdown を引き起こした。false positive でも現場コストは大きい。",
+      "sourceLabel": "AIID 1312",
+      "sourceUrl": "https://incidentdatabase.ai/cite/1312",
+      "relatedLabel": "Primary report",
+      "relatedUrl": "https://www.washingtonpost.com/nation/2025/12/17/ai-gun-school-detection/"
+    },
+    {
+      "id": "1306",
+      "title": "Florida Couple Reportedly Loses $45,000 in Alleged AI-Generated Elon Musk Impersonation Scam",
+      "year": "2025-12-15",
+      "place": "Orlando, United States",
+      "region": "North America",
+      "lat": 28.54,
+      "lon": -81.38,
+      "mode": "Fraud / Impersonation",
+      "modeKey": "fraud",
+      "summary": "Elon Musk giveaway を装う AI 生成詐欺でフロリダの夫婦が損失を被った。著名人 deepfake の送金誘導が続いている。",
+      "sourceLabel": "AIID 1306",
+      "sourceUrl": "https://incidentdatabase.ai/cite/1306",
+      "relatedLabel": "Primary report",
+      "relatedUrl": "https://www.clickorlando.com/news/investigators/2025/12/15/elon-musk-giveaway-scheme-steals-45000-from-florida-couple/"
+    },
+    {
+      "id": "1337",
+      "title": "Waymo Robotaxi Reportedly Transported Undetected Person Trapped in Trunk in Los Angeles",
+      "year": "2025-12-08",
+      "place": "Los Angeles, United States",
+      "region": "North America",
+      "lat": 34.05,
+      "lon": -118.24,
+      "mode": "Autonomy Failure",
+      "modeKey": "autonomy",
+      "summary": "Waymo がトランク内の人物を検知できないまま走行した。 perception gap が physical safety issue へ直結した例。",
+      "sourceLabel": "AIID 1337",
+      "sourceUrl": "https://incidentdatabase.ai/cite/1337",
+      "relatedLabel": "Primary report",
+      "relatedUrl": "https://www.latimes.com/california/story/2025-12-11/waymo-problems-man-jumps-into-trunk-of-driverless-taxi-in-la-gets-stuck-removed-by-police"
+    },
+    {
+      "id": "1293",
+      "title": "Purported Deepfake Impersonating Cyprus President Nikos Christodoulides Reportedly Defrauded Citizens of Thousands of Euros",
+      "year": "2025-12-06",
+      "place": "Nicosia, Cyprus",
+      "region": "Europe",
+      "lat": 35.18,
+      "lon": 33.38,
+      "mode": "Fraud / Impersonation",
+      "modeKey": "fraud",
+      "summary": "キプロス大統領を装う deepfake が投資詐欺に使われた。国家首脳クラスの偽装が一般市民向け詐欺の常套手段になっている。",
+      "sourceLabel": "AIID 1293",
+      "sourceUrl": "https://incidentdatabase.ai/cite/1293",
+      "relatedLabel": "Primary report",
+      "relatedUrl": "https://in-cyprus.philenews.com/local/ai-generated-scam-videos-cyprus-president-celebrities/"
+    },
+    {
+      "id": "1379",
+      "title": "Florida Woman Reportedly Jailed After Ex-Boyfriend Allegedly Submitted AI-Fabricated Text Screenshot as Bond-Violation Evidence",
+      "year": "2024-11-23",
+      "place": "Florida, United States",
+      "region": "North America",
+      "lat": 27.95,
+      "lon": -82.46,
+      "mode": "Legal / Procedural Failure",
+      "modeKey": "legal",
+      "summary": "AI fabricated text screenshot が bond violation の証拠として使われ、女性が拘束されたと報じられた。証拠生成の偽装問題。",
+      "sourceLabel": "AIID 1379",
+      "sourceUrl": "https://incidentdatabase.ai/cite/1379",
+      "relatedLabel": "Primary report",
+      "relatedUrl": "https://6abc.com/post/no-verified-evidence-woman-says-ai-generated-deepfake-text-sent-jail-action-news-investigation/18373467/"
+    },
+    {
+      "id": "881",
+      "title": "Waymo Robotaxi Allegedly Collides With Serve Robotics Delivery Bot in Los Angeles",
+      "year": "2024-12-27",
+      "place": "Los Angeles, United States",
+      "region": "North America",
+      "lat": 34.05,
+      "lon": -118.24,
+      "mode": "Autonomy Failure",
+      "modeKey": "autonomy",
+      "summary": "Waymo robotaxi と delivery bot の衝突。自律移動体同士の相互運用失敗が市街地で顕在化した。",
+      "sourceLabel": "AIID 881",
+      "sourceUrl": "https://incidentdatabase.ai/cite/881",
+      "relatedLabel": "Primary report",
+      "relatedUrl": "https://techcrunch.com/2024/12/31/a-waymo-robotaxi-and-a-serve-delivery-robot-collided-in-los-angeles/"
+    },
+    {
+      "id": "914",
+      "title": "Alleged Deepfake of Luis Suárez Used to Scam Uruguayans in Fake Investment Scheme",
+      "year": "2024-12-26",
+      "place": "Montevideo, Uruguay",
+      "region": "South America",
+      "lat": -34.9,
+      "lon": -56.16,
+      "mode": "Fraud / Impersonation",
+      "modeKey": "fraud",
+      "summary": "Luis Suarez を装う deepfake 投資詐欺がウルグアイで拡散した。スポーツ著名人の本人性が金融詐欺へ転用された。",
+      "sourceLabel": "AIID 914",
+      "sourceUrl": "https://incidentdatabase.ai/cite/914",
+      "relatedLabel": "Primary report",
+      "relatedUrl": "https://www.montevideo.com.uy/Noticias/UTE-advierte-por-video-fraudulento-que-invita-a-invertir-con-imagenes-y-voz-de-Luis-Suarez-uc910520"
+    },
+    {
+      "id": "932",
+      "title": "BP New Zealand's License Plate Recognition System Reportedly Misidentified Auckland Driver for Fuel Theft in Whanganui",
+      "year": "2024-12-25",
+      "place": "Whanganui, New Zealand",
+      "region": "Oceania",
+      "lat": -39.93,
+      "lon": 175.05,
+      "mode": "Biometric / Misidentification",
+      "modeKey": "biometric",
+      "summary": "BP NZ のナンバープレート認識が別人を fuel theft と誤認した。監視自動化が日常サービスの誤追及に変わった例。",
+      "sourceLabel": "AIID 932",
+      "sourceUrl": "https://incidentdatabase.ai/cite/932",
+      "relatedLabel": "Primary report",
+      "relatedUrl": "https://www.rnz.co.nz/news/national/537581/bp-pursues-auckland-man-for-petrol-theft-despite-his-car-being-different-colour-make-and-model"
+    },
+    {
+      "id": "961",
+      "title": "Serbian Authorities Allegedly Used AI-Powered Cellebrite Tools to Unlock Journalist’s Phone and Install Spyware",
+      "year": "2024-12-16",
+      "place": "Belgrade, Serbia",
+      "region": "Europe",
+      "lat": 44.81,
+      "lon": 20.46,
+      "mode": "Privacy / Surveillance",
+      "modeKey": "privacy",
+      "summary": "セルビア当局が AI-powered Cellebrite tools を用いて記者端末を開き、spyware を入れたと報じられた。",
+      "sourceLabel": "AIID 961",
+      "sourceUrl": "https://incidentdatabase.ai/cite/961",
+      "relatedLabel": "Primary report",
+      "relatedUrl": "https://securitylab.amnesty.org/latest/2024/12/a-digital-prison-surveillance-and-the-suppression-of-civil-society-in-serbia/"
+    },
+    {
+      "id": "863",
+      "title": "Character.ai Companion Allegedly Prompts Self-Harm and Violence in Texas Teen",
+      "year": "2024-12-12",
+      "place": "Texas, United States",
+      "region": "North America",
+      "lat": 31.0,
+      "lon": -99.0,
+      "mode": "Unsafe / Harmful Guidance",
+      "modeKey": "unsafe",
+      "summary": "Character.ai companion が Texas teen に self-harm や violence を促したとされる。擬似伴走型 chatbot の危険。",
+      "sourceLabel": "AIID 863",
+      "sourceUrl": "https://incidentdatabase.ai/cite/863",
+      "relatedLabel": "Primary report",
+      "relatedUrl": "https://www.washingtonpost.com/technology/2024/12/10/character-ai-lawsuit-teen-kill-parents-texas/"
+    },
+    {
+      "id": "928",
+      "title": "Deepfake Cryptocurrency Scam Allegedly Impersonates Italian President Sergio Mattarella and Prime Minister Giorgia Meloni",
+      "year": "2024-12-12",
+      "place": "Rome, Italy",
+      "region": "Europe",
+      "lat": 41.9,
+      "lon": 12.5,
+      "mode": "Fraud / Impersonation",
+      "modeKey": "fraud",
+      "summary": "イタリア大統領と首相を装う deepfake crypto scam。国家レベルの顔と声が詐欺 conversion に使われた。",
+      "sourceLabel": "AIID 928",
+      "sourceUrl": "https://incidentdatabase.ai/cite/928",
+      "relatedLabel": "Primary report",
+      "relatedUrl": "https://www.repubblica.it/economia/diritti-e-consumi/2024/12/12/news/deepfake_meloni_mattarella_consob-423882754/"
+    },
+    {
+      "id": "857",
+      "title": "Navigation App Allegedly Directs Car Over Damaged Bridge in Uttar Pradesh, Resulting in Three Deaths",
+      "year": "2024-11-25",
+      "place": "Uttar Pradesh, India",
+      "region": "Asia",
+      "lat": 27.0,
+      "lon": 80.94,
+      "mode": "Unsafe / Navigation Failure",
+      "modeKey": "unsafe",
+      "summary": "navigation app が損傷橋へ車を誘導し、死亡事故につながった。ルーティング自動化の safety boundary failure。",
+      "sourceLabel": "AIID 857",
+      "sourceUrl": "https://incidentdatabase.ai/cite/857",
+      "relatedLabel": "Primary report",
+      "relatedUrl": "https://www.ndtv.com/india-news/gps-misleads-car-to-damaged-bridge-it-falls-into-river-killing-3-in-up-7096433"
+    },
+    {
+      "id": "619",
+      "title": "Rite Aid Facial Recognition Disproportionately Misidentified Minority Shoppers as Shoplifters",
+      "year": "2023-12-20",
+      "place": "United States",
+      "region": "North America",
+      "lat": 39.83,
+      "lon": -98.58,
+      "mode": "Biometric / Misidentification",
+      "modeKey": "biometric",
+      "summary": "Rite Aid の facial recognition が minority shoppers を万引き犯として誤認しやすかった。商業監視の差別的 harm。",
+      "sourceLabel": "AIID 619",
+      "sourceUrl": "https://incidentdatabase.ai/cite/619",
+      "relatedLabel": "Primary report",
+      "relatedUrl": "https://www.theguardian.com/technology/2023/dec/20/rite-aid-shoplifting-facial-recognition-ftc-settlement"
+    },
+    {
+      "id": "614",
+      "title": "Google Bard Allegedly Generates False Allegations Against Consulting Firms Used in Research Presented in Australian Parliamentary Inquiry",
+      "year": "2023-11-02",
+      "place": "Canberra, Australia",
+      "region": "Oceania",
+      "lat": -35.28,
+      "lon": 149.13,
+      "mode": "Fabrication / Defamation",
+      "modeKey": "fabrication",
+      "summary": "Bard が豪州議会向け資料に虚偽 allegations を混入させた。政策空間での hallucination の代表例。",
+      "sourceLabel": "AIID 614",
+      "sourceUrl": "https://incidentdatabase.ai/cite/614",
+      "relatedLabel": "Primary report",
+      "relatedUrl": "https://www.theguardian.com/business/2023/nov/02/australian-academics-apologise-for-false-ai-generated-allegations-against-big-four-consultancy-firms"
+    },
+    {
+      "id": "594",
+      "title": "AI Meal Planner Suggests Hazardous Chlorine Gas Recipe",
+      "year": "2023-08-10",
+      "place": "New Zealand",
+      "region": "Oceania",
+      "lat": -41.29,
+      "lon": 174.78,
+      "mode": "Unsafe / Harmful Guidance",
+      "modeKey": "unsafe",
+      "summary": "AI meal planner が塩素ガス混合レシピを提案した。 consumer helper が危険助言へ反転した典型。",
+      "sourceLabel": "AIID 594",
+      "sourceUrl": "https://incidentdatabase.ai/cite/594",
+      "relatedLabel": "Primary report",
+      "relatedUrl": "https://www.theguardian.com/world/2023/aug/10/pak-n-save-savey-meal-bot-ai-app-malfunction-recipes"
+    },
+    {
+      "id": "547",
+      "title": "Ron DeSantis's Presidential Campaign Released Twitter Video Containing AI Images of Donald Trump Hugging Anthony Fauci",
+      "year": "2023-06-05",
+      "place": "Florida, United States",
+      "region": "North America",
+      "lat": 30.44,
+      "lon": -84.28,
+      "mode": "Fabrication / Political Misinformation",
+      "modeKey": "fabrication",
+      "summary": "DeSantis campaign が Fauci を含む AI 画像を動画で使用した。政治コミュニケーションでの生成画像混入。",
+      "sourceLabel": "AIID 547",
+      "sourceUrl": "https://incidentdatabase.ai/cite/547",
+      "relatedLabel": "Primary report",
+      "relatedUrl": "https://www.washingtonpost.com/politics/2023/06/08/desantis-fauci-trump-ai-video/"
+    },
+    {
+      "id": "509",
+      "title": "Scammers Deepfaked Videos of Victims' Loved Ones Asking for Funds over Facebook in Vietnam",
+      "year": "2023-03-23",
+      "place": "Ho Chi Minh City, Vietnam",
+      "region": "Asia",
+      "lat": 10.82,
+      "lon": 106.63,
+      "mode": "Fraud / Impersonation",
+      "modeKey": "fraud",
+      "summary": "ベトナムで家族や知人を装う deepfake 動画詐欺が拡散し、送金被害を生んだ。本人確認コストが逆転した例。",
+      "sourceLabel": "AIID 509",
+      "sourceUrl": "https://incidentdatabase.ai/cite/509",
+      "relatedLabel": "Primary report",
+      "relatedUrl": "https://vietnamnet.vn/en/deepfake-posing-grave-danger-as-scamming-tool-2126646.html"
     }
   ];
+  INCIDENTS.sort(function(a, b) {
+    return a.year < b.year ? 1 : -1;
+  });
 
   var SIGNALS = [
     {
@@ -2144,6 +2454,7 @@ function initIncidentAtlas() {
   var signalListById = {};
   var activeIncidentId = INCIDENTS[0].id;
   var activeSignalId = SIGNALS[0].id;
+  var incidentLocationCounts = {};
 
   function escapeHtml(s) {
     return String(s || '').replace(/[&<>"']/g, function(c) {
@@ -2171,6 +2482,19 @@ function initIncidentAtlas() {
       '<div class="incident-popup-meta">' + escapeHtml(item.year + ' · ' + item.place + ' · ' + item.mode) + '</div>' +
       '<div class="incident-popup-copy">' + escapeHtml(item.summary) + '</div>'
     );
+  }
+
+  function getIncidentLatLng(item) {
+    var key = item.lat + ',' + item.lon;
+    var index = incidentLocationCounts[key] || 0;
+    incidentLocationCounts[key] = index + 1;
+    if (index === 0) return [item.lat, item.lon];
+    var angle = index * 2.399963229728653;
+    var spread = 0.28 * Math.ceil(index / 2);
+    return [
+      item.lat + Math.cos(angle) * spread,
+      item.lon + Math.sin(angle) * spread
+    ];
   }
 
   function updateIncidentMarkerStyles(focusId) {
@@ -2278,22 +2602,25 @@ function initIncidentAtlas() {
 
   var regions = {};
   INCIDENTS.forEach(function(item) { regions[item.region] = true; });
+  var yearsCovered = {};
+  INCIDENTS.forEach(function(item) { yearsCovered[item.year.slice(0, 4)] = true; });
+  var latestIncidentDate = INCIDENTS[0] && INCIDENTS[0].year ? INCIDENTS[0].year : '';
   var frontierSignals = SIGNALS.filter(function(item) {
     return item.stage === 'Research' || item.stage === 'Red Team';
   }).length;
   statsEl.innerHTML =
-    '<div class="incident-stat"><div class="incident-stat-label">Field Incidents</div><div class="incident-stat-value">' + INCIDENTS.length + '</div><div class="incident-stat-desc">AIID を正本にした seed set。 public administration, labor, finance, health, mobility を横断。</div></div>' +
-    '<div class="incident-stat"><div class="incident-stat-label">Regions</div><div class="incident-stat-value">' + Object.keys(regions).length + '</div><div class="incident-stat-desc">North America / Europe / Asia / Oceania / Africa に広がる分布。</div></div>' +
-    '<div class="incident-stat"><div class="incident-stat-label">Failure Modes</div><div class="incident-stat-value">' + uniqueModes.length + '</div><div class="incident-stat-desc">fabrication, unsafe advice, fraud, biometric bias, allocation, autonomy, context blindness。</div></div>' +
-    '<div class="incident-stat"><div class="incident-stat-label">Frontier Warnings</div><div class="incident-stat-value">' + frontierSignals + '</div><div class="incident-stat-desc">production drift と切り分け、研究段階の concealment / scheming signals を別軸で置く。</div></div>';
+    '<div class="incident-stat"><div class="incident-stat-label">Recent Incidents</div><div class="incident-stat-value">' + INCIDENTS.length + '</div><div class="incident-stat-desc">AIID 2026-04-20 snapshot を基礎に curated 収録し、公開 incident 一覧を 2026-04-23 時点で再確認。</div></div>' +
+    '<div class="incident-stat"><div class="incident-stat-label">Years Covered</div><div class="incident-stat-value">' + Object.keys(yearsCovered).length + '</div><div class="incident-stat-desc">2023 / 2024 / 2025 / 2026 の recent atlas。現公開面で確認できる最新 incident 1454 までを反映。</div></div>' +
+    '<div class="incident-stat"><div class="incident-stat-label">Regions</div><div class="incident-stat-value">' + Object.keys(regions).length + '</div><div class="incident-stat-desc">North America / South America / Europe / Asia / Oceania を横断。制度と地域の両方で破綻の顔が違う。</div></div>' +
+    '<div class="incident-stat"><div class="incident-stat-label">Latest Incident</div><div class="incident-stat-value">' + latestIncidentDate + '</div><div class="incident-stat-desc">現収録の最新 AIID incident は 2026-04-16。下段には frontier warning signals を別軸で併置。</div></div>';
 
-  countEl.textContent = INCIDENTS.length + ' incidents';
-  metaEl.textContent = INCIDENTS.length + ' field incidents · ' + SIGNALS.length + ' warning signals · AIID snapshot 2026-04-20';
+  countEl.textContent = INCIDENTS.length + ' incidents · 2023-2026';
+  metaEl.textContent = INCIDENTS.length + ' recent incidents · latest AIID incident ' + latestIncidentDate + ' · public list verified 2026-04-23';
   signalCountEl.textContent = SIGNALS.length + ' signals';
 
   INCIDENTS.forEach(function(item) {
     if (incidentMap) {
-      var marker = L.circleMarker([item.lat, item.lon], {
+      var marker = L.circleMarker(getIncidentLatLng(item), {
         radius: 8,
         fillColor: MODE_COLORS[item.modeKey],
         color: '#fff',
